@@ -1,0 +1,45 @@
+name: smartrr
+description: Smart Reporting & Reffering App.
+
+version: 1.0.5+6
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.4
+  flutter_launcher_icons: ^0.9.2
+  splashscreen: ^1.2.0
+  google_maps_flutter: any
+  location: ^4.3.0
+  http: ^0.13.4
+  firebase_core: any
+  firebase_auth: any
+  cloud_firestore: ^3.1.10
+  mailer: ^5.1.0
+  fluttertoast: ^8.0.9
+  google_fonts: ^2.3.1
+  shared_preferences: ^2.0.13
+  package_info: ^2.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/LOGO.png"
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/splash-screen.png
+    - assets/background.png
+    - assets/default-avatar.png
+    - assets/folder-icon.png
+    - assets/icons/
