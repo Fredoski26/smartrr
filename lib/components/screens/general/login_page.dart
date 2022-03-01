@@ -33,172 +33,234 @@ class _LoginPageState extends State<LoginPage> {
       resizeToAvoidBottomInset: false,
       key: mScaffoldState,
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 18),
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/background.png'),
-            fit: BoxFit.cover,
+        height: MediaQuery.of(context).size.height,
+        child: Stack(clipBehavior: Clip.hardEdge, children: [
+          Positioned(
+            top: -135,
+            child: Container(
+              height: 332.0,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                  color: Colors.orange,
+                  borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(90),
+                      bottomLeft: Radius.circular(90))),
+            ),
           ),
-        ),
-        child: Form(
-          key: _formKey,
-          child: isLoading
-              ? Center(
-                  child: CircularProgress(),
-                )
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                      SizedBox(
-                        height: kToolbarHeight,
-                      ),
-                      Text(
-                        'Login',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 40,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 40,
-                      ),
-                      smartTextField(
-                        title: 'Email',
-                        controller: emailController,
-                        isForm: true,
-                        textInputType: TextInputType.emailAddress,
-                      ),
-                      smartTextField(
-                        title: 'Password',
-                        controller: passwordController,
-                        obscure: true,
-                        isForm: true,
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: GestureDetector(
-                          onTap: () => Navigator.pushNamed(context, '/forgot'),
-                          child: Text(
-                            'Forgot Password?',
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              if (_isUser)
-                                setState(() => _isUser = false);
-                              else
-                                setState(() => _isUser = true);
-                            },
-                            child: Row(
-                              children: [
-                                Checkbox(
-                                  value: _isUser,
-                                  onChanged: (val) {
-                                    print('===> $val');
-                                    if (val)
-                                      setState(() => _isUser = true);
-                                    else
-                                      setState(() => _isUser = false);
-                                  },
-                                ),
-                                Text(
-                                  'User',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ],
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              if (_isUser)
-                                setState(() => _isUser = false);
-                              else
-                                setState(() => _isUser = true);
-                            },
-                            child: Row(
-                              children: [
-                                Checkbox(
-                                  value: !_isUser,
-                                  onChanged: (val) {
-                                    print('===> $val');
-                                    if (val)
-                                      setState(() => _isUser = false);
-                                    else
-                                      setState(() => _isUser = true);
-                                  },
-                                ),
-                                Text(
-                                  'Organization',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      Center(
-                        child: GestureDetector(
-                          child: Card(
-                            elevation: 8,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(
-                              Radius.circular(8),
-                            )),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 30, vertical: 12),
-                              child: Text(
-                                'LOGIN',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ),
-                          onTap: _validateLoginInput,
-                        ),
-                      ),
-                      Spacer(),
-                      GestureDetector(
-                        onTap: () => _bottomSheet(context: context),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              "Don't have an account?",
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                            Text(
-                              ' SignUp',
-                              style: TextStyle(
-                                color: Color(0xFFF7EC03),
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                    ]),
-        ),
+          Stack(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: 123),
+                    padding: EdgeInsets.all(30),
+                    width: 318,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(22),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color(0xFF444444),
+                          offset: Offset(0, 4),
+                          blurRadius: 122,
+                        )
+                      ],
+                    ),
+                    child: Form(
+                      key: _formKey,
+                      child: isLoading
+                          ? Center(
+                              child: CircularProgress(),
+                            )
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                  SizedBox(
+                                    height: kToolbarHeight,
+                                  ),
+                                  Text(
+                                    'LOGIN SMART RR',
+                                    style: TextStyle(
+                                      color: Color(0xFF444444),
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 40,
+                                  ),
+                                  smartTextField(
+                                    title: 'Email',
+                                    controller: emailController,
+                                    isForm: true,
+                                    textInputType: TextInputType.emailAddress,
+                                  ),
+                                  smartTextField(
+                                      title: 'Password',
+                                      controller: passwordController,
+                                      obscure: true,
+                                      isForm: true,
+                                      suffixIcon: Icon(Icons.e_mobiledata)),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          if (_isUser)
+                                            setState(() => _isUser = false);
+                                          else
+                                            setState(() => _isUser = true);
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Checkbox(
+                                              value: _isUser,
+                                              onChanged: (val) {
+                                                setState(() => _isUser = val);
+                                              },
+                                            ),
+                                            Text(
+                                              'User',
+                                              style: TextStyle(
+                                                  color: Color(0xFF444444)),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          if (_isUser)
+                                            setState(() => _isUser = false);
+                                          else
+                                            setState(() => _isUser = true);
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Checkbox(
+                                              value: !_isUser,
+                                              onChanged: (val) {
+                                                print('===> $val');
+                                                if (val)
+                                                  setState(
+                                                      () => _isUser = false);
+                                                else
+                                                  setState(
+                                                      () => _isUser = true);
+                                              },
+                                            ),
+                                            Text(
+                                              'Organization',
+                                              style: TextStyle(
+                                                  color: Color(0xFF444444)),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: TextButton(
+                                          onPressed: _validateLoginInput,
+                                          child: Text("Login"),
+                                          style: ButtonStyle(
+                                            shape: MaterialStateProperty.all(
+                                                RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            33))),
+                                            foregroundColor:
+                                                MaterialStateProperty.all(
+                                                    Colors.white),
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    Color(0xFFF59405)),
+                                            padding: MaterialStateProperty.all(
+                                                EdgeInsets.all(5.0)),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 38.0),
+                                  GestureDetector(
+                                    onTap: () => _bottomSheet(context: context),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text(
+                                          "Don't have an account?",
+                                          style: TextStyle(
+                                            fontSize: 12.0,
+                                            color: Color(0xFF444444),
+                                          ),
+                                        ),
+                                        Text(
+                                          ' SignUp',
+                                          style: TextStyle(
+                                            color: Color(0xFFF59405),
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 21),
+                                  GestureDetector(
+                                    onTap: () =>
+                                        Navigator.pushNamed(context, '/forgot'),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Forgot Password?',
+                                          style: TextStyle(
+                                            fontSize: 12.0,
+                                            color: Color(0xFF444444),
+                                          ),
+                                        ),
+                                        Text(' Reset Here',
+                                            style: TextStyle(
+                                              color: Color(0xFFF59405),
+                                              fontWeight: FontWeight.w600,
+                                            ))
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 20),
+                                ]),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 109.0,
+                    width: 109.0,
+                    margin: EdgeInsets.only(top: 63.0),
+                    child: Image.asset("assets/logo.png"),
+                  ),
+                ],
+              ),
+            ],
+          )
+        ]),
       ),
     );
   }
@@ -270,7 +332,8 @@ class _LoginPageState extends State<LoginPage> {
         try {
           await FirebaseFirestore.instance
               .collection('users')
-              .where('email', isEqualTo: emailController.text).get()
+              .where('email', isEqualTo: emailController.text)
+              .get()
               .then((users) {
             // debugPrint(
             //     "USR ===> ${users.docs[0].data['displayName'].toString()}  ::  Gender: ${users.docs[0].data['gender']} : ${users.docs[0].id}");
@@ -369,7 +432,7 @@ class _LoginPageState extends State<LoginPage> {
         setState(() => _isLoginError = true);
         _showException();
       }).then(
-            (UserCredential result) {
+        (UserCredential result) {
           setState(() => isLoading = false);
           if (!_isLoginError) {
             setUserIdPref(userId: userId).then((_) =>
@@ -401,7 +464,7 @@ class _LoginPageState extends State<LoginPage> {
         setState(() => _isLoginError = true);
         _showException();
       }).then(
-            (UserCredential result) {
+        (UserCredential result) {
           setState(() => isLoading = false);
           if (!_isLoginError) {
             setOrgIdPref(orgId: orgId).then((_) =>

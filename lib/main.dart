@@ -12,8 +12,13 @@ import 'package:smartrr/components/screens/user/sign_up_page.dart';
 import 'package:smartrr/utils/utils.dart';
 import 'components/screens/general/login_page.dart';
 import 'components/screens/user/report_or_history_page.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -33,12 +38,11 @@ class MyApp extends StatelessWidget {
       },
       theme: ThemeData(
         textTheme: GoogleFonts.poppinsTextTheme(),
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.orange,
       ),
     );
   }
 }
-
 
 class Splash extends StatefulWidget {
   @override
@@ -46,7 +50,6 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
-
   PackageInfo packageInfo;
 
   @override
@@ -60,10 +63,7 @@ class _SplashState extends State<Splash> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width,
+        width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 4),
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -77,10 +77,7 @@ class _SplashState extends State<Splash> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width / 2,
+                  width: MediaQuery.of(context).size.width / 2,
                   child: Image.asset(
                     'assets/icons/LOGO.png',
                     fit: BoxFit.contain,

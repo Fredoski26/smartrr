@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "979322367519",
+    "firebase_url": "https://smartrr-d5615.firebaseio.com",
+    "project_id": "smartrr-d5615",
+    "storage_bucket": "smartrr-d5615.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:979322367519:android:fa33e66401536cf6fc2f2a",
+        "android_client_info": {
+          "package_name": "com.smartrr.smartrr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "979322367519-fhc1vfgu7vri7g2r73tfes816d1iur5v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2FXED2G2qW15PRmTjykr2CL4vwrGxehA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "979322367519-fhc1vfgu7vri7g2r73tfes816d1iur5v.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "979322367519-eukffhopikd2i7o5lodqbksjm0qb90la.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.smartrr.smartrr"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
