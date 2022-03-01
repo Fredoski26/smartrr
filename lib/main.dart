@@ -37,9 +37,13 @@ class MyApp extends StatelessWidget {
         '/forgot': (context) => ForgotPasswordScreen(),
       },
       theme: ThemeData(
-        textTheme: GoogleFonts.poppinsTextTheme(),
-        primarySwatch: Colors.orange,
-      ),
+          textTheme: GoogleFonts.poppinsTextTheme(),
+          primarySwatch: Colors.orange,
+          appBarTheme: AppBarTheme(
+              centerTitle: true,
+              titleTextStyle:
+                  TextStyle().copyWith(color: Colors.white, fontSize: 18),
+              iconTheme: IconThemeData().copyWith(color: Colors.white))),
     );
   }
 }

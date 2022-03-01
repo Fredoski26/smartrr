@@ -28,16 +28,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text("Forgot Password")),
+      resizeToAvoidBottomInset: false,
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 18),
         height: MediaQuery.of(context).size.height,
         width: double.infinity,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/background.png'),
-            fit: BoxFit.cover,
-          ),
-        ),
+        decoration: BoxDecoration(color: Colors.white),
         child: Form(
           key: formKey,
           child: Container(
@@ -51,8 +48,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 Text(
                   'Forgot Password',
                   style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 30,
+                    color: Color(0xFF575555),
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 13),
+                Text(
+                  "Enter the email address associated with your Amrt RR account aand we will send a reset password link",
+                  style: TextStyle(
+                    color: Color(0xFF444444),
+                    fontSize: 14,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -68,52 +74,22 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 SizedBox(
                   height: 30,
                 ),
-                Align(
-                  alignment: Alignment.center,
-                  child: AnimatedContainer(
-                    height: 50,
-                    width:
-                        _isLoading ? 80 : MediaQuery.of(context).size.width / 2,
-                    duration: Duration(milliseconds: 500),
-                    child: ButtonTheme(
-                      child: RaisedButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0)),
-                        elevation: 0.0,
-                        color: Colors.white,
-                        child: _isLoading
-                            ? CircularProgress()
-                            : Text(
-                                'DONE',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                        onPressed: submit,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    new Text(
-                      "Already a member? ",
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                    new InkWell(
-                      onTap: () => Navigator.pop(context),
-                      child: new Text(
-                        "Login",
-                        style: TextStyle(
-                          color: Color(0xFFF7EC03),
-                          fontWeight: FontWeight.w600,
+                  children: [
+                    Expanded(
+                      child: TextButton(
+                        onPressed: submit,
+                        child: Text("Send Reset Link"),
+                        style: ButtonStyle(
+                          shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(33))),
+                          foregroundColor:
+                              MaterialStateProperty.all(Colors.white),
+                          backgroundColor:
+                              MaterialStateProperty.all(Color(0xFFF59405)),
+                          padding:
+                              MaterialStateProperty.all(EdgeInsets.all(5.0)),
                         ),
                       ),
                     ),

@@ -13,7 +13,7 @@ smartTextField({
   TextInputType textInputType = TextInputType.text,
   bool isForm = false,
   Widget prefix,
-  Icon suffixIcon,
+  Widget suffixIcon,
 }) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
