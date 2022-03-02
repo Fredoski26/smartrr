@@ -61,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                       color: Colors.white,
                       boxShadow: [
                         BoxShadow(
-                          color: Color(0xFF444444),
+                          color: Color(0xFF444444).withOpacity(0.5),
                           offset: Offset(0, 4),
                           blurRadius: 122,
                         )
@@ -173,21 +173,6 @@ class _LoginPageState extends State<LoginPage> {
                                         child: TextButton(
                                           onPressed: _validateLoginInput,
                                           child: Text("Login"),
-                                          style: ButtonStyle(
-                                            shape: MaterialStateProperty.all(
-                                                RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            33))),
-                                            foregroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.white),
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    Color(0xFFF59405)),
-                                            padding: MaterialStateProperty.all(
-                                                EdgeInsets.all(5.0)),
-                                          ),
                                         ),
                                       ),
                                     ],
@@ -279,14 +264,14 @@ class _LoginPageState extends State<LoginPage> {
             height: 250,
             padding: EdgeInsets.all(10),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(height: 10),
                 Text(
                   'Register',
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 40,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

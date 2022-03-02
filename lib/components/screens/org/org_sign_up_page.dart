@@ -43,16 +43,16 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
   String errorMsg;
   double _hPadding = 18.0;
   bool isLoading = false;
-  List<Services> servicesList = new List<Services>();
+  List<Services> servicesList = <Services>[];
   List<String> _selectedServicesList = [];
 
   // States
-  List<MyLocation> stateList = new List<MyLocation>();
+  List<MyLocation> stateList = <MyLocation>[];
   List<DropdownMenuItem<MyLocation>> _dropDownStateItem = [];
   MyLocation _currentState;
 
   // Locations
-  List<MyLocation> locationsList = new List<MyLocation>();
+  List<MyLocation> locationsList = <MyLocation>[];
   List<DropdownMenuItem<MyLocation>> _dropDownLocationItem = [];
   MyLocation _currentLocation;
 
@@ -79,110 +79,142 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
     return WillPopScope(
       onWillPop: _askAlertWill,
       child: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/background.png'),
-            fit: BoxFit.cover,
-          ),
-        ),
+        decoration: BoxDecoration(color: Colors.white),
         child: Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            elevation: 0,
-            automaticallyImplyLeading: false,
             backgroundColor: Colors.transparent,
-            leading: IconButton(
-                icon: Icon(Icons.arrow_back), onPressed: () => _askOut()),
-            actions: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Center(
-                  child: Text(
-                    'Step ${_stepIndex + 1} of ${_maxSteps + 1}',
-                    style: TextStyle(color: Colors.white),
+            appBar: AppBar(
+              elevation: 0,
+              automaticallyImplyLeading: false,
+              leading: IconButton(
+                  icon: Icon(Icons.arrow_back), onPressed: () => _askOut()),
+              actions: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: Text(
+                      'Step ${_stepIndex + 1} of ${_maxSteps + 1}',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            persistentFooterButtons: [
+              Container(
+                width: size.width,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                            border:
+                                Border.all(width: 1, color: Color(0xFFF59405)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(33))),
+                        child: TextButton(
+                          onPressed: _decreaseStackIndex,
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.white)),
+                          child: Text(
+                            'Back',
+                            style: TextStyle(
+                              color: Color(0xFFF59405),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: TextButton(
+                        onPressed: _increaseStackIndex,
+                        child: Container(
+                          child: Center(
+                            child: Text(
+                              'Next',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+            body: Container(
+              child: Stack(children: [
+                Positioned(
+                  top: -208,
+                  child: Container(
+                    height: 332.0,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                        color: Colors.orange,
+                        borderRadius: BorderRadius.only(
+                            bottomRight: Radius.circular(90),
+                            bottomLeft: Radius.circular(90))),
                   ),
                 ),
-              )
-            ],
-          ),
-          persistentFooterButtons: [
-            Container(
-              width: size.width,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  InkWell(
-                    onTap: _decreaseStackIndex,
-                    child: Card(
-                      elevation: 8,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(8),
-                              bottomLeft: Radius.circular(8))),
-                      color: Colors.red.withOpacity(0.8),
-                      child: Container(
-                        height: 44,
-                        width: size.width / 2.4,
-                        child: Center(
-                          child: Text(
-                            'BACK',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600),
+                Stack(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(top: 60),
+                          padding: EdgeInsets.all(30),
+                          width: 318,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(22),
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Color(0xFF494949).withOpacity(0.5),
+                                offset: Offset(0, 30),
+                                blurRadius: 122,
+                              )
+                            ],
                           ),
+                          child: AnimatedSwitcher(
+                              duration: Duration(milliseconds: 500),
+                              transitionBuilder:
+                                  (Widget child, Animation<double> animation) =>
+                                      ScaleTransition(
+                                          child: child, scale: animation),
+                              child: IndexedStack(
+                                key: ValueKey<int>(_stepIndex),
+                                index: _stepIndex,
+                                children: [
+                                  _stack1(),
+                                  _projectSpan(),
+                                  _workHours(),
+                                  _focalPerson(),
+                                  _services(),
+                                  _details(),
+                                  _locations(),
+                                ],
+                              )),
                         ),
-                      ),
+                      ],
                     ),
-                  ),
-                  InkWell(
-                    onTap: _increaseStackIndex,
-                    child: Card(
-                      elevation: 8,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(8),
-                        bottomRight: Radius.circular(8),
-                      )),
-                      color: Colors.green.withOpacity(0.8),
-                      child: Container(
-                        height: 44,
-                        width: size.width / 2.4,
-                        child: Center(
-                          child: Text(
-                            'NEXT',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600),
-                          ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 109.0,
+                          width: 109.0,
+                          margin: EdgeInsets.only(top: 0.0),
+                          child: Image.asset("assets/logo.png"),
                         ),
-                      ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-          body: AnimatedSwitcher(
-              duration: Duration(milliseconds: 500),
-              transitionBuilder: (Widget child, Animation<double> animation) =>
-                  ScaleTransition(child: child, scale: animation),
-              child: IndexedStack(
-                key: ValueKey<int>(_stepIndex),
-                index: _stepIndex,
-                children: [
-                  _stack1(),
-                  _projectSpan(),
-                  _workHours(),
-                  _focalPerson(),
-                  _services(),
-                  _details(),
-                  _locations(),
-                ],
-              )),
-        ),
+                  ],
+                )
+              ]),
+            )),
       ),
     );
   }
@@ -192,39 +224,38 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
     try {
       UserCredential authResult = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
-          email: cOrgEmail.text, password: cPassword.text);
+              email: cOrgEmail.text, password: cPassword.text);
       var displayName = "";
       displayName = cName.text;
       Navigator.pop(context);
       showLoading(message: 'Registering...', context: context);
       authResult.user.updateDisplayName(displayName).then((onValue) async {
-        await FirebaseFirestore.instance.collection('organizations').doc().set(
-            {
-              'name': cName.text,
-              'type': cType.text,
-              'telephone': cTelephone.text,
-              'orgEmail': cOrgEmail.text,
-              'password': cPassword.text,
-              'language': cLanguage.text,
-              'lga': cLga.text,
-              'ward': cWard.text,
-              'site': cSite.text,
-              'startDate': cStartDate.text,
-              'endDate': cEndDate.text,
-              'startTime': cStartTime.text,
-              'closeTime': cCloseTime.text,
-              'focalName': cFocalName.text,
-              'focalEmail': cFocalEmail.text,
-              'focalPhone': '234${cFocalPhone.text}',
-              'focalDesignation': cFocalDesignation.text,
-              'how': cHow.text,
-              'criteria': cCriteria.text,
-              'comments': cComments.text,
-              'servicesAvailable': FieldValue.arrayUnion(_selectedServicesList),
-              'status': 0,
-              'locationId': _currentLocation.id,
-              'uId': authResult.user.uid,
-            }).then((onValue) {
+        await FirebaseFirestore.instance.collection('organizations').doc().set({
+          'name': cName.text,
+          'type': cType.text,
+          'telephone': cTelephone.text,
+          'orgEmail': cOrgEmail.text,
+          'password': cPassword.text,
+          'language': cLanguage.text,
+          'lga': cLga.text,
+          'ward': cWard.text,
+          'site': cSite.text,
+          'startDate': cStartDate.text,
+          'endDate': cEndDate.text,
+          'startTime': cStartTime.text,
+          'closeTime': cCloseTime.text,
+          'focalName': cFocalName.text,
+          'focalEmail': cFocalEmail.text,
+          'focalPhone': '234${cFocalPhone.text}',
+          'focalDesignation': cFocalDesignation.text,
+          'how': cHow.text,
+          'criteria': cCriteria.text,
+          'comments': cComments.text,
+          'servicesAvailable': FieldValue.arrayUnion(_selectedServicesList),
+          'status': 0,
+          'locationId': _currentLocation.id,
+          'uId': authResult.user.uid,
+        }).then((onValue) {
           FirebaseAuth.instance.signOut();
           Navigator.pop(context);
           showAction(
@@ -273,7 +304,6 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
           }
       }
     }
-
   }
 
   _increaseStackIndex() {
@@ -350,13 +380,13 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
         child: Form(
           key: _formKey,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Text(
-                'Register',
+                'REGISTER',
                 style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 40,
+                  color: Color(0xFF444444),
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -384,7 +414,7 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
                 isForm: true,
               ),
               smartTextField(
-                title: 'Organization Password',
+                title: 'Password',
                 controller: cPassword,
                 obscure: true,
                 isForm: true,
@@ -422,7 +452,7 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
             Text(
               'Project Span',
               style: TextStyle(
-                color: Colors.white,
+                color: Color(0xFF444444),
                 fontSize: 40,
                 fontWeight: FontWeight.bold,
               ),
@@ -484,7 +514,7 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
             Text(
               'Work Hours',
               style: TextStyle(
-                color: Colors.white,
+                color: Color(0xFF444444),
                 fontSize: 40,
                 fontWeight: FontWeight.bold,
               ),
@@ -538,7 +568,7 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
             Text(
               'Focal Person',
               style: TextStyle(
-                color: Colors.white,
+                color: Color(0xFF444444),
                 fontSize: 40,
                 fontWeight: FontWeight.bold,
               ),
@@ -558,14 +588,15 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
                 title: 'Phone No',
                 controller: cFocalPhone,
                 isPhone: true,
-
                 prefix: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 14, horizontal: 4),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 14, horizontal: 4),
                   child: Text(
                     '+234',
                     style: TextStyle(
-                      color: Colors.purple, fontWeight: FontWeight.w700,),
+                      color: Colors.purple,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
                 textInputType: TextInputType.phone),
@@ -589,7 +620,7 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
             Text(
               'Services',
               style: TextStyle(
-                color: Colors.white,
+                color: Color(0xFF444444),
                 fontSize: 40,
                 fontWeight: FontWeight.bold,
               ),
@@ -606,7 +637,7 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
                   title: Text(
                     servicesList[index].title,
                     style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.w600),
+                        color: Color(0xFF444444), fontWeight: FontWeight.w600),
                   ),
                   children: <Widget>[
                     _buildExpansionList(servicesList[index].subTitles)
@@ -666,7 +697,7 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
             Text(
               'Location',
               style: TextStyle(
-                color: Colors.white,
+                color: Color(0xFF444444),
                 fontSize: 40,
                 fontWeight: FontWeight.bold,
               ),
@@ -677,7 +708,7 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
             Text(
               'State',
               style: TextStyle(
-                color: Colors.white,
+                color: Color(0xFF444444),
                 fontSize: 18,
               ),
             ),
@@ -694,10 +725,13 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
                 'Select State',
                 style: TextStyle(fontSize: 16, color: Colors.white70),
               ),
-              style: TextStyle(fontSize: 16, color: Colors.white),
+              style: TextStyle(fontSize: 16, color: Color(0xFF444444)),
               elevation: 1,
               underline: SizedBox(),
-              icon: Icon(Icons.keyboard_arrow_down, color: Colors.white,),
+              icon: Icon(
+                Icons.keyboard_arrow_down,
+                color: Color(0xFF444444),
+              ),
             ),
             SizedBox(
               height: 20,
@@ -705,7 +739,7 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
             Text(
               'Location',
               style: TextStyle(
-                color: Colors.white,
+                color: Color(0xFF444444),
                 fontSize: 18,
               ),
             ),
@@ -721,10 +755,13 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
                 'Select Location',
                 style: TextStyle(fontSize: 16, color: Colors.white70),
               ),
-              style: TextStyle(fontSize: 16, color: Colors.white),
+              style: TextStyle(fontSize: 16, color: Color(0xFF444444)),
               elevation: 1,
               underline: SizedBox(),
-              icon: Icon(Icons.keyboard_arrow_down, color: Colors.white,),
+              icon: Icon(
+                Icons.keyboard_arrow_down,
+                color: Color(0xFF444444),
+              ),
             ),
           ],
         ),
@@ -749,11 +786,9 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
             .get()
             .then((subServices) {
           for (int j = 0; j < subServices.docs.length; j++) {
-            debugPrint(
-                "Sub Services ===> ${subServices.docs[j].get('title')}");
+            debugPrint("Sub Services ===> ${subServices.docs[j].get('title')}");
             tempSubServices.add(
-              SubService(
-                  title: subServices.docs[j].get('title'), value: false),
+              SubService(title: subServices.docs[j].get('title'), value: false),
             );
           }
         });
@@ -769,15 +804,12 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
   }
 
   _getStatesFromFirebase() async {
-    await FirebaseFirestore.instance.collection('state').get().then((
-        docs) {
+    await FirebaseFirestore.instance.collection('state').get().then((docs) {
       for (int i = 0; i < docs.docs.length; i++) {
-        debugPrint("${docs.docs[i].get('sName').toString()}  ::  " +
-            docs.docs[i].id);
-        setState(() =>
-            stateList.add(MyLocation(
-                docs.docs[i].id.toString(),
-                docs.docs[i].get('sName'))));
+        debugPrint(
+            "${docs.docs[i].get('sName').toString()}  ::  " + docs.docs[i].id);
+        setState(() => stateList.add(
+            MyLocation(docs.docs[i].id.toString(), docs.docs[i].get('sName'))));
       }
       _dropDownStateItem = buildDropDownStateItems(stateList);
     });
@@ -810,13 +842,11 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
         .then((locations) {
       for (int i = 0; i < locations.docs.length; i++) {
         debugPrint(
-            "iiiiiii: ${locations.docs[i].get('location')
-                .toString()}  ::  " +
+            "iiiiiii: ${locations.docs[i].get('location').toString()}  ::  " +
                 locations.docs[i].id);
-        setState(() =>
-            locationsList.add(MyLocation(
-                locations.docs[i].id.toString(),
-                locations.docs[i].get('location'))));
+        setState(() => locationsList.add(MyLocation(
+            locations.docs[i].id.toString(),
+            locations.docs[i].get('location'))));
       }
       _dropDownLocationItem = buildDropDownLocationItems(locationsList);
     });
@@ -857,7 +887,7 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
           },
           title: Text(
             list[index].title,
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Color(0xFF444444)),
           ),
         );
       },

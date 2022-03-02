@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
         '/': (context) => Splash(),
@@ -37,13 +38,35 @@ class MyApp extends StatelessWidget {
         '/forgot': (context) => ForgotPasswordScreen(),
       },
       theme: ThemeData(
-          textTheme: GoogleFonts.poppinsTextTheme(),
-          primarySwatch: Colors.orange,
-          appBarTheme: AppBarTheme(
-              centerTitle: true,
-              titleTextStyle:
-                  TextStyle().copyWith(color: Colors.white, fontSize: 18),
-              iconTheme: IconThemeData().copyWith(color: Colors.white))),
+        textTheme: GoogleFonts.poppinsTextTheme(),
+        primarySwatch: Colors.orange,
+        appBarTheme: AppBarTheme(
+            elevation: 0,
+            centerTitle: true,
+            titleTextStyle:
+                TextStyle().copyWith(color: Colors.white, fontSize: 18),
+            iconTheme: IconThemeData().copyWith(color: Colors.white)),
+        textButtonTheme: TextButtonThemeData(
+          style: ButtonStyle(
+            shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(33))),
+            foregroundColor: MaterialStateProperty.all(Colors.white),
+            backgroundColor: MaterialStateProperty.all(Color(0xFFF59405)),
+            padding: MaterialStateProperty.all(EdgeInsets.all(5.0)),
+          ),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+            shape: MaterialStateProperty.all(
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+            foregroundColor: MaterialStateProperty.all(Colors.white),
+            backgroundColor: MaterialStateProperty.all(Color(0xFFF59405)),
+            padding: MaterialStateProperty.all(
+              EdgeInsets.all(5.0),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

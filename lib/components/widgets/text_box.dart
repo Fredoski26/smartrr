@@ -88,7 +88,7 @@ class CustomTextBox extends StatelessWidget {
                   suffixIcon: suffixIcon,
                   fillColor: Colors.green,
                   contentPadding:
-                      new EdgeInsets.symmetric(vertical: 12, horizontal: 5.0),
+                      new EdgeInsets.symmetric(vertical: 8, horizontal: 25),
                   enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: borderColor, width: 1),
                       borderRadius: BorderRadius.all(Radius.circular(33))),
@@ -123,14 +123,15 @@ class CustomPhoneTextBox extends StatelessWidget {
   final Function onTap;
   final bool isForm;
   final Widget prefix;
+  final String counterText;
 
   CustomPhoneTextBox(
       {this.focusNode,
       this.placeholderText,
       this.prefix,
-      this.borderColor = Colors.white,
-      this.textColor = Colors.black,
-      this.placeholderColor = Colors.white,
+      this.borderColor = const Color(0xFFA59B9B),
+      this.textColor = const Color(0xFFA59B9B),
+      this.placeholderColor = const Color(0xFFA59B9B),
       this.textboxBackgroundColor = Colors.white,
       this.controller,
       this.errorText = 'Field cannot be left empty',
@@ -141,7 +142,8 @@ class CustomPhoneTextBox extends StatelessWidget {
       this.readOnly = false,
       this.keyboardType = TextInputType.text,
       this.onTap,
-      this.isForm = false});
+      this.isForm = false,
+      this.counterText = ""});
 
   @override
   Widget build(BuildContext context) {
@@ -167,10 +169,11 @@ class CustomPhoneTextBox extends StatelessWidget {
               style: TextStyle(color: textColor, fontWeight: FontWeight.w700),
               controller: controller,
               decoration: InputDecoration(
+                counterText: counterText,
                 prefixIcon: prefix,
                 fillColor: Colors.green,
                 contentPadding:
-                    new EdgeInsets.symmetric(vertical: 12, horizontal: 5.0),
+                    new EdgeInsets.symmetric(vertical: 8, horizontal: 25),
                 enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: borderColor, width: 1),
                     borderRadius: BorderRadius.all(Radius.circular(33))),
@@ -199,7 +202,7 @@ class CustomPhoneTextBox extends StatelessWidget {
                   prefixIcon: prefix,
                   fillColor: Colors.green,
                   contentPadding:
-                      new EdgeInsets.symmetric(vertical: 12, horizontal: 5.0),
+                      new EdgeInsets.symmetric(vertical: 8, horizontal: 25),
                   enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: borderColor, width: 1),
                       borderRadius: BorderRadius.all(Radius.circular(33))),
