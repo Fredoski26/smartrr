@@ -13,6 +13,7 @@ import 'package:smartrr/utils/utils.dart';
 import 'components/screens/general/login_page.dart';
 import 'components/screens/user/report_or_history_page.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'utils/colors.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,18 +41,20 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         textTheme: GoogleFonts.poppinsTextTheme(),
         primarySwatch: Colors.orange,
+        scaffoldBackgroundColor: Colors.white,
         appBarTheme: AppBarTheme(
             elevation: 0,
             centerTitle: true,
             titleTextStyle:
                 TextStyle().copyWith(color: Colors.white, fontSize: 18),
             iconTheme: IconThemeData().copyWith(color: Colors.white)),
+        drawerTheme: DrawerThemeData(backgroundColor: primaryColor),
         textButtonTheme: TextButtonThemeData(
           style: ButtonStyle(
             shape: MaterialStateProperty.all(RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(33))),
             foregroundColor: MaterialStateProperty.all(Colors.white),
-            backgroundColor: MaterialStateProperty.all(Color(0xFFF59405)),
+            backgroundColor: MaterialStateProperty.all(primaryColor),
             padding: MaterialStateProperty.all(EdgeInsets.all(5.0)),
           ),
         ),
@@ -60,7 +63,7 @@ class MyApp extends StatelessWidget {
             shape: MaterialStateProperty.all(
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
             foregroundColor: MaterialStateProperty.all(Colors.white),
-            backgroundColor: MaterialStateProperty.all(Color(0xFFF59405)),
+            backgroundColor: MaterialStateProperty.all(primaryColor),
             padding: MaterialStateProperty.all(
               EdgeInsets.all(5.0),
             ),

@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/utils/utils.dart';
 import '../../widgets/ask_action.dart';
 import 'consent_form_page.dart';
+import '../../widgets/custom_drawer.dart';
 
 class ReportOrHistoryPage extends StatefulWidget {
   @override
@@ -11,104 +13,98 @@ class ReportOrHistoryPage extends StatefulWidget {
 
 class _ReportOrHistoryPageState extends State<ReportOrHistoryPage> {
   final mScaffoldState = GlobalKey<ScaffoldState>();
+
+  void _openDrawer(BuildContext context) {
+    Scaffold.of(context).openDrawer();
+  }
+
+  BoxDecoration _actionButtonDecoration = BoxDecoration(boxShadow: [
+    BoxShadow(
+        color: Colors.black.withOpacity(0.25),
+        blurRadius: 100,
+        offset: Offset(0, 4))
+  ]);
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-            image: AssetImage('assets/background.png'), fit: BoxFit.cover),
+    return Scaffold(
+      key: mScaffoldState,
+      drawer: CustomDrawer(),
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: primaryColor),
+        backgroundColor: Colors.white,
       ),
-      child: Scaffold(
-        key: mScaffoldState,
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          title: Text('SmartRR'),
-          actions: <Widget>[
-            PopupMenuButton<More>(
-              onSelected: (More result) => _more(result),
-              tooltip: 'More',
-              itemBuilder: (BuildContext context) => [
-                PopupMenuItem<More>(
-                  value: More.logout,
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: Icon(Icons.exit_to_app, color: Colors.purple,),
-                      ),
-                      Text('Logout'),
-                    ],
+      body: Center(
+        child: IntrinsicWidth(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
+                decoration: _actionButtonDecoration,
+                child: ElevatedButton(
+                  onPressed: () => _bottomSheet(context: context),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 48.0, vertical: 20.0),
+                    child: Text("Report a Case"),
                   ),
                 ),
-              ],
-            ),
-          ],
-        ),
-        body: Stack(
-          children: <Widget>[
-            Container(
-              child: Column(
-                children: <Widget>[
-                  Expanded(
-                      child: new Material(
-                        //True Button
-                        color: Colors.transparent,
-                        child: new InkWell(
-                          onTap: () => _bottomSheet(context: context),
-                          child: new Center(
-                            child: new Container(
-                              decoration: new BoxDecoration(
-                                  border: new Border.all(
-                                      color: Colors.white, width: 5.0)),
-                              padding: new EdgeInsets.all(20.0),
-                              child: new Text(
-                                "Report".toUpperCase(),
-                                style: new TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 40.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      )),
-                  Container(
-                    color: Colors.white,
-                    height: 0.5,
-                  ),
-                  Expanded(
-                      child: new Material(
-                        //True Button
-                        color: Colors.transparent,
-                        child: new InkWell(
-                          onTap: () =>
-                              Navigator.pushNamed(context, '/casesHistory'),
-                          child: new Center(
-                            child: new Container(
-                              decoration: new BoxDecoration(
-                                  border: new Border.all(
-                                      color: Colors.white, width: 5.0)),
-                              padding: new EdgeInsets.all(20.0),
-                              child: new Text(
-                                "History".toUpperCase(),
-                                style: new TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 40.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      )),
-                ],
               ),
-            ),
-          ],
+              Container(
+                decoration: _actionButtonDecoration,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 48.0, vertical: 20.0),
+                    child: Text("All About SMR"),
+                  ),
+                ),
+              ),
+              Container(
+                decoration: _actionButtonDecoration,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 48.0, vertical: 20.0),
+                    child: Text("Impact of Smart RR"),
+                  ),
+                ),
+              ),
+              // new Material(
+              //   //True Button
+              //   color: primaryColor,
+              //   child: new InkWell(
+              //     onTap: () => Navigator.pushNamed(context, '/casesHistory'),
+              //     child: new Center(
+              //       child: new Container(
+              //         decoration: new BoxDecoration(
+              //             border: new Border.all(
+              //                 color: Colors.white, width: 5.0)),
+              //         padding: new EdgeInsets.all(20.0),
+              //         child: new Text(
+              //           "History".toUpperCase(),
+              //           style: new TextStyle(
+              //             color: Colors.white,
+              //             fontSize: 40.0,
+              //             fontWeight: FontWeight.bold,
+              //           ),
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+            ],
+          ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: primaryColor,
+        foregroundColor: Colors.white,
+        child: Icon(Icons.chat),
+        onPressed: () {},
       ),
     );
   }
@@ -164,8 +160,7 @@ class _ReportOrHistoryPageState extends State<ReportOrHistoryPage> {
               ],
             ),
           );
-        }
-    );
+        });
   }
 
   _onReportTap({bool userType}) async {
@@ -174,8 +169,7 @@ class _ReportOrHistoryPageState extends State<ReportOrHistoryPage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (BuildContext context) =>
-              ConsentFormPage(),
+          builder: (BuildContext context) => ConsentFormPage(),
         ),
       );
     });
@@ -200,9 +194,8 @@ class _ReportOrHistoryPageState extends State<ReportOrHistoryPage> {
   _logout() async {
     debugPrint('Logged Out!');
     await FirebaseAuth.instance.signOut().then((_) {
-      clearPrefs().then((_) =>
-          Navigator.pushNamedAndRemoveUntil(
-              context, '/login', ModalRoute.withName('Login')));
+      clearPrefs().then((_) => Navigator.pushNamedAndRemoveUntil(
+          context, '/login', ModalRoute.withName('Login')));
     });
   }
 
