@@ -320,30 +320,30 @@ class _LoginPageState extends State<LoginPage> {
               .where('email', isEqualTo: emailController.text)
               .get()
               .then((users) {
-            // debugPrint(
-            //     "USR ===> ${users.docs[0].data['displayName'].toString()}  ::  Gender: ${users.docs[0].data['gender']} : ${users.docs[0].id}");
-            // bool status = users.docs[0].data['status'];
-            // switch (status) {
-            //   // Approved
-            //   case true:
-            //     _loginUser(userId: users.docs[0].id.toString());
-            //     break;
-            //   // DisApproved
-            //   case false:
-            //     setState(() {
-            //       errorMsg = "Account Blocked!";
-            //       isLoading = false;
-            //     });
-            //     _showException();
-            //     break;
-            //   default:
-            //     setState(() {
-            //       errorMsg = "An error occured!";
-            //       isLoading = false;
-            //     });
-            //     _showException();
-            //     break;
-            // }
+            debugPrint(
+                "USR ===> ${users.docs[0].get('displayName').toString()}  ::  Gender: ${users.docs[0].get('gender')} : ${users.docs[0].id}");
+            bool status = users.docs[0].get('status');
+            switch (status) {
+              // Approved
+              case true:
+                _loginUser(userId: users.docs[0].id.toString());
+                break;
+              // DisApproved
+              case false:
+                setState(() {
+                  errorMsg = "Account Blocked!";
+                  isLoading = false;
+                });
+                _showException();
+                break;
+              default:
+                setState(() {
+                  errorMsg = "An error occured!";
+                  isLoading = false;
+                });
+                _showException();
+                break;
+            }
           });
         } catch (error) {
           setState(() {

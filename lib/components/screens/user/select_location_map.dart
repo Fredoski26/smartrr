@@ -79,10 +79,11 @@ class _SelectLocationMapState extends State<SelectLocationMap> {
     return FloatingActionButton(
       onPressed: function,
       materialTapTargetSize: MaterialTapTargetSize.padded,
-      backgroundColor: Color(0xFF9C00D0),
+      backgroundColor: Color(0xFFF59405),
       child: Icon(
         icon,
         size: 36,
+        color: Colors.white,
       ),
     );
   }
@@ -108,7 +109,7 @@ class _SelectLocationMapState extends State<SelectLocationMap> {
               child: Icon(
                 Icons.location_on,
                 size: 50,
-                color: Color(0xFF9C00D0),
+                color: Color(0xFFF59405),
               ),
             ),
           )
@@ -119,7 +120,6 @@ class _SelectLocationMapState extends State<SelectLocationMap> {
           'Select Location',
           style: TextStyle(color: Colors.white, fontSize: 20),
         ),
-        backgroundColor: Color(0xFF9C00D0),
       ),
       floatingActionButton: button(_onChooseLocation, Icons.check),
     );
