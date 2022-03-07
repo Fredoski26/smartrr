@@ -55,7 +55,8 @@ class MyApp extends StatelessWidget {
                 borderRadius: BorderRadius.circular(33))),
             foregroundColor: MaterialStateProperty.all(Colors.white),
             backgroundColor: MaterialStateProperty.all(primaryColor),
-            padding: MaterialStateProperty.all(EdgeInsets.all(5.0)),
+            padding: MaterialStateProperty.all(
+                EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0)),
           ),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
@@ -65,8 +66,7 @@ class MyApp extends StatelessWidget {
             foregroundColor: MaterialStateProperty.all(Colors.white),
             backgroundColor: MaterialStateProperty.all(primaryColor),
             padding: MaterialStateProperty.all(
-              EdgeInsets.all(5.0),
-            ),
+                EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0)),
           ),
         ),
       ),

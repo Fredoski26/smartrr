@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
 import '../../utils/colors.dart';
+import 'package:smartrr/utils/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    _logout() async {
+      debugPrint('Logged Out!');
+      await FirebaseAuth.instance.signOut().then((_) {
+        clearPrefs().then((_) => Navigator.pushNamedAndRemoveUntil(
+            context, '/login', ModalRoute.withName('Login')));
+      });
+    }
+
     return Drawer(
       elevation: 1,
       child: ListView(children: [
@@ -40,7 +50,7 @@ class CustomDrawer extends StatelessWidget {
           title: Text("Log Out"),
           textColor: Colors.white,
           iconColor: Colors.white,
-          onTap: () {},
+          onTap: _logout,
         )
       ]),
     );

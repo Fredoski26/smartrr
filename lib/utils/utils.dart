@@ -32,9 +32,9 @@ Future<bool> getIsUserPref() async {
 
 Future clearPrefs({String orgId}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setBool("isUser", null);
-  await prefs.setString("orgId", null);
-  await prefs.setString("userId", null);
+  await prefs.setBool("isUser", false);
+  await prefs.remove("orgId");
+  await prefs.remove("userId");
 }
 
 Future setUserTypePref({bool userType}) async {

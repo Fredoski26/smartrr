@@ -31,8 +31,9 @@ class _ReportOrHistoryPageState extends State<ReportOrHistoryPage> {
       key: mScaffoldState,
       drawer: CustomDrawer(),
       appBar: AppBar(
-        iconTheme: IconThemeData(color: primaryColor),
-        backgroundColor: Colors.white,
+        title: Text("Smart RR"),
+        // iconTheme: IconThemeData(color: primaryColor),
+        // backgroundColor: Colors.white,
       ),
       body: Center(
         child: IntrinsicWidth(
@@ -128,35 +129,42 @@ class _ReportOrHistoryPageState extends State<ReportOrHistoryPage> {
                 SizedBox(
                   height: 10,
                 ),
-                Text(
-                  'Report for',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Report for',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(
                   height: 20,
                 ),
-                Card(
-                  elevation: 2,
-                  shadowColor: Colors.purple,
-                  child: ListTile(
-                    title: Text('Yourself'),
-                    trailing: Icon(Icons.keyboard_arrow_right),
-                    onTap: () => _onReportTap(userType: true),
-                  ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        child: Text('Yourself'),
+                        onPressed: () => _onReportTap(userType: true),
+                      ),
+                    ),
+                  ],
                 ),
-                Card(
-                  elevation: 2,
-                  shadowColor: Colors.purple,
-                  child: ListTile(
-                    title: Text('Someone else'),
-                    trailing: Icon(Icons.keyboard_arrow_right),
-                    onTap: () => _onReportTap(userType: false),
-                  ),
-                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        child: Text('Someone else'),
+                        onPressed: () => _onReportTap(userType: false),
+                      ),
+                    ),
+                  ],
+                )
               ],
             ),
           );
