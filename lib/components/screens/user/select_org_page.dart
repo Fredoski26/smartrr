@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:smartrr/components/widgets/my_stepper.dart';
 import 'package:smartrr/components/widgets/show_action.dart';
 import 'package:smartrr/components/widgets/show_loading.dart';
 import 'package:smartrr/utils/colors.dart';
@@ -35,7 +36,7 @@ class SelectOrgPage extends StatefulWidget {
 
 class _SelectOrgPageState extends State<SelectOrgPage> {
   bool acceptedValue = false;
-  List<Organization> serviceProviderList = new List<Organization>();
+  List<Organization> serviceProviderList = <Organization>[];
   bool isLoading = true;
 
   @override
@@ -71,11 +72,11 @@ class _SelectOrgPageState extends State<SelectOrgPage> {
             ),
           ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               onPressed: () => Navigator.pop(context),
               child: Text('No'),
             ),
-            FlatButton(
+            TextButton(
               onPressed: () => _onRefer(org),
               child: Text('Yes'),
             ),
@@ -88,15 +89,10 @@ class _SelectOrgPageState extends State<SelectOrgPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text("Select Service Provider")),
       body: Container(
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 4),
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/background.png'),
-            fit: BoxFit.cover,
-          ),
-        ),
         child: isLoading
             ? Center(
                 child: CircularProgress(),
@@ -104,26 +100,17 @@ class _SelectOrgPageState extends State<SelectOrgPage> {
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    height: kToolbarHeight + 10,
-                  ),
+                  MyStepper(activeIndex: 4),
+                  SizedBox(height: 31),
                   Text(
                     "${widget.selectedLocation.title}, ${widget.selectedState.title}",
                     textAlign: TextAlign.center,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: smartYellow,
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
-                  ),
-                  Text(
-                    'Select Organization',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600),
                   ),
                   isLoading
                       ? Center(
@@ -135,9 +122,7 @@ class _SelectOrgPageState extends State<SelectOrgPage> {
                                 'No Organizations Found',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                    color: Color(0xFFFCF200),
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600),
+                                    fontSize: 18, fontWeight: FontWeight.w600),
                               ),
                             )
                           : Expanded(
@@ -164,14 +149,14 @@ class _SelectOrgPageState extends State<SelectOrgPage> {
                                       width: MediaQuery.of(context).size.width *
                                           0.9,
                                       textColor: Colors.white,
-                                      bgColor: Color(0x77000000),
+                                      bgColor: primaryColor,
                                       child: Column(
                                         children: <Widget>[
                                           Text(
                                             serviceProviderList[index].name,
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
-                                                color: Color(0xFFF7EC03),
+                                                color: Colors.white,
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.w600),
                                           ),
@@ -252,8 +237,7 @@ class _SelectOrgPageState extends State<SelectOrgPage> {
           language: organizations.docs[i].get('language'),
           orgEmail: organizations.docs[i].get('orgEmail'),
           password: organizations.docs[i].get('password'),
-          servicesAvailable:
-              organizations.docs[i].get('servicesAvailable'),
+          servicesAvailable: organizations.docs[i].get('servicesAvailable'),
           startDate: organizations.docs[i].get('startDate'),
           startTime: organizations.docs[i].get('startTime'),
           telephone: organizations.docs[i].get('telephone'),
@@ -279,10 +263,7 @@ class _SelectOrgPageState extends State<SelectOrgPage> {
     Navigator.pop(context);
     showLoading(message: 'Referring to ${org.name}', context: context);
     try {
-      FirebaseFirestore.instance
-          .collection('cases')
-          .doc(widget.caseId)
-          .update({
+      FirebaseFirestore.instance.collection('cases').doc(widget.caseId).update({
         'orgId': org.id,
         'orgName': org.name,
         'orgEmail': org.orgEmail,

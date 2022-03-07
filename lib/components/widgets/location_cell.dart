@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartrr/utils/colors.dart';
 
 class LocationCell extends StatelessWidget {
   final String title;
@@ -9,10 +10,10 @@ class LocationCell extends StatelessWidget {
   final Color textColor;
 
   LocationCell(
-      {this.textColor = Colors.white,
+      {this.textColor = darkGrey,
       this.title,
       this.func,
-      this.color = Colors.white,
+      this.color = darkGrey,
       this.borderRadius = 5,
       this.width});
 
@@ -31,7 +32,7 @@ class LocationCell extends StatelessWidget {
               color: textColor, fontSize: 22, fontWeight: FontWeight.w600),
         ),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.white, width: 1),
+          border: Border.all(color: darkGrey, width: 1),
           borderRadius: BorderRadius.all(Radius.circular(this.borderRadius)),
         ),
         width: this.width,

@@ -13,7 +13,7 @@ class CasesHistoryScreen extends StatefulWidget {
 
 class _CasesHistoryScreenState extends State<CasesHistoryScreen> {
   bool _isLoading = true;
-  List<Case> _casesList = new List<Case>();
+  List<Case> _casesList = <Case>[];
 
   @override
   void initState() {
@@ -24,55 +24,47 @@ class _CasesHistoryScreenState extends State<CasesHistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text("History")),
       body: Container(
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 4),
-        decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage('assets/background.png'), fit: BoxFit.cover),
-        ),
         child: _isLoading
             ? CircularProgress()
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    height: kToolbarHeight + 10,
-                  ),
-                  Text(
-                    'Cases History',
-                    textAlign: TextAlign.center,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: smartYellow,
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Container(
-                    height: 1,
-                    width: 200,
-                    color: Colors.white,
-                  ),
+                  SizedBox(height: 31),
                   _casesList.length == 0
                       ? Text(
                           'No Cases Filed Yet',
                           style: TextStyle(
-                            color: Colors.white,
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),
                         )
                       : Expanded(
-                          child: ListView.builder(
+                          child: ListView.separated(
+                            separatorBuilder: (context, i) => Divider(),
                             itemCount: _casesList.length,
                             itemBuilder: (context, index) {
+                              return ListTile(
+                                contentPadding: EdgeInsets.zero,
+                                leading: Text("${index + 1}"),
+                                title: Text(
+                                  _casesList[index].orgName,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                subtitle: Text(
+                                  "Case: ${_casesList[index].caseDesc} \n ${getDate(_casesList[index].timestamp)}",
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                isThreeLine: true,
+                              );
                               return BlackLocationCell(
                                   width:
                                       MediaQuery.of(context).size.width * 0.9,
                                   textColor: Colors.white,
-                                  bgColor: dropDownCanvasDarkColor,
+                                  bgColor: primaryColor,
                                   child: Column(
                                     children: <Widget>[
                                       Text(

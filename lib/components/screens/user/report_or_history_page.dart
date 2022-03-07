@@ -32,8 +32,6 @@ class _ReportOrHistoryPageState extends State<ReportOrHistoryPage> {
       drawer: CustomDrawer(),
       appBar: AppBar(
         title: Text("Smart RR"),
-        // iconTheme: IconThemeData(color: primaryColor),
-        // backgroundColor: Colors.white,
       ),
       body: Center(
         child: IntrinsicWidth(

@@ -29,7 +29,7 @@ class CustomDrawer extends StatelessWidget {
           title: Text("History"),
           textColor: Colors.white,
           iconColor: Colors.white,
-          onTap: () {},
+          onTap: () => Navigator.pushNamed(context, '/casesHistory'),
         ),
         ListTile(
           leading: Icon(Icons.settings),

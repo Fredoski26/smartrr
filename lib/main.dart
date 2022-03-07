@@ -41,13 +41,15 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         textTheme: GoogleFonts.poppinsTextTheme(),
         primarySwatch: Colors.orange,
+        primaryColor: primaryColor,
         scaffoldBackgroundColor: Colors.white,
         appBarTheme: AppBarTheme(
-            elevation: 0,
-            centerTitle: true,
-            titleTextStyle:
-                TextStyle().copyWith(color: Colors.white, fontSize: 18),
-            iconTheme: IconThemeData().copyWith(color: Colors.white)),
+          elevation: 0,
+          centerTitle: true,
+          titleTextStyle:
+              TextStyle().copyWith(color: Colors.white, fontSize: 18),
+          iconTheme: IconThemeData().copyWith(color: Colors.white),
+        ),
         drawerTheme: DrawerThemeData(backgroundColor: primaryColor),
         textButtonTheme: TextButtonThemeData(
           style: ButtonStyle(

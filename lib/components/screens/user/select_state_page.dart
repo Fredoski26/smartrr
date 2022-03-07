@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:smartrr/utils/colors.dart';
+import 'package:smartrr/components/widgets/my_stepper.dart';
 import '../../widgets/location_cell.dart';
 import '../../../models/location.dart';
 import 'select_location_map.dart';
@@ -32,7 +32,7 @@ class SelectStatePage extends StatefulWidget {
 class _SelectStatePageState extends State<SelectStatePage> {
   bool acceptedValue = false;
   String currentSelectedAddress = '';
-  List<MyLocation> stateList = new List<MyLocation>();
+  List<MyLocation> stateList = <MyLocation>[];
   bool isLoading = true;
 
   @override
@@ -45,15 +45,14 @@ class _SelectStatePageState extends State<SelectStatePage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (BuildContext context) =>
-            SelectLocationPage(
-              selectedState: stateSelected,
-              service: widget.service,
-              isUser: widget.isUser,
-              referredBy: widget.referredBy,
-              referredName: widget.referredName,
-              caseId: widget.caseId,
-            ),
+        builder: (BuildContext context) => SelectLocationPage(
+          selectedState: stateSelected,
+          service: widget.service,
+          isUser: widget.isUser,
+          referredBy: widget.referredBy,
+          referredName: widget.referredName,
+          caseId: widget.caseId,
+        ),
       ),
     );
   }
@@ -61,59 +60,33 @@ class _SelectStatePageState extends State<SelectStatePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Select State"),
+      ),
       body: Container(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width,
+        width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 4),
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/background.png'),
-            fit: BoxFit.cover,
-          ),
-        ),
         child: isLoading
             ? Center(
-          child: CircularProgress(),
+                child: CircularProgress(),
               )
             : Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  MyStepper(activeIndex: 2),
                   SizedBox(
-                    height: kToolbarHeight + 10,
+                    height: 31,
                   ),
-                  Text(
-                    widget.service,
-                    textAlign: TextAlign.center,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: smartYellow,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-            Text(
-              'Select State',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: stateList.length,
-                itemBuilder: (context, index) {
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: stateList.length,
+                      itemBuilder: (context, index) {
                         if (index == stateList.length - 1) {
                           return Column(
                             children: <Widget>[
                               LocationCell(
-                                width: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width * 1,
-                                textColor: Colors.white,
+                                width: MediaQuery.of(context).size.width * 1,
                                 title: stateList[index].title,
                                 borderRadius: 10,
                                 func: () {
@@ -124,11 +97,7 @@ class _SelectStatePageState extends State<SelectStatePage> {
                                 height: 10,
                               ),
                               LocationCell(
-                                width: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width * 1,
-                                textColor: Colors.white,
+                                width: MediaQuery.of(context).size.width * 1,
                                 title: currentSelectedAddress == ''
                                     ? 'Select Custom Location'
                                     : currentSelectedAddress,
@@ -136,16 +105,16 @@ class _SelectStatePageState extends State<SelectStatePage> {
                                 func: () async {
                                   if (currentSelectedAddress == '') {
                                     String selectedAddress =
-                                    await Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder:
-                                                (BuildContext context) =>
-                                                SelectLocationMap()));
+                                        await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        SelectLocationMap()));
                                     setState(() {
                                       if (selectedAddress != null)
                                         currentSelectedAddress =
-                                        '$selectedAddress';
+                                            '$selectedAddress';
                                     });
                                   } else {
                                     setState(() => isLoading = true);
@@ -156,8 +125,8 @@ class _SelectStatePageState extends State<SelectStatePage> {
                                       if (currentSelectedAddress
                                           .toLowerCase()
                                           .contains(stateList[index]
-                                          .title
-                                          .toLowerCase())) {
+                                              .title
+                                              .toLowerCase())) {
                                         debugPrint('I FOUND THE STATE');
                                         myState = new MyLocation(
                                             stateList[index].id,
@@ -169,25 +138,20 @@ class _SelectStatePageState extends State<SelectStatePage> {
                                             .get()
                                             .then((locations) {
                                           for (int j = 0;
-                                          j < locations.docs.length;
-                                          j++) {
+                                              j < locations.docs.length;
+                                              j++) {
                                             debugPrint(
-                                                "iiiiiii: ${locations
-                                                    .docs[j]
-                                                    .get('location')
-                                                    .toString()}  ::  " +
-                                                    locations.docs[j]
-                                                        .id);
+                                                "iiiiiii: ${locations.docs[j].get('location').toString()}  ::  " +
+                                                    locations.docs[j].id);
                                             if (currentSelectedAddress
                                                 .toLowerCase()
                                                 .contains(locations.docs[j]
-                                                .get('location')
-                                                .toLowerCase())) {
+                                                    .get('location')
+                                                    .toLowerCase())) {
                                               debugPrint('I FOUND THE CITY');
                                               _isFound = true;
                                               myLocation = new MyLocation(
-                                                  locations
-                                                      .docs[j].id
+                                                  locations.docs[j].id
                                                       .toString(),
                                                   locations.docs[j]
                                                       .get('location'));
@@ -210,10 +174,10 @@ class _SelectStatePageState extends State<SelectStatePage> {
                                         MaterialPageRoute(
                                           builder: (BuildContext context) =>
                                               SelectOrgPage(
-                                                service: widget.service,
-                                                selectedState: myState,
-                                                selectedLocation: myLocation,
-                                              ),
+                                            service: widget.service,
+                                            selectedState: myState,
+                                            selectedLocation: myLocation,
+                                          ),
                                         ),
                                       );
                                     } else {
@@ -223,8 +187,7 @@ class _SelectStatePageState extends State<SelectStatePage> {
                                           gravity: ToastGravity.BOTTOM,
                                           timeInSecForIosWeb: 1,
                                           backgroundColor:
-                                          Colors.black54.withOpacity(0.3),
-                                          textColor: Colors.white,
+                                              Colors.black54.withOpacity(0.3),
                                           fontSize: 16.0);
                                     }
                                   }
@@ -236,11 +199,7 @@ class _SelectStatePageState extends State<SelectStatePage> {
                           return Column(
                             children: <Widget>[
                               LocationCell(
-                                width: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width * 1,
-                                textColor: Colors.white,
+                                width: MediaQuery.of(context).size.width * 1,
                                 title: stateList[index].title,
                                 borderRadius: 10,
                                 func: () {
@@ -255,9 +214,9 @@ class _SelectStatePageState extends State<SelectStatePage> {
                         }
                       },
                     ),
-            )
-          ],
-        ),
+                  )
+                ],
+              ),
       ),
     );
   }
@@ -265,11 +224,8 @@ class _SelectStatePageState extends State<SelectStatePage> {
   _getDataFromFirebase() {
     FirebaseFirestore.instance.collection('state').get().then((docs) {
       for (int i = 0; i < docs.docs.length; i++) {
-        debugPrint("${docs.docs[i].get('sName').toString()}  ::  " +
-            docs.docs[i].id);
-        setState(() => stateList.add(MyLocation(
-            docs.docs[i].id.toString(),
-            docs.docs[i].get('sName'))));
+        setState(() => stateList.add(
+            MyLocation(docs.docs[i].id.toString(), docs.docs[i].get('sName'))));
       }
       setState(() => isLoading = false);
     });

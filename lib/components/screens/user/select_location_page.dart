@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:smartrr/components/widgets/my_stepper.dart';
 import 'package:smartrr/utils/colors.dart';
 import '../../widgets/circular_progress.dart';
 import '../../widgets/location_cell.dart';
@@ -31,7 +32,7 @@ class SelectLocationPage extends StatefulWidget {
 class _SelectLocationPageState extends State<SelectLocationPage> {
   bool acceptedValue = false;
   String currentSelectedAddress = '';
-  List<MyLocation> locationList = new List<MyLocation>();
+  List<MyLocation> locationList = <MyLocation>[];
   bool isLoading = true;
 
   @override
@@ -44,15 +45,14 @@ class _SelectLocationPageState extends State<SelectLocationPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (BuildContext context) =>
-            SelectOrgPage(
+        builder: (BuildContext context) => SelectOrgPage(
           service: widget.service,
           selectedState: widget.selectedState,
           selectedLocation: locationSelected,
-              isUser: widget.isUser,
-              referredBy: widget.referredBy,
-              referredName: widget.referredName,
-              caseId: widget.caseId,
+          isUser: widget.isUser,
+          referredBy: widget.referredBy,
+          referredName: widget.referredName,
+          caseId: widget.caseId,
         ),
       ),
     );
@@ -61,70 +61,39 @@ class _SelectLocationPageState extends State<SelectLocationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text("Select LGA")),
       body: Container(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width,
+        width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 4),
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/background.png'),
-            fit: BoxFit.cover,
-          ),
-        ),
         child: isLoading
             ? Center(
-          child: CircularProgress(),
+                child: CircularProgress(),
               )
             : Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-                  SizedBox(
-                    height: kToolbarHeight + 10,
-                  ),
-                  Text(
-                    widget.selectedState.title,
-                    textAlign: TextAlign.center,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: smartYellow,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-            Text(
-              'Select Location',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: locationList.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 6),
-                    child: LocationCell(
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width * 1,
-                      textColor: Colors.white,
-                      title: locationList[index].title,
-                      borderRadius: 10,
-                      func: () {
-                        locationSelected(locationList[index]);
-                      },
-                    ),
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  MyStepper(activeIndex: 3),
+                  SizedBox(height: 31),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: locationList.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          child: LocationCell(
+                            width: MediaQuery.of(context).size.width * 1,
+                            title: locationList[index].title,
+                            borderRadius: 10,
+                            func: () {
+                              locationSelected(locationList[index]);
+                            },
+                          ),
                         );
                       },
                     ),
-            )
-          ],
-        ),
+                  )
+                ],
+              ),
       ),
     );
   }

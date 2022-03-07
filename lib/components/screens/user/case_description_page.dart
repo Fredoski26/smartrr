@@ -3,11 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:smartrr/components/widgets/circular_progress.dart';
+import 'package:smartrr/components/widgets/my_stepper.dart';
 import 'package:smartrr/components/widgets/show_action.dart';
 import 'package:smartrr/components/widgets/smart_text_field.dart';
 import 'package:smartrr/models/location.dart';
 import 'package:smartrr/models/organization.dart';
-import 'package:smartrr/services/api_client.dart';
 import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/utils/utils.dart';
 import '../../widgets/selected_location_cell.dart';
@@ -50,318 +50,326 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
     _getUserType();
     super.initState();
     User _currentUser = FirebaseAuth.instance.currentUser;
-      setState(() {
-        currentUser = _currentUser;
-      });
+    setState(() {
+      currentUser = _currentUser;
+    });
 
-      FirebaseFirestore.instance
-          .collection('users')
-          .where('email', isEqualTo: _currentUser.email)
-          .get()
-          .then((docsReturned) {
-        var returnedUserInfo = docsReturned.docs[0].data();
-        setState(() {
-          currentUserInfo = returnedUserInfo;
-          _isLoading = false;
-        });
+    FirebaseFirestore.instance
+        .collection('users')
+        .where('email', isEqualTo: _currentUser.email)
+        .get()
+        .then((docsReturned) {
+      var returnedUserInfo = docsReturned.docs[0].data();
+      setState(() {
+        currentUserInfo = returnedUserInfo;
+        _isLoading = false;
       });
-    }
+    });
+  }
+
+  final List<String> items = [
+    'Female Genital Mutilation',
+    'Physical Abuse',
+    'Rape',
+    'Sexual Abuse',
+    'Psychological/Emotional Abuse',
+    'Forced/child marriage',
+    'Denial of resources',
+    'Sexual Exploitation & Abuse'
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text("Select Case Description")),
       body: Container(
-        height: MediaQuery
-            .of(context)
-            .size
-            .height,
-        width: MediaQuery
-            .of(context)
-            .size
-            .width,
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 4),
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/background.png'),
-            fit: BoxFit.cover,
-          ),
-        ),
         child: _isLoading
             ? CircularProgress()
             : _userType
-            ? Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: kToolbarHeight + 10,
-            ),
-            Text(
-              '${widget.org.name}',
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: smartYellow,
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              'CASE DESCRIPTION',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600),
-            ),
-            SizedBox(
-              height: 50,
-            ),
-            Theme(
-              data: ThemeData(
-                canvasColor: dropDownCanvasColor,
-              ),
-              child: BlackLocationCell(
-                borderRadius: 12,
-                verticalPadding: 4,
-                child: DropdownButton<String>(
-                  isExpanded: true,
-                  value: selectedDescription,
-                  hint: Text(
-                    'Select One',
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                  icon: Icon(Icons.keyboard_arrow_down),
-                  underline: SizedBox(),
-                  style: TextStyle(color: Colors.black),
-                  items: <String>[
-                    'Physical Abuse',
-                    'Rape',
-                    'Sexual Abuse',
-                    'Psychological/Emotional Abuse',
-                    'Forced/child marriage',
-                    'Denial of resources',
-                    'Sexual Exploitation & Abuse'
-                  ].map((String value) {
-                    return new DropdownMenuItem<String>(
-                      value: value,
-                      child: new Text(
-                        value,
-                        style: TextStyle(color: Colors.black),
+                ? Column(mainAxisSize: MainAxisSize.min, children: [
+                    Text(
+                      '${widget.org.name}',
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       ),
-                    );
-                  }).toList(),
-                  onChanged: (value) =>
-                      setState(() => selectedDescription = value),
-                ),
-              ),
-            ),
-          ],
-        )
-            : SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: kToolbarHeight + 10,
-                ),
-                Text(
-                  '${widget.org.name}',
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: smartYellow,
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'CASE DESCRIPTION',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600),
-                ),
-                SizedBox(
-                  height: 50,
-                ),
-                Text(
-                  'Case Type',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                  ),
-                ),
-                Theme(
-                  data: ThemeData(
-                    canvasColor: dropDownCanvasColor,
-                  ),
-                  child: BlackLocationCell(
-                    borderRadius: 12,
-                    verticalPadding: 4,
-                    child: DropdownButton<String>(
-                      isExpanded: true,
-                      value: selectedDescription,
-                      hint: Text(
-                        'Select One',
-                        style: TextStyle(color: Colors.grey),
+                    ),
+                    Expanded(
+                      child: ListView.builder(
+                        itemBuilder: (context, i) {
+                          return ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            leading: Radio(
+                                value: items[i],
+                                groupValue: selectedDescription,
+                                onChanged: (val) => {
+                                      setState(() {
+                                        selectedDescription = val;
+                                      })
+                                    }),
+                            title: Text(items[i]),
+                          );
+                        },
+                        itemCount: items.length,
                       ),
-                      icon: Icon(Icons.keyboard_arrow_down),
-                      underline: SizedBox(),
-                      style: TextStyle(color: Colors.black),
-                      items: <String>[
-                        'Physical Abuse',
-                        'Rape',
-                        'Sexual Abuse',
-                        'Psychological/Emotional Abuse',
-                        'Forced/child marriage',
-                        'Denial of resources',
-                        'Sexual Exploitation & Abuse'
-                      ].map((String value) {
-                        return new DropdownMenuItem<String>(
-                          value: value,
-                          child: new Text(
-                            value,
-                            style: TextStyle(color: Colors.black),
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                            child: TextButton(
+                          onPressed: _saveCase,
+                          child: Text(
+                            "Submit Report",
                           ),
-                        );
-                      }).toList(),
-                      onChanged: (value) =>
-                          setState(() => selectedDescription = value),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 18,
-                ),
-                smartTextField(
-                  title: 'Name',
-                  controller: _name,
-                  isForm: true,
-                ),
-                smartTextField(
-                  title: 'Age',
-                  controller: _age,
-                  isForm: true,
-                  textInputType: TextInputType.number,
-                ),
-                smartTextField(
-                  title: 'Phone No.',
-                  controller: _phone,
-                  isPhone: true,
-                  prefix: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 14, horizontal: 4),
-                    child: Text(
-                      '+234',
-                      style: TextStyle(color: Colors.purple,
-                        fontWeight: FontWeight.w700,),
-                    ),
-                  ),
-                  isForm: true,
-                  textInputType: TextInputType.phone,
-                ),
-                smartTextField(
-                  title: 'National ID Card No.',
-                  controller: _cnic,
-                  isForm: false,
-                  required: false,
-                  textInputType: TextInputType.number,
-                ),
-                Text(
-                  'Gender',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        if (_isMale)
-                          setState(() => _isMale = false);
-                        else
-                          setState(() => _isMale = true);
-                      },
-                      child: Row(
+                        ))
+                      ],
+                    )
+                  ])
+                // ? Column(
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     mainAxisSize: MainAxisSize.min,
+                //     children: [
+                //       MyStepper(activeIndex: 5),
+                //       SizedBox(height: 31),
+                //       Text(
+                //         '${widget.org.name}',
+                //         textAlign: TextAlign.center,
+                //         maxLines: 1,
+                //         overflow: TextOverflow.ellipsis,
+                //         style: TextStyle(
+                //           fontSize: 30,
+                //           fontWeight: FontWeight.bold,
+                //         ),
+                //       ),
+                //       SizedBox(height: 20),
+                //       ListView.builder(
+                //         itemBuilder: (context, i) {
+                //           return ListTile(
+                //             contentPadding: EdgeInsets.zero,
+                //             leading: Radio(
+                //                 value: items[i],
+                //                 groupValue: _value,
+                //                 onChanged: (val) => {
+                //                       setState(() {
+                //                         _value = val;
+                //                       })
+                //                     }),
+                //             title: Text("Select"),
+                //           );
+                //         },
+                //         itemCount: items.length,
+                //       ),
+                //       Theme(
+                //         data: ThemeData(
+                //           canvasColor: dropDownCanvasColor,
+                //         ),
+                //         child: BlackLocationCell(
+                //           borderRadius: 12,
+                //           verticalPadding: 4,
+                //           child: DropdownButton<String>(
+                //             isExpanded: true,
+                //             value: selectedDescription,
+                //             hint: Text(
+                //               'Select One',
+                //               style: TextStyle(color: Colors.grey),
+                //             ),
+                //             icon: Icon(Icons.keyboard_arrow_down),
+                //             underline: SizedBox(),
+                //             style: TextStyle(color: Colors.black),
+                //             items: items.map((String value) {
+                //               return new DropdownMenuItem<String>(
+                //                 value: value,
+                //                 child: new Text(
+                //                   value,
+                //                   style: TextStyle(color: Colors.black),
+                //                 ),
+                //               );
+                //             }).toList(),
+                //             onChanged: (value) =>
+                //                 setState(() => selectedDescription = value),
+                //           ),
+                //         ),
+                //       ),
+                //     ],
+                //   )
+                : SingleChildScrollView(
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Checkbox(
-                            value: _isMale,
-                            onChanged: (val) {
-                              print('===> $val');
-                              if (val)
-                                setState(() => _isMale = true);
-                              else
-                                setState(() => _isMale = false);
-                            },
+                          Text(
+                            '${widget.org.name}',
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 50,
                           ),
                           Text(
-                            'Male',
-                            style: TextStyle(color: Colors.white),
+                            'Case Type',
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
                           ),
+                          Theme(
+                            data: ThemeData(
+                              canvasColor: dropDownCanvasColor,
+                            ),
+                            child: BlackLocationCell(
+                              borderRadius: 12,
+                              verticalPadding: 4,
+                              child: DropdownButton<String>(
+                                isExpanded: true,
+                                value: selectedDescription,
+                                hint: Text(
+                                  'Select One',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                                icon: Icon(Icons.keyboard_arrow_down),
+                                underline: SizedBox(),
+                                style: TextStyle(color: Colors.black),
+                                items: items.map((String value) {
+                                  return new DropdownMenuItem<String>(
+                                    value: value,
+                                    child: new Text(
+                                      value,
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                  );
+                                }).toList(),
+                                onChanged: (value) =>
+                                    setState(() => selectedDescription = value),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 18,
+                          ),
+                          smartTextField(
+                            title: 'Name',
+                            controller: _name,
+                            isForm: true,
+                          ),
+                          smartTextField(
+                            title: 'Age',
+                            controller: _age,
+                            isForm: true,
+                            textInputType: TextInputType.number,
+                          ),
+                          smartTextField(
+                            title: 'Phone No.',
+                            controller: _phone,
+                            isPhone: true,
+                            prefix: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 14, horizontal: 4),
+                              child: Text(
+                                '+234',
+                                style: TextStyle(
+                                  color: lightGrey,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                            isForm: true,
+                            textInputType: TextInputType.phone,
+                          ),
+                          smartTextField(
+                            title: 'National ID Card No.',
+                            controller: _cnic,
+                            isForm: false,
+                            required: false,
+                            textInputType: TextInputType.number,
+                          ),
+                          Text(
+                            'Gender',
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  if (_isMale)
+                                    setState(() => _isMale = false);
+                                  else
+                                    setState(() => _isMale = true);
+                                },
+                                child: Row(
+                                  children: [
+                                    Checkbox(
+                                      value: _isMale,
+                                      onChanged: (val) {
+                                        print('===> $val');
+                                        if (val)
+                                          setState(() => _isMale = true);
+                                        else
+                                          setState(() => _isMale = false);
+                                      },
+                                    ),
+                                    Text(
+                                      'Male',
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  if (_isMale)
+                                    setState(() => _isMale = false);
+                                  else
+                                    setState(() => _isMale = true);
+                                },
+                                child: Row(
+                                  children: [
+                                    Checkbox(
+                                      value: !_isMale,
+                                      onChanged: (val) {
+                                        print('===> $val');
+                                        if (val)
+                                          setState(() => _isMale = false);
+                                        else
+                                          setState(() => _isMale = true);
+                                      },
+                                    ),
+                                    Text(
+                                      'Female',
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 80,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                  child: TextButton(
+                                child: Text("Submit Report"),
+                                onPressed: _saveCaseWithUser,
+                              ))
+                            ],
+                          )
                         ],
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        if (_isMale)
-                          setState(() => _isMale = false);
-                        else
-                          setState(() => _isMale = true);
-                      },
-                      child: Row(
-                        children: [
-                          Checkbox(
-                            value: !_isMale,
-                            onChanged: (val) {
-                              print('===> $val');
-                              if (val)
-                                setState(() => _isMale = false);
-                              else
-                                setState(() => _isMale = true);
-                            },
-                          ),
-                          Text(
-                            'Female',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 80,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async {
-          if (_userType) {
-            await _saveCase();
-          } else {
-            if (_formKey.currentState.validate()) {
-              await _saveCaseWithUser();
-            }
-          }
-        },
-        label: Text(
-          'SUBMIT',
-          style: TextStyle(
-              color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
-        ),
-        icon: Icon(
-          Icons.done,
-          color: Colors.white,
-        ),
-        backgroundColor: Color(0xFFFF0000),
+                  ),
       ),
     );
   }
@@ -453,9 +461,7 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
         caseNumber += ll[i].substring(0, 1);
       }
       caseNumber =
-      "$caseNumber${DateTime
-          .now()
-          .millisecondsSinceEpoch}${widget.service.substring(0, 1)}";
+          "$caseNumber${DateTime.now().millisecondsSinceEpoch}${widget.service.substring(0, 1)}";
       try {
         FirebaseFirestore.instance.collection('cases').doc().set({
           'caseNumber': caseNumber,
@@ -514,9 +520,7 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
         caseNumber += ll[i].substring(0, 1);
       }
       caseNumber =
-      "$caseNumber${DateTime
-          .now()
-          .millisecondsSinceEpoch}${widget.service.substring(0, 1)}";
+          "$caseNumber${DateTime.now().millisecondsSinceEpoch}${widget.service.substring(0, 1)}";
       try {
         FirebaseFirestore.instance.collection('cases').doc().set({
           'caseNumber': caseNumber,
