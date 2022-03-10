@@ -34,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
       key: mScaffoldState,
       body: Container(
         height: MediaQuery.of(context).size.height,
-        child: Stack(clipBehavior: Clip.hardEdge, children: [
+        child: Stack(children: [
           Positioned(
             top: -135,
             child: Container(

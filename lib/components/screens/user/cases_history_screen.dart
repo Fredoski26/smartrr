@@ -60,80 +60,80 @@ class _CasesHistoryScreenState extends State<CasesHistoryScreen> {
                                 ),
                                 isThreeLine: true,
                               );
-                              return BlackLocationCell(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.9,
-                                  textColor: Colors.white,
-                                  bgColor: primaryColor,
-                                  child: Column(
-                                    children: <Widget>[
-                                      Text(
-                                        _casesList[index].orgName,
-                                        textAlign: TextAlign.start,
-                                        maxLines: 2,
-                                        style: TextStyle(
-                                            color: Color(0xFFF7EC03),
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                      Text(
-                                        _casesList[index].caseType,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      Text(
-                                        'Case: ' + _casesList[index].caseDesc,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      _casesList[index].isVictim
-                                          ? Text(
-                                              'Victim: ' +
-                                                  _casesList[index].victimName,
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            )
-                                          : Container(),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Text(
-                                        _casesList[index].locationName,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      Text(
-                                        getDate(_casesList[index].timestamp),
-                                        style: TextStyle(
-                                          color: Colors.white70,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Align(
-                                        alignment: Alignment.centerRight,
-                                        child: _statusWidget(
-                                            status: _casesList[index].status),
-                                      ),
-                                    ],
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                  ),
-                                  borderRadius: 10,
-                                  func: () {
-                                    debugPrint('Case Tapped');
-                                  });
+                              // return BlackLocationCell(
+                              //     width:
+                              //         MediaQuery.of(context).size.width * 0.9,
+                              //     textColor: Colors.white,
+                              //     bgColor: primaryColor,
+                              //     child: Column(
+                              //       children: <Widget>[
+                              //         Text(
+                              //           _casesList[index].orgName,
+                              //           textAlign: TextAlign.start,
+                              //           maxLines: 2,
+                              //           style: TextStyle(
+                              //               color: Color(0xFFF7EC03),
+                              //               fontSize: 20,
+                              //               fontWeight: FontWeight.w600),
+                              //         ),
+                              //         Text(
+                              //           _casesList[index].caseType,
+                              //           style: TextStyle(
+                              //             color: Colors.white,
+                              //             fontSize: 15,
+                              //             fontWeight: FontWeight.w500,
+                              //           ),
+                              //         ),
+                              //         Text(
+                              //           'Case: ' + _casesList[index].caseDesc,
+                              //           style: TextStyle(
+                              //             color: Colors.white,
+                              //             fontWeight: FontWeight.w500,
+                              //           ),
+                              //         ),
+                              //         _casesList[index].isVictim
+                              //             ? Text(
+                              //                 'Victim: ' +
+                              //                     _casesList[index].victimName,
+                              //                 style: TextStyle(
+                              //                   color: Colors.white,
+                              //                   fontWeight: FontWeight.w500,
+                              //                 ),
+                              //               )
+                              //             : Container(),
+                              //         SizedBox(
+                              //           height: 10,
+                              //         ),
+                              //         Text(
+                              //           _casesList[index].locationName,
+                              //           style: TextStyle(
+                              //             color: Colors.white,
+                              //             fontWeight: FontWeight.w500,
+                              //           ),
+                              //         ),
+                              //         Text(
+                              //           getDate(_casesList[index].timestamp),
+                              //           style: TextStyle(
+                              //             color: Colors.white70,
+                              //             fontWeight: FontWeight.w500,
+                              //           ),
+                              //         ),
+                              //         SizedBox(
+                              //           height: 5,
+                              //         ),
+                              //         Align(
+                              //           alignment: Alignment.centerRight,
+                              //           child: _statusWidget(
+                              //               status: _casesList[index].status),
+                              //         ),
+                              //       ],
+                              //       crossAxisAlignment:
+                              //           CrossAxisAlignment.start,
+                              //     ),
+                              //     borderRadius: 10,
+                              //     func: () {
+                              //       debugPrint('Case Tapped');
+                              //     });
                             },
                           ),
                         ),

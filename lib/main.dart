@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:package_info/package_info.dart';
 import 'package:smartrr/components/screens/general/forgot_password.dart';
-import 'package:smartrr/components/screens/org/org_cases_screen.dart';
 import 'package:smartrr/components/screens/org/refer_or_cases_page.dart';
 import 'package:smartrr/components/screens/org/referal_page.dart';
+import 'package:smartrr/components/screens/settings.dart';
 import 'package:smartrr/components/screens/user/cases_history_screen.dart';
 import 'package:smartrr/components/screens/org/org_sign_up_page.dart';
 import 'package:smartrr/components/screens/user/sign_up_page.dart';
@@ -37,13 +37,28 @@ class MyApp extends StatelessWidget {
         '/orgMain': (context) => ReferOrCasesPage(),
         '/refer': (context) => ReferralPage(),
         '/forgot': (context) => ForgotPasswordScreen(),
+        '/settings': ((context) => Settings())
       },
+      themeMode: ThemeMode.light,
+      darkTheme: ThemeData(
+          primarySwatch: Colors.orange,
+          primaryColor: primaryColor,
+          appBarTheme: AppBarTheme().copyWith(color: primaryColor),
+          scaffoldBackgroundColor: darkGrey,
+          textTheme: TextTheme().copyWith(
+              button: TextStyle().copyWith(color: Colors.white),
+              headline6: TextStyle().copyWith(color: Colors.white),
+              bodyText2: TextStyle().copyWith(color: Colors.white),
+              caption: TextStyle().copyWith(color: Colors.grey),
+              subtitle1: TextStyle().copyWith(color: Colors.white)),
+          elevatedButtonTheme: ElevatedButtonThemeData(),
+          drawerTheme: DrawerThemeData().copyWith(backgroundColor: darkGrey)),
       theme: ThemeData(
         textTheme: GoogleFonts.poppinsTextTheme(),
         primarySwatch: Colors.orange,
         primaryColor: primaryColor,
-        scaffoldBackgroundColor: Colors.white,
         appBarTheme: AppBarTheme(
+          backgroundColor: primaryColor,
           elevation: 0,
           centerTitle: true,
           titleTextStyle:
