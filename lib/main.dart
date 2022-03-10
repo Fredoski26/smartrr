@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:package_info/package_info.dart';
 import 'package:smartrr/components/screens/general/forgot_password.dart';
 import 'package:smartrr/components/screens/org/refer_or_cases_page.dart';
@@ -9,11 +8,11 @@ import 'package:smartrr/components/screens/settings.dart';
 import 'package:smartrr/components/screens/user/cases_history_screen.dart';
 import 'package:smartrr/components/screens/org/org_sign_up_page.dart';
 import 'package:smartrr/components/screens/user/sign_up_page.dart';
+import 'package:smartrr/theme/themes.dart';
 import 'package:smartrr/utils/utils.dart';
 import 'components/screens/general/login_page.dart';
 import 'components/screens/user/report_or_history_page.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'utils/colors.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,53 +39,8 @@ class MyApp extends StatelessWidget {
         '/settings': ((context) => Settings())
       },
       themeMode: ThemeMode.light,
-      darkTheme: ThemeData(
-          primarySwatch: Colors.orange,
-          primaryColor: primaryColor,
-          appBarTheme: AppBarTheme().copyWith(color: primaryColor),
-          scaffoldBackgroundColor: darkGrey,
-          textTheme: TextTheme().copyWith(
-              button: TextStyle().copyWith(color: Colors.white),
-              headline6: TextStyle().copyWith(color: Colors.white),
-              bodyText2: TextStyle().copyWith(color: Colors.white),
-              caption: TextStyle().copyWith(color: Colors.grey),
-              subtitle1: TextStyle().copyWith(color: Colors.white)),
-          elevatedButtonTheme: ElevatedButtonThemeData(),
-          drawerTheme: DrawerThemeData().copyWith(backgroundColor: darkGrey)),
-      theme: ThemeData(
-        textTheme: GoogleFonts.poppinsTextTheme(),
-        primarySwatch: Colors.orange,
-        primaryColor: primaryColor,
-        appBarTheme: AppBarTheme(
-          backgroundColor: primaryColor,
-          elevation: 0,
-          centerTitle: true,
-          titleTextStyle:
-              TextStyle().copyWith(color: Colors.white, fontSize: 18),
-          iconTheme: IconThemeData().copyWith(color: Colors.white),
-        ),
-        drawerTheme: DrawerThemeData(backgroundColor: primaryColor),
-        textButtonTheme: TextButtonThemeData(
-          style: ButtonStyle(
-            shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(33))),
-            foregroundColor: MaterialStateProperty.all(Colors.white),
-            backgroundColor: MaterialStateProperty.all(primaryColor),
-            padding: MaterialStateProperty.all(
-                EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0)),
-          ),
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ButtonStyle(
-            shape: MaterialStateProperty.all(
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
-            foregroundColor: MaterialStateProperty.all(Colors.white),
-            backgroundColor: MaterialStateProperty.all(primaryColor),
-            padding: MaterialStateProperty.all(
-                EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0)),
-          ),
-        ),
-      ),
+      darkTheme: darkTheme,
+      theme: appTheme,
     );
   }
 }

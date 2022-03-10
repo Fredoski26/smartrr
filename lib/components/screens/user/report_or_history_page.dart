@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:smartrr/components/widgets/chatbot.dart';
 import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/utils/utils.dart';
 import '../../widgets/ask_action.dart';
@@ -100,11 +101,11 @@ class _ReportOrHistoryPageState extends State<ReportOrHistoryPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: primaryColor,
-        foregroundColor: Colors.white,
-        child: Icon(Icons.chat),
-        onPressed: () {},
-      ),
+          backgroundColor: primaryColor,
+          foregroundColor: Colors.white,
+          child: Icon(Icons.chat),
+          onPressed: () => Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => ChatBot()))),
     );
   }
 
