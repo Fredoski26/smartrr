@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:smartrr/components/screens/about.dart';
@@ -15,14 +16,29 @@ import 'package:smartrr/utils/utils.dart';
 import 'components/screens/general/login_page.dart';
 import 'components/screens/user/report_or_history_page.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'services/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
+
+  runApp(ChangeNotifierProvider(
+    create: (_) => ThemeNotifier(),
+    child: Consumer<ThemeNotifier>(
+      builder: (context, ThemeNotifier notifier, child) {
+        return MyApp(
+          isDarkTheme: notifier.darkTheme,
+        );
+      },
+    ),
+  ));
 }
 
 class MyApp extends StatelessWidget {
+  final bool isDarkTheme;
+
+  MyApp({this.isDarkTheme});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -42,9 +58,7 @@ class MyApp extends StatelessWidget {
         '/about': (context) => About(),
         '/faq': (context) => FrequentlyAskedQuestions()
       },
-      themeMode: ThemeMode.light,
-      darkTheme: darkTheme,
-      theme: appTheme,
+      theme: isDarkTheme ? darkTheme : appTheme,
     );
   }
 }
@@ -67,13 +81,10 @@ class _SplashState extends State<Splash> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Container(
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 4),
-        decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage('assets/background.png'), fit: BoxFit.cover),
-        ),
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(12.0),
@@ -96,14 +107,15 @@ class _SplashState extends State<Splash> {
                   style: TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
                   ),
                 ),
                 Text(
+                  "Smart Reporting and Referral",
+                  style: TextStyle(fontSize: 14),
+                ),
+                Text(
                   packageInfo == null ? '' : 'ver ${packageInfo.version}',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
+                  style: TextStyle(),
                 ),
               ],
             ),

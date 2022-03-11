@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:smartrr/models/location.dart';
+import 'package:smartrr/utils/colors.dart';
 import '../../widgets/ask_action.dart';
 import '../../widgets/show_action.dart';
 import '../../widgets/show_loading.dart';
@@ -81,7 +82,6 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
       child: Container(
         decoration: BoxDecoration(color: Colors.white),
         child: Scaffold(
-            backgroundColor: Colors.transparent,
             appBar: AppBar(
               elevation: 0,
               automaticallyImplyLeading: false,
@@ -107,22 +107,12 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border:
-                                Border.all(width: 1, color: Color(0xFFF59405)),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(33))),
-                        child: TextButton(
-                          onPressed: _decreaseStackIndex,
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.white)),
-                          child: Text(
-                            'Back',
-                            style: TextStyle(
-                              color: Color(0xFFF59405),
-                            ),
+                      child: OutlinedButton(
+                        onPressed: _decreaseStackIndex,
+                        child: Text(
+                          'Back',
+                          style: TextStyle(
+                            color: primaryColor,
                           ),
                         ),
                       ),
@@ -131,12 +121,8 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
                     Expanded(
                       child: TextButton(
                         onPressed: _increaseStackIndex,
-                        child: Container(
-                          child: Center(
-                            child: Text(
-                              'Next',
-                            ),
-                          ),
+                        child: Text(
+                          'Next',
                         ),
                       ),
                     ),

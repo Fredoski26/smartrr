@@ -1,10 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:smartrr/utils/colors.dart';
+import '../../services/theme_provider.dart';
 
-class Settings extends StatelessWidget {
-  // const Settings({ Key? key }) : super(key: key);
+class Settings extends StatefulWidget {
+  @override
+  State<Settings> createState() => _SettingsState();
+}
 
+class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,17 +79,21 @@ class Settings extends StatelessWidget {
                     ),
                     Divider(),
                     ListTile(
-                      leading: Icon(
-                        Icons.light_mode_outlined,
-                        color: primaryColor,
-                      ),
-                      title: Text("Light Mode"),
-                      trailing: CupertinoSwitch(
-                        activeColor: primaryColor,
-                        value: true,
-                        onChanged: (val) {},
-                      ),
-                    )
+                        leading: Icon(
+                          Icons.light_mode_outlined,
+                          color: primaryColor,
+                        ),
+                        title: Text("Dark Mode"),
+                        trailing: Consumer<ThemeNotifier>(
+                          builder: (context, notifier, child) =>
+                              CupertinoSwitch(
+                            activeColor: primaryColor,
+                            value: notifier.darkTheme,
+                            onChanged: (val) {
+                              notifier.toggleTheme();
+                            },
+                          ),
+                        ))
                   ]),
                 ),
               ],

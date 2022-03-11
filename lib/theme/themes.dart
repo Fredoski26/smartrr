@@ -47,12 +47,43 @@ ThemeData appTheme = ThemeData(
 final ThemeData darkTheme = ThemeData(
     primarySwatch: Colors.orange,
     primaryColor: primaryColor,
-    appBarTheme: AppBarTheme().copyWith(color: primaryColor),
+    appBarTheme:
+        appTheme.appBarTheme.copyWith(color: primaryColor, elevation: 0),
     scaffoldBackgroundColor: darkGrey,
-    textTheme: TextTheme().copyWith(
-        button: TextStyle().copyWith(color: Colors.white),
-        headline6: TextStyle().copyWith(color: Colors.white),
-        bodyText2: TextStyle().copyWith(color: Colors.white),
-        caption: TextStyle().copyWith(color: Colors.grey),
-        subtitle1: TextStyle().copyWith(color: Colors.white)),
-    drawerTheme: DrawerThemeData().copyWith(backgroundColor: darkGrey));
+    textTheme: appTheme.textTheme,
+    // textTheme: TextTheme().copyWith(
+    //     button: TextStyle().copyWith(color: Colors.white),
+    //     headline6: TextStyle().copyWith(color: Colors.white),
+    //     bodyText2: TextStyle().copyWith(color: Colors.white),
+    //     caption: TextStyle().copyWith(color: Colors.grey),
+    //     subtitle1: TextStyle().copyWith(color: Colors.white)),
+    drawerTheme: DrawerThemeData().copyWith(backgroundColor: darkGrey),
+    textButtonTheme: TextButtonThemeData(
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(33))),
+        foregroundColor: MaterialStateProperty.all(Colors.white),
+        backgroundColor: MaterialStateProperty.all(primaryColor),
+        padding: MaterialStateProperty.all(
+            EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0)),
+      ),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+        foregroundColor: MaterialStateProperty.all(Colors.white),
+        backgroundColor: MaterialStateProperty.all(primaryColor),
+        padding: MaterialStateProperty.all(
+            EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0)),
+      ),
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+        style: ButtonStyle(
+      padding: MaterialStateProperty.all(
+          EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0)),
+      side: MaterialStateProperty.all(
+          BorderSide(width: 1.0, color: primaryColor)),
+      shape: MaterialStateProperty.all(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(33))),
+    )));

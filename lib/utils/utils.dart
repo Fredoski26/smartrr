@@ -47,6 +47,19 @@ Future<bool> getUserTypePref() async {
   return prefs.getBool("userType");
 }
 
+Future setTheme({bool isDarkMode}) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setBool("isDarkMode", isDarkMode);
+}
+
+Future<bool> getTheme() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  dynamic isDarkTheme = prefs.getBool("isDarkTheme");
+  if (isDarkTheme == null) isDarkTheme = true;
+
+  return isDarkTheme;
+}
+
 texts({String title, String value}) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 10),
