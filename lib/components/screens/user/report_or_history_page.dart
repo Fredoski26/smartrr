@@ -15,10 +15,6 @@ class ReportOrHistoryPage extends StatefulWidget {
 class _ReportOrHistoryPageState extends State<ReportOrHistoryPage> {
   final mScaffoldState = GlobalKey<ScaffoldState>();
 
-  void _openDrawer(BuildContext context) {
-    Scaffold.of(context).openDrawer();
-  }
-
   BoxDecoration _actionButtonDecoration = BoxDecoration(boxShadow: [
     BoxShadow(
         color: Colors.black.withOpacity(0.25),

@@ -43,7 +43,7 @@ class CustomDrawer extends StatelessWidget {
           title: Text("FAQs"),
           textColor: Colors.white,
           iconColor: Colors.white,
-          onTap: () {},
+          onTap: () => Navigator.pushNamed(context, '/faq'),
         ),
         ListTile(
           leading: Icon(Icons.logout),

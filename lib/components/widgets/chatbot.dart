@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:dialog_flowtter/dialog_flowtter.dart';
+import 'package:smartrr/components/screens/user/consent_form_page.dart';
 import 'package:smartrr/utils/colors.dart';
+import 'package:smartrr/utils/utils.dart';
 
 class ChatBot extends StatefulWidget {
   const ChatBot({Key key, this.title}) : super(key: key);
@@ -47,7 +49,7 @@ class _ChatBotState extends State<ChatBot> {
                   horizontal: 10,
                   vertical: 5,
                 ),
-                color: Colors.white,
+                color: Color(0xFFFFF2DF),
                 child: Row(
                   children: [
                     Expanded(
@@ -156,7 +158,33 @@ class _AppBodyState extends State<AppBody> {
                                     Navigator.of(context).pushNamed("/about"),
                                 child: Text("Read about SMHR")),
                             OutlinedButton(
-                                onPressed: () {}, child: Text("Report a case"))
+                                onPressed: () async {
+                                  await setUserTypePref(userType: true)
+                                      .then((_) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            ConsentFormPage(),
+                                      ),
+                                    );
+                                  });
+                                },
+                                child: Text("Report a case for yourself")),
+                            OutlinedButton(
+                                onPressed: () async {
+                                  await setUserTypePref(userType: false)
+                                      .then((_) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            ConsentFormPage(),
+                                      ),
+                                    );
+                                  });
+                                },
+                                child: Text("Report a case for someone"))
                           ],
                         )
                       ],
