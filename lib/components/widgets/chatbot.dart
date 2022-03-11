@@ -152,7 +152,8 @@ class _AppBodyState extends State<AppBody> {
                                     widget.sendMessage("Talk to a counsellor"),
                                 child: Text("Talk to a counsellor")),
                             OutlinedButton(
-                                onPressed: () {},
+                                onPressed: () =>
+                                    Navigator.of(context).pushNamed("/about"),
                                 child: Text("Read about SMHR")),
                             OutlinedButton(
                                 onPressed: () {}, child: Text("Report a case"))

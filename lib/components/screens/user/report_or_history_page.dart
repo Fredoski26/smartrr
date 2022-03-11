@@ -54,7 +54,7 @@ class _ReportOrHistoryPageState extends State<ReportOrHistoryPage> {
               Container(
                 decoration: _actionButtonDecoration,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () => Navigator.of(context).pushNamed("/about"),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 48.0, vertical: 20.0),

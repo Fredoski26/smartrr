@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
+import 'package:smartrr/components/screens/about.dart';
 import 'package:smartrr/components/screens/general/forgot_password.dart';
 import 'package:smartrr/components/screens/org/refer_or_cases_page.dart';
 import 'package:smartrr/components/screens/org/referal_page.dart';
@@ -36,7 +37,8 @@ class MyApp extends StatelessWidget {
         '/orgMain': (context) => ReferOrCasesPage(),
         '/refer': (context) => ReferralPage(),
         '/forgot': (context) => ForgotPasswordScreen(),
-        '/settings': ((context) => Settings())
+        '/settings': ((context) => Settings()),
+        '/about': (context) => About(),
       },
       themeMode: ThemeMode.light,
       darkTheme: darkTheme,

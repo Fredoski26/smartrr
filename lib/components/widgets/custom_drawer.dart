@@ -22,7 +22,7 @@ class CustomDrawer extends StatelessWidget {
           title: Text("About Smart RR"),
           textColor: Colors.white,
           iconColor: Colors.white,
-          onTap: () {},
+          onTap: () => Navigator.of(context).pushNamed("/about"),
         ),
         ListTile(
           leading: Icon(Icons.history),
