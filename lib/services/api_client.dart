@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 class ApiClient {
   Future<String> getAddressFromCoordinates(
       double latitude, double longitude, String apiKey) async {
-    print("Got into getPosts");
     final response = await http.post(
         Uri.parse(
             'https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=$apiKey'),
@@ -22,7 +21,6 @@ class ApiClient {
   }
 
   Future<dynamic> sendSMS({String phoneNumber, String message}) async {
-    print("Got into getPosts");
 //    ac89f1f3
 //    EWXULOE0HO87RjBn
     var response = await http.post(
@@ -33,7 +31,6 @@ class ApiClient {
           "Content-Type": "application/x-www-form-urlencoded"
         });
     var jsonResponse = json.decode(response.body);
-    debugPrint("MSG RESPONSE: ${response.body}");
     return jsonResponse;
   }
 }

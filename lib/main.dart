@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:smartrr/components/screens/about.dart';
@@ -7,6 +6,7 @@ import 'package:smartrr/components/screens/faq.dart';
 import 'package:smartrr/components/screens/general/forgot_password.dart';
 import 'package:smartrr/components/screens/org/refer_or_cases_page.dart';
 import 'package:smartrr/components/screens/org/referal_page.dart';
+import 'package:smartrr/components/screens/select_country.dart';
 import 'package:smartrr/components/screens/settings.dart';
 import 'package:smartrr/components/screens/user/cases_history_screen.dart';
 import 'package:smartrr/components/screens/org/org_sign_up_page.dart';
@@ -56,7 +56,8 @@ class MyApp extends StatelessWidget {
         '/forgot': (context) => ForgotPasswordScreen(),
         '/settings': ((context) => Settings()),
         '/about': (context) => About(),
-        '/faq': (context) => FrequentlyAskedQuestions()
+        '/faq': (context) => FrequentlyAskedQuestions(),
+        "/countries": (context) => SelectCountry()
       },
       theme: isDarkTheme ? darkTheme : appTheme,
     );

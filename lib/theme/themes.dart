@@ -6,6 +6,7 @@ ThemeData appTheme = ThemeData(
     textTheme: GoogleFonts.poppinsTextTheme(),
     primarySwatch: Colors.orange,
     primaryColor: primaryColor,
+    iconTheme: IconThemeData().copyWith(color: Colors.white),
     appBarTheme: AppBarTheme(
       backgroundColor: primaryColor,
       elevation: 0,
@@ -13,7 +14,6 @@ ThemeData appTheme = ThemeData(
       titleTextStyle: TextStyle().copyWith(color: Colors.white, fontSize: 18),
       iconTheme: IconThemeData().copyWith(color: Colors.white),
     ),
-    drawerTheme: DrawerThemeData(backgroundColor: primaryColor),
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
         shape: MaterialStateProperty.all(
@@ -50,14 +50,10 @@ final ThemeData darkTheme = ThemeData(
     appBarTheme:
         appTheme.appBarTheme.copyWith(color: primaryColor, elevation: 0),
     scaffoldBackgroundColor: darkGrey,
-    textTheme: appTheme.textTheme,
-    // textTheme: TextTheme().copyWith(
-    //     button: TextStyle().copyWith(color: Colors.white),
-    //     headline6: TextStyle().copyWith(color: Colors.white),
-    //     bodyText2: TextStyle().copyWith(color: Colors.white),
-    //     caption: TextStyle().copyWith(color: Colors.grey),
-    //     subtitle1: TextStyle().copyWith(color: Colors.white)),
+    textTheme: appTheme.textTheme
+        .apply(bodyColor: Colors.white, displayColor: Colors.white),
     drawerTheme: DrawerThemeData().copyWith(backgroundColor: darkGrey),
+    iconTheme: appTheme.iconTheme,
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
         shape: MaterialStateProperty.all(
