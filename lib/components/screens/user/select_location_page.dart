@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:smartrr/components/widgets/my_stepper.dart';
-import 'package:smartrr/utils/colors.dart';
 import '../../widgets/circular_progress.dart';
 import '../../widgets/location_cell.dart';
 import '../../../models/location.dart';
@@ -99,21 +99,58 @@ class _SelectLocationPageState extends State<SelectLocationPage> {
   }
 
   _getDataFromFirebase() {
-    FirebaseFirestore.instance
-        .collection("state")
-        .doc(widget.selectedState.id)
-        .collection("locations")
+    CollectionReference stateCollection =
+        FirebaseFirestore.instance.collection("state");
+
+    stateCollection
+        .where("sName", isEqualTo: widget.selectedState.title)
         .get()
-        .then((locations) {
-      for (int i = 0; i < locations.docs.length; i++) {
-        debugPrint(
-            "iiiiiii: ${locations.docs[i].get('location').toString()}  ::  " +
-                locations.docs[i].id);
-        setState(() => locationList.add(MyLocation(
-            locations.docs[i].id.toString(),
-            locations.docs[i].get('location'))));
+        .then((states) {
+      if (states.docs.length > 0) {
+        final stateId = states.docs[0].id;
+
+        stateCollection
+            .doc(stateId)
+            .collection("locations")
+            .get()
+            .then((locations) {
+          for (int i = 0; i < locations.docs.length; i++) {
+            locationList.add(MyLocation(locations.docs[i].id.toString(),
+                locations.docs[i].get('location')));
+          }
+          setState(() => isLoading = false);
+        });
+      } else {
+        throw "No locations found";
       }
-      setState(() => isLoading = false);
+    }).catchError((e) {
+      Navigator.pop(context);
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.TOP,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black.withOpacity(.5),
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
     });
+
+    // FirebaseFirestore.instance
+    //     .collection("state")
+    //     .doc(widget.selectedState.id)
+    //     .collection("locations")
+    //     .get()
+    //     .then((locations) {
+    //   for (int i = 0; i < locations.docs.length; i++) {
+    //     debugPrint(
+    //         "iiiiiii: ${locations.docs[i].get('location').toString()}  ::  " +
+    //             locations.docs[i].id);
+    //     setState(() => locationList.add(MyLocation(
+    //         locations.docs[i].id.toString(),
+    //         locations.docs[i].get('location'))));
+    //   }
+    //   setState(() => isLoading = false);
+    // });
   }
 }

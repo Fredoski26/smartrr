@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:smartrr/components/widgets/my_stepper.dart';
+import 'package:smartrr/services/country_service.dart';
+import 'package:smartrr/services/database_service.dart';
 import '../../widgets/location_cell.dart';
 import '../../../models/location.dart';
 import 'select_location_map.dart';
@@ -34,6 +37,7 @@ class _SelectStatePageState extends State<SelectStatePage> {
   String currentSelectedAddress = '';
   List<MyLocation> stateList = <MyLocation>[];
   bool isLoading = true;
+  final User _currentUser = FirebaseAuth.instance.currentUser;
 
   @override
   void initState() {
@@ -127,7 +131,7 @@ class _SelectStatePageState extends State<SelectStatePage> {
                                           .contains(stateList[index]
                                               .title
                                               .toLowerCase())) {
-                                        debugPrint('I FOUND THE STATE');
+                                        // debugPrint('I FOUND THE STATE');
                                         myState = new MyLocation(
                                             stateList[index].id,
                                             stateList[index].title);
@@ -140,15 +144,15 @@ class _SelectStatePageState extends State<SelectStatePage> {
                                           for (int j = 0;
                                               j < locations.docs.length;
                                               j++) {
-                                            debugPrint(
-                                                "iiiiiii: ${locations.docs[j].get('location').toString()}  ::  " +
-                                                    locations.docs[j].id);
+                                            // debugPrint(
+                                            //     "iiiiiii: ${locations.docs[j].get('location').toString()}  ::  " +
+                                            //         locations.docs[j].id);
                                             if (currentSelectedAddress
                                                 .toLowerCase()
                                                 .contains(locations.docs[j]
                                                     .get('location')
                                                     .toLowerCase())) {
-                                              debugPrint('I FOUND THE CITY');
+                                              // debugPrint('I FOUND THE CITY');
                                               _isFound = true;
                                               myLocation = new MyLocation(
                                                   locations.docs[j].id
@@ -158,7 +162,7 @@ class _SelectStatePageState extends State<SelectStatePage> {
                                               return;
                                             } else {
                                               _isFound = false;
-                                              debugPrint('City not foun');
+                                              // debugPrint('City not foun');
                                             }
                                           }
                                         });
@@ -222,12 +226,25 @@ class _SelectStatePageState extends State<SelectStatePage> {
   }
 
   _getDataFromFirebase() {
-    FirebaseFirestore.instance.collection('state').get().then((docs) {
-      for (int i = 0; i < docs.docs.length; i++) {
-        setState(() => stateList.add(
-            MyLocation(docs.docs[i].id.toString(), docs.docs[i].get('sName'))));
-      }
+    DatabaseService(email: _currentUser.email)
+        .getUser()
+        .then((user) => CountryService.getStates(user["country"] ?? "Nigeria"))
+        .then((states) {
+      states.forEach((state) {
+        if (state["name"] == "Federal Capital Territory") {
+          stateList.add(MyLocation("Abuja", "Abuja"));
+        } else {
+          stateList.add(MyLocation(state['name'], state['name']));
+        }
+      });
       setState(() => isLoading = false);
     });
+    // FirebaseFirestore.instance.collection('state').get().then((docs) {
+    //   for (int i = 0; i < docs.docs.length; i++) {
+    //     setState(() => stateList.add(
+    //         MyLocation(docs.docs[i].id.toString(), docs.docs[i].get('sName'))));
+    //   }
+    //   setState(() => isLoading = false);
+    // });
   }
 }

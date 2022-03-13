@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:smartrr/components/widgets/circular_progress.dart';
 import 'package:smartrr/components/widgets/show_action.dart';
 import 'package:smartrr/components/widgets/smart_text_field.dart';
+import 'package:smartrr/services/theme_provider.dart';
+import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/utils/utils.dart';
 
 class LoginPage extends StatefulWidget {
@@ -32,220 +35,218 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       key: mScaffoldState,
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        child: Stack(children: [
-          Positioned(
-            top: -135,
-            child: Container(
-              height: 332.0,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                  color: Colors.orange,
-                  borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(90),
-                      bottomLeft: Radius.circular(90))),
+      body: Consumer<ThemeNotifier>(
+        builder: (context, notifier, child) => Container(
+          height: MediaQuery.of(context).size.height,
+          child: Stack(children: [
+            Positioned(
+              top: -135,
+              child: Container(
+                height: 332.0,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                    color: Colors.orange,
+                    borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(90),
+                        bottomLeft: Radius.circular(90))),
+              ),
             ),
-          ),
-          Stack(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(top: 123),
-                    padding: EdgeInsets.all(30),
-                    width: 318,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(22),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color(0xFF444444).withOpacity(0.5),
-                          offset: Offset(0, 4),
-                          blurRadius: 122,
-                        )
-                      ],
-                    ),
-                    child: Form(
-                      key: _formKey,
-                      child: isLoading
-                          ? Center(
-                              child: CircularProgress(),
-                            )
-                          : Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                  SizedBox(
-                                    height: kToolbarHeight,
-                                  ),
-                                  Text(
-                                    'LOGIN SMART RR',
-                                    style: TextStyle(
-                                      color: Color(0xFF444444),
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
+            Stack(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(top: 123),
+                      padding: EdgeInsets.all(30),
+                      width: 318,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(22),
+                        color: notifier.darkTheme ? darkGrey : Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: notifier.darkTheme
+                                ? Colors.white.withOpacity(0.5)
+                                : Color(0xFF444444).withOpacity(0.5),
+                            offset: Offset(0, 4),
+                            blurRadius: 122,
+                          )
+                        ],
+                      ),
+                      child: Form(
+                        key: _formKey,
+                        child: isLoading
+                            ? Center(
+                                child: CircularProgress(),
+                              )
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                    SizedBox(
+                                      height: kToolbarHeight,
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 40,
-                                  ),
-                                  smartTextField(
-                                    title: 'Email',
-                                    controller: emailController,
-                                    isForm: true,
-                                    textInputType: TextInputType.emailAddress,
-                                  ),
-                                  smartTextField(
-                                      title: 'Password',
-                                      controller: passwordController,
-                                      obscure: true,
+                                    Text(
+                                      'LOGIN SMART RR',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 40,
+                                    ),
+                                    smartTextField(
+                                      title: 'Email',
+                                      controller: emailController,
                                       isForm: true,
-                                      suffixIcon: Icon(Icons.e_mobiledata)),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          if (_isUser)
-                                            setState(() => _isUser = false);
-                                          else
-                                            setState(() => _isUser = true);
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Checkbox(
-                                              value: _isUser,
-                                              onChanged: (val) {
-                                                setState(() => _isUser = val);
-                                              },
-                                            ),
-                                            Text(
-                                              'User',
-                                              style: TextStyle(
-                                                  color: Color(0xFF444444)),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          if (_isUser)
-                                            setState(() => _isUser = false);
-                                          else
-                                            setState(() => _isUser = true);
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Checkbox(
-                                              value: !_isUser,
-                                              onChanged: (val) {
-                                                print('===> $val');
-                                                if (val)
-                                                  setState(
-                                                      () => _isUser = false);
-                                                else
-                                                  setState(
-                                                      () => _isUser = true);
-                                              },
-                                            ),
-                                            Text(
-                                              'Organization',
-                                              style: TextStyle(
-                                                  color: Color(0xFF444444)),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: TextButton(
-                                          onPressed: _validateLoginInput,
-                                          child: Text("Login"),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 38.0),
-                                  GestureDetector(
-                                    onTap: () => _bottomSheet(context: context),
-                                    child: Row(
+                                      textInputType: TextInputType.emailAddress,
+                                    ),
+                                    smartTextField(
+                                        title: 'Password',
+                                        controller: passwordController,
+                                        obscure: true,
+                                        isForm: true,
+                                        suffixIcon: Icon(Icons.e_mobiledata)),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: <Widget>[
-                                        Text(
-                                          "Don't have an account?",
-                                          style: TextStyle(
-                                            fontSize: 12.0,
-                                            color: Color(0xFF444444),
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            if (_isUser)
+                                              setState(() => _isUser = false);
+                                            else
+                                              setState(() => _isUser = true);
+                                          },
+                                          child: Row(
+                                            children: [
+                                              Checkbox(
+                                                value: _isUser,
+                                                onChanged: (val) {
+                                                  setState(() => _isUser = val);
+                                                },
+                                              ),
+                                              Text(
+                                                'User',
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                        Text(
-                                          ' SignUp',
-                                          style: TextStyle(
-                                            color: Color(0xFFF59405),
-                                            fontWeight: FontWeight.w600,
+                                        GestureDetector(
+                                          onTap: () {
+                                            if (_isUser)
+                                              setState(() => _isUser = false);
+                                            else
+                                              setState(() => _isUser = true);
+                                          },
+                                          child: Row(
+                                            children: [
+                                              Checkbox(
+                                                value: !_isUser,
+                                                onChanged: (val) {
+                                                  print('===> $val');
+                                                  if (val)
+                                                    setState(
+                                                        () => _isUser = false);
+                                                  else
+                                                    setState(
+                                                        () => _isUser = true);
+                                                },
+                                              ),
+                                              Text(
+                                                'Organization',
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ],
                                     ),
-                                  ),
-                                  SizedBox(height: 21),
-                                  GestureDetector(
-                                    onTap: () =>
-                                        Navigator.pushNamed(context, '/forgot'),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Row(
                                       children: [
-                                        Text(
-                                          'Forgot Password?',
-                                          style: TextStyle(
-                                            fontSize: 12.0,
-                                            color: Color(0xFF444444),
+                                        Expanded(
+                                          child: TextButton(
+                                            onPressed: _validateLoginInput,
+                                            child: Text("Login"),
                                           ),
                                         ),
-                                        Text(' Reset Here',
+                                      ],
+                                    ),
+                                    SizedBox(height: 38.0),
+                                    GestureDetector(
+                                      onTap: () =>
+                                          _bottomSheet(context: context),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: <Widget>[
+                                          Text(
+                                            "Don't have an account?",
+                                            style: TextStyle(
+                                              fontSize: 12.0,
+                                            ),
+                                          ),
+                                          Text(
+                                            ' SignUp',
                                             style: TextStyle(
                                               color: Color(0xFFF59405),
                                               fontWeight: FontWeight.w600,
-                                            ))
-                                      ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(height: 20),
-                                ]),
+                                    SizedBox(height: 21),
+                                    GestureDetector(
+                                      onTap: () => Navigator.pushNamed(
+                                          context, '/forgot'),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            'Forgot Password?',
+                                            style: TextStyle(
+                                              fontSize: 12.0,
+                                            ),
+                                          ),
+                                          Text(' Reset Here',
+                                              style: TextStyle(
+                                                color: Color(0xFFF59405),
+                                                fontWeight: FontWeight.w600,
+                                              ))
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: 20),
+                                  ]),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    height: 109.0,
-                    width: 109.0,
-                    margin: EdgeInsets.only(top: 63.0),
-                    child: Image.asset("assets/logo.png"),
-                  ),
-                ],
-              ),
-            ],
-          )
-        ]),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: 109.0,
+                      width: 109.0,
+                      margin: EdgeInsets.only(top: 63.0),
+                      child: Image.asset("assets/logo.png"),
+                    ),
+                  ],
+                ),
+              ],
+            )
+          ]),
+        ),
       ),
     );
   }

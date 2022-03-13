@@ -17,13 +17,42 @@ abstract class CountryService {
         .toList();
   }
 
-  Future<List<String>> getStates(String country) async {
-    final response = await http.post(
-        Uri.parse("https://countriesnow.space/api/v0.1/countries/cities"),
-        body: {"country": country});
+  static Future<List> getStates(String country) async {
+    if (country == "Nigeria") {
+      final response = await http
+          .get(Uri.parse("http://locationsng-api.herokuapp.com/api/v1/states"));
 
-    final body = json.decode(response.body);
+      final body = json.decode(response.body);
 
-    return body["data"];
+      return body;
+    } else {
+      final response = await http.post(
+          Uri.parse("https://countriesnow.space/api/v0.1/countries/states"),
+          body: {"country": country});
+
+      final body = json.decode(response.body);
+
+      return body["data"]["states"];
+    }
+  }
+
+  static Future<List> getCities(String country, String state) async {
+    if (country == "Nigeria") {
+      final response = await http.get(Uri.parse(
+          "http://locationsng-api.herokuapp.com/api/v1/states/$state/lgas"));
+
+      final body = json.decode(response.body);
+
+      return body;
+    } else {
+      final response = await http.post(
+          Uri.parse(
+              "https://countriesnow.space/api/v0.1/countries/state/cities"),
+          body: {"country": country, "state": state});
+
+      final body = json.decode(response.body);
+
+      return body["data"];
+    }
   }
 }
