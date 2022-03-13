@@ -132,7 +132,7 @@ class CustomPhoneTextBox extends StatelessWidget {
       this.borderColor = const Color(0xFFA59B9B),
       this.textColor = const Color(0xFFA59B9B),
       this.placeholderColor = const Color(0xFFA59B9B),
-      this.textboxBackgroundColor = Colors.white,
+      this.textboxBackgroundColor = Colors.transparent,
       this.controller,
       this.errorText = 'Field cannot be left empty',
       this.required = false,
@@ -166,7 +166,7 @@ class CustomPhoneTextBox extends StatelessWidget {
                 }
                 return null;
               },
-              style: TextStyle(color: textColor, fontWeight: FontWeight.w700),
+              style: TextStyle(color: textColor),
               controller: controller,
               decoration: InputDecoration(
                 counterText: counterText,

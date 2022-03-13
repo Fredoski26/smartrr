@@ -20,15 +20,14 @@ class CustomButtonWidth extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: this.width,
-      child: FlatButton(
-        // : Colors.white,
-        // borderSide: BorderSide(color: color),
-
-        highlightColor: this.color,
-        color: color,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(borderRadius)),
-        textColor: color,
+      child: TextButton(
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(color),
+            foregroundColor: MaterialStateProperty.all(color),
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(borderRadius)),
+            )),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Text(

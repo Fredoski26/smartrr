@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartrr/utils/colors.dart';
 import 'text_box.dart';
 
 smartTextField({
@@ -28,7 +29,7 @@ smartTextField({
               keyboardType: textInputType,
               isForm: isForm,
               prefix: prefix,
-              placeholderColor: Color(0xA59B9BFF),
+              placeholderColor: lightGrey,
               placeholderText: title,
             )
           : CustomTextBox(
@@ -39,7 +40,7 @@ smartTextField({
               obscureText: obscure,
               keyboardType: textInputType,
               isForm: isForm,
-              placeholderColor: Color(0xA59B9BFF),
+              placeholderColor: lightGrey,
               placeholderText: title,
               suffixIcon: suffixIcon,
             ),

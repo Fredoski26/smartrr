@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:package_info/package_info.dart';
 import 'package:smartrr/components/screens/about.dart';
 import 'package:smartrr/components/screens/faq.dart';
@@ -12,6 +13,7 @@ import 'package:smartrr/components/screens/user/cases_history_screen.dart';
 import 'package:smartrr/components/screens/org/org_sign_up_page.dart';
 import 'package:smartrr/components/screens/user/sign_up_page.dart';
 import 'package:smartrr/theme/themes.dart';
+import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/utils/utils.dart';
 import 'components/screens/general/login_page.dart';
 import 'components/screens/user/report_or_history_page.dart';
@@ -27,8 +29,13 @@ void main() async {
     create: (_) => ThemeNotifier(),
     child: Consumer<ThemeNotifier>(
       builder: (context, ThemeNotifier notifier, child) {
-        return MyApp(
-          isDarkTheme: notifier.darkTheme,
+        return AnnotatedRegion<SystemUiOverlayStyle>(
+          value: SystemUiOverlayStyle().copyWith(
+              statusBarColor: primaryColor,
+              statusBarIconBrightness: Brightness.light),
+          child: MyApp(
+            isDarkTheme: notifier.darkTheme,
+          ),
         );
       },
     ),

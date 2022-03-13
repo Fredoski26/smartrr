@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:smartrr/services/country_service.dart';
+import 'package:smartrr/components/widgets/smart_text_field.dart';
+import 'package:smartrr/services/auth_service.dart';
 import 'package:smartrr/services/database_service.dart';
 import 'package:smartrr/utils/colors.dart';
 import '../../services/theme_provider.dart';
@@ -17,18 +19,18 @@ class _SettingsState extends State<Settings> {
   final User _currentUser = FirebaseAuth.instance.currentUser;
   String country = "-";
 
-  // Object _getUserData() async {
-  //   await DatabaseService(email: _currentUser.email).getUser();
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _confirmPasswordController = TextEditingController();
 
-  //   return
-  // }
-
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     DatabaseService(email: _currentUser.email).getUser().then((user) {
-      setState(() {
-        country = user["country"];
-      });
+      if (mounted) {
+        setState(() {
+          country = user["country"] ?? "Nigeria";
+        });
+      }
     });
     return Scaffold(
       appBar: AppBar(title: Text("Settings")),
@@ -69,6 +71,8 @@ class _SettingsState extends State<Settings> {
                           color: primaryColor,
                         ),
                         title: Text("Change Password"),
+                        onTap: () =>
+                            _changePasswordDialod(context, notifier.darkTheme),
                       ),
                       // Divider(),
                       // ListTile(
@@ -120,5 +124,71 @@ class _SettingsState extends State<Settings> {
         ),
       ),
     );
+  }
+
+  _submitPassword(String password, String confirmPassword) async {
+    if (_formKey.currentState.validate()) {
+      if (password != confirmPassword) {
+        Fluttertoast.showToast(
+          msg: "Passwords don't match",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.TOP,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+        return null;
+      }
+      await AuthService.updatePassword(password: password);
+      Navigator.pop(context);
+    } else {
+      return null;
+    }
+  }
+
+  _changePasswordDialod(BuildContext context, bool isDarkTheme) {
+    return showDialog(
+        context: context,
+        builder: (context) => Dialog(
+              backgroundColor: isDarkTheme ? darkGrey : Colors.white,
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
+                child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "Update Password",
+                          textAlign: TextAlign.center,
+                          style: TextStyle().copyWith(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 10.0),
+                        smartTextField(
+                            title: "Password",
+                            controller: _passwordController,
+                            obscure: true,
+                            isForm: true),
+                        smartTextField(
+                            title: "Confirm Password",
+                            controller: _confirmPasswordController,
+                            obscure: true,
+                            isForm: true),
+                        Row(
+                          children: [
+                            Expanded(
+                                child: TextButton(
+                                    onPressed: () => _submitPassword(
+                                        _passwordController.text,
+                                        _confirmPasswordController.text),
+                                    child: Text("Update"))),
+                          ],
+                        )
+                      ],
+                    )),
+              ),
+            ));
   }
 }

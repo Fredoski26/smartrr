@@ -361,36 +361,36 @@ class _LoginPageState extends State<LoginPage> {
               .then((orgs) {
             // debugPrint(
             //     "ORG ===> ${orgs.docs[0].data['name'].toString()}  ::  Status: ${orgs.docs[0].data['status']}");
-            // int status = orgs.docs[0].data['status'];
-            // switch (status) {
-            //   // Awaiting
-            //   case 0:
-            //     setState(() {
-            //       errorMsg = "Waiting for Approval!";
-            //       isLoading = false;
-            //     });
-            //     _showException();
-            //     break;
-            //   // Approved
-            //   case 1:
-            //     _loginOrg(orgId: orgs.docs[0].id.toString());
-            //     break;
-            // // DisApproved
-            //   case 2:
-            //     setState(() {
-            //       errorMsg = "Account Disapproved!";
-            //       isLoading = false;
-            //     });
-            //     _showException();
-            //     break;
-            //   default:
-            //     setState(() {
-            //       errorMsg = "An error occured!";
-            //       isLoading = false;
-            //     });
-            //     _showException();
-            //     break;
-            // }
+            int status = orgs.docs[0].get('status');
+            switch (status) {
+              // Awaiting
+              case 0:
+                setState(() {
+                  errorMsg = "Waiting for Approval!";
+                  isLoading = false;
+                });
+                _showException();
+                break;
+              // Approved
+              case 1:
+                _loginOrg(orgId: orgs.docs[0].id.toString());
+                break;
+              // DisApproved
+              case 2:
+                setState(() {
+                  errorMsg = "Account Disapproved!";
+                  isLoading = false;
+                });
+                _showException();
+                break;
+              default:
+                setState(() {
+                  errorMsg = "An error occured!";
+                  isLoading = false;
+                });
+                _showException();
+                break;
+            }
           });
         } catch (error) {
           setState(() {

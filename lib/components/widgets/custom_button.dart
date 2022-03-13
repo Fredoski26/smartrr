@@ -16,14 +16,14 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      // : Colors.white,
-      // borderSide: BorderSide(color: color),
-      highlightColor: this.color,
-      color: color,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(borderRadius)),
-      textColor: color,
+    return TextButton(
+      style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(color),
+          foregroundColor: MaterialStateProperty.all(color),
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(borderRadius)),
+          )),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Text(

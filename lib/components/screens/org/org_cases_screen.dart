@@ -178,14 +178,13 @@ class _OrgCasesScreenState extends State<OrgCasesScreen> {
                                             ),
                                           ),
                                           actions: <Widget>[
-                                            FlatButton(
+                                            TextButton(
                                               onPressed: () =>
                                                   Navigator.pop(context),
                                               child: Text('No'),
                                             ),
-                                            FlatButton(
-                                              onPressed: () =>
-                                                  _onClose(doc.id),
+                                            TextButton(
+                                              onPressed: () => _onClose(doc.id),
                                               child: Text('Yes'),
                                             ),
                                           ],

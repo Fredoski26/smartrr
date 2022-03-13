@@ -7,11 +7,11 @@ Future askAction(
     @required BuildContext context,
     @required Function func,
     @required Function cancelFunc}) {
-  Widget continueButton = FlatButton(
+  Widget continueButton = TextButton(
     onPressed: () => func(),
     child: Text(actionText),
   );
-  Widget cancelButton = FlatButton(
+  Widget cancelButton = TextButton(
     onPressed: () => cancelFunc(),
     child: Text(cancelText),
   );

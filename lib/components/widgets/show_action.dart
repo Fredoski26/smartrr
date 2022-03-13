@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:smartrr/utils/colors.dart';
 
 Future showAction(
     {@required String actionText,
     @required String text,
     @required Function func,
     @required BuildContext context}) {
-  Widget continueButton = FlatButton(
+  Widget continueButton = TextButton(
     onPressed: () => func(),
-    child: Text(actionText, style: TextStyle(color: Colors.purple),),
+    child: Text(
+      actionText,
+    ),
   );
   return showDialog(
     context: context,
@@ -18,9 +21,7 @@ Future showAction(
           borderRadius: BorderRadius.all(Radius.circular(10))),
       title: Text(
         text,
-        style: TextStyle(
-          fontSize: 16,
-        ),
+        style: TextStyle(fontSize: 16, color: darkGrey),
       ),
       actions: <Widget>[continueButton],
     ),

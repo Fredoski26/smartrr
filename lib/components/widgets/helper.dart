@@ -22,7 +22,7 @@ class Helper {
   // }
 
   void helperShowDialog(BuildContext context, String title, String message,
-      List<FlatButton> actionList) {
+      List<TextButton> actionList) {
     // flutter defined function
     showDialog(
       context: context,
