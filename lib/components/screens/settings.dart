@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,10 +14,22 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  String country = "Nigeria";
+  final User _currentUser = FirebaseAuth.instance.currentUser;
+  String country = "-";
+
+  // Object _getUserData() async {
+  //   await DatabaseService(email: _currentUser.email).getUser();
+
+  //   return
+  // }
 
   @override
   Widget build(BuildContext context) {
+    DatabaseService(email: _currentUser.email).getUser().then((user) {
+      setState(() {
+        country = user["country"];
+      });
+    });
     return Scaffold(
       appBar: AppBar(title: Text("Settings")),
       body: Consumer<ThemeNotifier>(
@@ -57,27 +70,30 @@ class _SettingsState extends State<Settings> {
                         ),
                         title: Text("Change Password"),
                       ),
-                      Divider(),
-                      ListTile(
-                          leading: Icon(
-                            Icons.language,
-                            color: primaryColor,
-                          ),
-                          title: Text("Language"),
-                          trailing: Text("English")),
+                      // Divider(),
+                      // ListTile(
+                      //     leading: Icon(
+                      //       Icons.language,
+                      //       color: primaryColor,
+                      //     ),
+                      //     title: Text("Language"),
+                      //     trailing: Text("English")),
                       Divider(),
                       ListTile(
                           leading: Icon(
                             Icons.public,
                             color: primaryColor,
                           ),
-                          title: Text("Country"),
-                          trailing: StreamBuilder(
-                              stream: DatabaseService(uid: "uid")
-                                  .getUser()
-                                  .asStream(),
-                              builder: (context, snapshot) =>
-                                  snapshot.hasData ? Text(country) : Text("-")),
+                          title: Text(
+                            "Country",
+                            softWrap: false,
+                          ),
+                          trailing: Text(
+                            country,
+                            textAlign: TextAlign.right,
+                            maxLines: 2,
+                            overflow: TextOverflow.fade,
+                          ),
                           onTap: () =>
                               Navigator.of(context).pushNamed("/countries")),
                       Divider(),

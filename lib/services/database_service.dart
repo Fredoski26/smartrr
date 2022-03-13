@@ -3,9 +3,9 @@ import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseService {
-  final String uid;
+  final String email;
 
-  DatabaseService({this.uid});
+  DatabaseService({this.email});
 
   CollectionReference userCollection =
       FirebaseFirestore.instance.collection('users');
@@ -13,7 +13,12 @@ class DatabaseService {
   Future updateUser(Map update) async {
     try {
       HashMap<String, Object> userData = HashMap.from(update);
-      await userCollection.doc(uid).set(userData);
+      final id = await userCollection
+          .where("email", isEqualTo: email)
+          .get()
+          .then((value) => value.docs[0].id);
+
+      await userCollection.doc(id).set(userData, SetOptions(merge: true));
     } catch (e) {
       return null;
     }
@@ -21,8 +26,12 @@ class DatabaseService {
 
   Future getUser() async {
     try {
-      DocumentSnapshot snapshot = await userCollection.doc(uid).get();
-      return snapshot.data();
+      final data = await userCollection
+          .where("email", isEqualTo: email)
+          .get()
+          .then((snapshot) => snapshot.docs[0].data());
+
+      return data;
     } catch (e) {
       return null;
     }

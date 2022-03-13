@@ -21,28 +21,28 @@ class _SelectCountryState extends State<SelectCountry> {
             ? Center(child: Text("Something went wrong"))
             : Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 snapshot.hasData
-                    ? StatefulBuilder(
-                        builder: (context, setState) => Container(
-                              constraints: BoxConstraints(
-                                  maxHeight: MediaQuery.of(context).size.height,
-                                  maxWidth: MediaQuery.of(context).size.width),
-                              child: ListView.builder(
-                                  itemCount: snapshot.data.length,
-                                  itemBuilder: (context, index) => ListTile(
-                                        contentPadding: EdgeInsets.zero,
-                                        title: Text(snapshot.data[index].name),
-                                        leading: Radio(
-                                          value: snapshot.data[index].name,
-                                          groupValue: country,
-                                          onChanged: (val) {
-                                            setState(() {
-                                              country = val;
-                                            });
-                                            _updateCountry(val);
-                                          },
-                                        ),
-                                      )),
-                            ))
+                    ? Container(
+                        constraints: BoxConstraints(
+                            maxHeight: MediaQuery.of(context).size.height,
+                            maxWidth: MediaQuery.of(context).size.width),
+                        child: ListView.builder(
+                            itemCount: snapshot.data.length,
+                            itemBuilder: (context, index) => ListTile(
+                                  onTap: () {
+                                    setState(() {
+                                      country = snapshot.data[index].name;
+                                    });
+                                    _updateCountry(snapshot.data[index].name);
+                                  },
+                                  contentPadding: EdgeInsets.zero,
+                                  title: Text(snapshot.data[index].name),
+                                  leading: Radio(
+                                    value: snapshot.data[index].name,
+                                    groupValue: country,
+                                    onChanged: (val) {},
+                                  ),
+                                )),
+                      )
                     : Center(child: CircularProgressIndicator())
               ]),
         stream: CountryService.getCountries().asStream(),
@@ -53,7 +53,7 @@ class _SelectCountryState extends State<SelectCountry> {
   void _updateCountry(String country) async {
     final User _currentUser = FirebaseAuth.instance.currentUser;
 
-    await DatabaseService(uid: _currentUser.uid).updateUser(
+    await DatabaseService(email: _currentUser.email).updateUser(
         {"country": country}).then((value) => Navigator.of(context).pop());
   }
 }
