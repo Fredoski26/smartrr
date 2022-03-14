@@ -223,6 +223,7 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
           'status': 0,
           'locationId': _currentLocation.id,
           'uId': authResult.user.uid,
+          'country': _currentCountry.name
         }).then((onValue) {
           FirebaseAuth.instance.signOut();
           Navigator.pop(context);
