@@ -1,8 +1,11 @@
+import 'dart:math';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:dialog_flowtter/dialog_flowtter.dart';
 import 'package:smartrr/components/screens/user/consent_form_page.dart';
 import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/utils/utils.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ChatBot extends StatefulWidget {
   const ChatBot({Key key, this.title}) : super(key: key);
@@ -17,13 +20,13 @@ class _ChatBotState extends State<ChatBot> {
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
-  List<Map<String, dynamic>> messages = [];
+  List<Map> messages = [];
 
   @override
   void initState() {
     super.initState();
     DialogFlowtter.fromFile(
-            path: "assets/credentials.json", projectId: "smartrr-eddx")
+            path: "assets/credentials.json", projectId: "smartrr-d5615")
         .then((instance) => dialogFlowtter = instance)
         .then((value) => sendMessage("Hi"));
   }
@@ -54,6 +57,7 @@ class _ChatBotState extends State<ChatBot> {
                   children: [
                     Expanded(
                       child: TextField(
+                        style: TextStyle(color: darkGrey),
                         controller: _controller,
                         onSubmitted: (val) {
                           sendMessage(val);
@@ -98,13 +102,33 @@ class _ChatBotState extends State<ChatBot> {
   }
 
   void addMessage(Message message, [bool isUserMessage = false]) {
-    setState(() {
-      messages.add({
-        'message': message.text.text[0],
-        'isUserMessage': isUserMessage,
+    if (message.payload != null) {
+      setState(() {
+        messages.add({
+          'type': "payload",
+          'counsellors': message.payload["counsellors"],
+          'isUserMessage': isUserMessage,
+        });
       });
-    });
-
+    } else {
+      setState(() {
+        messages.add({
+          'type': "text",
+          'message': message.text.text[0],
+          'isUserMessage': isUserMessage,
+        });
+      });
+      if (message.text.text[0] == "Talk to a counsellor") {
+        setState(() {
+          messages.add({
+            'type': "notification",
+            'message':
+                "You will now be automatically connected to any available counsellor",
+            'isUserMessage': false,
+          });
+        });
+      }
+    }
     // always scroll to buttom
     _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
   }
@@ -121,7 +145,7 @@ class AppBody extends StatefulWidget {
       {Key key, this.messages, this.sendMessage, this.scrollController})
       : super(key: key);
 
-  final List<Map<String, dynamic>> messages;
+  final List<Map> messages;
   final Function sendMessage;
   final ScrollController scrollController;
 
@@ -189,21 +213,93 @@ class _AppBodyState extends State<AppBody> {
                         )
                       ],
                     )
-                  : ChatMessage(
-                      message: widget.messages[index],
-                    )),
+                  : widget.messages[index]["type"] == "notification"
+                      ? Notification(
+                          text: widget.messages[index]["message"],
+                        )
+                      : ChatMessage(
+                          message: widget.messages[index],
+                        )),
           itemCount: widget.messages.length,
         ));
   }
 }
 
-class ChatMessage extends StatelessWidget {
-  const ChatMessage({Key key, this.message}) : super(key: key);
-
-  final Map<String, dynamic> message;
+class Notification extends StatelessWidget {
+  Notification({@required this.text});
+  final String text;
   @override
   Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontStyle: FontStyle.italic, fontSize: 12, color: lightGrey),
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class ChatMessage extends StatelessWidget {
+  const ChatMessage({Key key, this.message}) : super(key: key);
+  final Map message;
+  @override
+  Widget build(BuildContext context) {
+    final User _currentUser = FirebaseAuth.instance.currentUser;
+
+    final _random = Random();
+    final counsellor = message["type"] == "payload"
+        ? message["counsellors"][_random.nextInt(message["counsellors"].length)]
+        : null;
     final bool isUserMessage = message["isUserMessage"];
+
+    Widget _botMessage({type = "text"}) {
+      if (type == "payload") {
+        return Container(
+          constraints: BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width / 2,
+          ),
+          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          decoration: BoxDecoration(
+              color: lightGrey, borderRadius: BorderRadius.circular(12)),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text("Click link below to chat with ${counsellor['counsellor']}"),
+              InkWell(
+                child: Text(
+                  counsellor["link"],
+                  style:
+                      TextStyle().copyWith(color: primaryColor, fontSize: 14),
+                ),
+                onTap: () {
+                  final url = Uri.parse(
+                      "${counsellor["link"]}?text=Hi ${counsellor['counsellor']}.%0D%0AI am ${_currentUser.displayName}");
+                  launch(url.toString());
+                },
+              )
+            ],
+          ),
+        );
+      } else {
+        return Container(
+          constraints: BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width / 2,
+          ),
+          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          decoration: BoxDecoration(
+              color: lightGrey, borderRadius: BorderRadius.circular(12)),
+          child: Text("${message['message']}"),
+        );
+      }
+    }
+
     return Row(
       mainAxisAlignment:
           isUserMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
@@ -222,15 +318,7 @@ class ChatMessage extends StatelessWidget {
                   style: TextStyle().copyWith(color: Colors.white),
                 ),
               )
-            : Container(
-                constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width / 2,
-                ),
-                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                decoration: BoxDecoration(
-                    color: lightGrey, borderRadius: BorderRadius.circular(12)),
-                child: Text("${message['message']}"),
-              )
+            : _botMessage(type: message["type"])
       ],
     );
   }

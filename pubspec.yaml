@@ -29,6 +29,7 @@ dependencies:
   accordion: ^2.2.1
   provider: ^6.0.2
   page_transition: ^2.0.5
+  url_launcher: ^6.0.20
 
 dev_dependencies:
   flutter_test:
