@@ -160,7 +160,7 @@ class _SettingsState extends State<Settings> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          "Update Password",
+                          "Change Password",
                           textAlign: TextAlign.center,
                           style: TextStyle().copyWith(
                               fontSize: 18, fontWeight: FontWeight.bold),

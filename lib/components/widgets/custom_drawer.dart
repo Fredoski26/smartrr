@@ -3,7 +3,7 @@ import 'package:smartrr/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class CustomDrawer extends StatelessWidget {
-  User _currentUser = FirebaseAuth.instance.currentUser;
+  final User _currentUser = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
     _logout() async {
@@ -21,7 +21,10 @@ class CustomDrawer extends StatelessWidget {
             currentAccountPicture: _currentUser.photoURL != null
                 ? Image.network(_currentUser.photoURL)
                 : CircleAvatar(
-                    child: Icon(Icons.person),
+                    child: Icon(
+                      Icons.person,
+                      size: 50,
+                    ),
                   ),
             accountName: Text(_currentUser.displayName),
             accountEmail: Text(_currentUser.email)),

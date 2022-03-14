@@ -36,59 +36,32 @@ class _ReportOrHistoryPageState extends State<ReportOrHistoryPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                decoration: _actionButtonDecoration,
-                child: ElevatedButton(
-                  onPressed: () => _bottomSheet(context: context),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 48.0, vertical: 20.0),
-                    child: Text("Report a Case"),
-                  ),
+              ElevatedButton.icon(
+                onPressed: () => _bottomSheet(context: context),
+                icon: Icon(Icons.report_rounded),
+                label: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 0, vertical: 20.0),
+                  child: Text("Report a Case"),
                 ),
               ),
-              Container(
-                decoration: _actionButtonDecoration,
-                child: ElevatedButton(
-                  onPressed: () => Navigator.of(context).pushNamed("/about"),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 48.0, vertical: 20.0),
-                    child: Text("All About SMR"),
-                  ),
+              ElevatedButton.icon(
+                onPressed: () => Navigator.of(context).pushNamed("/about"),
+                icon: Icon(Icons.info_rounded),
+                label: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 0, vertical: 20.0),
+                  child: Text("All About SMR"),
                 ),
-              ),
-              Container(
-                decoration: _actionButtonDecoration,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 48.0, vertical: 20.0),
-                    child: Text("Impact of Smart RR"),
-                  ),
-                ),
-              ),
-              // new Material(
-              //   //True Button
-              //   color: primaryColor,
-              //   child: new InkWell(
-              //     onTap: () => Navigator.pushNamed(context, '/casesHistory'),
-              //     child: new Center(
-              //       child: new Container(
-              //         decoration: new BoxDecoration(
-              //             border: new Border.all(
-              //                 color: Colors.white, width: 5.0)),
-              //         padding: new EdgeInsets.all(20.0),
-              //         child: new Text(
-              //           "History".toUpperCase(),
-              //           style: new TextStyle(
-              //             color: Colors.white,
-              //             fontSize: 40.0,
-              //             fontWeight: FontWeight.bold,
-              //           ),
-              //         ),
-              //       ),
+              )
+              // Container(
+              //   decoration: _actionButtonDecoration,
+              //   child: ElevatedButton(
+              //     onPressed: () {},
+              //     child: Padding(
+              //       padding: const EdgeInsets.symmetric(
+              //           horizontal: 48.0, vertical: 20.0),
+              //       child: Text("Impact of Smart RR"),
               //     ),
               //   ),
               // ),
