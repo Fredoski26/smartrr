@@ -53,7 +53,9 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => Splash(),
-        '/login': (context) => LoginPage(),
+        '/login': (context) => LoginPage(
+              isDarkTheme: isDarkTheme,
+            ),
         '/userSignup': (context) => SignUpPage(),
         '/orgSignup': (context) => OrgSignUpPage(),
         '/casesHistory': (context) => CasesHistoryScreen(),

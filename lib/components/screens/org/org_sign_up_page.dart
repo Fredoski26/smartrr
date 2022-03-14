@@ -2,7 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:smartrr/components/widgets/auth_container.dart';
+import 'package:smartrr/models/country.dart';
 import 'package:smartrr/models/location.dart';
+import 'package:smartrr/services/country_service.dart';
+import 'package:smartrr/services/database_service.dart';
 import 'package:smartrr/utils/colors.dart';
 import '../../widgets/ask_action.dart';
 import '../../widgets/show_action.dart';
@@ -19,27 +23,27 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
   int _stepIndex = 0;
   int _maxSteps = 6;
 
-  final _formKey = GlobalKey<FormState>();
-  TextEditingController cName = TextEditingController();
-  TextEditingController cType = TextEditingController();
-  TextEditingController cTelephone = TextEditingController();
-  TextEditingController cOrgEmail = TextEditingController();
-  TextEditingController cPassword = TextEditingController();
-  TextEditingController cLanguage = TextEditingController();
-  TextEditingController cLga = TextEditingController();
-  TextEditingController cWard = TextEditingController();
-  TextEditingController cSite = TextEditingController();
-  TextEditingController cStartDate = TextEditingController();
-  TextEditingController cEndDate = TextEditingController();
-  TextEditingController cStartTime = TextEditingController();
-  TextEditingController cCloseTime = TextEditingController();
-  TextEditingController cFocalName = TextEditingController();
-  TextEditingController cFocalEmail = TextEditingController();
-  TextEditingController cFocalPhone = TextEditingController();
-  TextEditingController cFocalDesignation = TextEditingController();
-  TextEditingController cHow = TextEditingController();
-  TextEditingController cCriteria = TextEditingController();
-  TextEditingController cComments = TextEditingController();
+  GlobalKey<FormState> _formKey;
+  TextEditingController cName;
+  TextEditingController cType;
+  TextEditingController cTelephone;
+  TextEditingController cOrgEmail;
+  TextEditingController cPassword;
+  TextEditingController cLanguage;
+  TextEditingController cLga;
+  TextEditingController cWard;
+  TextEditingController cSite;
+  TextEditingController cStartDate;
+  TextEditingController cEndDate;
+  TextEditingController cStartTime;
+  TextEditingController cCloseTime;
+  TextEditingController cFocalName;
+  TextEditingController cFocalEmail;
+  TextEditingController cFocalPhone;
+  TextEditingController cFocalDesignation;
+  TextEditingController cHow;
+  TextEditingController cCriteria;
+  TextEditingController cComments;
 
   String errorMsg;
   double _hPadding = 18.0;
@@ -49,7 +53,12 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
 
   // States
   List<MyLocation> stateList = <MyLocation>[];
-  List<DropdownMenuItem<MyLocation>> _dropDownStateItem = [];
+  List<DropdownMenuItem<MyLocation>> _dropDownStateItem = [
+    // DropdownMenuItem(
+    //   child: Text("Test"),
+    //   value: MyLocation("Abuja", "Abuja"),
+    // )
+  ];
   MyLocation _currentState;
 
   // Locations
@@ -57,10 +66,37 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
   List<DropdownMenuItem<MyLocation>> _dropDownLocationItem = [];
   MyLocation _currentLocation;
 
+  // Country
+  List<Country> countriesList = <Country>[];
+  List<DropdownMenuItem<Country>> _dropDownCountryItem = [];
+  Country _currentCountry;
+
   @override
   void initState() {
+    _formKey = GlobalKey<FormState>();
+    cName = TextEditingController();
+    cType = TextEditingController();
+    cTelephone = TextEditingController();
+    cOrgEmail = TextEditingController();
+    cPassword = TextEditingController();
+    cLanguage = TextEditingController();
+    cLga = TextEditingController();
+    cWard = TextEditingController();
+    cSite = TextEditingController();
+    cStartDate = TextEditingController();
+    cEndDate = TextEditingController();
+    cStartTime = TextEditingController();
+    cCloseTime = TextEditingController();
+    cFocalName = TextEditingController();
+    cFocalEmail = TextEditingController();
+    cFocalPhone = TextEditingController();
+    cFocalDesignation = TextEditingController();
+    cHow = TextEditingController();
+    cCriteria = TextEditingController();
+    cComments = TextEditingController();
+
     _getDataFromFirebase();
-    _getStatesFromFirebase();
+    _getCountries();
     super.initState();
   }
 
@@ -79,129 +115,75 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
 
     return WillPopScope(
       onWillPop: _askAlertWill,
-      child: Container(
-        decoration: BoxDecoration(color: Colors.white),
-        child: Scaffold(
-            appBar: AppBar(
-              elevation: 0,
-              automaticallyImplyLeading: false,
-              leading: IconButton(
-                  icon: Icon(Icons.arrow_back), onPressed: () => _askOut()),
-              actions: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Center(
-                    child: Text(
-                      'Step ${_stepIndex + 1} of ${_maxSteps + 1}',
-                      style: TextStyle(color: Colors.white),
-                    ),
+      child: Scaffold(
+          appBar: AppBar(
+            elevation: 0,
+            automaticallyImplyLeading: false,
+            leading: IconButton(
+                icon: Icon(Icons.arrow_back), onPressed: () => _askOut()),
+            actions: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: Text(
+                    'Step ${_stepIndex + 1} of ${_maxSteps + 1}',
                   ),
-                )
-              ],
-            ),
-            persistentFooterButtons: [
-              Container(
-                width: size.width,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: _decreaseStackIndex,
-                        child: Text(
-                          'Back',
-                          style: TextStyle(
-                            color: primaryColor,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: TextButton(
-                        onPressed: _increaseStackIndex,
-                        child: Text(
-                          'Next',
-                        ),
-                      ),
-                    ),
-                  ],
                 ),
-              ),
+              )
             ],
-            body: Container(
-              child: Stack(children: [
-                Positioned(
-                  top: -208,
-                  child: Container(
-                    height: 332.0,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                        color: Colors.orange,
-                        borderRadius: BorderRadius.only(
-                            bottomRight: Radius.circular(90),
-                            bottomLeft: Radius.circular(90))),
+          ),
+          persistentFooterButtons: [
+            Container(
+              width: size.width,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: _decreaseStackIndex,
+                      child: Text(
+                        'Back',
+                        style: TextStyle(
+                          color: primaryColor,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-                Stack(
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: TextButton(
+                      onPressed: _increaseStackIndex,
+                      child: Text(
+                        'Next',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+          body: AuthContainer(
+            isOrgSignUp: true,
+            child: AnimatedSwitcher(
+                duration: Duration(milliseconds: 500),
+                transitionBuilder:
+                    (Widget child, Animation<double> animation) =>
+                        ScaleTransition(child: child, scale: animation),
+                child: IndexedStack(
+                  key: ValueKey<int>(_stepIndex),
+                  index: _stepIndex,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(top: 60),
-                          padding: EdgeInsets.all(30),
-                          width: 318,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(22),
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color(0xFF494949).withOpacity(0.5),
-                                offset: Offset(0, 30),
-                                blurRadius: 122,
-                              )
-                            ],
-                          ),
-                          child: AnimatedSwitcher(
-                              duration: Duration(milliseconds: 500),
-                              transitionBuilder:
-                                  (Widget child, Animation<double> animation) =>
-                                      ScaleTransition(
-                                          child: child, scale: animation),
-                              child: IndexedStack(
-                                key: ValueKey<int>(_stepIndex),
-                                index: _stepIndex,
-                                children: [
-                                  _stack1(),
-                                  _projectSpan(),
-                                  _workHours(),
-                                  _focalPerson(),
-                                  _services(),
-                                  _details(),
-                                  _locations(),
-                                ],
-                              )),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: 109.0,
-                          width: 109.0,
-                          margin: EdgeInsets.only(top: 0.0),
-                          child: Image.asset("assets/logo.png"),
-                        ),
-                      ],
-                    ),
+                    _stack1(),
+                    _projectSpan(),
+                    _workHours(),
+                    _focalPerson(),
+                    _services(),
+                    _details(),
+                    _locations(),
                   ],
-                )
-              ]),
-            )),
-      ),
+                )),
+          )),
     );
   }
 
@@ -371,7 +353,6 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
               Text(
                 'REGISTER',
                 style: TextStyle(
-                  color: Color(0xFF444444),
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -438,7 +419,6 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
             Text(
               'Project Span',
               style: TextStyle(
-                color: Color(0xFF444444),
                 fontSize: 40,
                 fontWeight: FontWeight.bold,
               ),
@@ -500,7 +480,6 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
             Text(
               'Work Hours',
               style: TextStyle(
-                color: Color(0xFF444444),
                 fontSize: 40,
                 fontWeight: FontWeight.bold,
               ),
@@ -554,7 +533,6 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
             Text(
               'Focal Person',
               style: TextStyle(
-                color: Color(0xFF444444),
                 fontSize: 40,
                 fontWeight: FontWeight.bold,
               ),
@@ -580,7 +558,7 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
                   child: Text(
                     '+234',
                     style: TextStyle(
-                      color: Colors.purple,
+                      color: lightGrey,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -606,7 +584,6 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
             Text(
               'Services',
               style: TextStyle(
-                color: Color(0xFF444444),
                 fontSize: 40,
                 fontWeight: FontWeight.bold,
               ),
@@ -622,8 +599,7 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
                 return ExpansionTile(
                   title: Text(
                     servicesList[index].title,
-                    style: TextStyle(
-                        color: Color(0xFF444444), fontWeight: FontWeight.w600),
+                    style: TextStyle(fontWeight: FontWeight.w600),
                   ),
                   children: <Widget>[
                     _buildExpansionList(servicesList[index].subTitles)
@@ -655,16 +631,19 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
             SizedBox(
               height: 20,
             ),
+            Text("How to access Services"),
             smartTextField(
-              title: 'How to access Services',
+              title: "",
               controller: cHow,
             ),
+            Text("Criteria to access services"),
             smartTextField(
-              title: 'Criteria to access services',
+              title: '',
               controller: cCriteria,
             ),
+            Text("Comments"),
             smartTextField(
-              title: 'Comments',
+              title: '',
               controller: cComments,
             ),
           ],
@@ -683,7 +662,6 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
             Text(
               'Location',
               style: TextStyle(
-                color: Color(0xFF444444),
                 fontSize: 40,
                 fontWeight: FontWeight.bold,
               ),
@@ -692,9 +670,36 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
               height: 20,
             ),
             Text(
+              'Country',
+              style: TextStyle(
+                fontSize: 18,
+              ),
+            ),
+            DropdownButton(
+              isExpanded: true,
+              items: _dropDownCountryItem,
+              value: _currentCountry,
+              onChanged: (Country value) {
+                setState(() => _currentCountry = value);
+                _getStates();
+              },
+              dropdownColor: Colors.black,
+              hint: Text(
+                'Select Country',
+                style: TextStyle(fontSize: 16, color: Colors.white70),
+              ),
+              style: TextStyle(
+                fontSize: 16,
+              ),
+              elevation: 1,
+              underline: SizedBox(),
+              icon: Icon(
+                Icons.keyboard_arrow_down,
+              ),
+            ),
+            Text(
               'State',
               style: TextStyle(
-                color: Color(0xFF444444),
                 fontSize: 18,
               ),
             ),
@@ -704,19 +709,20 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
               value: _currentState,
               onChanged: (MyLocation value) {
                 setState(() => _currentState = value);
-                _getLocationsFromFirebase(stateId: value.id);
+                _getLocations(state: value.title);
               },
               dropdownColor: Colors.black,
               hint: Text(
                 'Select State',
                 style: TextStyle(fontSize: 16, color: Colors.white70),
               ),
-              style: TextStyle(fontSize: 16, color: Color(0xFF444444)),
+              style: TextStyle(
+                fontSize: 16,
+              ),
               elevation: 1,
               underline: SizedBox(),
               icon: Icon(
                 Icons.keyboard_arrow_down,
-                color: Color(0xFF444444),
               ),
             ),
             SizedBox(
@@ -725,7 +731,6 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
             Text(
               'Location',
               style: TextStyle(
-                color: Color(0xFF444444),
                 fontSize: 18,
               ),
             ),
@@ -741,12 +746,13 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
                 'Select Location',
                 style: TextStyle(fontSize: 16, color: Colors.white70),
               ),
-              style: TextStyle(fontSize: 16, color: Color(0xFF444444)),
+              style: TextStyle(
+                fontSize: 16,
+              ),
               elevation: 1,
               underline: SizedBox(),
               icon: Icon(
                 Icons.keyboard_arrow_down,
-                color: Color(0xFF444444),
               ),
             ),
           ],
@@ -762,9 +768,6 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
         .then((docs) async {
       for (int i = 0; i < docs.docs.length; i++) {
         List<SubService> tempSubServices = [];
-        // debugPrint(
-        //     "S ===> ${docs.docs[i].data['title'].toString()}  ::  " +
-        //         docs.docs[i].id);
         await FirebaseFirestore.instance
             .collection('services')
             .doc(docs.docs[i].id)
@@ -789,21 +792,28 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
     });
   }
 
-  _getStatesFromFirebase() async {
-    await FirebaseFirestore.instance.collection('state').get().then((docs) {
-      for (int i = 0; i < docs.docs.length; i++) {
-        debugPrint(
-            "${docs.docs[i].get('sName').toString()}  ::  " + docs.docs[i].id);
-        setState(() => stateList.add(
-            MyLocation(docs.docs[i].id.toString(), docs.docs[i].get('sName'))));
+  _getStates() async {
+    await CountryService.getStates(_currentCountry.name).then((states) {
+      List<MyLocation> items = [];
+      for (int i = 0; i < states.length; i++) {
+        if (states[i]["name"] == "Federal Capital Territory") {
+          items.add(MyLocation("Abuja", "Abuja"));
+        } else {
+          items.add(MyLocation(states[i]["name"], states[i]["name"]));
+        }
       }
-      _dropDownStateItem = buildDropDownStateItems(stateList);
+      setState(() {
+        _currentState = null;
+        stateList = items;
+        _dropDownStateItem = buildDropDownStateItems(items);
+      });
+      ;
     });
   }
 
   List<DropdownMenuItem<MyLocation>> buildDropDownStateItems(
       List<MyLocation> list) {
-    List<DropdownMenuItem<MyLocation>> items = List();
+    List<DropdownMenuItem<MyLocation>> items = [];
     for (MyLocation location in list) {
       items.add(
         DropdownMenuItem(
@@ -815,26 +825,35 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
     return items;
   }
 
-  _getLocationsFromFirebase({String stateId}) {
+  _getCountries() async {
+    await CountryService.getCountries().then((countries) {
+      setState(() {
+        countriesList = countries;
+      });
+    });
+    for (Country country in countriesList) {
+      _dropDownCountryItem.add(DropdownMenuItem(
+        child: Text(country.name),
+        value: country,
+      ));
+    }
+  }
+
+  Future _getLocations({String state}) async {
     locationsList = [];
     _dropDownLocationItem = [];
     _currentLocation = null;
 
-    FirebaseFirestore.instance
-        .collection("state")
-        .doc(stateId)
-        .collection("locations")
-        .get()
-        .then((locations) {
-      for (int i = 0; i < locations.docs.length; i++) {
-        debugPrint(
-            "iiiiiii: ${locations.docs[i].get('location').toString()}  ::  " +
-                locations.docs[i].id);
-        setState(() => locationsList.add(MyLocation(
-            locations.docs[i].id.toString(),
-            locations.docs[i].get('location'))));
+    DatabaseService().getLocations(state).then((locations) {
+      List<MyLocation> items = [];
+      for (int i = 0; i < locations.length; i++) {
+        items.add(MyLocation(locations[i].id, locations[i].title));
       }
-      _dropDownLocationItem = buildDropDownLocationItems(locationsList);
+      setState(() {
+        _currentLocation = null;
+        locationsList = items;
+        _dropDownLocationItem = buildDropDownLocationItems(locationsList);
+      });
     });
   }
 
@@ -873,7 +892,7 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
           },
           title: Text(
             list[index].title,
-            style: TextStyle(color: Color(0xFF444444)),
+            style: TextStyle(),
           ),
         );
       },

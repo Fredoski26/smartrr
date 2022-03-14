@@ -1,14 +1,18 @@
 import 'dart:collection';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:smartrr/models/location.dart';
 
 class DatabaseService {
   final String email;
 
-  DatabaseService({this.email});
+  DatabaseService({this.email = ""});
 
   CollectionReference userCollection =
       FirebaseFirestore.instance.collection('users');
+
+  CollectionReference stateCollection =
+      FirebaseFirestore.instance.collection("state");
 
   Future updateUser(Map update) async {
     try {
@@ -37,9 +41,29 @@ class DatabaseService {
     }
   }
 
-  Future getAllUsers() async {
-    final response = await userCollection.get();
+  Future getLocations(String state) async {
+    return stateCollection
+        .where("sName", isEqualTo: state)
+        .get()
+        .then((states) {
+      if (states.docs.length > 0) {
+        final stateId = states.docs[0].id;
 
-    print(response.docs.length);
+        return stateCollection
+            .doc(stateId)
+            .collection("locations")
+            .get()
+            .then((locations) {
+          return locations.docs
+              .map((location) =>
+                  MyLocation(location.id, location.get('location')))
+              .toList();
+        });
+      } else {
+        return [];
+      }
+    }).catchError((e) {
+      throw e.toString();
+    });
   }
 }

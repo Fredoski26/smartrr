@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartrr/utils/colors.dart';
 
 Future askAction(
     {@required String actionText,
@@ -23,9 +24,7 @@ Future askAction(
           borderRadius: BorderRadius.all(Radius.circular(10))),
       title: Text(
         text,
-        style: TextStyle(
-          fontSize: 16,
-        ),
+        style: TextStyle(fontSize: 16, color: darkGrey),
       ),
       actions: <Widget>[cancelButton, continueButton],
     ),

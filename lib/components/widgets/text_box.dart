@@ -25,7 +25,7 @@ class CustomTextBox extends StatelessWidget {
       this.borderColor = const Color(0xFFA59B9B),
       this.textColor = const Color(0xFFA59B9B),
       this.placeholderColor = Colors.white,
-      this.textboxBackgroundColor = Colors.white,
+      this.textboxBackgroundColor = Colors.transparent,
       this.controller,
       this.errorText = 'Field cannot be left empty',
       this.required = false,

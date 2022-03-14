@@ -13,6 +13,7 @@ ThemeData appTheme = ThemeData(
       centerTitle: true,
       titleTextStyle: TextStyle().copyWith(color: Colors.white, fontSize: 18),
       iconTheme: IconThemeData().copyWith(color: Colors.white),
+      toolbarTextStyle: TextStyle().copyWith(color: Colors.white),
     ),
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(

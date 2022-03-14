@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:smartrr/components/widgets/circular_progress.dart';
 import 'package:smartrr/components/widgets/show_action.dart';
 import 'package:smartrr/components/widgets/smart_text_field.dart';
 
@@ -34,7 +33,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         padding: EdgeInsets.symmetric(horizontal: 18),
         height: MediaQuery.of(context).size.height,
         width: double.infinity,
-        decoration: BoxDecoration(color: Colors.white),
         child: Form(
           key: formKey,
           child: Container(
@@ -48,7 +46,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 Text(
                   'Forgot Password',
                   style: TextStyle(
-                    color: Color(0xFF575555),
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
@@ -57,7 +54,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 Text(
                   "Enter the email address associated with your Amrt RR account aand we will send a reset password link",
                   style: TextStyle(
-                    color: Color(0xFF444444),
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                   ),
