@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:smartrr/components/widgets/my_stepper.dart';
 import 'package:smartrr/services/country_service.dart';
 import 'package:smartrr/services/database_service.dart';
+import 'package:smartrr/utils/colors.dart';
 import '../../widgets/location_cell.dart';
 import '../../../models/location.dart';
 import 'select_location_map.dart';
@@ -18,6 +19,7 @@ class SelectStatePage extends StatefulWidget {
   final String referredBy;
   final String referredName;
   final String caseId;
+  final bool isDarkTheme;
 
   const SelectStatePage({
     Key key,
@@ -26,6 +28,7 @@ class SelectStatePage extends StatefulWidget {
     @required this.referredBy,
     @required this.referredName,
     @required this.caseId,
+    this.isDarkTheme,
   }) : super(key: key);
 
   @override
@@ -50,6 +53,7 @@ class _SelectStatePageState extends State<SelectStatePage> {
       context,
       MaterialPageRoute(
         builder: (BuildContext context) => SelectLocationPage(
+          isDarkTheme: widget.isDarkTheme,
           selectedState: stateSelected,
           service: widget.service,
           isUser: widget.isUser,
@@ -90,6 +94,9 @@ class _SelectStatePageState extends State<SelectStatePage> {
                           return Column(
                             children: <Widget>[
                               LocationCell(
+                                bgColor: widget.isDarkTheme
+                                    ? lightGrey
+                                    : Colors.white,
                                 width: MediaQuery.of(context).size.width * 1,
                                 title: stateList[index].title,
                                 borderRadius: 10,
@@ -101,6 +108,9 @@ class _SelectStatePageState extends State<SelectStatePage> {
                                 height: 10,
                               ),
                               LocationCell(
+                                bgColor: widget.isDarkTheme
+                                    ? lightGrey
+                                    : Colors.white,
                                 width: MediaQuery.of(context).size.width * 1,
                                 title: currentSelectedAddress == ''
                                     ? 'Select Custom Location'
@@ -131,7 +141,6 @@ class _SelectStatePageState extends State<SelectStatePage> {
                                           .contains(stateList[index]
                                               .title
                                               .toLowerCase())) {
-                                        // debugPrint('I FOUND THE STATE');
                                         myState = new MyLocation(
                                             stateList[index].id,
                                             stateList[index].title);
@@ -144,9 +153,6 @@ class _SelectStatePageState extends State<SelectStatePage> {
                                           for (int j = 0;
                                               j < locations.docs.length;
                                               j++) {
-                                            // debugPrint(
-                                            //     "iiiiiii: ${locations.docs[j].get('location').toString()}  ::  " +
-                                            //         locations.docs[j].id);
                                             if (currentSelectedAddress
                                                 .toLowerCase()
                                                 .contains(locations.docs[j]
@@ -203,6 +209,9 @@ class _SelectStatePageState extends State<SelectStatePage> {
                           return Column(
                             children: <Widget>[
                               LocationCell(
+                                bgColor: widget.isDarkTheme
+                                    ? lightGrey
+                                    : Colors.white,
                                 width: MediaQuery.of(context).size.width * 1,
                                 title: stateList[index].title,
                                 borderRadius: 10,

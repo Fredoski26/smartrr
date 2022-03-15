@@ -1,14 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:smartrr/components/widgets/my_stepper.dart';
+import 'package:smartrr/utils/colors.dart';
 import '../../../models/location.dart';
 import 'select_state_page.dart';
 import '../../widgets/circular_progress.dart';
 
 class SelectSubServicePage extends StatefulWidget {
   final MyLocation selectedService;
-
-  const SelectSubServicePage({Key key, this.selectedService}) : super(key: key);
+  final bool isDarkTheme;
+  const SelectSubServicePage({Key key, this.selectedService, this.isDarkTheme})
+      : super(key: key);
 
   @override
   _SelectSubServicePageState createState() => _SelectSubServicePageState();
@@ -57,6 +59,7 @@ class _SelectSubServicePageState extends State<SelectSubServicePage> {
                                 MaterialPageRoute(
                                   builder: (BuildContext context) =>
                                       SelectStatePage(
+                                    isDarkTheme: widget.isDarkTheme,
                                     service: subServiceList[index].title,
                                     isUser: true,
                                     referredName: '',
@@ -68,6 +71,8 @@ class _SelectSubServicePageState extends State<SelectSubServicePage> {
                             },
                             child: Card(
                               elevation: 8,
+                              color:
+                                  widget.isDarkTheme ? lightGrey : Colors.white,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.all(
                                 Radius.circular(12),

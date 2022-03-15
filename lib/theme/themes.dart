@@ -11,7 +11,7 @@ final ThemeData appTheme = ThemeData(
       backgroundColor: primaryColor,
       elevation: 0,
       centerTitle: true,
-      titleTextStyle: TextStyle().copyWith(color: Colors.white, fontSize: 18),
+      titleTextStyle: TextStyle().copyWith(color: Colors.white, fontSize: 20),
       iconTheme: IconThemeData().copyWith(color: Colors.white),
       toolbarTextStyle: TextStyle().copyWith(color: Colors.white),
     ),

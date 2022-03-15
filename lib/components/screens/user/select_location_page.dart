@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:smartrr/components/widgets/my_stepper.dart';
+import 'package:smartrr/utils/colors.dart';
 import '../../widgets/circular_progress.dart';
 import '../../widgets/location_cell.dart';
 import '../../../models/location.dart';
@@ -14,6 +15,7 @@ class SelectLocationPage extends StatefulWidget {
   final String referredBy;
   final String referredName;
   final String caseId;
+  final bool isDarkTheme;
 
   const SelectLocationPage({
     Key key,
@@ -23,6 +25,7 @@ class SelectLocationPage extends StatefulWidget {
     @required this.referredBy,
     @required this.referredName,
     @required this.caseId,
+    this.isDarkTheme,
   }) : super(key: key);
 
   @override
@@ -81,6 +84,8 @@ class _SelectLocationPageState extends State<SelectLocationPage> {
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 6),
                           child: LocationCell(
+                            bgColor:
+                                widget.isDarkTheme ? lightGrey : Colors.white,
                             width: MediaQuery.of(context).size.width * 1,
                             title: locationList[index].title,
                             borderRadius: 10,
@@ -135,22 +140,5 @@ class _SelectLocationPageState extends State<SelectLocationPage> {
         fontSize: 16.0,
       );
     });
-
-    // FirebaseFirestore.instance
-    //     .collection("state")
-    //     .doc(widget.selectedState.id)
-    //     .collection("locations")
-    //     .get()
-    //     .then((locations) {
-    //   for (int i = 0; i < locations.docs.length; i++) {
-    //     debugPrint(
-    //         "iiiiiii: ${locations.docs[i].get('location').toString()}  ::  " +
-    //             locations.docs[i].id);
-    //     setState(() => locationList.add(MyLocation(
-    //         locations.docs[i].id.toString(),
-    //         locations.docs[i].get('location'))));
-    //   }
-    //   setState(() => isLoading = false);
-    // });
   }
 }

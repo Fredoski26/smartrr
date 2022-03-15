@@ -51,9 +51,17 @@ class _ReportOrHistoryPageState extends State<ReportOrHistoryPage> {
                 label: Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 0, vertical: 20.0),
-                  child: Text("All About SMR"),
+                  child: Text("All About SRHR"),
                 ),
-              )
+              ),
+              ElevatedButton.icon(
+                  onPressed: () {},
+                  icon: Icon(Icons.info_rounded),
+                  label: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 0, vertical: 20.0),
+                    child: Text("Impact of Smart RR"),
+                  )),
               // Container(
               //   decoration: _actionButtonDecoration,
               //   child: ElevatedButton(

@@ -8,14 +8,17 @@ class LocationCell extends StatelessWidget {
   final double borderRadius;
   final double width;
   final Color textColor;
+  final Color bgColor;
 
-  LocationCell(
-      {this.textColor = darkGrey,
-      this.title,
-      this.func,
-      this.color = darkGrey,
-      this.borderRadius = 5,
-      this.width});
+  LocationCell({
+    this.textColor,
+    this.title,
+    this.func,
+    this.color = darkGrey,
+    this.borderRadius = 5,
+    this.width,
+    this.bgColor = Colors.white,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +32,11 @@ class LocationCell extends StatelessWidget {
           title,
           textAlign: TextAlign.center,
           style: TextStyle(
-              color: textColor, fontSize: 22, fontWeight: FontWeight.w600),
+            fontSize: 22,
+          ),
         ),
         decoration: BoxDecoration(
+          color: bgColor,
           border: Border.all(color: darkGrey, width: 1),
           borderRadius: BorderRadius.all(Radius.circular(this.borderRadius)),
         ),
