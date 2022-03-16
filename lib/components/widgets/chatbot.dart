@@ -271,7 +271,7 @@ class ChatMessage extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text("Click link below to chat with ${counsellor['counsellor']}"),
+              Text("Click link below to chat with a counsellor"),
               InkWell(
                 child: Text(
                   counsellor["link"],
@@ -280,7 +280,7 @@ class ChatMessage extends StatelessWidget {
                 ),
                 onTap: () {
                   final url = Uri.parse(
-                      "${counsellor["link"]}?text=Hi ${counsellor['counsellor']}.%0D%0AI am ${_currentUser.displayName}");
+                      "${counsellor["link"]}?text=Hello,%0D%0AI am ${_currentUser.displayName}");
                   launch(url.toString());
                 },
               )
