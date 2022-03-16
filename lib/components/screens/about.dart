@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:smartrr/generated/l10n.dart';
 
 class About extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final _language = S.of(context);
+
     return Scaffold(
-      appBar: AppBar(title: Text("About SMartRR")),
+      appBar: AppBar(title: Text(_language.aboutSmartRR)),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

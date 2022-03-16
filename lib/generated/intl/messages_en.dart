@@ -21,22 +21,35 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
+    "aboutSmartRR" : MessageLookupByLibrary.simpleMessage("About Smart RR"),
+    "allAboutSRHR" : MessageLookupByLibrary.simpleMessage("All About SRHR"),
     "alreadyHaveAnAccount" : MessageLookupByLibrary.simpleMessage("Already have an account?"),
+    "changePassword" : MessageLookupByLibrary.simpleMessage("Change Password"),
+    "country" : MessageLookupByLibrary.simpleMessage("Country"),
     "dob" : MessageLookupByLibrary.simpleMessage("DOB"),
     "dontHaveAccount" : MessageLookupByLibrary.simpleMessage("Don\'t have an account?"),
     "female" : MessageLookupByLibrary.simpleMessage("Female"),
     "forgotPassword" : MessageLookupByLibrary.simpleMessage("Forgot password?"),
     "gender" : MessageLookupByLibrary.simpleMessage("Gender"),
+    "history" : MessageLookupByLibrary.simpleMessage("History"),
+    "impactOfSmartRR" : MessageLookupByLibrary.simpleMessage("Impact of Smart RR"),
     "language" : MessageLookupByLibrary.simpleMessage("Language"),
     "location" : MessageLookupByLibrary.simpleMessage("Location"),
     "logIn" : MessageLookupByLibrary.simpleMessage("Login"),
+    "logOut" : MessageLookupByLibrary.simpleMessage("Log Out"),
     "male" : MessageLookupByLibrary.simpleMessage("Male"),
     "name" : MessageLookupByLibrary.simpleMessage("Name"),
     "organization" : MessageLookupByLibrary.simpleMessage("Organization"),
     "password" : MessageLookupByLibrary.simpleMessage("Password"),
     "phoneNumber" : MessageLookupByLibrary.simpleMessage("Phone Number"),
+    "reportACase" : MessageLookupByLibrary.simpleMessage("Report a case"),
+    "reportFor" : MessageLookupByLibrary.simpleMessage("Report for"),
     "resetHere" : MessageLookupByLibrary.simpleMessage("Reset Here"),
+    "resetPassword" : MessageLookupByLibrary.simpleMessage("Reset Password"),
+    "settings" : MessageLookupByLibrary.simpleMessage("Settings"),
     "signUp" : MessageLookupByLibrary.simpleMessage("SignUp"),
-    "user" : MessageLookupByLibrary.simpleMessage("User")
+    "someoneElse" : MessageLookupByLibrary.simpleMessage("Someone Else"),
+    "user" : MessageLookupByLibrary.simpleMessage("User"),
+    "yourself" : MessageLookupByLibrary.simpleMessage("Yourself")
   };
 }

@@ -1,11 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:smartrr/components/widgets/chatbot.dart';
+import 'package:smartrr/components/widgets/language_picker.dart';
+import 'package:smartrr/provider/language_provider.dart';
 import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/utils/utils.dart';
 import '../../widgets/ask_action.dart';
 import 'consent_form_page.dart';
 import '../../widgets/custom_drawer.dart';
+import 'package:smartrr/generated/l10n.dart';
 
 class ReportOrHistoryPage extends StatefulWidget {
   @override
@@ -24,66 +28,64 @@ class _ReportOrHistoryPageState extends State<ReportOrHistoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: mScaffoldState,
-      drawer: CustomDrawer(),
-      appBar: AppBar(
-        title: Text("Smart RR"),
-      ),
-      body: Center(
-        child: IntrinsicWidth(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ElevatedButton.icon(
-                onPressed: () => _bottomSheet(context: context),
-                icon: Icon(Icons.report_rounded),
-                label: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 0, vertical: 20.0),
-                  child: Text("Report a Case"),
+    final _language = S.of(context);
+
+    return Consumer<LanguageNotifier>(
+        builder: (context, _, child) => Scaffold(
+              key: mScaffoldState,
+              drawer: CustomDrawer(),
+              appBar: AppBar(
+                title: Text("Smart RR"),
+                actions: [LanguagePicker()],
+              ),
+              body: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
+                child: Center(
+                  child: IntrinsicWidth(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton.icon(
+                          onPressed: () => _bottomSheet(context: context),
+                          icon: Icon(Icons.report_rounded),
+                          label: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 0, vertical: 20.0),
+                            child: Text(_language.reportACase),
+                          ),
+                        ),
+                        ElevatedButton.icon(
+                          onPressed: () =>
+                              Navigator.of(context).pushNamed("/about"),
+                          icon: Icon(Icons.info_rounded),
+                          label: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 0, vertical: 20.0),
+                            child: Text(_language.allAboutSRHR),
+                          ),
+                        ),
+                        ElevatedButton.icon(
+                            onPressed: () {},
+                            icon: Icon(Icons.info_rounded),
+                            label: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 0, vertical: 20.0),
+                              child: Text(_language.impactOfSmartRR),
+                            )),
+                      ],
+                    ),
+                  ),
                 ),
               ),
-              ElevatedButton.icon(
-                onPressed: () => Navigator.of(context).pushNamed("/about"),
-                icon: Icon(Icons.info_rounded),
-                label: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 0, vertical: 20.0),
-                  child: Text("All About SRHR"),
-                ),
-              ),
-              ElevatedButton.icon(
-                  onPressed: () {},
-                  icon: Icon(Icons.info_rounded),
-                  label: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 0, vertical: 20.0),
-                    child: Text("Impact of Smart RR"),
-                  )),
-              // Container(
-              //   decoration: _actionButtonDecoration,
-              //   child: ElevatedButton(
-              //     onPressed: () {},
-              //     child: Padding(
-              //       padding: const EdgeInsets.symmetric(
-              //           horizontal: 48.0, vertical: 20.0),
-              //       child: Text("Impact of Smart RR"),
-              //     ),
-              //   ),
-              // ),
-            ],
-          ),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-          backgroundColor: primaryColor,
-          foregroundColor: Colors.white,
-          child: Icon(Icons.chat),
-          onPressed: () => Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => ChatBot()))),
-    );
+              floatingActionButton: FloatingActionButton(
+                  backgroundColor: primaryColor,
+                  foregroundColor: Colors.white,
+                  child: Icon(Icons.chat),
+                  onPressed: () => Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => ChatBot()))),
+            ));
   }
 
   _bottomSheet({BuildContext context}) {
@@ -109,7 +111,7 @@ class _ReportOrHistoryPageState extends State<ReportOrHistoryPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Report for',
+                      S.current.reportFor,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 18,
@@ -125,7 +127,7 @@ class _ReportOrHistoryPageState extends State<ReportOrHistoryPage> {
                   children: [
                     Expanded(
                       child: ElevatedButton(
-                        child: Text('Yourself'),
+                        child: Text(S.current.yourself),
                         onPressed: () => _onReportTap(userType: true),
                       ),
                     ),
@@ -135,7 +137,7 @@ class _ReportOrHistoryPageState extends State<ReportOrHistoryPage> {
                   children: [
                     Expanded(
                       child: ElevatedButton(
-                        child: Text('Someone else'),
+                        child: Text(S.current.someoneElse),
                         onPressed: () => _onReportTap(userType: false),
                       ),
                     ),
@@ -157,33 +159,5 @@ class _ReportOrHistoryPageState extends State<ReportOrHistoryPage> {
         ),
       );
     });
-  }
-
-  _more(More result) {
-    debugPrint(result.toString());
-    switch (result) {
-      case More.logout:
-        debugPrint('Logout tapped!');
-        askAction(
-            actionText: 'Yes',
-            cancelText: 'No',
-            text: 'Do you want to logout?',
-            context: context,
-            func: _logout,
-            cancelFunc: _stayHere);
-        break;
-    }
-  }
-
-  _logout() async {
-    debugPrint('Logged Out!');
-    await FirebaseAuth.instance.signOut().then((_) {
-      clearPrefs().then((_) => Navigator.pushNamedAndRemoveUntil(
-          context, '/login', ModalRoute.withName('Login')));
-    });
-  }
-
-  _stayHere() {
-    Navigator.pop(context);
   }
 }

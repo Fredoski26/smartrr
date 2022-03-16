@@ -80,6 +80,16 @@ class S {
     return Intl.message(
       'Forgot password?',
       name: 'forgotPassword',
+      desc: 'Enter the email address associated with your Amrt RR account aand we will send a reset password link',
+      args: [],
+    );
+  }
+
+  /// `Reset Password`
+  String get resetPassword {
+    return Intl.message(
+      'Reset Password',
+      name: 'resetPassword',
       desc: '',
       args: [],
     );
@@ -200,6 +210,126 @@ class S {
     return Intl.message(
       'Language',
       name: 'language',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Report a case`
+  String get reportACase {
+    return Intl.message(
+      'Report a case',
+      name: 'reportACase',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All About SRHR`
+  String get allAboutSRHR {
+    return Intl.message(
+      'All About SRHR',
+      name: 'allAboutSRHR',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Impact of Smart RR`
+  String get impactOfSmartRR {
+    return Intl.message(
+      'Impact of Smart RR',
+      name: 'impactOfSmartRR',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `About Smart RR`
+  String get aboutSmartRR {
+    return Intl.message(
+      'About Smart RR',
+      name: 'aboutSmartRR',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `History`
+  String get history {
+    return Intl.message(
+      'History',
+      name: 'history',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Settings`
+  String get settings {
+    return Intl.message(
+      'Settings',
+      name: 'settings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Log Out`
+  String get logOut {
+    return Intl.message(
+      'Log Out',
+      name: 'logOut',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Country`
+  String get country {
+    return Intl.message(
+      'Country',
+      name: 'country',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change Password`
+  String get changePassword {
+    return Intl.message(
+      'Change Password',
+      name: 'changePassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Report for`
+  String get reportFor {
+    return Intl.message(
+      'Report for',
+      name: 'reportFor',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Yourself`
+  String get yourself {
+    return Intl.message(
+      'Yourself',
+      name: 'yourself',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Someone Else`
+  String get someoneElse {
+    return Intl.message(
+      'Someone Else',
+      name: 'someoneElse',
       desc: '',
       args: [],
     );

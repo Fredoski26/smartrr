@@ -4,6 +4,10 @@
   "dontHaveAccount": "Don't have an account?",
   "signUp": "SignUp",
   "forgotPassword": "Forgot password?",
+  "@forgotPassword": {
+    "description": "Enter the email address associated with your Amrt RR account aand we will send a reset password link"
+  },
+  "resetPassword": "Reset Password",
   "resetHere": "Reset Here",
   "logIn": "Login",
   "name": "Name",
@@ -15,5 +19,17 @@
   "male": "Male",
   "female": "Female",
   "alreadyHaveAnAccount": "Already have an account?",
-  "language": "Language"
+  "language": "Language",
+  "reportACase": "Report a case",
+  "allAboutSRHR": "All About SRHR",
+  "impactOfSmartRR": "Impact of Smart RR",
+  "aboutSmartRR": "About Smart RR",
+  "history": "History",
+  "settings": "Settings",
+  "logOut": "Log Out",
+  "country": "Country",
+  "changePassword": "Change Password",
+  "reportFor": "Report for",
+  "yourself": "Yourself",
+  "someoneElse": "Someone Else"
 }

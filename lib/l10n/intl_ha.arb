@@ -3,7 +3,11 @@
   "organization": "Kungiya",
   "dontHaveAccount": "Baka da akwati?",
   "signUp": "  Yi Rejista",
-  "forgotPassword": "Manta da Mubudi? ",
+  "forgotPassword": "Manta da Mubudi",
+  "@forgotPassword": {
+    "description": "Shigar da Adireshin Email da ke da alaka da manahajar (APP) SmartRR"
+  },
+  "resetPassword": "Canja Mabudi",
   "resetHere": "Sake Mabudi",
   "logIn": "Shiga",
   "name": "Suna",
@@ -15,5 +19,17 @@
   "male": "Namiji",
   "female": "mace",
   "alreadyHaveAnAccount": "Akwai Akwati?",
-  "language": "Harshe"
+  "language": "Harshe",
+  "reportACase": "Shigar da Kara",
+  "allAboutSRHR": "Abinda Ya Shafi Yanci da Lafiyar Jima'i Da haifuwa",
+  "impactOfSmartRR": "Tasiri Smart RR",
+  "aboutSmartRR": "Dandane da SmartRR",
+  "history": "Tarihi",
+  "settings": "Saiti",
+  "logOut": "Fita",
+  "country": "Kasa",
+  "changePassword": "Canja Mabudi",
+  "reportFor": "Shigar da kara ma",
+  "yourself": "kai na",
+  "someoneElse": "Wani"
 }

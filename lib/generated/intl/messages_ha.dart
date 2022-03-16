@@ -21,22 +21,35 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
+    "aboutSmartRR" : MessageLookupByLibrary.simpleMessage("Dandane da SmartRR"),
+    "allAboutSRHR" : MessageLookupByLibrary.simpleMessage("Abinda Ya Shafi Yanci da Lafiyar Jima\'i Da haifuwa"),
     "alreadyHaveAnAccount" : MessageLookupByLibrary.simpleMessage("Akwai Akwati?"),
+    "changePassword" : MessageLookupByLibrary.simpleMessage("Canja Mabudi"),
+    "country" : MessageLookupByLibrary.simpleMessage("Kasa"),
     "dob" : MessageLookupByLibrary.simpleMessage("Shekaru"),
     "dontHaveAccount" : MessageLookupByLibrary.simpleMessage("Baka da akwati?"),
     "female" : MessageLookupByLibrary.simpleMessage("mace"),
-    "forgotPassword" : MessageLookupByLibrary.simpleMessage("Manta da Mubudi? "),
+    "forgotPassword" : MessageLookupByLibrary.simpleMessage("Manta da Mubudi"),
     "gender" : MessageLookupByLibrary.simpleMessage("Jinsi"),
+    "history" : MessageLookupByLibrary.simpleMessage("Tarihi"),
+    "impactOfSmartRR" : MessageLookupByLibrary.simpleMessage("Tasiri Smart RR"),
     "language" : MessageLookupByLibrary.simpleMessage("Harshe"),
     "location" : MessageLookupByLibrary.simpleMessage("Wurin zama"),
     "logIn" : MessageLookupByLibrary.simpleMessage("Shiga"),
+    "logOut" : MessageLookupByLibrary.simpleMessage("Fita"),
     "male" : MessageLookupByLibrary.simpleMessage("Namiji"),
     "name" : MessageLookupByLibrary.simpleMessage("Suna"),
     "organization" : MessageLookupByLibrary.simpleMessage("Kungiya"),
     "password" : MessageLookupByLibrary.simpleMessage("Mabudi"),
     "phoneNumber" : MessageLookupByLibrary.simpleMessage("Lamba Waya"),
+    "reportACase" : MessageLookupByLibrary.simpleMessage("Shigar da Kara"),
+    "reportFor" : MessageLookupByLibrary.simpleMessage("Shigar da kara ma"),
     "resetHere" : MessageLookupByLibrary.simpleMessage("Sake Mabudi"),
+    "resetPassword" : MessageLookupByLibrary.simpleMessage("Canja Mabudi"),
+    "settings" : MessageLookupByLibrary.simpleMessage("Saiti"),
     "signUp" : MessageLookupByLibrary.simpleMessage("  Yi Rejista"),
-    "user" : MessageLookupByLibrary.simpleMessage("Mai Aiki")
+    "someoneElse" : MessageLookupByLibrary.simpleMessage("Wani"),
+    "user" : MessageLookupByLibrary.simpleMessage("Mai Aiki"),
+    "yourself" : MessageLookupByLibrary.simpleMessage("kai na")
   };
 }

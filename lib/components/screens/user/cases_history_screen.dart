@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:smartrr/components/widgets/circular_progress.dart';
-import 'package:smartrr/components/widgets/selected_location_cell.dart';
 import 'package:smartrr/models/case.dart';
-import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/utils/utils.dart';
+import 'package:smartrr/generated/l10n.dart';
 
 class CasesHistoryScreen extends StatefulWidget {
   @override
@@ -23,8 +22,10 @@ class _CasesHistoryScreenState extends State<CasesHistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final _language = S.of(context);
+
     return Scaffold(
-      appBar: AppBar(title: Text("History")),
+      appBar: AppBar(title: Text(_language.history)),
       body: Container(
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 4),
