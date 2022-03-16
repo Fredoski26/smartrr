@@ -27,6 +27,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "female" : MessageLookupByLibrary.simpleMessage("Female"),
     "forgotPassword" : MessageLookupByLibrary.simpleMessage("Forgot password?"),
     "gender" : MessageLookupByLibrary.simpleMessage("Gender"),
+    "language" : MessageLookupByLibrary.simpleMessage("Language"),
     "location" : MessageLookupByLibrary.simpleMessage("Location"),
     "logIn" : MessageLookupByLibrary.simpleMessage("Login"),
     "male" : MessageLookupByLibrary.simpleMessage("Male"),

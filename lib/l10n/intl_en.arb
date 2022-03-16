@@ -14,5 +14,6 @@
   "gender": "Gender",
   "male": "Male",
   "female": "Female",
-  "alreadyHaveAnAccount": "Already have an account?"
+  "alreadyHaveAnAccount": "Already have an account?",
+  "language": "Language"
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smartrr/components/widgets/language_picker.dart';
 import 'package:smartrr/services/theme_provider.dart';
 import 'package:smartrr/utils/colors.dart';
 
@@ -21,11 +22,14 @@ class _AuthContainerState extends State<AuthContainer> {
   String errorMsg;
   bool isLoading = false;
 
+  final _appBarHeight = AppBar().preferredSize.height;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       key: mScaffoldState,
+      appBar: widget.isOrgSignUp ? null : AppBar(actions: [LanguagePicker()]),
       body: Consumer<ThemeNotifier>(
         builder: (context, notifier, child) => Container(
           height: MediaQuery.of(context).size.height,
@@ -33,7 +37,7 @@ class _AuthContainerState extends State<AuthContainer> {
             Positioned(
               top: widget.isOrgSignUp ? -208 : -135,
               child: Container(
-                height: 332.0,
+                height: 332.0 - _appBarHeight,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                     color: primaryColor,
@@ -46,7 +50,10 @@ class _AuthContainerState extends State<AuthContainer> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  margin: EdgeInsets.only(top: widget.isOrgSignUp ? 60 : 123),
+                  margin: EdgeInsets.only(
+                      top: widget.isOrgSignUp
+                          ? 60 - _appBarHeight
+                          : 123 - _appBarHeight),
                   padding: EdgeInsets.all(30),
                   width: 318,
                   decoration: BoxDecoration(
@@ -72,7 +79,8 @@ class _AuthContainerState extends State<AuthContainer> {
                 Container(
                   height: 109.0,
                   width: 109.0,
-                  margin: EdgeInsets.only(top: widget.isOrgSignUp ? 0.0 : 63.0),
+                  margin: EdgeInsets.only(
+                      top: widget.isOrgSignUp ? 0.0 : 63.0 - _appBarHeight),
                   child: Image.asset("assets/logo.png"),
                 ),
               ],

@@ -27,6 +27,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "female" : MessageLookupByLibrary.simpleMessage("mace"),
     "forgotPassword" : MessageLookupByLibrary.simpleMessage("Manta da Mubudi? "),
     "gender" : MessageLookupByLibrary.simpleMessage("Jinsi"),
+    "language" : MessageLookupByLibrary.simpleMessage("Harshe"),
     "location" : MessageLookupByLibrary.simpleMessage("Wurin zama"),
     "logIn" : MessageLookupByLibrary.simpleMessage("Shiga"),
     "male" : MessageLookupByLibrary.simpleMessage("Namiji"),
