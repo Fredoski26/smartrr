@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:smartrr/components/widgets/my_stepper.dart';
+import 'package:smartrr/services/my_translator.dart';
 import 'package:smartrr/utils/colors.dart';
 import '../../../models/location.dart';
 import 'select_state_page.dart';
@@ -9,7 +10,10 @@ import '../../widgets/circular_progress.dart';
 class SelectSubServicePage extends StatefulWidget {
   final MyLocation selectedService;
   final bool isDarkTheme;
-  const SelectSubServicePage({Key key, this.selectedService, this.isDarkTheme})
+  final String lang;
+
+  const SelectSubServicePage(
+      {Key key, this.selectedService, this.isDarkTheme, this.lang = "en"})
       : super(key: key);
 
   @override
@@ -53,14 +57,17 @@ class _SelectSubServicePageState extends State<SelectSubServicePage> {
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           child: GestureDetector(
-                            onTap: () {
+                            onTap: () async {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (BuildContext context) =>
                                       SelectStatePage(
+                                    lang: widget.lang,
                                     isDarkTheme: widget.isDarkTheme,
-                                    service: subServiceList[index].title,
+                                    service: subServiceList[index]
+                                        .title
+                                        .split("-")[1],
                                     isUser: true,
                                     referredName: '',
                                     referredBy: '',
@@ -82,7 +89,7 @@ class _SelectSubServicePageState extends State<SelectSubServicePage> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 16, vertical: 12),
                                   child: Text(
-                                    subServiceList[index].title,
+                                    subServiceList[index].title.split("-")[0],
                                     style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w600,
@@ -109,15 +116,19 @@ class _SelectSubServicePageState extends State<SelectSubServicePage> {
         .collection("sub-services")
         .get()
         .then((subServices) {
-      for (int i = 0; i < subServices.docs.length; i++) {
-        debugPrint(
-            "iiiiiii: ${subServices.docs[i].get('title').toString()}  ::  " +
-                subServices.docs[i].id);
-        setState(() => subServiceList.add(MyLocation(
-            subServices.docs[i].id.toString(),
-            subServices.docs[i].get('title'))));
-      }
-      setState(() => isLoading = false);
-    });
+      subServices.docs.forEach((subService) async {
+        final String originaName = subService.get("title");
+        if (widget.lang == "ha") {
+          final translation =
+              await MyTranslator.translate(text: subService.get("title"));
+
+          setState(() => subServiceList
+              .add(MyLocation(subService.id, "$translation-$originaName")));
+        } else {
+          setState(() => subServiceList.add(MyLocation(
+              subService.id, "${subService.get("title")}-$originaName")));
+        }
+      });
+    }).then((value) => setState(() => isLoading = false));
   }
 }

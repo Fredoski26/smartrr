@@ -12,6 +12,7 @@ import 'select_location_map.dart';
 import 'select_location_page.dart';
 import 'select_org_page.dart';
 import '../../widgets/circular_progress.dart';
+import 'package:smartrr/generated/l10n.dart';
 
 class SelectStatePage extends StatefulWidget {
   final String service;
@@ -20,6 +21,7 @@ class SelectStatePage extends StatefulWidget {
   final String referredName;
   final String caseId;
   final bool isDarkTheme;
+  final String lang;
 
   const SelectStatePage({
     Key key,
@@ -29,6 +31,7 @@ class SelectStatePage extends StatefulWidget {
     @required this.referredName,
     @required this.caseId,
     this.isDarkTheme,
+    this.lang = "en",
   }) : super(key: key);
 
   @override
@@ -67,9 +70,11 @@ class _SelectStatePageState extends State<SelectStatePage> {
 
   @override
   Widget build(BuildContext context) {
+    final _language = S.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("Select State"),
+        title: Text(_language.selectState),
       ),
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -113,7 +118,7 @@ class _SelectStatePageState extends State<SelectStatePage> {
                                     : Colors.white,
                                 width: MediaQuery.of(context).size.width * 1,
                                 title: currentSelectedAddress == ''
-                                    ? 'Select Custom Location'
+                                    ? _language.selectCustomLocation
                                     : currentSelectedAddress,
                                 borderRadius: 10,
                                 func: () async {
@@ -184,6 +189,7 @@ class _SelectStatePageState extends State<SelectStatePage> {
                                         MaterialPageRoute(
                                           builder: (BuildContext context) =>
                                               SelectOrgPage(
+                                            lang: widget.lang,
                                             service: widget.service,
                                             selectedState: myState,
                                             selectedLocation: myLocation,

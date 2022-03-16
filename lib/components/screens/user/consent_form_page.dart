@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
+import 'package:smartrr/provider/language_provider.dart';
 import '../../widgets/constants.dart';
 import 'select_service_page.dart';
 
@@ -77,7 +79,11 @@ class _ConsentFormPageState extends State<ConsentFormPage> {
                             context,
                             MaterialPageRoute(
                               builder: (BuildContext context) =>
-                                  SelectServicePage(),
+                                  Consumer<LanguageNotifier>(
+                                      builder: (context, langNotifier, child) =>
+                                          SelectServicePage(
+                                            lang: langNotifier.locale,
+                                          )),
                             ),
                           );
                         else {

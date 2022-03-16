@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:smartrr/components/widgets/my_stepper.dart';
 import 'package:smartrr/components/widgets/show_action.dart';
 import 'package:smartrr/components/widgets/show_loading.dart';
+import 'package:smartrr/generated/l10n.dart';
 import 'package:smartrr/utils/colors.dart';
 import '../../widgets/selected_location_cell.dart';
 import '../../../models/location.dart';
@@ -18,6 +19,7 @@ class SelectOrgPage extends StatefulWidget {
   final String referredBy;
   final String referredName;
   final String caseId;
+  final String lang;
 
   const SelectOrgPage({
     Key key,
@@ -28,6 +30,7 @@ class SelectOrgPage extends StatefulWidget {
     @required this.referredBy,
     @required this.referredName,
     @required this.caseId,
+    this.lang,
   }) : super(key: key);
 
   @override
@@ -89,7 +92,7 @@ class _SelectOrgPageState extends State<SelectOrgPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Select Service Provider")),
+      appBar: AppBar(title: Text(S.of(context).selectServiceProvider)),
       body: Container(
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 4),

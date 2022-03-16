@@ -334,6 +334,206 @@ class S {
       args: [],
     );
   }
+
+  /// `Select Service Type`
+  String get selectService {
+    return Intl.message(
+      'Select Service Type',
+      name: 'selectService',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Custom Location`
+  String get selectCustomLocation {
+    return Intl.message(
+      'Select Custom Location',
+      name: 'selectCustomLocation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select State`
+  String get selectState {
+    return Intl.message(
+      'Select State',
+      name: 'selectState',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select LGA`
+  String get selectLGA {
+    return Intl.message(
+      'Select LGA',
+      name: 'selectLGA',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Service Provider`
+  String get selectServiceProvider {
+    return Intl.message(
+      'Select Service Provider',
+      name: 'selectServiceProvider',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Case Description`
+  String get selectCaseDescription {
+    return Intl.message(
+      'Select Case Description',
+      name: 'selectCaseDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Female Genital Mutilation`
+  String get fgm {
+    return Intl.message(
+      'Female Genital Mutilation',
+      name: 'fgm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rape`
+  String get rape {
+    return Intl.message(
+      'Rape',
+      name: 'rape',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sexual Abuse`
+  String get sexualAbuse {
+    return Intl.message(
+      'Sexual Abuse',
+      name: 'sexualAbuse',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Emotional Abuse`
+  String get psychologicalOrEmotionalAbuse {
+    return Intl.message(
+      'Emotional Abuse',
+      name: 'psychologicalOrEmotionalAbuse',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Forced / Child Marriage `
+  String get forcedMarriage {
+    return Intl.message(
+      'Forced / Child Marriage ',
+      name: 'forcedMarriage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Denial of Resources`
+  String get denialOfResources {
+    return Intl.message(
+      'Denial of Resources',
+      name: 'denialOfResources',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sexual Exploitation`
+  String get sexualExploitation {
+    return Intl.message(
+      'Sexual Exploitation',
+      name: 'sexualExploitation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Submit Report`
+  String get submitReport {
+    return Intl.message(
+      'Submit Report',
+      name: 'submitReport',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Physical Abuse`
+  String get physicalAbuse {
+    return Intl.message(
+      'Physical Abuse',
+      name: 'physicalAbuse',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Case Registered Successfully`
+  String get caseRegisteredSuccesfully {
+    return Intl.message(
+      'Case Registered Successfully',
+      name: 'caseRegisteredSuccesfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please check your internet connection`
+  String get badInternet {
+    return Intl.message(
+      'Please check your internet connection',
+      name: 'badInternet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please select a description`
+  String get selectDescription {
+    return Intl.message(
+      'Please select a description',
+      name: 'selectDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select One`
+  String get selectOne {
+    return Intl.message(
+      'Select One',
+      name: 'selectOne',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Case Type`
+  String get caseType {
+    return Intl.message(
+      'Case Type',
+      name: 'caseType',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

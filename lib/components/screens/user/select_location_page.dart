@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:smartrr/components/widgets/my_stepper.dart';
+import 'package:smartrr/generated/l10n.dart';
 import 'package:smartrr/utils/colors.dart';
 import '../../widgets/circular_progress.dart';
 import '../../widgets/location_cell.dart';
@@ -64,7 +65,7 @@ class _SelectLocationPageState extends State<SelectLocationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Select LGA")),
+      appBar: AppBar(title: Text(S.of(context).selectLGA)),
       body: Container(
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 4),

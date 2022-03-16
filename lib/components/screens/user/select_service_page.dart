@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartrr/components/widgets/my_stepper.dart';
+import 'package:smartrr/generated/l10n.dart';
+import 'package:smartrr/services/my_translator.dart';
 import 'package:smartrr/services/theme_provider.dart';
 import 'package:smartrr/utils/colors.dart';
 import '../../../models/location.dart';
@@ -9,6 +11,9 @@ import 'select_sub_service_page.dart';
 import '../../widgets/circular_progress.dart';
 
 class SelectServicePage extends StatefulWidget {
+  final String lang;
+
+  SelectServicePage({this.lang = "en"});
   @override
   _SelectServicePageState createState() => _SelectServicePageState();
 }
@@ -28,7 +33,7 @@ class _SelectServicePageState extends State<SelectServicePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Select Service Type"),
+        title: Text(S.of(context).selectService),
       ),
       body: Consumer<ThemeNotifier>(
           builder: ((context, notifier, child) => Container(
@@ -58,6 +63,7 @@ class _SelectServicePageState extends State<SelectServicePage> {
                                         MaterialPageRoute(
                                           builder: (BuildContext context) =>
                                               SelectSubServicePage(
+                                            lang: widget.lang,
                                             isDarkTheme: notifier.darkTheme,
                                             selectedService: serviceList[index],
                                           ),
@@ -99,11 +105,17 @@ class _SelectServicePageState extends State<SelectServicePage> {
 
   _getDataFromFirebase() {
     FirebaseFirestore.instance.collection('services').get().then((docs) {
-      for (int i = 0; i < docs.docs.length; i++) {
-        setState(() => serviceList.add(
-            MyLocation(docs.docs[i].id.toString(), docs.docs[i].get('title'))));
-      }
-      setState(() => isLoading = false);
-    });
+      docs.docs.forEach((service) async {
+        if (widget.lang == "ha") {
+          final translation =
+              await MyTranslator.translate(text: service.get("title"));
+
+          setState(() => serviceList.add(MyLocation(service.id, translation)));
+        } else {
+          setState(() =>
+              serviceList.add(MyLocation(service.id, service.get("title"))));
+        }
+      });
+    }).then((value) => setState(() => isLoading = false));
   }
 }
