@@ -2,12 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:provider/provider.dart';
 import 'package:smartrr/components/widgets/auth_container.dart';
-import 'package:smartrr/services/theme_provider.dart';
 import '../../widgets/smart_text_field.dart';
 import 'select_location_map.dart';
 import '../../widgets/circular_progress.dart';
+import 'package:smartrr/generated/l10n.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -133,6 +132,8 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
+    final _language = S.of(context);
+
     return AuthContainer(
         child: isLoading
             ? Center(
@@ -148,7 +149,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         height: 22,
                       ),
                       Text(
-                        'Register'.toUpperCase(),
+                        _language.signUp.toUpperCase(),
                         style: TextStyle(
                           color: Color(0xFF444444),
                           fontSize: 18,
@@ -159,7 +160,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         height: 47,
                       ),
                       smartTextField(
-                        title: 'Name',
+                        title: _language.name,
                         controller: nameController,
                         isForm: true,
                       ),
@@ -170,18 +171,17 @@ class _SignUpPageState extends State<SignUpPage> {
                         textInputType: TextInputType.emailAddress,
                       ),
                       smartTextField(
-                        title: 'Password',
+                        title: _language.password,
                         controller: passwordController,
                         isForm: true,
                         obscure: true,
                       ),
                       smartTextField(
-                        title: 'DOB',
+                        title: _language.dob,
                         readOnly: true,
                         isForm: true,
                         controller: dobController,
                         onTap: () {
-                          debugPrint("DT tapped");
                           showDatePicker(
                                   context: context,
                                   initialDate: DateTime.now(),
@@ -190,8 +190,6 @@ class _SignUpPageState extends State<SignUpPage> {
                               .then(
                             (value) {
                               if (value != null) {
-                                debugPrint(
-                                    "DT: ${value.day}, ${value.month}, ${value.year}");
                                 dobController.text =
                                     "${value.day}-${value.month}-${value.year}";
                               }
@@ -200,12 +198,11 @@ class _SignUpPageState extends State<SignUpPage> {
                         },
                       ),
                       smartTextField(
-                        title: 'Location',
+                        title: _language.location,
                         readOnly: true,
                         isForm: true,
                         controller: locationController,
                         onTap: () async {
-                          print('Location selected pressed');
                           String selectedAddress = await Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -218,7 +215,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         },
                       ),
                       smartTextField(
-                          title: 'Phone No.',
+                          title: _language.phoneNumber,
                           controller: phoneNumberController,
                           isForm: true,
                           isPhone: true,
@@ -242,7 +239,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         textInputType: TextInputType.number,
                       ),
                       Text(
-                        'Gender',
+                        _language.gender,
                         style: TextStyle(
                           fontSize: 18,
                         ),
@@ -270,7 +267,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                   },
                                 ),
                                 Text(
-                                  'Male',
+                                  _language.male,
                                 ),
                               ],
                             ),
@@ -295,7 +292,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                   },
                                 ),
                                 Text(
-                                  'Female',
+                                  _language.female,
                                 ),
                               ],
                             ),
@@ -311,7 +308,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             child: TextButton(
                               onPressed: _validateRegisterInput,
                               child: Text(
-                                'Sign Up',
+                                _language.signUp,
                                 style: TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.w600),
                               ),
@@ -329,11 +326,11 @@ class _SignUpPageState extends State<SignUpPage> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             Text(
-                              "Already have an account?",
+                              _language.alreadyHaveAnAccount,
                               style: TextStyle(),
                             ),
                             Text(
-                              ' Login',
+                              _language.logIn,
                               style: TextStyle(
                                   color: Color(0xFFFD9A05),
                                   fontWeight: FontWeight.w600),

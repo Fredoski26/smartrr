@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:package_info/package_info.dart';
 import 'package:smartrr/components/screens/about.dart';
 import 'package:smartrr/components/screens/faq.dart';
@@ -12,6 +13,8 @@ import 'package:smartrr/components/screens/settings.dart';
 import 'package:smartrr/components/screens/user/cases_history_screen.dart';
 import 'package:smartrr/components/screens/org/org_sign_up_page.dart';
 import 'package:smartrr/components/screens/user/sign_up_page.dart';
+import 'package:smartrr/generated/l10n.dart';
+import 'package:smartrr/provider/language_provider.dart';
 import 'package:smartrr/theme/themes.dart';
 import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/utils/utils.dart';
@@ -24,20 +27,21 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
-  runApp(ChangeNotifierProvider(
-    create: (_) => ThemeNotifier(),
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_) => ThemeNotifier()),
+      ChangeNotifierProvider(create: (context) => LanguageNotifier())
+    ],
     child: Consumer<ThemeNotifier>(
-      builder: (context, ThemeNotifier notifier, child) {
-        return AnnotatedRegion<SystemUiOverlayStyle>(
-          value: SystemUiOverlayStyle().copyWith(
-              statusBarColor: primaryColor,
-              statusBarIconBrightness: Brightness.light),
-          child: MyApp(
-            isDarkTheme: notifier.darkTheme,
-          ),
-        );
-      },
+      builder: (context, ThemeNotifier notifier, child) =>
+          AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle().copyWith(
+            statusBarColor: primaryColor,
+            statusBarIconBrightness: Brightness.light),
+        child: MyApp(
+          isDarkTheme: notifier.darkTheme,
+        ),
+      ),
     ),
   ));
 }
@@ -69,6 +73,13 @@ class MyApp extends StatelessWidget {
         "/countries": (context) => SelectCountry()
       },
       theme: isDarkTheme ? darkTheme : appTheme,
+      localizationsDelegates: [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: S.delegate.supportedLocales,
     );
   }
 }

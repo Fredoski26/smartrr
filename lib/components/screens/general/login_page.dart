@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:smartrr/components/widgets/circular_progress.dart';
 import 'package:smartrr/components/widgets/show_action.dart';
 import 'package:smartrr/components/widgets/smart_text_field.dart';
+import 'package:smartrr/provider/language_provider.dart';
 import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/utils/utils.dart';
 import '../../widgets/auth_container.dart';
+import 'package:smartrr/generated/l10n.dart';
 
 class LoginPage extends StatefulWidget {
   final bool isDarkTheme;
@@ -34,156 +37,158 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return AuthContainer(
-        child: Form(
-      key: _formKey,
-      child: isLoading
-          ? Center(
-              child: CircularProgress(),
-            )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                  SizedBox(
-                    height: kToolbarHeight,
-                  ),
-                  Text(
-                    'LOGIN SMART RR',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 40,
-                  ),
-                  smartTextField(
-                    title: 'Email',
-                    controller: emailController,
-                    isForm: true,
-                    textInputType: TextInputType.emailAddress,
-                  ),
-                  smartTextField(
-                      title: 'Password',
-                      controller: passwordController,
-                      obscure: true,
-                      isForm: true,
-                      suffixIcon: Icon(Icons.e_mobiledata)),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          if (_isUser)
-                            setState(() => _isUser = false);
-                          else
-                            setState(() => _isUser = true);
-                        },
-                        child: Row(
-                          children: [
-                            Checkbox(
-                              value: _isUser,
-                              onChanged: (val) {
-                                setState(() => _isUser = val);
-                              },
-                            ),
-                            Text(
-                              'User',
-                            ),
-                          ],
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          if (_isUser)
-                            setState(() => _isUser = false);
-                          else
-                            setState(() => _isUser = true);
-                        },
-                        child: Row(
-                          children: [
-                            Checkbox(
-                              value: !_isUser,
-                              onChanged: (val) {
-                                print('===> $val');
-                                if (val)
-                                  setState(() => _isUser = false);
-                                else
-                                  setState(() => _isUser = true);
-                              },
-                            ),
-                            Text(
-                              'Organization',
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextButton(
-                          onPressed: _validateLoginInput,
-                          child: Text("Login"),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 38.0),
-                  GestureDetector(
-                    onTap: () => _bottomSheet(
-                        context: context, isDarkTheme: widget.isDarkTheme),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+    return Consumer<LanguageNotifier>(
+        builder: (context, LanguageNotifier notifier, child) => AuthContainer(
+                child: Form(
+              key: _formKey,
+              child: isLoading
+                  ? Center(
+                      child: CircularProgress(),
+                    )
+                  : Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Text(
-                          "Don't have an account?",
-                          style: TextStyle(
-                            fontSize: 12.0,
+                          SizedBox(
+                            height: kToolbarHeight,
                           ),
-                        ),
-                        Text(
-                          ' SignUp',
-                          style: TextStyle(
-                            color: Color(0xFFF59405),
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 21),
-                  GestureDetector(
-                    onTap: () => Navigator.pushNamed(context, '/forgot'),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Forgot Password?',
-                          style: TextStyle(
-                            fontSize: 12.0,
-                          ),
-                        ),
-                        Text(' Reset Here',
+                          Text(
+                            "login smart rr".toUpperCase(),
                             style: TextStyle(
-                              color: Color(0xFFF59405),
-                              fontWeight: FontWeight.w600,
-                            ))
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                ]),
-    ));
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 40,
+                          ),
+                          smartTextField(
+                            title: 'Email',
+                            controller: emailController,
+                            isForm: true,
+                            textInputType: TextInputType.emailAddress,
+                          ),
+                          smartTextField(
+                              title: 'Password',
+                              controller: passwordController,
+                              obscure: true,
+                              isForm: true,
+                              suffixIcon: Icon(Icons.e_mobiledata)),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  if (_isUser)
+                                    setState(() => _isUser = false);
+                                  else
+                                    setState(() => _isUser = true);
+                                },
+                                child: Row(
+                                  children: [
+                                    Checkbox(
+                                      value: _isUser,
+                                      onChanged: (val) {
+                                        setState(() => _isUser = val);
+                                      },
+                                    ),
+                                    Text(
+                                      S.of(context).user,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  if (_isUser)
+                                    setState(() => _isUser = false);
+                                  else
+                                    setState(() => _isUser = true);
+                                },
+                                child: Row(
+                                  children: [
+                                    Checkbox(
+                                      value: !_isUser,
+                                      onChanged: (val) {
+                                        if (val)
+                                          setState(() => _isUser = false);
+                                        else
+                                          setState(() => _isUser = true);
+                                      },
+                                    ),
+                                    Text(
+                                      S.of(context).organization,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextButton(
+                                  onPressed: _validateLoginInput,
+                                  child: Text("Login"),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 38.0),
+                          GestureDetector(
+                            onTap: () => _bottomSheet(
+                                context: context,
+                                isDarkTheme: widget.isDarkTheme),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  S.of(context).dontHaveAccount,
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                  ),
+                                ),
+                                Text(
+                                  S.of(context).signUp,
+                                  style: TextStyle(
+                                    color: Color(0xFFF59405),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 21),
+                          GestureDetector(
+                            onTap: () =>
+                                Navigator.pushNamed(context, '/forgot'),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  S.of(context).forgotPassword,
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                  ),
+                                ),
+                                Text(S.of(context).resetHere,
+                                    style: TextStyle(
+                                      color: Color(0xFFF59405),
+                                      fontWeight: FontWeight.w600,
+                                    ))
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                        ]),
+            )));
   }
 
   _bottomSheet({BuildContext context, bool isDarkTheme}) {
@@ -205,7 +210,7 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 SizedBox(height: 10),
                 Text(
-                  'Register',
+                  S.of(context).signUp,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18,
@@ -220,14 +225,14 @@ class _LoginPageState extends State<LoginPage> {
                     Navigator.pop(context);
                     Navigator.pushNamed(context, '/userSignup');
                   },
-                  child: Text("User"),
+                  child: Text(S.of(context).user),
                 ),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.pop(context);
                     Navigator.pushNamed(context, '/orgSignup');
                   },
-                  child: Text("Organization"),
+                  child: Text(S.of(context).organization),
                 ),
               ],
             ),

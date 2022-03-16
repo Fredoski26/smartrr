@@ -1,0 +1,18 @@
+{
+  "user": "User",
+  "organization": "Organization",
+  "dontHaveAccount": "Don't have an account?",
+  "signUp": "SignUp",
+  "forgotPassword": "Forgot password?",
+  "resetHere": "Reset Here",
+  "logIn": "Login",
+  "name": "Name",
+  "dob": "DOB",
+  "phoneNumber": "Phone Number",
+  "password": "Password",
+  "location": "Location",
+  "gender": "Gender",
+  "male": "Male",
+  "female": "Female",
+  "alreadyHaveAnAccount": "Already have an account?"
+}

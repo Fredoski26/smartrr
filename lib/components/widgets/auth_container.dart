@@ -1,13 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:smartrr/components/widgets/circular_progress.dart';
-import 'package:smartrr/components/widgets/show_action.dart';
-import 'package:smartrr/components/widgets/smart_text_field.dart';
 import 'package:smartrr/services/theme_provider.dart';
 import 'package:smartrr/utils/colors.dart';
-import 'package:smartrr/utils/utils.dart';
 
 class AuthContainer extends StatefulWidget {
   AuthContainer({Key key, @required this.child, this.isOrgSignUp = false})
@@ -21,12 +15,10 @@ class AuthContainer extends StatefulWidget {
 }
 
 class _AuthContainerState extends State<AuthContainer> {
-  final _formKey = GlobalKey<FormState>();
   final mScaffoldState = GlobalKey<ScaffoldState>();
   TextEditingController emailController;
   TextEditingController passwordController;
   String errorMsg;
-  bool _isUser = true;
   bool isLoading = false;
 
   @override
@@ -84,7 +76,7 @@ class _AuthContainerState extends State<AuthContainer> {
                   child: Image.asset("assets/logo.png"),
                 ),
               ],
-            )
+            ),
           ]),
         ),
       ),
