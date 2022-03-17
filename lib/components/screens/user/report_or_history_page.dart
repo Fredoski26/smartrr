@@ -1,13 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:smartrr/components/screens/all_about_srhr.dart';
 import 'package:smartrr/components/widgets/chatbot.dart';
 import 'package:smartrr/components/widgets/language_picker.dart';
 import 'package:smartrr/provider/language_provider.dart';
 import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/utils/utils.dart';
-import '../../widgets/ask_action.dart';
 import 'consent_form_page.dart';
 import '../../widgets/custom_drawer.dart';
 import 'package:smartrr/generated/l10n.dart';
@@ -19,13 +16,6 @@ class ReportOrHistoryPage extends StatefulWidget {
 
 class _ReportOrHistoryPageState extends State<ReportOrHistoryPage> {
   final mScaffoldState = GlobalKey<ScaffoldState>();
-
-  BoxDecoration _actionButtonDecoration = BoxDecoration(boxShadow: [
-    BoxShadow(
-        color: Colors.black.withOpacity(0.25),
-        blurRadius: 100,
-        offset: Offset(0, 4))
-  ]);
 
   @override
   Widget build(BuildContext context) {

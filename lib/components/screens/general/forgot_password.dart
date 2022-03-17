@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:smartrr/components/widgets/show_action.dart';
 import 'package:smartrr/components/widgets/smart_text_field.dart';
+import 'package:smartrr/provider/language_provider.dart';
+import 'package:smartrr/generated/l10n.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   @override
@@ -26,77 +29,81 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Forgot Password")),
-      resizeToAvoidBottomInset: false,
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 18),
-        height: MediaQuery.of(context).size.height,
-        width: double.infinity,
-        child: Form(
-          key: formKey,
-          child: Container(
-            padding: EdgeInsets.all(32.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(
-                  height: kToolbarHeight,
-                ),
-                Text(
-                  'Forgot Password',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 13),
-                Text(
-                  "Enter the email address associated with your Amrt RR account aand we will send a reset password link",
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-                smartTextField(
-                  title: 'Email',
-                  controller: _email,
-                  isForm: true,
-                  textInputType: TextInputType.emailAddress,
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextButton(
-                        onPressed: submit,
-                        child: Text("Send Reset Link"),
-                        style: ButtonStyle(
-                          shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(33))),
-                          foregroundColor:
-                              MaterialStateProperty.all(Colors.white),
-                          backgroundColor:
-                              MaterialStateProperty.all(Color(0xFFF59405)),
-                          padding:
-                              MaterialStateProperty.all(EdgeInsets.all(5.0)),
+    final _language = S.of(context);
+
+    return Consumer<LanguageNotifier>(
+        builder: (context, langNotifier, child) => Scaffold(
+              appBar: AppBar(title: Text(_language.forgotPassword)),
+              resizeToAvoidBottomInset: false,
+              body: Container(
+                padding: EdgeInsets.symmetric(horizontal: 18),
+                height: MediaQuery.of(context).size.height,
+                width: double.infinity,
+                child: Form(
+                  key: formKey,
+                  child: Container(
+                    padding: EdgeInsets.all(32.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(
+                          height: kToolbarHeight,
                         ),
-                      ),
+                        Text(
+                          _language.forgotPassword,
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 13),
+                        Text(
+                          _language.forgotPasswordDescription,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 40,
+                        ),
+                        smartTextField(
+                          title: 'Email',
+                          controller: _email,
+                          isForm: true,
+                          textInputType: TextInputType.emailAddress,
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextButton(
+                                onPressed: submit,
+                                child: Text(_language.sendResetLink),
+                                style: ButtonStyle(
+                                  shape: MaterialStateProperty.all(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(33))),
+                                  foregroundColor:
+                                      MaterialStateProperty.all(Colors.white),
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Color(0xFFF59405)),
+                                  padding: MaterialStateProperty.all(
+                                      EdgeInsets.all(5.0)),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
+              ),
+            ));
   }
 
   void _sendResetEmail() {

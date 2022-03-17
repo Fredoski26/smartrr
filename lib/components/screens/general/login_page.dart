@@ -37,6 +37,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final _language = S.of(context);
+
     return Consumer<LanguageNotifier>(
         builder: (context, LanguageNotifier notifier, child) => AuthContainer(
                 child: Form(
@@ -53,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                             height: kToolbarHeight,
                           ),
                           Text(
-                            "login smart rr".toUpperCase(),
+                            "${_language.logIn} smart rr".toUpperCase(),
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -69,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                             textInputType: TextInputType.emailAddress,
                           ),
                           smartTextField(
-                              title: 'Password',
+                              title: _language.password,
                               controller: passwordController,
                               obscure: true,
                               isForm: true,
@@ -96,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                                       },
                                     ),
                                     Text(
-                                      S.of(context).user,
+                                      _language.user,
                                     ),
                                   ],
                                 ),
@@ -120,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                                       },
                                     ),
                                     Text(
-                                      S.of(context).organization,
+                                      _language.organization,
                                     ),
                                   ],
                                 ),
@@ -135,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                               Expanded(
                                 child: TextButton(
                                   onPressed: _validateLoginInput,
-                                  child: Text("Login"),
+                                  child: Text(_language.logIn),
                                 ),
                               ),
                             ],
@@ -150,13 +152,13 @@ class _LoginPageState extends State<LoginPage> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  S.of(context).dontHaveAccount,
+                                  "${_language.dontHaveAccount} ",
                                   style: TextStyle(
                                     fontSize: 12.0,
                                   ),
                                 ),
                                 Text(
-                                  S.of(context).signUp,
+                                  _language.signUp,
                                   style: TextStyle(
                                     color: Color(0xFFF59405),
                                     fontWeight: FontWeight.w600,
@@ -173,7 +175,7 @@ class _LoginPageState extends State<LoginPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  S.of(context).forgotPassword,
+                                  "${_language.forgotPassword} ",
                                   style: TextStyle(
                                     fontSize: 12.0,
                                   ),
