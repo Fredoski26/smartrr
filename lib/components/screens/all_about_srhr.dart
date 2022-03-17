@@ -67,7 +67,7 @@ class AllAboutSRHR extends StatelessWidget {
                                   "https://docs.google.com/document/d/170XeWJLKtTo2GOufFgnhqqmZ1tFyfoAv/edit?usp=sharing&ouid=102250998567041919901&rtpof=true&sd=true",
                                 );
                               },
-                              child: Text("Read more..."),
+                              child: Text("${_language.readMore}.."),
                             )
                           : TextButton(
                               onPressed: () async {
@@ -75,7 +75,7 @@ class AllAboutSRHR extends StatelessWidget {
                                   "https://docs.google.com/document/d/1gCIciVW4qZTHgGd8tNJDX-mtDKcIutAF/edit?usp=sharing&ouid=102250998567041919901&rtpof=true&sd=true",
                                 );
                               },
-                              child: Text("Read more..."),
+                              child: Text("${_language.readMore}..."),
                             ),
                     ],
                   ),

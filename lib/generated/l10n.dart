@@ -595,6 +595,16 @@ class S {
     );
   }
 
+  /// `Read more`
+  String get readMore {
+    return Intl.message(
+      'Read more',
+      name: 'readMore',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Smart Reporting and Referral (SMART RR) is a technology based mobile application that allows survivors, social workers and service providers to report and refer cases/incidents of GBV from their smart and basic phones. The tool was developed by Big Family 360 Foundation, a national non-governmental organisation in Nigeria.\n\nSmart RR application is a technology based mobile application which enables survivors, social workers and service providers to report and refer GBV incidents to relevant service providers and authorities, conducts service mapping, automatically updates referral directory, collects and analyses referral data. This idea was built on the existing referral mechanism of the GBV Sub Sector which is done manually.\n\n`
   String get aboutSmartrrData {
     return Intl.message(

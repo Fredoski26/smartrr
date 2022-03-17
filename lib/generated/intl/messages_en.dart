@@ -58,6 +58,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "proceed" : MessageLookupByLibrary.simpleMessage("Proceed"),
     "psychologicalOrEmotionalAbuse" : MessageLookupByLibrary.simpleMessage("Emotional Abuse"),
     "rape" : MessageLookupByLibrary.simpleMessage("Rape"),
+    "readMore" : MessageLookupByLibrary.simpleMessage("Read more"),
     "reportACase" : MessageLookupByLibrary.simpleMessage("Report a case"),
     "reportFor" : MessageLookupByLibrary.simpleMessage("Report for"),
     "resetHere" : MessageLookupByLibrary.simpleMessage("Reset Here"),
