@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 class ListItem extends StatelessWidget {
-  const ListItem({Key key, this.label = "•", @required this.body})
+  const ListItem(
+      {Key key, this.label = "•", @required this.body, this.title = ""})
       : super(key: key);
 
-  final String label, body;
+  final String label, body, title;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -17,7 +19,10 @@ class ListItem extends StatelessWidget {
           label,
           style: TextStyle().copyWith(fontWeight: FontWeight.bold),
         ),
-        title: Text(
+        title: title.isNotEmpty
+            ? Text(title, style: Theme.of(context).textTheme.bodyText1)
+            : null,
+        subtitle: Text(
           body,
           style: Theme.of(context)
               .textTheme

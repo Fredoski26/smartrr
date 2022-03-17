@@ -5,13 +5,8 @@ import 'package:smartrr/components/widgets/text_paragraph.dart';
 import 'package:smartrr/generated/l10n.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class AllAboutSmartRR extends StatelessWidget {
-  AllAboutSmartRR({Key key}) : super(key: key);
-
-  final TextStyle _headingStyle = TextStyle().copyWith(
-    fontWeight: FontWeight.bold,
-    fontSize: 18,
-  );
+class AllAboutSRHR extends StatelessWidget {
+  const AllAboutSRHR({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +48,7 @@ class AllAboutSmartRR extends StatelessWidget {
               TextHeading(
                   text: "Sexual Reproductive Health and Rights Definitions"),
               ListItem(
+                  title: "Sexual Health (SH):",
                   label: "A",
                   body:
                       "Is a state of physical, emotional,  mental, and social wellbeing in relation to sexual feelings, considerations, attractions and practices towards others Sexuality. It encompasses the possibility of pleasurable and safe sexual experiences, free of coercion, discrimination, and violence. For sexual health to be attained and maintained, the sexual rights of all persons must be respected, protected, and fulfilled"),
@@ -66,6 +62,24 @@ class AllAboutSmartRR extends StatelessWidget {
               ListItem(
                   body:
                       "Psychosexual counselling, and treatment for sexual dysfunction and disorders"),
+              ListItem(
+                  label: "B",
+                  title: "Sexuality:",
+                  body:
+                      "sexual feelings, considerations, attractions and practices towards others Sexuality."),
+              ListItem(
+                  label: "C",
+                  title: " Reproductive Health(RH):",
+                  body:
+                      "Reproductive health is a state of complete physical, mental, and social wellbeing, and not merely the absence of disease or infirmity, in all matters relating to the reproductive system and to its functions and processes.\n\nReproductive health means  people are able to have a satisfying and safe sex life, and that they have the capability to reproduce and the freedom to decide if, when, and how often to do so."),
+              TextButton(
+                onPressed: () async {
+                  await launch(
+                    "https://docs.google.com/document/d/170XeWJLKtTo2GOufFgnhqqmZ1tFyfoAv/edit",
+                  );
+                },
+                child: Text("Read more..."),
+              ),
             ],
           ),
         ),

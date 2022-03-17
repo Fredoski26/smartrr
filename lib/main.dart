@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:package_info/package_info.dart';
 import 'package:smartrr/components/screens/about.dart';
+import 'package:smartrr/components/screens/all_about_srhr.dart';
 import 'package:smartrr/components/screens/faq.dart';
 import 'package:smartrr/components/screens/general/forgot_password.dart';
 import 'package:smartrr/components/screens/org/refer_or_cases_page.dart';
@@ -70,7 +71,8 @@ class MyApp extends StatelessWidget {
         '/settings': ((context) => Settings()),
         '/about': (context) => About(),
         '/faq': (context) => FrequentlyAskedQuestions(),
-        "/countries": (context) => SelectCountry()
+        "/countries": (context) => SelectCountry(),
+        "/srhr": (ontext) => AllAboutSRHR()
       },
       theme: isDarkTheme ? darkTheme : appTheme,
       localizationsDelegates: [

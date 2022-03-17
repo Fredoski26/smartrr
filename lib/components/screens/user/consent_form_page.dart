@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:smartrr/provider/language_provider.dart';
-import '../../widgets/constants.dart';
 import 'select_service_page.dart';
+import 'package:smartrr/generated/l10n.dart';
 
 class ConsentFormPage extends StatefulWidget {
   @override
@@ -15,6 +15,9 @@ class _ConsentFormPageState extends State<ConsentFormPage> {
 
   @override
   Widget build(BuildContext context) {
+    final _language = S.of(context);
+    final String consentFormData = _language.consentFormData;
+
     return Scaffold(
         body: Stack(
       children: <Widget>[
@@ -28,7 +31,7 @@ class _ConsentFormPageState extends State<ConsentFormPage> {
                     height: kToolbarHeight,
                   ),
                   Text(
-                    'CONSENT FORM',
+                    _language.consentForm,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 18,
@@ -57,8 +60,8 @@ class _ConsentFormPageState extends State<ConsentFormPage> {
                   ),
                   Center(
                     child: CheckboxListTile(
-                      title: const Text(
-                        'Accept Terms \& Conditions',
+                      title: Text(
+                        _language.acceptTerms,
                         style: TextStyle(
                           fontSize: 14,
                         ),
@@ -88,7 +91,7 @@ class _ConsentFormPageState extends State<ConsentFormPage> {
                           );
                         else {
                           Fluttertoast.showToast(
-                            msg: "Please accept Terms \& Conditions",
+                            msg: _language.pleaseAcceptTerms,
                             toastLength: Toast.LENGTH_SHORT,
                             gravity: ToastGravity.BOTTOM,
                             timeInSecForIosWeb: 1,
@@ -98,7 +101,7 @@ class _ConsentFormPageState extends State<ConsentFormPage> {
                           );
                         }
                       },
-                      child: Text("Proceed")),
+                      child: Text(_language.proceed)),
                   SizedBox(
                     height: 20,
                   ),
