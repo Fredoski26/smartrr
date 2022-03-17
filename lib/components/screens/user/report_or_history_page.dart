@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smartrr/components/screens/all_about_smartrr.dart';
 import 'package:smartrr/components/widgets/chatbot.dart';
 import 'package:smartrr/components/widgets/language_picker.dart';
 import 'package:smartrr/provider/language_provider.dart';
@@ -57,8 +58,9 @@ class _ReportOrHistoryPageState extends State<ReportOrHistoryPage> {
                           ),
                         ),
                         ElevatedButton.icon(
-                          onPressed: () =>
-                              Navigator.of(context).pushNamed("/about"),
+                          onPressed: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) => AllAboutSmartRR())),
                           icon: Icon(Icons.info_rounded),
                           label: Padding(
                             padding: const EdgeInsets.symmetric(

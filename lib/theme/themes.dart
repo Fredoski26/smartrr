@@ -3,7 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import '../utils/colors.dart';
 
 final ThemeData appTheme = ThemeData(
-    textTheme: GoogleFonts.poppinsTextTheme(),
+    textTheme: GoogleFonts.poppinsTextTheme()
+        .copyWith(bodyText1: TextStyle(fontSize: 16)),
     primarySwatch: Colors.orange,
     primaryColor: primaryColor,
     iconTheme: IconThemeData().copyWith(color: Colors.white),
