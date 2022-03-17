@@ -23,7 +23,27 @@ class AllAboutSRHR extends StatelessWidget {
                 actions: [
                   LanguagePicker(),
                   MyTts(
-                    text: _language.allAboutSRHR,
+                    text: [
+                      _language.srhrHeading1,
+                      _language.srhrParagraph1,
+                      _language.srhrHeading2,
+                      _language.srhrParagraph2,
+                      _language.srhrParagraph3,
+                      _language.srhrParagraph4,
+                      _language.srhrParagraph5,
+                      _language.srhrParagraph6,
+                      _language.srhrHeading4,
+                      _language.srhrDefinition1Title,
+                      _language.srhrDefinition1Body,
+                      _language.srhrDefinition1SubList1Title,
+                      _language.srhrDefinition1SubList1Item1,
+                      _language.srhrDefinition1SubList1Item2,
+                      _language.srhrDefinition1SubList1Item3,
+                      _language.srhrDefinition2Title,
+                      _language.srhrDefinition2Body,
+                      _language.srhrDefinition3Title,
+                      _language.srhrDefinition3Body
+                    ].join(""),
                     language: langNotifier.locale,
                   )
                 ],
@@ -37,7 +57,6 @@ class AllAboutSRHR extends StatelessWidget {
                       TextHeading(text: _language.srhrHeading1),
                       TextParagraph(text: _language.srhrParagraph1),
                       TextHeading(text: _language.srhrHeading2),
-                      TextHeading(text: _language.srhrHeading3.toUpperCase()),
                       TextParagraph(text: _language.srhrParagraph2),
                       TextParagraph(text: _language.srhrParagraph3),
                       TextParagraph(text: _language.srhrParagraph4),

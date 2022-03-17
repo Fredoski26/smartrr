@@ -605,30 +605,30 @@ class S {
     );
   }
 
-  /// `Smart Reporting and Referral (SMART RR) is a technology based mobile application that allows survivors, social workers and service providers to report and refer cases/incidents of GBV from their smart and basic phones. The tool was developed by Big Family 360 Foundation, a national non-governmental organisation in Nigeria.\n\nSmart RR application is a technology based mobile application which enables survivors, social workers and service providers to report and refer GBV incidents to relevant service providers and authorities, conducts service mapping, automatically updates referral directory, collects and analyses referral data. This idea was built on the existing referral mechanism of the GBV Sub Sector which is done manually.\n\n`
+  /// `Smart Reporting and Referral (SMART RR) is a technology based mobile application that allows survivors, social workers and service providers to report and refer cases/incidents of GBV from their smart and basic phones. The tool was developed by Big Family 360 Foundation, a national non-governmental organisation in Nigeria.\n\nSmart RR application is a technology based mobile application which enables survivors, social workers and service providers to report and refer GBV incidents to relevant service providers and authorities, conducts service mapping, automatically updates referral directory, collects and analyses referral data. This idea was built on the existing referral mechanism of the GBV Sub Sector which is done manually.`
   String get aboutSmartrrData {
     return Intl.message(
-      'Smart Reporting and Referral (SMART RR) is a technology based mobile application that allows survivors, social workers and service providers to report and refer cases/incidents of GBV from their smart and basic phones. The tool was developed by Big Family 360 Foundation, a national non-governmental organisation in Nigeria.\n\nSmart RR application is a technology based mobile application which enables survivors, social workers and service providers to report and refer GBV incidents to relevant service providers and authorities, conducts service mapping, automatically updates referral directory, collects and analyses referral data. This idea was built on the existing referral mechanism of the GBV Sub Sector which is done manually.\n\n',
+      'Smart Reporting and Referral (SMART RR) is a technology based mobile application that allows survivors, social workers and service providers to report and refer cases/incidents of GBV from their smart and basic phones. The tool was developed by Big Family 360 Foundation, a national non-governmental organisation in Nigeria.\n\nSmart RR application is a technology based mobile application which enables survivors, social workers and service providers to report and refer GBV incidents to relevant service providers and authorities, conducts service mapping, automatically updates referral directory, collects and analyses referral data. This idea was built on the existing referral mechanism of the GBV Sub Sector which is done manually.',
       name: 'aboutSmartrrData',
       desc: '',
       args: [],
     );
   }
 
-  /// `I understand that in giving  my  authorization below,  I  am giving  permission to  share  the  specific  case  information from  my  incident report with the  service  provider(s)  I  have indicated, so  that I  can  receive  help  with safety,  health, psychosocial, and/or  legal  needs.    I  understand that shared information will  be  treated with confidentiality  and respect, and shared  only as  needed to  provide  the  assistance  I  request. I  understand that releasing  this  information means  that a  person from  the  agency  or  service  selected below may  come  to  talk to  me.   At any  point, I  have  the  right to  change  my  mind about sharing information with the  designated agency/focal  point listed below.`
+  /// `I understand that in giving  my  authorization below,  I  am giving  permission to  share  the  specific  case  information from  my  incident report with the  service  provider(s)  I  have indicated, so  that I  can  receive  help  with safety,  health, psychosocial, and/or  legal  needs. I understand that shared information will  be  treated with confidentiality  and respect, and shared  only as  needed to  provide  the  assistance  I  request. I  understand that releasing  this  information means  that a  person from  the  agency  or  service  selected below may  come  to  talk to  me.   At any  point, I  have  the  right to  change  my  mind about sharing information with the  designated agency/focal  point listed below.`
   String get consentFormData {
     return Intl.message(
-      'I understand that in giving  my  authorization below,  I  am giving  permission to  share  the  specific  case  information from  my  incident report with the  service  provider(s)  I  have indicated, so  that I  can  receive  help  with safety,  health, psychosocial, and/or  legal  needs.    I  understand that shared information will  be  treated with confidentiality  and respect, and shared  only as  needed to  provide  the  assistance  I  request. I  understand that releasing  this  information means  that a  person from  the  agency  or  service  selected below may  come  to  talk to  me.   At any  point, I  have  the  right to  change  my  mind about sharing information with the  designated agency/focal  point listed below.',
+      'I understand that in giving  my  authorization below,  I  am giving  permission to  share  the  specific  case  information from  my  incident report with the  service  provider(s)  I  have indicated, so  that I  can  receive  help  with safety,  health, psychosocial, and/or  legal  needs. I understand that shared information will  be  treated with confidentiality  and respect, and shared  only as  needed to  provide  the  assistance  I  request. I  understand that releasing  this  information means  that a  person from  the  agency  or  service  selected below may  come  to  talk to  me.   At any  point, I  have  the  right to  change  my  mind about sharing information with the  designated agency/focal  point listed below.',
       name: 'consentFormData',
       desc: '',
       args: [],
     );
   }
 
-  /// `Sexual Reproductive Health and Rights (SRHR) CONTENTS`
+  /// `Sexual Reproductive Health and Rights (SRHR) Contents.`
   String get srhrHeading1 {
     return Intl.message(
-      'Sexual Reproductive Health and Rights (SRHR) CONTENTS',
+      'Sexual Reproductive Health and Rights (SRHR) Contents.',
       name: 'srhrHeading1',
       desc: '',
       args: [],
@@ -645,20 +645,20 @@ class S {
     );
   }
 
-  /// `Key definitions of Sexual Reproductive Health and Rights components`
+  /// `Key definitions of Sexual Reproductive Health and Rights components.`
   String get srhrHeading2 {
     return Intl.message(
-      'Key definitions of Sexual Reproductive Health and Rights components',
+      'Key definitions of Sexual Reproductive Health and Rights components.',
       name: 'srhrHeading2',
       desc: '',
       args: [],
     );
   }
 
-  /// `key messages`
+  /// `key messages.`
   String get srhrHeading3 {
     return Intl.message(
-      'key messages',
+      'key messages.',
       name: 'srhrHeading3',
       desc: '',
       args: [],
@@ -715,10 +715,10 @@ class S {
     );
   }
 
-  /// `Sexual Reproductive Health and Rights Definitions`
+  /// `Sexual Reproductive Health and Rights Definitions.`
   String get srhrHeading4 {
     return Intl.message(
-      'Sexual Reproductive Health and Rights Definitions',
+      'Sexual Reproductive Health and Rights Definitions.',
       name: 'srhrHeading4',
       desc: '',
       args: [],
@@ -735,10 +735,10 @@ class S {
     );
   }
 
-  /// `Is a state of physical, emotional,  mental, and social wellbeing in relation to sexual feelings, considerations, attractions and practices towards others Sexuality. It encompasses the possibility of pleasurable and safe sexual experiences, free of coercion, discrimination, and violence. For sexual health to be attained and maintained, the sexual rights of all persons must be respected, protected, and fulfilled`
+  /// `Is a state of physical, emotional,  mental, and social wellbeing in relation to sexual feelings, considerations, attractions and practices towards others Sexuality. It encompasses the possibility of pleasurable and safe sexual experiences, free of coercion, discrimination, and violence. For sexual health to be attained and maintained, the sexual rights of all persons must be respected, protected, and fulfilled.`
   String get srhrDefinition1Body {
     return Intl.message(
-      'Is a state of physical, emotional,  mental, and social wellbeing in relation to sexual feelings, considerations, attractions and practices towards others Sexuality. It encompasses the possibility of pleasurable and safe sexual experiences, free of coercion, discrimination, and violence. For sexual health to be attained and maintained, the sexual rights of all persons must be respected, protected, and fulfilled',
+      'Is a state of physical, emotional,  mental, and social wellbeing in relation to sexual feelings, considerations, attractions and practices towards others Sexuality. It encompasses the possibility of pleasurable and safe sexual experiences, free of coercion, discrimination, and violence. For sexual health to be attained and maintained, the sexual rights of all persons must be respected, protected, and fulfilled.',
       name: 'srhrDefinition1Body',
       desc: '',
       args: [],
@@ -755,30 +755,30 @@ class S {
     );
   }
 
-  /// `Counselling and care related to sexuality, sexual identity, and sexual relationships`
+  /// `Counselling and care related to sexuality, sexual identity, and sexual relationships.`
   String get srhrDefinition1SubList1Item1 {
     return Intl.message(
-      'Counselling and care related to sexuality, sexual identity, and sexual relationships',
+      'Counselling and care related to sexuality, sexual identity, and sexual relationships.',
       name: 'srhrDefinition1SubList1Item1',
       desc: '',
       args: [],
     );
   }
 
-  /// `Prevention and management of sexually transmitted infections (STIs)`
+  /// `Prevention and management of sexually transmitted infections (STIs).`
   String get srhrDefinition1SubList1Item2 {
     return Intl.message(
-      'Prevention and management of sexually transmitted infections (STIs)',
+      'Prevention and management of sexually transmitted infections (STIs).',
       name: 'srhrDefinition1SubList1Item2',
       desc: '',
       args: [],
     );
   }
 
-  /// `Psychosexual counselling, and treatment for sexual dysfunction and disorders`
+  /// `Psychosexual counselling, and treatment for sexual dysfunction and disorders.`
   String get srhrDefinition1SubList1Item3 {
     return Intl.message(
-      'Psychosexual counselling, and treatment for sexual dysfunction and disorders',
+      'Psychosexual counselling, and treatment for sexual dysfunction and disorders.',
       name: 'srhrDefinition1SubList1Item3',
       desc: '',
       args: [],
