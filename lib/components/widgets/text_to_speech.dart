@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_tts/flutter_tts.dart';
 import 'dart:io' show Platform;
-import 'package:smartrr/generated/l10n.dart';
 
 enum TtsState { playing, stopped, paused, continued }
 
@@ -24,9 +23,6 @@ class _MyTtsState extends State<MyTts> {
   double pitch = 1.0;
   double rate = 0.5;
   bool isCurrentLanguageInstalled = false;
-
-  // String _newVoiceText;
-  // int _inputLength;
 
   TtsState ttsState = TtsState.stopped;
 
@@ -88,10 +84,6 @@ class _MyTtsState extends State<MyTts> {
     }
   }
 
-  // Future<dynamic> _getLanguages() => flutterTts.getLanguages;
-
-  // Future<dynamic> _getEngines() => flutterTts.getEngines;
-
   Future _getDefaultEngine() async {
     var engine = await flutterTts.getDefaultEngine;
     if (engine != null) {
@@ -100,7 +92,7 @@ class _MyTtsState extends State<MyTts> {
   }
 
   Future _setLanguage(String language) async {
-    var result = await flutterTts.setLanguage(language);
+    await flutterTts.setLanguage(language);
   }
 
   Future _speak() async {
