@@ -9,7 +9,7 @@ import 'package:smartrr/provider/language_provider.dart';
 import 'package:smartrr/services/auth_service.dart';
 import 'package:smartrr/services/database_service.dart';
 import 'package:smartrr/utils/colors.dart';
-import '../../services/theme_provider.dart';
+import '../../../services/theme_provider.dart';
 import 'package:smartrr/generated/l10n.dart';
 
 class Settings extends StatefulWidget {

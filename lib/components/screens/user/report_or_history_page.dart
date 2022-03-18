@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smartrr/components/screens/user/impact_of_smartrr.dart';
 import 'package:smartrr/components/widgets/chatbot.dart';
 import 'package:smartrr/components/widgets/language_picker.dart';
 import 'package:smartrr/provider/language_provider.dart';
@@ -40,7 +41,7 @@ class _ReportOrHistoryPageState extends State<ReportOrHistoryPage> {
                       children: [
                         ElevatedButton.icon(
                           onPressed: () => _bottomSheet(context: context),
-                          icon: Icon(Icons.report_rounded),
+                          icon: Icon(Icons.input),
                           label: Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 0, vertical: 20.0),
@@ -58,8 +59,10 @@ class _ReportOrHistoryPageState extends State<ReportOrHistoryPage> {
                           ),
                         ),
                         ElevatedButton.icon(
-                            onPressed: () {},
-                            icon: Icon(Icons.info_rounded),
+                            onPressed: () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) => ImpactOfSmartRR())),
+                            icon: Icon(Icons.public),
                             label: Padding(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 0, vertical: 20.0),
