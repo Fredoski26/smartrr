@@ -67,7 +67,7 @@ class _SelectSubServicePageState extends State<SelectSubServicePage> {
                                     isDarkTheme: widget.isDarkTheme,
                                     service: subServiceList[index]
                                         .title
-                                        .split("-")[1],
+                                        .split("_")[1],
                                     isUser: true,
                                     referredName: '',
                                     referredBy: '',
@@ -89,7 +89,7 @@ class _SelectSubServicePageState extends State<SelectSubServicePage> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 16, vertical: 12),
                                   child: Text(
-                                    subServiceList[index].title.split("-")[0],
+                                    subServiceList[index].title.split("_")[0],
                                     style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w600,
@@ -118,15 +118,15 @@ class _SelectSubServicePageState extends State<SelectSubServicePage> {
         .then((subServices) {
       subServices.docs.forEach((subService) async {
         final String originaName = subService.get("title");
+
         if (widget.lang == "ha") {
-          final translation =
-              await MyTranslator.translate(text: subService.get("title"));
+          final translation = await MyTranslator.translate(text: originaName);
 
           setState(() => subServiceList
-              .add(MyLocation(subService.id, "$translation-$originaName")));
+              .add(MyLocation(subService.id, "${translation}_${originaName}")));
         } else {
           setState(() => subServiceList.add(MyLocation(
-              subService.id, "${subService.get("title")}-$originaName")));
+              subService.id, "${subService.get("title")}_${originaName}")));
         }
       });
     }).then((value) => setState(() => isLoading = false));
