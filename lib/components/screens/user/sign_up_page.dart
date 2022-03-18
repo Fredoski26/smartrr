@@ -326,7 +326,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             Text(
-                              _language.alreadyHaveAnAccount,
+                              "${_language.alreadyHaveAnAccount} ",
                               style: TextStyle(),
                             ),
                             Text(

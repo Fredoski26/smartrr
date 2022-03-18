@@ -51,9 +51,7 @@ class _AuthContainerState extends State<AuthContainer> {
               children: [
                 Container(
                   margin: EdgeInsets.only(
-                      top: widget.isOrgSignUp
-                          ? 60 - _appBarHeight
-                          : 123 - _appBarHeight),
+                      top: widget.isOrgSignUp ? 55 : 123 - _appBarHeight),
                   padding: EdgeInsets.all(30),
                   width: 318,
                   decoration: BoxDecoration(

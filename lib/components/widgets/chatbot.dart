@@ -179,8 +179,8 @@ class _AppBodyState extends State<AppBody> {
                                 child: Text("Talk to a counsellor")),
                             OutlinedButton(
                                 onPressed: () =>
-                                    Navigator.of(context).pushNamed("/about"),
-                                child: Text("Read about SMHR")),
+                                    Navigator.of(context).pushNamed("/srhr"),
+                                child: Text("Read about SRHR")),
                             OutlinedButton(
                                 onPressed: () async {
                                   await setUserTypePref(userType: true)

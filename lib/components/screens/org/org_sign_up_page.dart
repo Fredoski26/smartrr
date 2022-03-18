@@ -53,12 +53,7 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
 
   // States
   List<MyLocation> stateList = <MyLocation>[];
-  List<DropdownMenuItem<MyLocation>> _dropDownStateItem = [
-    // DropdownMenuItem(
-    //   child: Text("Test"),
-    //   value: MyLocation("Abuja", "Abuja"),
-    // )
-  ];
+  List<DropdownMenuItem<MyLocation>> _dropDownStateItem = [];
   MyLocation _currentState;
 
   // Locations

@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -14,11 +13,11 @@ import 'package:smartrr/components/screens/user/settings.dart';
 import 'package:smartrr/components/screens/user/cases_history_screen.dart';
 import 'package:smartrr/components/screens/org/org_sign_up_page.dart';
 import 'package:smartrr/components/screens/user/sign_up_page.dart';
+import 'package:smartrr/components/wrapper.dart';
 import 'package:smartrr/generated/l10n.dart';
 import 'package:smartrr/provider/language_provider.dart';
 import 'package:smartrr/theme/themes.dart';
 import 'package:smartrr/utils/colors.dart';
-import 'package:smartrr/utils/utils.dart';
 import 'components/screens/general/login_page.dart';
 import 'components/screens/user/report_or_history_page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -57,7 +56,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/': (context) => Splash(),
+        '/': (context) => Wrapper(isDarkTheme: isDarkTheme),
         '/login': (context) => LoginPage(
               isDarkTheme: isDarkTheme,
             ),
@@ -97,8 +96,6 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    _next();
-    _getVersion();
   }
 
   @override
@@ -146,37 +143,5 @@ class _SplashState extends State<Splash> {
         ),
       ),
     );
-  }
-
-  void _next() async {
-    User currentUser = await FirebaseAuth.instance.currentUser;
-    bool isUser = await getIsUserPref();
-    debugPrint("Current User is: $currentUser");
-    Future.delayed(Duration(seconds: 1)).then((value) async {
-      if (currentUser != null) {
-        if (currentUser.email == null) {
-          Navigator.pushNamedAndRemoveUntil(
-              context, '/login', ModalRoute.withName('Login'));
-        } else {
-          if (isUser == null) {
-            Navigator.pushNamedAndRemoveUntil(
-                context, '/login', ModalRoute.withName('Login'));
-          } else if (isUser) {
-            Navigator.pushNamedAndRemoveUntil(
-                context, '/userMain', ModalRoute.withName('Dashboard'));
-          } else {
-            Navigator.pushNamedAndRemoveUntil(
-                context, '/orgMain', ModalRoute.withName('Dashboard'));
-          }
-        }
-      } else {
-        Navigator.pushNamedAndRemoveUntil(
-            context, '/login', ModalRoute.withName('Login'));
-      }
-    });
-  }
-
-  Future _getVersion() async {
-    packageInfo = await PackageInfo.fromPlatform();
   }
 }

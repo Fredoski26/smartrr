@@ -74,7 +74,7 @@ class CustomTextBox extends StatelessWidget {
                       borderSide: BorderSide(color: borderColor, width: 1),
                       borderRadius: BorderRadius.all(Radius.circular(33))),
                   hintText: placeholderText,
-                  hintStyle: TextStyle(color: placeholderColor)),
+                  hintStyle: TextStyle().copyWith(color: placeholderColor)),
             )
           : TextField(
               onTap: onTap,
@@ -82,7 +82,7 @@ class CustomTextBox extends StatelessWidget {
               keyboardType: keyboardType,
               obscureText: obscureText,
               readOnly: readOnly,
-              style: TextStyle(color: textColor, fontWeight: FontWeight.w700),
+              style: TextStyle().copyWith(color: textColor),
               controller: controller,
               decoration: InputDecoration(
                   suffixIcon: suffixIcon,
@@ -99,7 +99,7 @@ class CustomTextBox extends StatelessWidget {
                       borderSide: BorderSide(color: borderColor, width: 1),
                       borderRadius: BorderRadius.all(Radius.circular(33))),
                   hintText: placeholderText,
-                  hintStyle: TextStyle(color: placeholderColor)),
+                  hintStyle: TextStyle().copyWith(color: placeholderColor)),
             ),
     );
   }
