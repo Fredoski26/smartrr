@@ -35,7 +35,7 @@ class _AuthContainerState extends State<AuthContainer> {
           height: MediaQuery.of(context).size.height,
           child: Stack(children: [
             Positioned(
-              top: widget.isOrgSignUp ? -208 : -135,
+              top: -135,
               child: Container(
                 height: 332.0 - _appBarHeight,
                 width: MediaQuery.of(context).size.width,

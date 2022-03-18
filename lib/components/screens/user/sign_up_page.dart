@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'package:smartrr/components/widgets/auth_container.dart';
+import 'package:smartrr/provider/language_provider.dart';
 import '../../widgets/smart_text_field.dart';
 import 'select_location_map.dart';
 import '../../widgets/circular_progress.dart';
@@ -139,211 +141,214 @@ class _SignUpPageState extends State<SignUpPage> {
             ? Center(
                 child: CircularProgress(),
               )
-            : SingleChildScrollView(
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      SizedBox(
-                        height: 22,
-                      ),
-                      Text(
-                        _language.signUp.toUpperCase(),
-                        style: TextStyle(
-                          color: Color(0xFF444444),
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 47,
-                      ),
-                      smartTextField(
-                        title: _language.name,
-                        controller: nameController,
-                        isForm: true,
-                      ),
-                      smartTextField(
-                        title: 'Email',
-                        controller: emailController,
-                        isForm: true,
-                        textInputType: TextInputType.emailAddress,
-                      ),
-                      smartTextField(
-                        title: _language.password,
-                        controller: passwordController,
-                        isForm: true,
-                        obscure: true,
-                      ),
-                      smartTextField(
-                        title: _language.dob,
-                        readOnly: true,
-                        isForm: true,
-                        controller: dobController,
-                        onTap: () {
-                          showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime(1950),
-                                  lastDate: DateTime.now())
-                              .then(
-                            (value) {
-                              if (value != null) {
-                                dobController.text =
-                                    "${value.day}-${value.month}-${value.year}";
-                              }
-                            },
-                          );
-                        },
-                      ),
-                      smartTextField(
-                        title: _language.location,
-                        readOnly: true,
-                        isForm: true,
-                        controller: locationController,
-                        onTap: () async {
-                          String selectedAddress = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      SelectLocationMap()));
-                          setState(() {
-                            if (selectedAddress != null)
-                              locationController.text = '$selectedAddress';
-                          });
-                        },
-                      ),
-                      smartTextField(
-                          title: _language.phoneNumber,
-                          controller: phoneNumberController,
-                          isForm: true,
-                          isPhone: true,
-                          prefix: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 14, horizontal: 4),
-                            child: Text(
-                              '+234',
-                              style: TextStyle(
-                                color: Color(0xFFA59B9B),
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                          textInputType: TextInputType.phone),
-                      smartTextField(
-                        title: 'National ID Card No.',
-                        controller: cnicController,
-                        isForm: false,
-                        required: false,
-                        textInputType: TextInputType.number,
-                      ),
-                      Text(
-                        _language.gender,
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              if (_isMale)
-                                setState(() => _isMale = false);
-                              else
-                                setState(() => _isMale = true);
-                            },
-                            child: Row(
-                              children: [
-                                Checkbox(
-                                  value: _isMale,
-                                  onChanged: (val) {
-                                    print('===> $val');
-                                    if (val)
-                                      setState(() => _isMale = true);
-                                    else
-                                      setState(() => _isMale = false);
-                                  },
-                                ),
-                                Text(
-                                  _language.male,
-                                ),
-                              ],
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              if (_isMale)
-                                setState(() => _isMale = false);
-                              else
-                                setState(() => _isMale = true);
-                            },
-                            child: Row(
-                              children: [
-                                Checkbox(
-                                  value: !_isMale,
-                                  onChanged: (val) {
-                                    print('===> $val');
-                                    if (val)
-                                      setState(() => _isMale = false);
-                                    else
-                                      setState(() => _isMale = true);
-                                  },
-                                ),
-                                Text(
-                                  _language.female,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 47,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextButton(
-                              onPressed: _validateRegisterInput,
-                              child: Text(
-                                _language.signUp,
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.w600),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 17,
-                      ),
-                      GestureDetector(
-                        onTap: () => Navigator.pop(context),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+            : Consumer<LanguageNotifier>(
+                builder: (context, _, child) => SingleChildScrollView(
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                            Text(
-                              "${_language.alreadyHaveAnAccount} ",
-                              style: TextStyle(),
+                            SizedBox(
+                              height: 22,
                             ),
                             Text(
-                              _language.logIn,
+                              _language.signUp.toUpperCase(),
                               style: TextStyle(
-                                  color: Color(0xFFFD9A05),
-                                  fontWeight: FontWeight.w600),
+                                color: Color(0xFF444444),
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 47,
+                            ),
+                            smartTextField(
+                              title: _language.name,
+                              controller: nameController,
+                              isForm: true,
+                            ),
+                            smartTextField(
+                              title: 'Email',
+                              controller: emailController,
+                              isForm: true,
+                              textInputType: TextInputType.emailAddress,
+                            ),
+                            smartTextField(
+                              title: _language.password,
+                              controller: passwordController,
+                              isForm: true,
+                              obscure: true,
+                            ),
+                            smartTextField(
+                              title: _language.dob,
+                              readOnly: true,
+                              isForm: true,
+                              controller: dobController,
+                              onTap: () {
+                                showDatePicker(
+                                        context: context,
+                                        initialDate: DateTime.now(),
+                                        firstDate: DateTime(1950),
+                                        lastDate: DateTime.now())
+                                    .then(
+                                  (value) {
+                                    if (value != null) {
+                                      dobController.text =
+                                          "${value.day}-${value.month}-${value.year}";
+                                    }
+                                  },
+                                );
+                              },
+                            ),
+                            smartTextField(
+                              title: _language.location,
+                              readOnly: true,
+                              isForm: true,
+                              controller: locationController,
+                              onTap: () async {
+                                String selectedAddress = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            SelectLocationMap()));
+                                setState(() {
+                                  if (selectedAddress != null)
+                                    locationController.text =
+                                        '$selectedAddress';
+                                });
+                              },
+                            ),
+                            smartTextField(
+                                title: _language.phoneNumber,
+                                controller: phoneNumberController,
+                                isForm: true,
+                                isPhone: true,
+                                prefix: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 14, horizontal: 4),
+                                  child: Text(
+                                    '+234',
+                                    style: TextStyle(
+                                      color: Color(0xFFA59B9B),
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                                textInputType: TextInputType.phone),
+                            smartTextField(
+                              title: 'National ID Card No.',
+                              controller: cnicController,
+                              isForm: false,
+                              required: false,
+                              textInputType: TextInputType.number,
+                            ),
+                            Text(
+                              _language.gender,
+                              style: TextStyle(
+                                fontSize: 18,
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    if (_isMale)
+                                      setState(() => _isMale = false);
+                                    else
+                                      setState(() => _isMale = true);
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Checkbox(
+                                        value: _isMale,
+                                        onChanged: (val) {
+                                          print('===> $val');
+                                          if (val)
+                                            setState(() => _isMale = true);
+                                          else
+                                            setState(() => _isMale = false);
+                                        },
+                                      ),
+                                      Text(
+                                        _language.male,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    if (_isMale)
+                                      setState(() => _isMale = false);
+                                    else
+                                      setState(() => _isMale = true);
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Checkbox(
+                                        value: !_isMale,
+                                        onChanged: (val) {
+                                          print('===> $val');
+                                          if (val)
+                                            setState(() => _isMale = false);
+                                          else
+                                            setState(() => _isMale = true);
+                                        },
+                                      ),
+                                      Text(
+                                        _language.female,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 47,
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: TextButton(
+                                    onPressed: _validateRegisterInput,
+                                    child: Text(
+                                      _language.signUp,
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 17,
+                            ),
+                            GestureDetector(
+                              onTap: () => Navigator.pop(context),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    "${_language.alreadyHaveAnAccount} ",
+                                    style: TextStyle(),
+                                  ),
+                                  Text(
+                                    _language.logIn,
+                                    style: TextStyle(
+                                        color: Color(0xFFFD9A05),
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
                             ),
                           ],
                         ),
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                    ],
-                  ),
-                ),
-              ));
+                    )));
   }
 }
