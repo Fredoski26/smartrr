@@ -155,6 +155,16 @@ class S {
     );
   }
 
+  /// `Age`
+  String get age {
+    return Intl.message(
+      'Age',
+      name: 'age',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Phone Number`
   String get phoneNumber {
     return Intl.message(

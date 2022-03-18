@@ -11,6 +11,7 @@
   "logIn": "Login",
   "name": "Name",
   "dob": "DOB",
+  "age": "Age",
   "phoneNumber": "Phone Number",
   "password": "Password",
   "location": "Location",

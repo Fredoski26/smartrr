@@ -203,7 +203,7 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
                                     isForm: true,
                                   ),
                                   smartTextField(
-                                    title: _language.dob,
+                                    title: _language.age,
                                     controller: _age,
                                     isForm: true,
                                     textInputType: TextInputType.number,

@@ -19,35 +19,13 @@ class _OrgCasesScreenState extends State<OrgCasesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text("Case History")),
       body: Container(
         width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 4),
-        decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage('assets/background.png'), fit: BoxFit.cover),
-        ),
+        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: kToolbarHeight + 10,
-            ),
-            Text(
-              'Cases History',
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: smartYellow,
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Container(
-              height: 1,
-              width: 200,
-              color: Colors.white,
-            ),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
@@ -69,22 +47,20 @@ class _OrgCasesScreenState extends State<OrgCasesScreen> {
                               (doc) => BlackLocationCell(
                                   width:
                                       MediaQuery.of(context).size.width * 0.9,
-                                  textColor: Colors.white,
                                   child: Column(
                                     children: <Widget>[
                                       Text(
-                                        doc.get("ordName"),
+                                        doc.get("orgName"),
                                         textAlign: TextAlign.start,
                                         maxLines: 2,
                                         style: TextStyle(
-                                            color: Color(0xFFF7EC03),
+                                            color: primaryColor,
                                             fontSize: 20,
                                             fontWeight: FontWeight.w600),
                                       ),
                                       Text(
                                         doc.get('caseType'),
                                         style: TextStyle(
-                                          color: Colors.white,
                                           fontSize: 15,
                                           fontWeight: FontWeight.w500,
                                         ),
@@ -92,14 +68,12 @@ class _OrgCasesScreenState extends State<OrgCasesScreen> {
                                       Text(
                                         'Case: ' + doc.get('caseDescription'),
                                         style: TextStyle(
-                                          color: Colors.white,
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
                                       Text(
                                         'Case No. ' + doc.get('caseNumber'),
                                         style: TextStyle(
-                                          color: Colors.white,
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
@@ -109,14 +83,12 @@ class _OrgCasesScreenState extends State<OrgCasesScreen> {
                                       Text(
                                         doc.get('locationName'),
                                         style: TextStyle(
-                                          color: Colors.white,
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
                                       Text(
                                         getDate(doc.get('timestamp')),
                                         style: TextStyle(
-                                          color: Colors.white70,
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
@@ -131,7 +103,6 @@ class _OrgCasesScreenState extends State<OrgCasesScreen> {
                                                   Text(
                                                     "Reffered by",
                                                     style: TextStyle(
-                                                      color: Colors.white70,
                                                       fontWeight:
                                                           FontWeight.w500,
                                                     ),
@@ -139,7 +110,6 @@ class _OrgCasesScreenState extends State<OrgCasesScreen> {
                                                   Text(
                                                     doc.get('referredByName'),
                                                     style: TextStyle(
-                                                      color: Colors.white,
                                                       fontWeight:
                                                           FontWeight.w600,
                                                     ),

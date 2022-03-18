@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:smartrr/components/screens/org/org_cases_screen.dart';
 import 'package:smartrr/components/widgets/circular_progress.dart';
+import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/utils/utils.dart';
 import '../../widgets/ask_action.dart';
 
@@ -14,14 +15,8 @@ class _ReferOrCasesPageState extends State<ReferOrCasesPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-            image: AssetImage('assets/background.png'), fit: BoxFit.cover),
-      ),
       child: Scaffold(
-        backgroundColor: Colors.transparent,
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
           elevation: 0,
           title: Text('SmartRR'),
           actions: <Widget>[
@@ -35,7 +30,10 @@ class _ReferOrCasesPageState extends State<ReferOrCasesPage> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: Icon(Icons.exit_to_app, color: Colors.purple,),
+                        child: Icon(
+                          Icons.exit_to_app,
+                          color: primaryColor,
+                        ),
                       ),
                       Text('Logout'),
                     ],
@@ -53,19 +51,18 @@ class _ReferOrCasesPageState extends State<ReferOrCasesPage> {
                   Expanded(
                       child: new Material(
                     //True Button
-                    color: Colors.transparent,
                     child: new InkWell(
                       onTap: () => Navigator.pushNamed(context, '/refer'),
                       child: new Center(
                         child: new Container(
                           decoration: new BoxDecoration(
                               border: new Border.all(
-                                  color: Colors.white, width: 5.0)),
+                                  color: primaryColor, width: 5.0)),
                           padding: new EdgeInsets.all(20.0),
                           child: new Text(
                             "Refer".toUpperCase(),
                             style: new TextStyle(
-                              color: Colors.white,
+                              color: primaryColor,
                               fontSize: 40.0,
                               fontWeight: FontWeight.bold,
                             ),
@@ -75,13 +72,12 @@ class _ReferOrCasesPageState extends State<ReferOrCasesPage> {
                     ),
                   )),
                   Container(
-                    color: Colors.white,
+                    color: primaryColor,
                     height: 0.5,
                   ),
                   Expanded(
                       child: new Material(
                     //True Button
-                    color: Colors.transparent,
                     child: new InkWell(
                       onTap: () async {
                         String orgId = await getOrgIdPref();
@@ -98,12 +94,12 @@ class _ReferOrCasesPageState extends State<ReferOrCasesPage> {
                         child: new Container(
                           decoration: new BoxDecoration(
                               border: new Border.all(
-                                  color: Colors.white, width: 5.0)),
+                                  color: primaryColor, width: 5.0)),
                           padding: new EdgeInsets.all(20.0),
                           child: new Text(
                             "Cases".toUpperCase(),
                             style: new TextStyle(
-                              color: Colors.white,
+                              color: primaryColor,
                               fontSize: 40.0,
                               fontWeight: FontWeight.bold,
                             ),

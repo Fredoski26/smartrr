@@ -22,6 +22,7 @@ class SelectStatePage extends StatefulWidget {
   final String caseId;
   final bool isDarkTheme;
   final String lang;
+  final String country;
 
   const SelectStatePage({
     Key key,
@@ -32,6 +33,7 @@ class SelectStatePage extends StatefulWidget {
     @required this.caseId,
     this.isDarkTheme,
     this.lang = "en",
+    this.country = "Nigeria",
   }) : super(key: key);
 
   @override
@@ -243,7 +245,8 @@ class _SelectStatePageState extends State<SelectStatePage> {
   _getDataFromFirebase() {
     DatabaseService(email: _currentUser.email)
         .getUser()
-        .then((user) => CountryService.getStates(user["country"] ?? "Nigeria"))
+        .then((user) => CountryService.getStates(
+            widget.isUser ? user["country"] ?? "Nigeria" : "Nigeria"))
         .then((states) {
       states.forEach((state) {
         if (state["name"] == "Federal Capital Territory") {

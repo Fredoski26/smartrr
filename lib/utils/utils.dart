@@ -69,12 +69,11 @@ texts({String title, String value}) {
       children: [
         Text(
           title,
-          style: TextStyle(color: Colors.grey.shade300, fontSize: 14),
+          style: TextStyle(fontSize: 14),
         ),
         Text(
           value,
-          style: TextStyle(
-              color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
         ),
       ],
     ),
