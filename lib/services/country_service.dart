@@ -1,5 +1,4 @@
 import 'package:smartrr/models/country.dart';
-
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -26,9 +25,10 @@ abstract class CountryService {
 
       return body;
     } else {
-      final response = await http.post(
-          Uri.parse("https://countriesnow.space/api/v0.1/countries/states"),
-          body: {"country": country});
+      final response = await http.get(
+        Uri.parse(
+            "https://countriesnow.space/api/v0.1/countries/states/q?country=$country"),
+      );
 
       final body = json.decode(response.body);
 
@@ -45,10 +45,10 @@ abstract class CountryService {
 
       return body;
     } else {
-      final response = await http.post(
-          Uri.parse(
-              "https://countriesnow.space/api/v0.1/countries/state/cities"),
-          body: {"country": country, "state": state});
+      final response = await http.get(
+        Uri.parse(
+            "https://countriesnow.space/api/v0.1/countries/state/cities/q?country=$country&state=$state"),
+      );
 
       final body = json.decode(response.body);
 

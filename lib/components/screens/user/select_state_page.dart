@@ -256,13 +256,17 @@ class _SelectStatePageState extends State<SelectStatePage> {
         }
       });
       setState(() => isLoading = false);
+    }).catchError((e) {
+      setState(() => isLoading = false);
+      Fluttertoast.showToast(
+        msg: "Something went wrong",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.TOP,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
     });
-    // FirebaseFirestore.instance.collection('state').get().then((docs) {
-    //   for (int i = 0; i < docs.docs.length; i++) {
-    //     setState(() => stateList.add(
-    //         MyLocation(docs.docs[i].id.toString(), docs.docs[i].get('sName'))));
-    //   }
-    //   setState(() => isLoading = false);
-    // });
   }
 }
