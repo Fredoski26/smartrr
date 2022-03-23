@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartrr/components/widgets/language_picker.dart';
-import 'package:smartrr/components/widgets/list_item.dart';
 import 'package:smartrr/provider/language_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -17,7 +16,7 @@ class ImpactOfSmartRR extends StatelessWidget {
     initialVideoId: 'Yp1buaEzrZk',
     flags: YoutubePlayerFlags(
       autoPlay: false,
-      mute: true,
+      mute: false,
     ),
   );
 
