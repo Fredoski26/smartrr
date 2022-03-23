@@ -32,9 +32,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "caseType" : MessageLookupByLibrary.simpleMessage("Case Type"),
     "changePassword" : MessageLookupByLibrary.simpleMessage("Change Password"),
     "clickToRead" : MessageLookupByLibrary.simpleMessage("Click to read"),
+    "confirmPassword" : MessageLookupByLibrary.simpleMessage("Confirm password"),
     "consentForm" : MessageLookupByLibrary.simpleMessage("Consent Form"),
     "consentFormData" : MessageLookupByLibrary.simpleMessage("I understand that in giving  my  authorization below,  I  am giving  permission to  share  the  specific  case  information from  my  incident report with the  service  provider(s)  I  have indicated, so  that I  can  receive  help  with safety,  health, psychosocial, and/or  legal  needs. I understand that shared information will  be  treated with confidentiality  and respect, and shared  only as  needed to  provide  the  assistance  I  request. I  understand that releasing  this  information means  that a  person from  the  agency  or  service  selected below may  come  to  talk to  me.   At any  point, I  have  the  right to  change  my  mind about sharing information with the  designated agency/focal  point listed below."),
     "country" : MessageLookupByLibrary.simpleMessage("Country"),
+    "darkMode" : MessageLookupByLibrary.simpleMessage("Dark mode"),
     "denialOfResources" : MessageLookupByLibrary.simpleMessage("Denial of Resources"),
     "dob" : MessageLookupByLibrary.simpleMessage("DOB"),
     "dontHaveAccount" : MessageLookupByLibrary.simpleMessage("Don\'t have an account?"),
@@ -68,6 +70,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "resetHere" : MessageLookupByLibrary.simpleMessage("Reset Here"),
     "resetPassword" : MessageLookupByLibrary.simpleMessage("Reset Password"),
     "selectCaseDescription" : MessageLookupByLibrary.simpleMessage("Select Case Description"),
+    "selectCountry" : MessageLookupByLibrary.simpleMessage("Select country"),
     "selectCustomLocation" : MessageLookupByLibrary.simpleMessage("Select Custom Location"),
     "selectDescription" : MessageLookupByLibrary.simpleMessage("Please select a description"),
     "selectLGA" : MessageLookupByLibrary.simpleMessage("Select LGA"),
@@ -102,6 +105,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "srhrParagraph5" : MessageLookupByLibrary.simpleMessage("A world without fear, stigma, or discrimination drives equality and progress for all."),
     "srhrParagraph6" : MessageLookupByLibrary.simpleMessage("To fulfill women and girls Sexual Reproductive Health and Rights (SRHR), adolescents and women in reproductive age must have the knowledge, skills, and tools needed to make safe and informed decisions."),
     "submitReport" : MessageLookupByLibrary.simpleMessage("Submit Report"),
+    "update" : MessageLookupByLibrary.simpleMessage("Update"),
     "user" : MessageLookupByLibrary.simpleMessage("User"),
     "yourself" : MessageLookupByLibrary.simpleMessage("Yourself")
   };

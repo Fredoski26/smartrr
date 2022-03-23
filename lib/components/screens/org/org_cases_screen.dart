@@ -200,16 +200,10 @@ class _OrgCasesScreenState extends State<OrgCasesScreen> {
     }
     return Container(
       height: 30,
-      width: 90,
+      width: 60,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(14)),
         color: bgColor,
-        boxShadow: [
-          BoxShadow(
-            color: bgColor,
-            blurRadius: 8,
-          ),
-        ],
       ),
       child: Center(
         child: FittedBox(

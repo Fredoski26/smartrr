@@ -33,7 +33,7 @@ class _SettingsState extends State<Settings> {
     DatabaseService(email: _currentUser.email).getUser().then((user) {
       if (mounted) {
         setState(() {
-          country = user["country"] ?? "Nigeria";
+          country = user["country"] ?? "";
         });
       }
     });
@@ -115,7 +115,7 @@ class _SettingsState extends State<Settings> {
                                   Icons.light_mode_outlined,
                                   color: primaryColor,
                                 ),
-                                title: Text("Dark Mode"),
+                                title: Text(_language.darkMode),
                                 trailing: CupertinoSwitch(
                                   activeColor: primaryColor,
                                   value: notifier.darkTheme,
@@ -169,19 +169,19 @@ class _SettingsState extends State<Settings> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          "Change Password",
+                          S.of(context).changePassword,
                           textAlign: TextAlign.center,
                           style: TextStyle().copyWith(
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(height: 10.0),
                         smartTextField(
-                            title: "Password",
+                            title: S.of(context).password,
                             controller: _passwordController,
                             obscure: true,
                             isForm: true),
                         smartTextField(
-                            title: "Confirm Password",
+                            title: S.of(context).confirmPassword,
                             controller: _confirmPasswordController,
                             obscure: true,
                             isForm: true),
@@ -192,7 +192,7 @@ class _SettingsState extends State<Settings> {
                                     onPressed: () => _submitPassword(
                                         _passwordController.text,
                                         _confirmPasswordController.text),
-                                    child: Text("Update"))),
+                                    child: Text(S.of(context).update))),
                           ],
                         )
                       ],

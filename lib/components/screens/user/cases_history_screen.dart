@@ -50,91 +50,21 @@ class _CasesHistoryScreenState extends State<CasesHistoryScreen> {
                             itemBuilder: (context, index) {
                               return ListTile(
                                 contentPadding: EdgeInsets.zero,
+                                minLeadingWidth: 10.0,
                                 leading: Text("${index + 1}"),
                                 title: Text(
-                                  _casesList[index].orgName,
+                                  "${_casesList[index].caseDesc}",
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 subtitle: Text(
-                                  "Case: ${_casesList[index].caseDesc} \n ${getDate(_casesList[index].timestamp)}",
+                                  "Org: ${_casesList[index].orgName} \n ${getDate(_casesList[index].timestamp)}",
                                   overflow: TextOverflow.ellipsis,
+                                  maxLines: 3,
                                 ),
+                                trailing: _statusWidget(
+                                    status: _casesList[index].status),
                                 isThreeLine: true,
                               );
-                              // return BlackLocationCell(
-                              //     width:
-                              //         MediaQuery.of(context).size.width * 0.9,
-                              //     textColor: Colors.white,
-                              //     bgColor: primaryColor,
-                              //     child: Column(
-                              //       children: <Widget>[
-                              //         Text(
-                              //           _casesList[index].orgName,
-                              //           textAlign: TextAlign.start,
-                              //           maxLines: 2,
-                              //           style: TextStyle(
-                              //               color: Color(0xFFF7EC03),
-                              //               fontSize: 20,
-                              //               fontWeight: FontWeight.w600),
-                              //         ),
-                              //         Text(
-                              //           _casesList[index].caseType,
-                              //           style: TextStyle(
-                              //             color: Colors.white,
-                              //             fontSize: 15,
-                              //             fontWeight: FontWeight.w500,
-                              //           ),
-                              //         ),
-                              //         Text(
-                              //           'Case: ' + _casesList[index].caseDesc,
-                              //           style: TextStyle(
-                              //             color: Colors.white,
-                              //             fontWeight: FontWeight.w500,
-                              //           ),
-                              //         ),
-                              //         _casesList[index].isVictim
-                              //             ? Text(
-                              //                 'Victim: ' +
-                              //                     _casesList[index].victimName,
-                              //                 style: TextStyle(
-                              //                   color: Colors.white,
-                              //                   fontWeight: FontWeight.w500,
-                              //                 ),
-                              //               )
-                              //             : Container(),
-                              //         SizedBox(
-                              //           height: 10,
-                              //         ),
-                              //         Text(
-                              //           _casesList[index].locationName,
-                              //           style: TextStyle(
-                              //             color: Colors.white,
-                              //             fontWeight: FontWeight.w500,
-                              //           ),
-                              //         ),
-                              //         Text(
-                              //           getDate(_casesList[index].timestamp),
-                              //           style: TextStyle(
-                              //             color: Colors.white70,
-                              //             fontWeight: FontWeight.w500,
-                              //           ),
-                              //         ),
-                              //         SizedBox(
-                              //           height: 5,
-                              //         ),
-                              //         Align(
-                              //           alignment: Alignment.centerRight,
-                              //           child: _statusWidget(
-                              //               status: _casesList[index].status),
-                              //         ),
-                              //       ],
-                              //       crossAxisAlignment:
-                              //           CrossAxisAlignment.start,
-                              //     ),
-                              //     borderRadius: 10,
-                              //     func: () {
-                              //       debugPrint('Case Tapped');
-                              //     });
                             },
                           ),
                         ),
@@ -210,16 +140,10 @@ class _CasesHistoryScreenState extends State<CasesHistoryScreen> {
     }
     return Container(
       height: 30,
-      width: 90,
+      width: 60,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(14)),
         color: bgColor,
-        boxShadow: [
-          BoxShadow(
-            color: bgColor,
-            blurRadius: 8,
-          ),
-        ],
       ),
       child: Center(
         child: FittedBox(

@@ -32,9 +32,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "caseType" : MessageLookupByLibrary.simpleMessage("Nau\'in Harka"),
     "changePassword" : MessageLookupByLibrary.simpleMessage("Canja Mabudi"),
     "clickToRead" : MessageLookupByLibrary.simpleMessage("Danna don karantawa"),
+    "confirmPassword" : MessageLookupByLibrary.simpleMessage("Tabbata mabudi"),
     "consentForm" : MessageLookupByLibrary.simpleMessage("Yardan bada bayani"),
     "consentFormData" : MessageLookupByLibrary.simpleMessage("Na fahimta da cewa bada izini da nake yi yanzu amincewa ne domin in sanar da mai yi mini hidima dukan bayanai da ya shafi kara da nake shigarwa ga mai hidima da na zaba, hakkan kuma domin in sami tamakon kariya da lafiya, da yanayin kwanciyar hankali na ne, tare da bukatuna da ya shafi shari’a da doka. Na kuma fahimta da kuma amimce cewa: za;a yi amfani da bayanai da naka bayarwa cikin sirri da girmamawa don kuma yanda za’a samar mini taimako da kulawa bisa ga bukata da mika. Na kuma fahimta cewa: bada wadannan bayanai na nufin jami’i daga cikin hukumomi ko ma’aikatun da na zaba zai/zata iya saduwa da ni fuska da fuska don ci gaba da tattaunawa wurin bin diddigin kara da na shigar. Kuma a kowanne lokaci zan iya canja ra’ayi game da samar da bayanai na ko game da jami\'I da ke kula da kara da na shigar."),
     "country" : MessageLookupByLibrary.simpleMessage("Kasa"),
+    "darkMode" : MessageLookupByLibrary.simpleMessage("Yanayin duhu"),
     "denialOfResources" : MessageLookupByLibrary.simpleMessage("Take Hakki"),
     "dob" : MessageLookupByLibrary.simpleMessage("Ranar haifuwa"),
     "dontHaveAccount" : MessageLookupByLibrary.simpleMessage("Baka da akwati?"),
@@ -68,6 +70,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "resetHere" : MessageLookupByLibrary.simpleMessage("Sake Mabudi"),
     "resetPassword" : MessageLookupByLibrary.simpleMessage("Canja Mabudi"),
     "selectCaseDescription" : MessageLookupByLibrary.simpleMessage("Nau\'in Kara"),
+    "selectCountry" : MessageLookupByLibrary.simpleMessage("Zabi kasa"),
     "selectCustomLocation" : MessageLookupByLibrary.simpleMessage("Zabi Wuri na Musamman"),
     "selectDescription" : MessageLookupByLibrary.simpleMessage("Da fatan za a zaɓi Bayani"),
     "selectLGA" : MessageLookupByLibrary.simpleMessage("Zabi Karamar Hukumar"),
@@ -102,6 +105,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "srhrParagraph5" : MessageLookupByLibrary.simpleMessage("Daidaituwa da kuma ci gaba ma kowa zai samu idan mun kau da sanya tsoro , wariya da tsangwama. Domin samar da wannan yancin lafiyar jima\'i ada haifuwa, \'yaya mata da suka kai shekarun haifuwa na bukatar samun ilimi, dabaru da kuma kayayyaki da ya kamata wajen yanke nagartacen shawara da kuma aiwatar ita."),
     "srhrParagraph6" : MessageLookupByLibrary.simpleMessage(""),
     "submitReport" : MessageLookupByLibrary.simpleMessage("Shigar Da Kara"),
+    "update" : MessageLookupByLibrary.simpleMessage("Sabunta"),
     "user" : MessageLookupByLibrary.simpleMessage("Mai Aiki"),
     "yourself" : MessageLookupByLibrary.simpleMessage("kai na")
   };

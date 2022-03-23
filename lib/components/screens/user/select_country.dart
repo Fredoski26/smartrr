@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartrr/generated/l10n.dart';
 import 'package:smartrr/services/country_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:smartrr/services/database_service.dart';
@@ -15,7 +16,7 @@ class _SelectCountryState extends State<SelectCountry> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Select Country")),
+      appBar: AppBar(title: Text(S.of(context).selectCountry)),
       body: StreamBuilder(
         builder: (context, snapshot) => snapshot.hasError
             ? Center(child: Text("Something went wrong"))
