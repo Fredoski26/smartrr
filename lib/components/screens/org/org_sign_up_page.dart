@@ -618,11 +618,8 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
           children: <Widget>[
             Text(
               'Info',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 40,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle()
+                  .copyWith(fontSize: 40, fontWeight: FontWeight.bold),
             ),
             SizedBox(
               height: 20,
@@ -657,19 +654,16 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
           children: <Widget>[
             Text(
               'Location',
-              style: TextStyle(
-                fontSize: 40,
-                fontWeight: FontWeight.bold,
-              ),
+              textAlign:TextAlign.center,
+              style: TextStyle()
+                  .copyWith(fontSize: 40, fontWeight: FontWeight.bold),
             ),
             SizedBox(
               height: 20,
             ),
             Text(
               'Country',
-              style: TextStyle(
-                fontSize: 18,
-              ),
+              style: TextStyle().copyWith(fontSize: 18),
             ),
             DropdownButton(
               isExpanded: true,
@@ -679,13 +673,9 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
                 setState(() => _currentCountry = value);
                 _getStates();
               },
-              dropdownColor: Colors.black,
               hint: Text(
                 'Select Country',
-                style: TextStyle(fontSize: 16, color: Colors.white70),
-              ),
-              style: TextStyle(
-                fontSize: 16,
+                style: TextStyle().copyWith(fontSize: 16),
               ),
               elevation: 1,
               underline: SizedBox(),
@@ -695,9 +685,7 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
             ),
             Text(
               'State',
-              style: TextStyle(
-                fontSize: 18,
-              ),
+              style: TextStyle().copyWith(fontSize: 18),
             ),
             DropdownButton(
               isExpanded: true,
@@ -707,13 +695,9 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
                 setState(() => _currentState = value);
                 _getLocations(state: value.title);
               },
-              dropdownColor: Colors.black,
               hint: Text(
                 'Select State',
-                style: TextStyle(fontSize: 16, color: Colors.white70),
-              ),
-              style: TextStyle(
-                fontSize: 16,
+                style: TextStyle().copyWith(fontSize: 16),
               ),
               elevation: 1,
               underline: SizedBox(),
@@ -726,9 +710,7 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
             ),
             Text(
               'Location',
-              style: TextStyle(
-                fontSize: 18,
-              ),
+              style: TextStyle().copyWith(fontSize: 18),
             ),
             DropdownButton(
               isExpanded: true,
@@ -737,13 +719,9 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
               onChanged: (MyLocation value) {
                 setState(() => _currentLocation = value);
               },
-              dropdownColor: Colors.black,
               hint: Text(
                 'Select Location',
-                style: TextStyle(fontSize: 16, color: Colors.white70),
-              ),
-              style: TextStyle(
-                fontSize: 16,
+                style: TextStyle().copyWith(fontSize: 16),
               ),
               elevation: 1,
               underline: SizedBox(),
@@ -839,11 +817,10 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
     locationsList = [];
     _dropDownLocationItem = [];
     _currentLocation = null;
-
-    DatabaseService().getLocations(state).then((locations) {
+    CountryService.getCities(_currentCountry.name, state).then((locations) {
       List<MyLocation> items = [];
       for (int i = 0; i < locations.length; i++) {
-        items.add(MyLocation(locations[i].id, locations[i].title));
+        items.add(MyLocation(locations[i], locations[i]));
       }
       setState(() {
         _currentLocation = null;

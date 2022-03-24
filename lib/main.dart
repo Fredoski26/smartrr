@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:package_info/package_info.dart';
 import 'package:smartrr/components/screens/user/about.dart';
 import 'package:smartrr/components/screens/user/all_about_srhr.dart';
 import 'package:smartrr/components/screens/user/faq.dart';
@@ -81,67 +80,6 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: S.delegate.supportedLocales,
-    );
-  }
-}
-
-class Splash extends StatefulWidget {
-  @override
-  _SplashState createState() => _SplashState();
-}
-
-class _SplashState extends State<Splash> {
-  PackageInfo packageInfo;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 4),
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width / 2,
-                  child: Image.asset(
-                    'assets/icons/LOGO.png',
-                    fit: BoxFit.contain,
-                  ),
-                ),
-                SizedBox(
-                  height: 50,
-                ),
-                Text(
-                  'Smart rr'.toUpperCase(),
-                  style: TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  "Smart Reporting and Referral",
-                  style: TextStyle(fontSize: 14),
-                ),
-                Text(
-                  packageInfo == null ? '' : 'ver ${packageInfo.version}',
-                  style: TextStyle(),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
     );
   }
 }
