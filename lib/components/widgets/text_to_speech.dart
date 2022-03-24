@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_tts/flutter_tts.dart';
 import 'dart:io' show Platform;
+import 'package:flutter_svg/flutter_svg.dart';
 
 enum TtsState { playing, stopped, paused, continued }
 
@@ -125,8 +126,14 @@ class _MyTtsState extends State<MyTts> {
   @override
   Widget build(BuildContext context) {
     return ttsState.name == "stopped"
-        ? IconButton(
-            onPressed: () => _speak(), icon: Icon(Icons.play_circle_rounded))
+        ? Container(
+            margin: EdgeInsets.symmetric(horizontal: 10.0),
+            child: GestureDetector(
+              onTap: () => _speak(),
+              child: SvgPicture.asset("assets/icons/tts_icon.svg",
+                  semanticsLabel: "Read aloud"),
+            ),
+          )
         : IconButton(
             onPressed: () => _stop(), icon: Icon(Icons.stop_circle_rounded));
   }
