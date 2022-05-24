@@ -145,10 +145,10 @@ class S {
     );
   }
 
-  /// `DOB`
+  /// `Date of birth`
   String get dob {
     return Intl.message(
-      'DOB',
+      'Date of birth',
       name: 'dob',
       desc: '',
       args: [],

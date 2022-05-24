@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:smartrr/components/widgets/auth_container.dart';
@@ -9,6 +10,8 @@ import '../../widgets/smart_text_field.dart';
 import 'select_location_map.dart';
 import '../../widgets/circular_progress.dart';
 import 'package:smartrr/generated/l10n.dart';
+import 'package:smartrr/utils/utils.dart';
+import 'package:smartrr/utils/birthDateInput.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -25,7 +28,6 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController dobController;
   TextEditingController locationController;
   TextEditingController ageController;
-  TextEditingController cnicController;
   String errorMsg;
   bool _isMale = true;
   bool isLoading = false;
@@ -39,7 +41,6 @@ class _SignUpPageState extends State<SignUpPage> {
     phoneNumberController = TextEditingController();
     dobController = TextEditingController();
     locationController = TextEditingController();
-    cnicController = TextEditingController();
   }
 
   void _validateRegisterInput() async {
@@ -63,8 +64,7 @@ class _SignUpPageState extends State<SignUpPage> {
           FirebaseFirestore.instance.collection('users').doc().set({
             'email': emailController.text,
             'displayName': nameController.text,
-            'phoneNumber': '234${phoneNumberController.text}',
-            'cnic': cnicController.text.toString(),
+            'phoneNumber': '${phoneNumberController.text}',
             'location': locationController.text,
             'dob': dobController.text,
             'gender': maleOrFemale,
@@ -135,6 +135,7 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     final _language = S.of(context);
+    BirthTextInputFormatter birthDateInput = BirthTextInputFormatter();
 
     return AuthContainer(
         child: isLoading
@@ -172,6 +173,15 @@ class _SignUpPageState extends State<SignUpPage> {
                               controller: emailController,
                               isForm: true,
                               textInputType: TextInputType.emailAddress,
+                              required: false,
+                            ),
+                            smartTextField(
+                              title: _language.phoneNumber,
+                              controller: phoneNumberController,
+                              isForm: true,
+                              isPhone: true,
+                              textInputType: TextInputType.phone,
+                              required: false,
                             ),
                             smartTextField(
                               title: _language.password,
@@ -181,24 +191,15 @@ class _SignUpPageState extends State<SignUpPage> {
                             ),
                             smartTextField(
                               title: _language.dob,
-                              readOnly: true,
-                              isForm: true,
                               controller: dobController,
-                              onTap: () {
-                                showDatePicker(
-                                        context: context,
-                                        initialDate: DateTime.now(),
-                                        firstDate: DateTime(1950),
-                                        lastDate: DateTime.now())
-                                    .then(
-                                  (value) {
-                                    if (value != null) {
-                                      dobController.text =
-                                          "${value.day}-${value.month}-${value.year}";
-                                    }
-                                  },
-                                );
-                              },
+                              isForm: true,
+                              validator: birthDateValidator,
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(10),
+                                FilteringTextInputFormatter.singleLineFormatter,
+                                birthDateInput,
+                              ],
+                              textInputType: TextInputType.phone,
                             ),
                             smartTextField(
                               title: _language.location,
@@ -217,30 +218,6 @@ class _SignUpPageState extends State<SignUpPage> {
                                         '$selectedAddress';
                                 });
                               },
-                            ),
-                            smartTextField(
-                                title: _language.phoneNumber,
-                                controller: phoneNumberController,
-                                isForm: true,
-                                isPhone: true,
-                                prefix: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 14, horizontal: 4),
-                                  child: Text(
-                                    '+234',
-                                    style: TextStyle(
-                                      color: Color(0xFFA59B9B),
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                ),
-                                textInputType: TextInputType.phone),
-                            smartTextField(
-                              title: 'National ID Card No.',
-                              controller: cnicController,
-                              isForm: false,
-                              required: false,
-                              textInputType: TextInputType.number,
                             ),
                             Text(
                               _language.gender,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomTextBox extends StatelessWidget {
   final String placeholderText;
@@ -18,6 +19,8 @@ class CustomTextBox extends StatelessWidget {
   final Function onTap;
   final bool isForm;
   final Icon suffixIcon;
+  final Function validator;
+  final List<TextInputFormatter> inputFormatters;
 
   CustomTextBox(
       {this.focusNode,
@@ -36,7 +39,9 @@ class CustomTextBox extends StatelessWidget {
       this.keyboardType = TextInputType.text,
       this.onTap,
       this.isForm = false,
-      this.suffixIcon = null});
+      this.suffixIcon = null,
+      this.validator,
+      this.inputFormatters});
 
   @override
   Widget build(BuildContext context) {
@@ -47,17 +52,19 @@ class CustomTextBox extends StatelessWidget {
       ),
       child: isForm
           ? TextFormField(
+              inputFormatters: inputFormatters,
               onTap: onTap,
               focusNode: focusNode,
               keyboardType: keyboardType,
               obscureText: obscureText,
               readOnly: readOnly,
-              validator: (value) {
-                if (value.isEmpty && required) {
-                  return errorText;
-                }
-                return null;
-              },
+              validator: validator ??
+                  (value) {
+                    if (value.isEmpty && required) {
+                      return errorText;
+                    }
+                    return null;
+                  },
               style: TextStyle(color: textColor),
               controller: controller,
               decoration: InputDecoration(
@@ -159,7 +166,7 @@ class CustomPhoneTextBox extends StatelessWidget {
               keyboardType: keyboardType,
               obscureText: obscureText,
               readOnly: readOnly,
-              maxLength: 10,
+              maxLength: 13,
               validator: (value) {
                 if (value.isEmpty && required) {
                   return errorText;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:smartrr/utils/colors.dart';
 import 'text_box.dart';
 
@@ -15,6 +16,8 @@ smartTextField({
   bool isForm = false,
   Widget prefix,
   Widget suffixIcon,
+  Function validator,
+  List<TextInputFormatter> inputFormatters,
 }) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,6 +46,8 @@ smartTextField({
               placeholderColor: lightGrey,
               placeholderText: title,
               suffixIcon: suffixIcon,
+              validator: validator,
+              inputFormatters: inputFormatters,
             ),
       SizedBox(
         height: bottomPadding,

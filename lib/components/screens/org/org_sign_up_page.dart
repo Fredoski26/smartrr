@@ -30,11 +30,6 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
   TextEditingController cOrgEmail;
   TextEditingController cPassword;
   TextEditingController cLanguage;
-  TextEditingController cLga;
-  TextEditingController cWard;
-  TextEditingController cSite;
-  TextEditingController cStartDate;
-  TextEditingController cEndDate;
   TextEditingController cStartTime;
   TextEditingController cCloseTime;
   TextEditingController cFocalName;
@@ -75,11 +70,6 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
     cOrgEmail = TextEditingController();
     cPassword = TextEditingController();
     cLanguage = TextEditingController();
-    cLga = TextEditingController();
-    cWard = TextEditingController();
-    cSite = TextEditingController();
-    cStartDate = TextEditingController();
-    cEndDate = TextEditingController();
     cStartTime = TextEditingController();
     cCloseTime = TextEditingController();
     cFocalName = TextEditingController();
@@ -170,7 +160,6 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
                   index: _stepIndex,
                   children: [
                     _stack1(),
-                    _projectSpan(),
                     _workHours(),
                     _focalPerson(),
                     _services(),
@@ -200,11 +189,6 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
           'orgEmail': cOrgEmail.text,
           'password': cPassword.text,
           'language': cLanguage.text,
-          'lga': cLga.text,
-          'ward': cWard.text,
-          'site': cSite.text,
-          'startDate': cStartDate.text,
-          'endDate': cEndDate.text,
           'startTime': cStartTime.text,
           'closeTime': cCloseTime.text,
           'focalName': cFocalName.text,
@@ -386,81 +370,8 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
                 title: 'Major Language',
                 controller: cLanguage,
               ),
-              smartTextField(
-                title: 'LGA',
-                controller: cLga,
-              ),
-              smartTextField(
-                title: 'Ward',
-                controller: cWard,
-              ),
-              smartTextField(
-                title: 'Site',
-                controller: cSite,
-              ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  _projectSpan() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: _hPadding),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              'Project Span',
-              style: TextStyle(
-                fontSize: 40,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            smartTextField(
-                title: 'Start Date',
-                readOnly: true,
-                controller: cStartDate,
-                onTap: () {
-                  showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime.now(),
-                    lastDate: DateTime(2050),
-                  ).then((value) {
-                    if (value != null) {
-                      debugPrint(
-                          "DT: ${value.day}, ${value.month}, ${value.year}");
-                      cStartDate.text =
-                          "${value.day}-${value.month}-${value.year}";
-                    }
-                  });
-                }),
-            smartTextField(
-                title: 'End Date',
-                readOnly: true,
-                controller: cEndDate,
-                onTap: () {
-                  showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime.now(),
-                          lastDate: DateTime(2050))
-                      .then((value) {
-                    if (value != null) {
-                      debugPrint(
-                          "DT: ${value.day}, ${value.month}, ${value.year}");
-                      cEndDate.text =
-                          "${value.day}-${value.month}-${value.year}";
-                    }
-                  });
-                }),
-          ],
         ),
       ),
     );
@@ -654,7 +565,7 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
           children: <Widget>[
             Text(
               'Location',
-              textAlign:TextAlign.center,
+              textAlign: TextAlign.center,
               style: TextStyle()
                   .copyWith(fontSize: 40, fontWeight: FontWeight.bold),
             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum More { logout }
@@ -78,4 +79,28 @@ texts({String title, String value}) {
       ],
     ),
   );
+}
+
+String birthDateValidator(String value) {
+  final DateTime now = DateTime.now();
+  final DateFormat formatter = DateFormat('yyyy', "en");
+  final String formatted = formatter.format(now);
+  String str1 = value;
+  List<String> str2 = str1.split('-');
+  String day = str2.isNotEmpty ? str2[0] : '';
+  String month = str2.length > 1 ? str2[1] : '';
+  String year = str2.length > 2 ? str2[2] : '';
+  print(value);
+  if (value.isEmpty) {
+    return 'Must be DD-MM-YYYY';
+  } else if (int.parse(month) > 13) {
+    return 'Must be DD-MM-YYYY';
+  } else if (int.parse(day) > 32) {
+    return 'Must be DD-MM-YYYY';
+  } else if ((int.parse(year) > int.parse(formatted))) {
+    return 'Must be DD-MM-YYYY';
+  } else if ((int.parse(year) < 1920)) {
+    return 'Must be DD-MM-YYYY';
+  }
+  return null;
 }

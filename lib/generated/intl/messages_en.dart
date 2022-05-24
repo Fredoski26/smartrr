@@ -38,7 +38,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "country" : MessageLookupByLibrary.simpleMessage("Country"),
     "darkMode" : MessageLookupByLibrary.simpleMessage("Dark mode"),
     "denialOfResources" : MessageLookupByLibrary.simpleMessage("Denial of Resources"),
-    "dob" : MessageLookupByLibrary.simpleMessage("DOB"),
+    "dob" : MessageLookupByLibrary.simpleMessage("Date of birth"),
     "dontHaveAccount" : MessageLookupByLibrary.simpleMessage("Don\'t have an account?"),
     "female" : MessageLookupByLibrary.simpleMessage("Female"),
     "fgm" : MessageLookupByLibrary.simpleMessage("Female Genital Mutilation"),
