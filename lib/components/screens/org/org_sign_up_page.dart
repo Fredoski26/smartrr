@@ -21,11 +21,10 @@ class OrgSignUpPage extends StatefulWidget {
 
 class _OrgSignUpPageState extends State<OrgSignUpPage> {
   int _stepIndex = 0;
-  int _maxSteps = 6;
+  int _maxSteps = 5;
 
   GlobalKey<FormState> _formKey;
   TextEditingController cName;
-  TextEditingController cType;
   TextEditingController cTelephone;
   TextEditingController cOrgEmail;
   TextEditingController cPassword;
@@ -61,11 +60,21 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
   List<DropdownMenuItem<Country>> _dropDownCountryItem = [];
   Country _currentCountry;
 
+  // organization types
+  List<DropdownMenuItem> _orgTypes = [
+    DropdownMenuItem(child: Text("NGO"), value: "NGO"),
+    DropdownMenuItem(child: Text("CSO"), value: "CSO"),
+    DropdownMenuItem(child: Text("MDA"), value: "MDA"),
+    DropdownMenuItem(child: Text("FBO"), value: "FBO"),
+    DropdownMenuItem(child: Text("CBO"), value: "CBO")
+  ];
+  String _orgType = "NGO";
+  String _orgTypeLabel = "Type of Organization";
+
   @override
   void initState() {
     _formKey = GlobalKey<FormState>();
     cName = TextEditingController();
-    cType = TextEditingController();
     cTelephone = TextEditingController();
     cOrgEmail = TextEditingController();
     cPassword = TextEditingController();
@@ -184,7 +193,7 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
       authResult.user.updateDisplayName(displayName).then((onValue) async {
         await FirebaseFirestore.instance.collection('organizations').doc().set({
           'name': cName.text,
-          'type': cType.text,
+          'type': _orgType,
           'telephone': cTelephone.text,
           'orgEmail': cOrgEmail.text,
           'password': cPassword.text,
@@ -345,10 +354,41 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
                 controller: cName,
                 isForm: true,
               ),
-              smartTextField(
-                title: 'Type of Organization',
-                controller: cType,
+              Row(
+                children: [
+                  Expanded(
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButtonFormField(
+                          decoration: InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(50)),
+                                borderSide: BorderSide(color: lightGrey)),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(50)),
+                                borderSide: BorderSide(color: lightGrey)),
+                            errorBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(50)),
+                                borderSide: BorderSide(color: Colors.red)),
+                          ),
+                          hint: Expanded(child: Text(_orgTypeLabel)),
+                          elevation: 0,
+                          items: _orgTypes,
+                          validator: (val) =>
+                              val == null ? "Select org type" : null,
+                          onChanged: (val) {
+                            setState(() {
+                              _orgTypeLabel = val;
+                              _orgType = val;
+                            });
+                          }),
+                    ),
+                  ),
+                ],
               ),
+              SizedBox(height: 20.0),
               smartTextField(
                 title: 'Telephone',
                 controller: cTelephone,
