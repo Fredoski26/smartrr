@@ -1,17 +1,18 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:smartrr/components/widgets/auth_container.dart';
 import 'package:smartrr/provider/language_provider.dart';
+import 'package:smartrr/utils/colors.dart';
 import '../../widgets/smart_text_field.dart';
 import 'select_location_map.dart';
 import '../../widgets/circular_progress.dart';
 import 'package:smartrr/generated/l10n.dart';
 import 'package:smartrr/utils/utils.dart';
 import 'package:smartrr/utils/birthDateInput.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import "package:smartrr/services/auth_service.dart";
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -20,6 +21,7 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
+  FirebaseAuth _auth;
 
   TextEditingController nameController;
   TextEditingController emailController;
@@ -32,9 +34,13 @@ class _SignUpPageState extends State<SignUpPage> {
   bool _isMale = true;
   bool isLoading = false;
 
+  String initialCountry = 'NG';
+  PhoneNumber number = PhoneNumber(isoCode: 'NG');
+
   @override
   void initState() {
     super.initState();
+    _auth = FirebaseAuth.instance;
     nameController = TextEditingController();
     emailController = TextEditingController();
     passwordController = TextEditingController();
@@ -43,99 +49,87 @@ class _SignUpPageState extends State<SignUpPage> {
     locationController = TextEditingController();
   }
 
-  void _validateRegisterInput() async {
-    final FormState form = _formKey.currentState;
-    if (_formKey.currentState.validate()) {
-      form.save();
-      setState(() {
-        isLoading = true;
-      });
-      try {
-        UserCredential authResult = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
-                email: emailController.text, password: passwordController.text);
-
-        var displayName;
-        displayName = nameController.text;
-
-        await authResult.user.updateDisplayName(displayName).then((onValue) {
-          int maleOrFemale = 1;
-          if (!_isMale) maleOrFemale = 0;
-          FirebaseFirestore.instance.collection('users').doc().set({
-            'email': emailController.text,
-            'displayName': nameController.text,
-            'phoneNumber': '${phoneNumberController.text}',
-            'location': locationController.text,
-            'dob': dobController.text,
-            'gender': maleOrFemale,
-            'status': true,
-            'uId': authResult.user.uid,
-          }).then((onValue) {
-            Fluttertoast.showToast(
-              msg: "Please Login",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.black54.withOpacity(0.3),
-              textColor: Colors.white,
-              fontSize: 16.0,
-            ).then((_) => Navigator.pop(context));
-            setState(() {
-              isLoading = false;
-            });
-          });
-        });
-      } catch (error) {
-        switch (error.code) {
-          case "ERROR_EMAIL_ALREADY_IN_USE":
-            {
-              setState(() {
-                errorMsg = "This email is already in use.";
-                isLoading = false;
-              });
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      content: Container(
-                        child: Text(errorMsg),
-                      ),
-                    );
-                  });
-            }
-            break;
-          case "ERROR_WEAK_PASSWORD":
-            {
-              setState(() {
-                errorMsg = "The password must be 6 characters long or more.";
-                isLoading = false;
-              });
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      content: Container(
-                        child: Text(errorMsg),
-                      ),
-                    );
-                  });
-            }
-            break;
-          default:
-            {
-              setState(() {
-                errorMsg = "";
-              });
-            }
-        }
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final _language = S.of(context);
     BirthTextInputFormatter birthDateInput = BirthTextInputFormatter();
+
+    void _validateRegisterInput() async {
+      final FormState form = _formKey.currentState;
+      if (_formKey.currentState.validate()) {
+        form.save();
+        setState(() {
+          isLoading = true;
+        });
+        try {
+          int maleOrFemale = 1;
+          if (!_isMale) maleOrFemale = 0;
+          Map userData = {
+            'email': emailController.text,
+            'password': passwordController.text,
+            'displayName': nameController.text,
+            'phoneNumber': '${number}',
+            'location': locationController.text,
+            'dob': dobController.text,
+            'gender': maleOrFemale,
+            'status': true,
+          };
+
+          await AuthService.signUpWithPhoneMobile(
+            phoneNumber: number.toString(),
+            context: context,
+            userData: userData,
+          ).then((_) => {
+                setState(() {
+                  isLoading = false;
+                })
+              });
+        } catch (error) {
+          switch (error.code) {
+            case "ERROR_EMAIL_ALREADY_IN_USE":
+              {
+                setState(() {
+                  errorMsg = "This email is already in use.";
+                  isLoading = false;
+                });
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        content: Container(
+                          child: Text(errorMsg),
+                        ),
+                      );
+                    });
+              }
+              break;
+            case "ERROR_WEAK_PASSWORD":
+              {
+                setState(() {
+                  errorMsg = "The password must be 6 characters long or more.";
+                  isLoading = false;
+                });
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        content: Container(
+                          child: Text(errorMsg),
+                        ),
+                      );
+                    });
+              }
+              break;
+            default:
+              {
+                setState(() {
+                  errorMsg = "";
+                });
+              }
+          }
+        }
+      }
+    }
 
     return AuthContainer(
         child: isLoading
@@ -175,14 +169,34 @@ class _SignUpPageState extends State<SignUpPage> {
                               textInputType: TextInputType.emailAddress,
                               required: false,
                             ),
-                            smartTextField(
-                              title: _language.phoneNumber,
-                              controller: phoneNumberController,
-                              isForm: true,
-                              isPhone: true,
-                              textInputType: TextInputType.phone,
-                              required: false,
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 25.0, vertical: 0),
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(50.0)),
+                                  border:
+                                      Border.all(width: 1, color: lightGrey)),
+                              child: InternationalPhoneNumberInput(
+                                onInputChanged: (PhoneNumber val) {
+                                  setState(() {
+                                    number = val;
+                                  });
+                                },
+                                selectorConfig: SelectorConfig(
+                                  selectorType:
+                                      PhoneInputSelectorType.BOTTOM_SHEET,
+                                ),
+                                selectorTextStyle:
+                                    TextStyle(color: Colors.black),
+                                initialValue: number,
+                                textFieldController: phoneNumberController,
+                                inputBorder: InputBorder.none,
+                                selectorButtonOnErrorPadding: 0,
+                                spaceBetweenSelectorAndTextField: 0,
+                              ),
                             ),
+                            SizedBox(height: 20.0),
                             smartTextField(
                               title: _language.password,
                               controller: passwordController,
@@ -327,5 +341,11 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ),
                     )));
+  }
+
+  @override
+  void dispose() {
+    phoneNumberController?.dispose();
+    super.dispose();
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smartrr/utils/colors.dart';
 
 enum More { logout }
 
@@ -103,4 +105,21 @@ String birthDateValidator(String value) {
     return 'Must be DD-MM-YYYY';
   }
   return null;
+}
+
+Color _toastBackgroundColor(String type) {
+  if (type == "error") return Colors.red;
+  if (type == "success")
+    return Colors.green;
+  else
+    return darkGrey;
+}
+
+showToast({String msg, String type = "info"}) {
+  Fluttertoast.showToast(
+    msg: msg,
+    backgroundColor: _toastBackgroundColor(type),
+    gravity: ToastGravity.BOTTOM,
+    toastLength: Toast.LENGTH_LONG,
+  );
 }

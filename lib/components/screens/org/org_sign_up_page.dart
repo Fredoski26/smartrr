@@ -380,7 +380,6 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
                               val == null ? "Select org type" : null,
                           onChanged: (val) {
                             setState(() {
-                              _orgTypeLabel = val;
                               _orgType = val;
                             });
                           }),

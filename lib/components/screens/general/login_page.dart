@@ -6,10 +6,12 @@ import 'package:smartrr/components/widgets/circular_progress.dart';
 import 'package:smartrr/components/widgets/show_action.dart';
 import 'package:smartrr/components/widgets/smart_text_field.dart';
 import 'package:smartrr/provider/language_provider.dart';
+import 'package:smartrr/services/auth_service.dart';
 import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/utils/utils.dart';
 import '../../widgets/auth_container.dart';
 import 'package:smartrr/generated/l10n.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class LoginPage extends StatefulWidget {
   final bool isDarkTheme;
@@ -24,15 +26,28 @@ class _LoginPageState extends State<LoginPage> {
   final mScaffoldState = GlobalKey<ScaffoldState>();
   TextEditingController emailController;
   TextEditingController passwordController;
+  TextEditingController phoneNumberController;
   String errorMsg;
   bool _isUser = true;
   bool isLoading = false;
+
+  ValueNotifier<bool> _signInWithPhone = ValueNotifier<bool>(true);
+
+  void _toggleSignInMode() {
+    _signInWithPhone.value = !_signInWithPhone.value;
+  }
+
+  String initialCountry = 'NG';
+  PhoneNumber number = PhoneNumber(isoCode: 'NG');
+
+  final _auth = FirebaseAuth.instance;
 
   @override
   void initState() {
     super.initState();
     emailController = TextEditingController();
     passwordController = TextEditingController();
+    phoneNumberController = TextEditingController();
   }
 
   @override
@@ -64,84 +79,13 @@ class _LoginPageState extends State<LoginPage> {
                           SizedBox(
                             height: 40,
                           ),
-                          smartTextField(
-                            title: 'Email',
-                            controller: emailController,
-                            isForm: true,
-                            textInputType: TextInputType.emailAddress,
-                          ),
-                          smartTextField(
-                              title: _language.password,
-                              controller: passwordController,
-                              obscure: true,
-                              isForm: true,
-                              suffixIcon: Icon(Icons.e_mobiledata)),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  if (_isUser)
-                                    setState(() => _isUser = false);
-                                  else
-                                    setState(() => _isUser = true);
-                                },
-                                child: Row(
-                                  children: [
-                                    Checkbox(
-                                      value: _isUser,
-                                      onChanged: (val) {
-                                        setState(() => _isUser = val);
-                                      },
-                                    ),
-                                    Text(
-                                      _language.user,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  if (_isUser)
-                                    setState(() => _isUser = false);
-                                  else
-                                    setState(() => _isUser = true);
-                                },
-                                child: Row(
-                                  children: [
-                                    Checkbox(
-                                      value: !_isUser,
-                                      onChanged: (val) {
-                                        if (val)
-                                          setState(() => _isUser = false);
-                                        else
-                                          setState(() => _isUser = true);
-                                      },
-                                    ),
-                                    Text(
-                                      _language.organization,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: TextButton(
-                                  onPressed: _validateLoginInput,
-                                  child: Text(_language.logIn),
-                                ),
-                              ),
-                            ],
-                          ),
+                          ValueListenableBuilder(
+                              valueListenable: _signInWithPhone,
+                              builder: (context, _, __) {
+                                if (_signInWithPhone.value)
+                                  return _phoneSignInWidgets();
+                                return _emailSignInWidgets();
+                              }),
                           SizedBox(height: 38.0),
                           GestureDetector(
                             onTap: () => _bottomSheet(
@@ -191,6 +135,147 @@ class _LoginPageState extends State<LoginPage> {
                           SizedBox(height: 20),
                         ]),
             )));
+  }
+
+  Widget _emailSignInWidgets() {
+    return Column(
+      children: [
+        smartTextField(
+          title: 'Email',
+          controller: emailController,
+          isForm: true,
+          textInputType: TextInputType.emailAddress,
+        ),
+        smartTextField(
+            title: S.current.password,
+            controller: passwordController,
+            obscure: true,
+            isForm: true,
+            suffixIcon: Icon(Icons.e_mobiledata)),
+        SizedBox(
+          height: 5,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            GestureDetector(
+              onTap: () {
+                if (_isUser)
+                  setState(() => _isUser = false);
+                else
+                  setState(() => _isUser = true);
+              },
+              child: Row(
+                children: [
+                  Checkbox(
+                    value: _isUser,
+                    onChanged: (val) {
+                      setState(() => _isUser = val);
+                    },
+                  ),
+                  Text(
+                    S.current.user,
+                  ),
+                ],
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                if (_isUser)
+                  setState(() => _isUser = false);
+                else
+                  setState(() => _isUser = true);
+              },
+              child: Row(
+                children: [
+                  Checkbox(
+                    value: !_isUser,
+                    onChanged: (val) {
+                      if (val)
+                        setState(() => _isUser = false);
+                      else
+                        setState(() => _isUser = true);
+                    },
+                  ),
+                  Text(
+                    S.current.organization,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 5,
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: TextButton(
+                onPressed: _validateLoginInput,
+                child: Text(S.current.logIn),
+              ),
+            ),
+          ],
+        ),
+        InkWell(
+          child: Text(
+            "Sign in with phone",
+            style: TextStyle().copyWith(color: primaryColor),
+          ),
+          onTap: _toggleSignInMode,
+        ),
+      ],
+    );
+  }
+
+  Widget _phoneSignInWidgets() {
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 0),
+          margin: EdgeInsets.only(bottom: 15.0),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(50.0)),
+              border: Border.all(width: 1, color: lightGrey)),
+          child: InternationalPhoneNumberInput(
+            onInputChanged: (PhoneNumber val) {
+              setState(() {
+                number = val;
+              });
+            },
+            selectorConfig: SelectorConfig(
+              selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+            ),
+            selectorTextStyle: TextStyle(color: Colors.black),
+            initialValue: number,
+            textFieldController: phoneNumberController,
+            inputBorder: InputBorder.none,
+            selectorButtonOnErrorPadding: 0,
+            spaceBetweenSelectorAndTextField: 0,
+          ),
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: TextButton(
+                onPressed: () async {
+                  await _loginWithPhone();
+                },
+                child: Text(S.current.logIn),
+              ),
+            ),
+          ],
+        ),
+        InkWell(
+          child: Text(
+            "Sign in with email",
+            style: TextStyle().copyWith(color: primaryColor),
+          ),
+          onTap: _toggleSignInMode,
+        ),
+      ],
+    );
   }
 
   _bottomSheet({BuildContext context, bool isDarkTheme}) {
@@ -254,8 +339,6 @@ class _LoginPageState extends State<LoginPage> {
               .where('email', isEqualTo: emailController.text)
               .get()
               .then((users) {
-            debugPrint(
-                "USR ===> ${users.docs[0].get('displayName').toString()}  ::  Gender: ${users.docs[0].get('gender')} : ${users.docs[0].id}");
             bool status = users.docs[0].get('status');
             switch (status) {
               // Approved
@@ -337,6 +420,22 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  Future _loginWithPhone() async {
+    if (_formKey.currentState.validate()) {
+      setState(() {
+        isLoading = true;
+      });
+
+      await AuthService.signInWithPhone(
+              phoneNumber: number.toString(), context: context)
+          .then((_) {
+        setState(() {
+          isLoading = false;
+        });
+      });
+    }
+  }
+
   _loginUser({String userId}) {
     bool _isLoginError = false;
     try {
@@ -408,5 +507,11 @@ class _LoginPageState extends State<LoginPage> {
       func: () => Navigator.pop(context),
       context: context,
     );
+  }
+
+  @override
+  void dispose() {
+    phoneNumberController.dispose();
+    super.dispose();
   }
 }

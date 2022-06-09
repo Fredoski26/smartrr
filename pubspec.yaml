@@ -37,6 +37,8 @@ dependencies:
   flutter_tts: ^3.3.3
   youtube_player_flutter: ^8.0.0
   flutter_svg: ^1.0.3
+  intl_phone_number_input: ^0.7.0+2
+  pinput: ^2.2.10
 
 dev_dependencies:
   flutter_test:
