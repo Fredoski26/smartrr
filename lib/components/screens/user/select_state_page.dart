@@ -6,6 +6,7 @@ import 'package:smartrr/components/widgets/my_stepper.dart';
 import 'package:smartrr/services/country_service.dart';
 import 'package:smartrr/services/database_service.dart';
 import 'package:smartrr/utils/colors.dart';
+import 'package:smartrr/utils/utils.dart';
 import '../../widgets/location_cell.dart';
 import '../../../models/location.dart';
 import 'select_location_map.dart';
@@ -45,7 +46,6 @@ class _SelectStatePageState extends State<SelectStatePage> {
   String currentSelectedAddress = '';
   List<MyLocation> stateList = <MyLocation>[];
   bool isLoading = true;
-  final User _currentUser = FirebaseAuth.instance.currentUser;
 
   @override
   void initState() {
@@ -242,8 +242,9 @@ class _SelectStatePageState extends State<SelectStatePage> {
     );
   }
 
-  _getDataFromFirebase() {
-    DatabaseService(email: _currentUser.email)
+  _getDataFromFirebase() async {
+    String uId = await getUserIdPref();
+    DatabaseService(uId: uId)
         .getUser()
         .then((user) => CountryService.getStates(
             widget.isUser ? user["country"] ?? "Nigeria" : "Nigeria"))

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:smartrr/components/screens/user/impact_of_smartrr.dart';
 import 'package:smartrr/components/widgets/chatbot.dart';
 import 'package:smartrr/components/widgets/language_picker.dart';
+import 'package:smartrr/components/widgets/speech_to_text.dart';
 import 'package:smartrr/provider/language_provider.dart';
 import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/utils/utils.dart';
@@ -28,7 +29,7 @@ class _ReportOrHistoryPageState extends State<ReportOrHistoryPage> {
               drawer: CustomDrawer(),
               appBar: AppBar(
                 title: Text("Smart RR"),
-                actions: [LanguagePicker()],
+                actions: [SmartSpeechToText(), LanguagePicker()],
               ),
               body: Padding(
                 padding:

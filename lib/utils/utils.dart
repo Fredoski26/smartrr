@@ -119,7 +119,7 @@ showToast({String msg, String type = "info"}) {
   Fluttertoast.showToast(
     msg: msg,
     backgroundColor: _toastBackgroundColor(type),
-    gravity: ToastGravity.BOTTOM,
+    gravity: ToastGravity.TOP,
     toastLength: Toast.LENGTH_LONG,
   );
 }

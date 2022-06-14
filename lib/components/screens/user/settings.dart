@@ -19,24 +19,25 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  final User _currentUser = FirebaseAuth.instance.currentUser;
   String country = "-";
 
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _confirmPasswordController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     final _language = S.of(context);
 
-    DatabaseService(email: _currentUser.email).getUser().then((user) {
+    DatabaseService().getUser().then((user) {
       if (mounted) {
         setState(() {
           country = user["country"] ?? "";
         });
       }
     });
+
     return Consumer<LanguageNotifier>(
         builder: (context, _, child) => Scaffold(
               appBar: AppBar(title: Text(_language.settings)),

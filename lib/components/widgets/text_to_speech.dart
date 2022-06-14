@@ -45,6 +45,10 @@ class _MyTtsState extends State<MyTts> {
       _getDefaultEngine();
     }
 
+    flutterTts.setProgressHandler((text, start, end, word) {
+      print("TEXT: $text\nSTART: $start \nEND: $end \nWORD: $word");
+    });
+
     flutterTts.setStartHandler(() {
       setState(() {
         ttsState = TtsState.playing;

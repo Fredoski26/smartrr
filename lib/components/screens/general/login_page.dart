@@ -40,8 +40,6 @@ class _LoginPageState extends State<LoginPage> {
   String initialCountry = 'NG';
   PhoneNumber number = PhoneNumber(isoCode: 'NG');
 
-  final _auth = FirebaseAuth.instance;
-
   @override
   void initState() {
     super.initState();
@@ -259,9 +257,7 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             Expanded(
               child: TextButton(
-                onPressed: () async {
-                  await _loginWithPhone();
-                },
+                onPressed: _loginWithPhone,
                 child: Text(S.current.logIn),
               ),
             ),
@@ -420,18 +416,14 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  Future _loginWithPhone() async {
+  void _loginWithPhone() async {
     if (_formKey.currentState.validate()) {
-      setState(() {
-        isLoading = true;
-      });
+      setState(() => isLoading = true);
 
       await AuthService.signInWithPhone(
               phoneNumber: number.toString(), context: context)
           .then((_) {
-        setState(() {
-          isLoading = false;
-        });
+        setState(() => isLoading = false);
       });
     }
   }

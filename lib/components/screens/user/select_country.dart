@@ -3,6 +3,7 @@ import 'package:smartrr/generated/l10n.dart';
 import 'package:smartrr/services/country_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:smartrr/services/database_service.dart';
+import 'package:smartrr/utils/utils.dart';
 
 class SelectCountry extends StatefulWidget {
   const SelectCountry({Key key}) : super(key: key);
@@ -52,9 +53,9 @@ class _SelectCountryState extends State<SelectCountry> {
   }
 
   void _updateCountry(String country) async {
-    final User _currentUser = FirebaseAuth.instance.currentUser;
+    final String uId = await getUserIdPref();
 
-    await DatabaseService(email: _currentUser.email).updateUser(
-        {"country": country}).then((value) => Navigator.of(context).pop());
+    await DatabaseService(uId: uId).updateUser({"country": country}).then(
+        (value) => Navigator.of(context).pop());
   }
 }
