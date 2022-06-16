@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:smartrr/components/screens/user/select_country.dart';
 import 'package:smartrr/components/widgets/language_picker.dart';
 import 'package:smartrr/components/widgets/smart_text_field.dart';
 import 'package:smartrr/provider/language_provider.dart';
@@ -33,7 +34,7 @@ class _SettingsState extends State<Settings> {
     DatabaseService().getUser().then((user) {
       if (mounted) {
         setState(() {
-          country = user["country"] ?? "";
+          country = user["country"] ?? "Nigeria";
         });
       }
     });
@@ -109,7 +110,10 @@ class _SettingsState extends State<Settings> {
                                     overflow: TextOverflow.fade,
                                   ),
                                   onTap: () => Navigator.of(context)
-                                      .pushNamed("/countries")),
+                                      .push(MaterialPageRoute(
+                                          builder: (context) => SelectCountry(
+                                                userCountry: country,
+                                              )))),
                               Divider(),
                               ListTile(
                                 leading: Icon(

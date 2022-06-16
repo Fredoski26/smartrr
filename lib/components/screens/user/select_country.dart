@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:smartrr/generated/l10n.dart';
 import 'package:smartrr/services/country_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:smartrr/services/database_service.dart';
 import 'package:smartrr/utils/utils.dart';
 
 class SelectCountry extends StatefulWidget {
-  const SelectCountry({Key key}) : super(key: key);
+  const SelectCountry({Key key, this.userCountry}) : super(key: key);
+
+  final String userCountry;
 
   @override
   State<SelectCountry> createState() => _SelectCountryState();
@@ -14,10 +15,33 @@ class SelectCountry extends StatefulWidget {
 
 class _SelectCountryState extends State<SelectCountry> {
   String country;
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    country = widget.userCountry;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(S.of(context).selectCountry)),
+      appBar: AppBar(
+        title: Text(S.of(context).selectCountry),
+        actions: [
+          TextButton(
+            onPressed: () => _updateCountry(country),
+            child: _isLoading
+                ? CircularProgressIndicator(
+                    color: Colors.white,
+                  )
+                : Text(
+                    "Done",
+                    style: TextStyle().copyWith(fontWeight: FontWeight.bold),
+                  ),
+          )
+        ],
+      ),
       body: StreamBuilder(
         builder: (context, snapshot) => snapshot.hasError
             ? Center(child: Text("Something went wrong"))
@@ -34,14 +58,17 @@ class _SelectCountryState extends State<SelectCountry> {
                                     setState(() {
                                       country = snapshot.data[index].name;
                                     });
-                                    _updateCountry(snapshot.data[index].name);
                                   },
                                   contentPadding: EdgeInsets.zero,
                                   title: Text(snapshot.data[index].name),
                                   leading: Radio(
                                     value: snapshot.data[index].name,
                                     groupValue: country,
-                                    onChanged: (val) {},
+                                    onChanged: (val) {
+                                      setState(() {
+                                        country = val;
+                                      });
+                                    },
                                   ),
                                 )),
                       )
@@ -53,6 +80,9 @@ class _SelectCountryState extends State<SelectCountry> {
   }
 
   void _updateCountry(String country) async {
+    setState(() {
+      _isLoading = true;
+    });
     final String uId = await getUserIdPref();
 
     await DatabaseService(uId: uId).updateUser({"country": country}).then(

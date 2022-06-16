@@ -110,6 +110,11 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
                                 itemBuilder: (context, i) {
                                   return ListTile(
                                     contentPadding: EdgeInsets.zero,
+                                    onTap: () {
+                                      setState(() {
+                                        selectedDescription = items[i];
+                                      });
+                                    },
                                     leading: Radio(
                                         value: items[i],
                                         groupValue: selectedDescription,
