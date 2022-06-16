@@ -35,7 +35,7 @@ class _SmartSpeechToTextState extends State<SmartSpeechToText> {
   List<LocaleName> _localeNames = [];
   final SpeechToText speech = SpeechToText();
 
-  ValueNotifier _recognizedWords = ValueNotifier<String>("Listening...");
+  ValueNotifier _recognizedWords = ValueNotifier<String>("");
 
   @override
   void initState() {
@@ -98,7 +98,7 @@ class _SmartSpeechToTextState extends State<SmartSpeechToText> {
         .listen(
             onResult: resultListener,
             listenFor: Duration(seconds: listenFor ?? 30),
-            pauseFor: Duration(seconds: pauseFor ?? 3),
+            pauseFor: Duration(seconds: pauseFor ?? 10),
             partialResults: true,
             localeId: _currentLocaleId,
             onSoundLevelChange: soundLevelListener,
@@ -160,25 +160,35 @@ class _SmartSpeechToTextState extends State<SmartSpeechToText> {
   /// This callback is invoked each time new recognition results are
   /// available after `listen` is called.
   void resultListener(SpeechRecognitionResult result) {
-    _logEvent(
-        'Result listener final: ${result.finalResult}, words: ${result.recognizedWords}');
-    setState(() {
-      lastWords = '${result.recognizedWords} - ${result.finalResult}';
-    });
     _recognizedWords.value = result.recognizedWords;
-
-    switch (result.recognizedWords) {
-      case "open settings":
-        showToast(msg: "Opening settings");
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Settings()));
-        break;
-      case "submit report":
-        showToast(msg: "Submitting report");
-        DatabaseService().submitQuickReport();
-        break;
-      default:
-        break;
+    if (result.finalResult) {
+      Navigator.pop(context);
+      switch (result.recognizedWords) {
+        case "open settings":
+          showToast(msg: "Opening settings");
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Settings()));
+          break;
+        case "submit report":
+          showToast(msg: "Submitting report");
+          DatabaseService().submitQuickReport();
+          break;
+        case "report case":
+          showToast(msg: "Submitting report");
+          DatabaseService().submitQuickReport();
+          break;
+        case "report":
+          showToast(msg: "Submitting report");
+          DatabaseService().submitQuickReport();
+          break;
+        case "report a case":
+          showToast(msg: "Submitting report");
+          DatabaseService().submitQuickReport();
+          break;
+        default:
+          showToast(msg: "Command not recognized");
+          break;
+      }
     }
   }
 
@@ -192,23 +202,21 @@ class _SmartSpeechToTextState extends State<SmartSpeechToText> {
   }
 
   void errorListener(SpeechRecognitionError error) {
-    _logEvent(
-        'Received error status: $error, listening: ${speech.isListening}');
-    setState(() {
-      lastError = '${error.errorMsg} - ${error.permanent}';
-    });
+    switch (error.errorMsg) {
+      case "error_no_match":
+        showToast(msg: "No match", type: "error");
+        break;
+      default:
+        showToast(msg: error.errorMsg, type: "error");
+        break;
+    }
+    Navigator.pop(context);
   }
 
   void statusListener(String status) {
-    _logEvent(
-        'Received listener status: $status, listening: ${speech.isListening}');
-    setState(() {
-      lastStatus = '$status';
-    });
-    print("STATUS: $status");
     switch (status) {
-      case "notListening":
-        Navigator.pop(context);
+      case 'listening':
+        _recognizedWords.value = "Listening...";
         break;
       default:
         break;
