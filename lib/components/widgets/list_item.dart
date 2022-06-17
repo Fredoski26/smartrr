@@ -20,9 +20,10 @@ class ListItem extends StatelessWidget {
           style: TextStyle().copyWith(fontWeight: FontWeight.bold),
         ),
         title: title.isNotEmpty
-            ? Text(title, style: Theme.of(context).textTheme.bodyText1)
+            ? SelectableText(title,
+                style: Theme.of(context).textTheme.bodyText1)
             : null,
-        subtitle: Text(
+        subtitle: SelectableText(
           body,
           style: Theme.of(context)
               .textTheme

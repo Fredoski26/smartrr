@@ -10,7 +10,9 @@ import 'package:smartrr/provider/language_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AllAboutSRHR extends StatelessWidget {
-  const AllAboutSRHR({Key key}) : super(key: key);
+  AllAboutSRHR({Key key}) : super(key: key);
+
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +25,7 @@ class AllAboutSRHR extends StatelessWidget {
                 actions: [
                   LanguagePicker(),
                   MyTts(
+                    scrollController: _scrollController,
                     text: [
                       _language.srhrHeading1,
                       _language.srhrParagraph1,
@@ -49,6 +52,7 @@ class AllAboutSRHR extends StatelessWidget {
                 ],
               ),
               body: SingleChildScrollView(
+                controller: _scrollController,
                 child: Container(
                   padding: EdgeInsets.all(10.0),
                   child: Column(

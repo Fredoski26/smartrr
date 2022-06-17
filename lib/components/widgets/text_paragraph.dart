@@ -9,7 +9,7 @@ class TextParagraph extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(bottom: 5.0),
-      child: Text(text),
+      child: SelectableText(text),
     );
   }
 }

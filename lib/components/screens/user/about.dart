@@ -45,7 +45,7 @@ class _AboutState extends State<About> {
                       height: MediaQuery.of(context).size.height,
                       padding: EdgeInsets.symmetric(
                           vertical: 33.0, horizontal: 36.0),
-                      child: Text(
+                      child: SelectableText(
                         _language.aboutSmartrrData,
                         textAlign: TextAlign.start,
                       ),

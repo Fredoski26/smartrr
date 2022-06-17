@@ -6,9 +6,14 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:smartrr/generated/l10n.dart';
 
-class ImpactOfSmartRR extends StatelessWidget {
+class ImpactOfSmartRR extends StatefulWidget {
   ImpactOfSmartRR({Key key}) : super(key: key);
 
+  @override
+  State<ImpactOfSmartRR> createState() => _ImpactOfSmartRRState();
+}
+
+class _ImpactOfSmartRRState extends State<ImpactOfSmartRR> {
   final voaInterviewLink =
       "https://www.voanews.com/a/covid-19-pandemic_nigeria-rape-reporting-app-helps-survivors-avoid-stigma/6202435.html";
 
@@ -54,5 +59,11 @@ class ImpactOfSmartRR extends StatelessWidget {
                         ],
                       )),
             ));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }

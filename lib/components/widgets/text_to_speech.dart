@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_tts/flutter_tts.dart';
@@ -7,10 +9,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 enum TtsState { playing, stopped, paused, continued }
 
 class MyTts extends StatefulWidget {
-  const MyTts({Key key, @required this.text, this.language = "en"})
-      : super(key: key);
+  const MyTts({
+    Key key,
+    @required this.text,
+    this.language = "en",
+    this.scrollController = null,
+  }) : super(key: key);
 
   final String text, language;
+  final ScrollController scrollController;
 
   @override
   State<MyTts> createState() => _MyTtsState();
@@ -36,6 +43,8 @@ class _MyTtsState extends State<MyTts> {
   bool get isAndroid => !kIsWeb && Platform.isAndroid;
   bool get isWeb => kIsWeb;
 
+  Timer _scrollTimer;
+
   initTts() {
     flutterTts = FlutterTts();
 
@@ -46,7 +55,10 @@ class _MyTtsState extends State<MyTts> {
     }
 
     flutterTts.setProgressHandler((text, start, end, word) {
-      print("TEXT: $text\nSTART: $start \nEND: $end \nWORD: $word");
+      // print("TEXT: $text");
+      // print("START: $start ");
+      // print("END: $end ");
+      // print("WORD: $word");
     });
 
     flutterTts.setStartHandler(() {
@@ -59,6 +71,7 @@ class _MyTtsState extends State<MyTts> {
       setState(() {
         ttsState = TtsState.stopped;
       });
+      _stopTimer();
     });
 
     flutterTts.setCancelHandler(() {
@@ -82,7 +95,6 @@ class _MyTtsState extends State<MyTts> {
 
       flutterTts.setErrorHandler((msg) {
         setState(() {
-          print("error: $msg");
           ttsState = TtsState.stopped;
         });
       });
@@ -102,7 +114,18 @@ class _MyTtsState extends State<MyTts> {
 
   Future _speak() async {
     await _setLanguage(widget.language);
+
+    if (widget.scrollController != null) {
+      int speed = widget.text.length ~/ widget.text.split(" ").length;
+
+      _scrollTimer =
+          Timer.periodic(new Duration(seconds: (speed ~/ 2) - 1), (timer) {
+        widget.scrollController
+            .jumpTo(widget.scrollController.offset + (speed * 2));
+      });
+    }
     var result = await flutterTts.speak(widget.text);
+
     if (result == 1) setState(() => ttsState = TtsState.playing);
   }
 
@@ -112,7 +135,13 @@ class _MyTtsState extends State<MyTts> {
 
   Future _stop() async {
     var result = await flutterTts.stop();
-    if (result == 1) setState(() => ttsState = TtsState.stopped);
+    _stopTimer();
+  }
+
+  void _stopTimer() {
+    if (widget.scrollController != null && _scrollTimer != null) {
+      _scrollTimer.cancel();
+    }
   }
 
   @override
@@ -124,6 +153,8 @@ class _MyTtsState extends State<MyTts> {
   @override
   void dispose() {
     flutterTts.stop();
+    _stopTimer();
+
     super.dispose();
   }
 
@@ -133,12 +164,11 @@ class _MyTtsState extends State<MyTts> {
         ? Container(
             margin: EdgeInsets.symmetric(horizontal: 10.0),
             child: GestureDetector(
-              onTap: () => _speak(),
+              onTap: _speak,
               child: SvgPicture.asset("assets/icons/tts_icon.svg",
                   semanticsLabel: "Read aloud"),
             ),
           )
-        : IconButton(
-            onPressed: () => _stop(), icon: Icon(Icons.stop_circle_rounded));
+        : IconButton(onPressed: _stop, icon: Icon(Icons.stop_circle_rounded));
   }
 }
