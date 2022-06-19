@@ -30,6 +30,7 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController dobController;
   TextEditingController locationController;
   TextEditingController ageController;
+
   String errorMsg;
   bool _isMale = true;
   bool isLoading = false;
@@ -217,21 +218,8 @@ class _SignUpPageState extends State<SignUpPage> {
                             ),
                             smartTextField(
                               title: _language.location,
-                              readOnly: true,
                               isForm: true,
                               controller: locationController,
-                              onTap: () async {
-                                String selectedAddress = await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            SelectLocationMap()));
-                                setState(() {
-                                  if (selectedAddress != null)
-                                    locationController.text =
-                                        '$selectedAddress';
-                                });
-                              },
                             ),
                             Text(
                               _language.gender,
@@ -254,7 +242,6 @@ class _SignUpPageState extends State<SignUpPage> {
                                       Checkbox(
                                         value: _isMale,
                                         onChanged: (val) {
-                                          print('===> $val');
                                           if (val)
                                             setState(() => _isMale = true);
                                           else
@@ -279,7 +266,6 @@ class _SignUpPageState extends State<SignUpPage> {
                                       Checkbox(
                                         value: !_isMale,
                                         onChanged: (val) {
-                                          print('===> $val');
                                           if (val)
                                             setState(() => _isMale = false);
                                           else

@@ -16,105 +16,6 @@ class AuthService {
     }
   }
 
-  static Future signUpWithPhoneWeb(String phoneNumber) async {
-    _auth.signInWithPhoneNumber(phoneNumber);
-  }
-
-  static Future signInWithPhone(
-      {@required String phoneNumber, @required BuildContext context}) async {
-    await _auth.verifyPhoneNumber(
-      phoneNumber: phoneNumber,
-      verificationCompleted: (PhoneAuthCredential credential) async {
-        await _handleSignInWithPhone(credential: credential, context: context);
-      },
-      verificationFailed: (FirebaseAuthException e) {
-        print(e.toString());
-        switch (e.code) {
-          case 'invalid-phone-number':
-            showToast(
-                msg: 'The provided phone number is not valid', type: "error");
-            break;
-          default:
-            showToast(msg: e.message, type: "error");
-            break;
-        }
-      },
-      codeSent: (String verificationId, int resendToken) async {
-        final formKey = GlobalKey<FormState>();
-        final pinController = TextEditingController();
-
-        showDialog(
-          context: context,
-          builder: (context) => Dialog(
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Verification Code",
-                        style: TextStyle().copyWith(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 2.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          "Enter the verification code sent to your mobile phone",
-                          textAlign: TextAlign.center,
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 5.0),
-                  Form(
-                      key: formKey,
-                      child: Pinput(
-                          length: 6,
-                          controller: pinController,
-                          onSubmitted: (pin) async {
-                            PhoneAuthCredential credential =
-                                PhoneAuthProvider.credential(
-                                    verificationId: verificationId,
-                                    smsCode: pin);
-
-                            await _handleSignInWithPhone(
-                                context: context, credential: credential);
-                          },
-                          validator: (pin) => pin.length < 6 || pin.length > 6
-                              ? "Invalid code"
-                              : null)),
-                  SizedBox(height: 5.0),
-                  ElevatedButton(
-                      onPressed: () async {
-                        if (formKey.currentState.validate()) {
-                          PhoneAuthCredential credential =
-                              PhoneAuthProvider.credential(
-                                  verificationId: verificationId,
-                                  smsCode: pinController.text);
-
-                          await _handleSignInWithPhone(
-                              context: context, credential: credential);
-                        }
-                      },
-                      child: Text("Continue"))
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {},
-    );
-  }
-
   static Future signUpWithPhoneMobile({
     @required String phoneNumber,
     @required BuildContext context,
@@ -220,16 +121,6 @@ class AuthService {
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
     );
-  }
-
-  static _handleSignInWithPhone(
-      {PhoneAuthCredential credential, BuildContext context}) async {
-    UserCredential userCredential =
-        await _auth.signInWithCredential(credential);
-    await setUserIdPref(userId: userCredential.user.uid);
-
-    Navigator.pushNamedAndRemoveUntil(
-        context, '/userMain', ModalRoute.withName('Dashboard'));
   }
 
   static Future _handlePhoneAuthCredentials({

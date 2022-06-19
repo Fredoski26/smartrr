@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 import 'package:smartrr/components/widgets/circular_progress.dart';
 import 'package:smartrr/components/widgets/show_action.dart';
@@ -22,6 +23,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final _auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
   final mScaffoldState = GlobalKey<ScaffoldState>();
   TextEditingController emailController;
@@ -420,12 +422,121 @@ class _LoginPageState extends State<LoginPage> {
     if (_formKey.currentState.validate()) {
       setState(() => isLoading = true);
 
-      await AuthService.signInWithPhone(
-              phoneNumber: number.toString(), context: context)
-          .then((_) {
-        setState(() => isLoading = false);
-      });
+      await _auth.verifyPhoneNumber(
+        phoneNumber: number.toString(),
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          await _handleSignInWithPhone(
+              credential: credential, context: context);
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          setState(() => isLoading = false);
+          switch (e.code) {
+            case 'invalid-phone-number':
+              showToast(
+                  msg: 'The provided phone number is not valid', type: "error");
+              break;
+            default:
+              showToast(msg: e.message, type: "error");
+              break;
+          }
+        },
+        codeSent: (String verificationId, int resendToken) async {
+          setState(() => isLoading = false);
+          final formKey = GlobalKey<FormState>();
+          final pinController = TextEditingController();
+
+          showDialog(
+            context: context,
+            builder: (context) => Dialog(
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
+                child: isLoading
+                    ? Center(child: CircularProgressIndicator())
+                    : Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Verification Code",
+                                style: TextStyle().copyWith(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 2.0),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  "Enter the verification code sent to your mobile phone",
+                                  textAlign: TextAlign.center,
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(height: 5.0),
+                          Form(
+                              key: formKey,
+                              child: Pinput(
+                                  length: 6,
+                                  controller: pinController,
+                                  onSubmitted: (pin) async {
+                                    PhoneAuthCredential credential =
+                                        PhoneAuthProvider.credential(
+                                            verificationId: verificationId,
+                                            smsCode: pin);
+
+                                    await _handleSignInWithPhone(
+                                        context: context,
+                                        credential: credential);
+                                  },
+                                  validator: (pin) =>
+                                      pin.length < 6 || pin.length > 6
+                                          ? "Invalid code"
+                                          : null)),
+                          SizedBox(height: 5.0),
+                          ElevatedButton(
+                              onPressed: () async {
+                                if (formKey.currentState.validate()) {
+                                  setState(() => isLoading = true);
+                                  try {
+                                    PhoneAuthCredential credential =
+                                        PhoneAuthProvider.credential(
+                                            verificationId: verificationId,
+                                            smsCode: pinController.text);
+
+                                    await _handleSignInWithPhone(
+                                        context: context,
+                                        credential: credential);
+                                  } catch (e) {
+                                    showToast(msg: e.toString(), type: "error");
+                                    Navigator.pop(context);
+                                  }
+                                }
+                              },
+                              child: Text("Continue"))
+                        ],
+                      ),
+              ),
+            ),
+          );
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {},
+      );
     }
+  }
+
+  _handleSignInWithPhone(
+      {PhoneAuthCredential credential, BuildContext context}) async {
+    UserCredential userCredential =
+        await _auth.signInWithCredential(credential);
+    await setUserIdPref(userId: userCredential.user.uid);
+
+    Navigator.pushNamedAndRemoveUntil(
+        context, '/userMain', ModalRoute.withName('Dashboard'));
   }
 
   _loginUser({String userId}) {

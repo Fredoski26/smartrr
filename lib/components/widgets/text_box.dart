@@ -166,7 +166,7 @@ class CustomPhoneTextBox extends StatelessWidget {
               keyboardType: keyboardType,
               obscureText: obscureText,
               readOnly: readOnly,
-              maxLength: 13,
+              maxLength: 14,
               validator: (value) {
                 if (value.isEmpty && required) {
                   return errorText;
@@ -202,10 +202,11 @@ class CustomPhoneTextBox extends StatelessWidget {
               keyboardType: keyboardType,
               obscureText: obscureText,
               readOnly: readOnly,
-              maxLength: 10,
+              maxLength: 14,
               style: TextStyle(color: textColor, fontWeight: FontWeight.w700),
               controller: controller,
               decoration: InputDecoration(
+                  counterText: counterText,
                   prefixIcon: prefix,
                   fillColor: Colors.green,
                   contentPadding:

@@ -6,7 +6,6 @@ import 'package:smartrr/components/widgets/auth_container.dart';
 import 'package:smartrr/models/country.dart';
 import 'package:smartrr/models/location.dart';
 import 'package:smartrr/services/country_service.dart';
-import 'package:smartrr/services/database_service.dart';
 import 'package:smartrr/utils/colors.dart';
 import '../../widgets/ask_action.dart';
 import '../../widgets/show_action.dart';
@@ -35,9 +34,6 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
   TextEditingController cFocalEmail;
   TextEditingController cFocalPhone;
   TextEditingController cFocalDesignation;
-  TextEditingController cHow;
-  TextEditingController cCriteria;
-  TextEditingController cComments;
 
   String errorMsg;
   double _hPadding = 18.0;
@@ -85,9 +81,6 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
     cFocalEmail = TextEditingController();
     cFocalPhone = TextEditingController();
     cFocalDesignation = TextEditingController();
-    cHow = TextEditingController();
-    cCriteria = TextEditingController();
-    cComments = TextEditingController();
 
     _getDataFromFirebase();
     _getCountries();
@@ -172,7 +165,6 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
                     _workHours(),
                     _focalPerson(),
                     _services(),
-                    _details(),
                     _locations(),
                   ],
                 )),
@@ -202,11 +194,8 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
           'closeTime': cCloseTime.text,
           'focalName': cFocalName.text,
           'focalEmail': cFocalEmail.text,
-          'focalPhone': '234${cFocalPhone.text}',
+          'focalPhone': cFocalPhone.text,
           'focalDesignation': cFocalDesignation.text,
-          'how': cHow.text,
-          'criteria': cCriteria.text,
-          'comments': cComments.text,
           'servicesAvailable': FieldValue.arrayUnion(_selectedServicesList),
           'status': 0,
           'locationId': _currentLocation.id,
@@ -498,17 +487,6 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
                 title: 'Phone No',
                 controller: cFocalPhone,
                 isPhone: true,
-                prefix: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 14, horizontal: 4),
-                  child: Text(
-                    '+234',
-                    style: TextStyle(
-                      color: lightGrey,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
                 textInputType: TextInputType.phone),
             smartTextField(
               title: 'Designation',
@@ -552,42 +530,6 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
                   ],
                 );
               },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  _details() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: _hPadding),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              'Info',
-              style: TextStyle()
-                  .copyWith(fontSize: 40, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Text("How to access Services"),
-            smartTextField(
-              title: "",
-              controller: cHow,
-            ),
-            Text("Criteria to access services"),
-            smartTextField(
-              title: '',
-              controller: cCriteria,
-            ),
-            Text("Comments"),
-            smartTextField(
-              title: '',
-              controller: cComments,
             ),
           ],
         ),

@@ -120,8 +120,11 @@ class _MyTtsState extends State<MyTts> {
 
       _scrollTimer =
           Timer.periodic(new Duration(seconds: (speed ~/ 2) - 1), (timer) {
-        widget.scrollController
-            .jumpTo(widget.scrollController.offset + (speed * 2));
+        if (widget.scrollController.position.pixels !=
+            widget.scrollController.position.maxScrollExtent) {
+          widget.scrollController
+              .jumpTo(widget.scrollController.offset + (speed * 2));
+        }
       });
     }
     var result = await flutterTts.speak(widget.text);
