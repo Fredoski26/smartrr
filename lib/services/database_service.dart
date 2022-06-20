@@ -15,6 +15,15 @@ class DatabaseService {
   CollectionReference stateCollection =
       FirebaseFirestore.instance.collection("state");
 
+  CollectionReference faqCollection =
+      FirebaseFirestore.instance.collection("faq");
+
+  Future<List<QueryDocumentSnapshot<Object>>> getFaqs() async {
+    final docs = await faqCollection.get();
+
+    return docs.docs;
+  }
+
   Future updateUser(Map update) async {
     try {
       HashMap<String, Object> userData = HashMap.from(update);

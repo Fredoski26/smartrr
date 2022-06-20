@@ -65,8 +65,8 @@ class _SmartSpeechToTextState extends State<SmartSpeechToText> {
         _hasSpeech = hasSpeech;
       });
     } catch (e) {
+      showToast(msg: "Speech recognition failed: ${e.toString()}");
       setState(() {
-        lastError = 'Speech recognition failed: ${e.toString()}';
         _hasSpeech = false;
       });
     }
@@ -162,7 +162,8 @@ class _SmartSpeechToTextState extends State<SmartSpeechToText> {
   void resultListener(SpeechRecognitionResult result) {
     _recognizedWords.value = result.recognizedWords;
     if (result.finalResult) {
-      Navigator.pop(context);
+      if (mounted) Navigator.pop(context);
+
       switch (result.recognizedWords) {
         case "open settings":
           showToast(msg: "Opening settings");
@@ -206,11 +207,14 @@ class _SmartSpeechToTextState extends State<SmartSpeechToText> {
       case "error_no_match":
         showToast(msg: "No match", type: "error");
         break;
+      case "error_speech_timeout":
+        showToast(msg: "Please say something");
+        break;
       default:
         showToast(msg: error.errorMsg, type: "error");
         break;
     }
-    Navigator.pop(context);
+    if (mounted) Navigator.pop(context);
   }
 
   void statusListener(String status) {
@@ -223,22 +227,9 @@ class _SmartSpeechToTextState extends State<SmartSpeechToText> {
     }
   }
 
-  void _switchLang(selectedVal) {
-    setState(() {
-      _currentLocaleId = selectedVal;
-    });
-    print(selectedVal);
-  }
-
   void _logEvent(String eventDescription) {
     var eventTime = DateTime.now().toIso8601String();
     print('$eventTime $eventDescription');
-  }
-
-  void _switchLogging(bool val) {
-    setState(() {
-      _logEvents = val ?? false;
-    });
   }
 
   @override
