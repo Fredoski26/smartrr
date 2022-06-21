@@ -6,7 +6,6 @@ import 'package:smartrr/components/widgets/auth_container.dart';
 import 'package:smartrr/provider/language_provider.dart';
 import 'package:smartrr/utils/colors.dart';
 import '../../widgets/smart_text_field.dart';
-import 'select_location_map.dart';
 import '../../widgets/circular_progress.dart';
 import 'package:smartrr/generated/l10n.dart';
 import 'package:smartrr/utils/utils.dart';
@@ -21,7 +20,6 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
-  FirebaseAuth _auth;
 
   TextEditingController nameController;
   TextEditingController emailController;
@@ -41,7 +39,6 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   void initState() {
     super.initState();
-    _auth = FirebaseAuth.instance;
     nameController = TextEditingController();
     emailController = TextEditingController();
     passwordController = TextEditingController();
@@ -150,7 +147,6 @@ class _SignUpPageState extends State<SignUpPage> {
                             Text(
                               _language.signUp.toUpperCase(),
                               style: TextStyle(
-                                color: Color(0xFF444444),
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -188,8 +184,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                   selectorType:
                                       PhoneInputSelectorType.BOTTOM_SHEET,
                                 ),
-                                selectorTextStyle:
-                                    TextStyle(color: Colors.black),
+                                selectorTextStyle: Theme.of(context)
+                                    .inputDecorationTheme
+                                    .hintStyle,
                                 initialValue: number,
                                 textFieldController: phoneNumberController,
                                 inputBorder: InputBorder.none,

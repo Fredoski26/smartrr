@@ -108,7 +108,6 @@ class _ReportOrHistoryPageState extends State<ReportOrHistoryPage> {
                     Text(
                       S.current.reportFor,
                       style: TextStyle(
-                        color: Colors.black,
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),

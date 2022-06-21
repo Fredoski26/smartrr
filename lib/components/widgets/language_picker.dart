@@ -30,11 +30,8 @@ class _LanguagePickerState extends State<LanguagePicker> {
                         Text(
                           locale.languageCode == "en" ? "English" : "Hausa",
                           style: TextStyle(
-                              fontSize: 16.0,
-                              color:
-                                  (locale.languageCode == langNotifier.locale)
-                                      ? Colors.blue
-                                      : Colors.black),
+                            fontSize: 16.0,
+                          ),
                         )
                       ],
                     ));

@@ -26,6 +26,9 @@ class _AuthContainerState extends State<AuthContainer> {
 
   @override
   Widget build(BuildContext context) {
+    final _containerWidth = MediaQuery.of(context).size.width -
+        (MediaQuery.of(context).size.width / 100 * 10);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       key: mScaffoldState,
@@ -52,8 +55,8 @@ class _AuthContainerState extends State<AuthContainer> {
                 Container(
                   margin: EdgeInsets.only(
                       top: widget.isOrgSignUp ? 55 : 123 - _appBarHeight),
-                  padding: EdgeInsets.all(30),
-                  width: 318,
+                  padding: EdgeInsets.all(20),
+                  width: _containerWidth,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(22),
                     color: notifier.darkTheme ? darkGrey : Colors.white,
@@ -75,8 +78,8 @@ class _AuthContainerState extends State<AuthContainer> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  height: 109.0,
-                  width: 109.0,
+                  height: 90.0,
+                  width: 90.0,
                   margin: EdgeInsets.only(
                       top: widget.isOrgSignUp ? 0.0 : 63.0 - _appBarHeight),
                   child: Image.asset("assets/logo.png"),

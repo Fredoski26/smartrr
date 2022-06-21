@@ -24,7 +24,7 @@ Future askAction(
           borderRadius: BorderRadius.all(Radius.circular(10))),
       title: Text(
         text,
-        style: TextStyle(fontSize: 16, color: darkGrey),
+        style: TextStyle(fontSize: 16),
       ),
       actions: <Widget>[cancelButton, continueButton],
     ),

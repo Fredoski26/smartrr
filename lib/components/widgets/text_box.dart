@@ -26,7 +26,7 @@ class CustomTextBox extends StatelessWidget {
       {this.focusNode,
       this.placeholderText,
       this.borderColor = const Color(0xFFA59B9B),
-      this.textColor = const Color(0xFFA59B9B),
+      this.textColor = null,
       this.placeholderColor = Colors.white,
       this.textboxBackgroundColor = Colors.transparent,
       this.controller,
@@ -137,7 +137,7 @@ class CustomPhoneTextBox extends StatelessWidget {
       this.placeholderText,
       this.prefix,
       this.borderColor = const Color(0xFFA59B9B),
-      this.textColor = const Color(0xFFA59B9B),
+      this.textColor = Colors.white,
       this.placeholderColor = const Color(0xFFA59B9B),
       this.textboxBackgroundColor = Colors.transparent,
       this.controller,
@@ -203,7 +203,7 @@ class CustomPhoneTextBox extends StatelessWidget {
               obscureText: obscureText,
               readOnly: readOnly,
               maxLength: 14,
-              style: TextStyle(color: textColor, fontWeight: FontWeight.w700),
+              style: TextStyle(color: textColor),
               controller: controller,
               decoration: InputDecoration(
                   counterText: counterText,
@@ -221,8 +221,7 @@ class CustomPhoneTextBox extends StatelessWidget {
                       borderSide: BorderSide(color: borderColor, width: 1),
                       borderRadius: BorderRadius.all(Radius.circular(33))),
                   hintText: placeholderText,
-                  hintStyle: TextStyle(
-                      color: placeholderColor, fontWeight: FontWeight.w700)),
+                  hintStyle: TextStyle(color: placeholderColor)),
             ),
     );
   }

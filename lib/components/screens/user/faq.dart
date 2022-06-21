@@ -22,7 +22,7 @@ class FrequentlyAskedQuestions extends StatelessWidget {
                   );
                 } else if (snapshot.hasError) {
                   return Center(
-                    child: Text("Error"),
+                    child: Text("Something went wrong"),
                   );
                 } else {
                   return Accordion(

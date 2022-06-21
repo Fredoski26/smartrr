@@ -49,6 +49,7 @@ final ThemeData appTheme = ThemeData(
 final ThemeData darkTheme = ThemeData(
   primarySwatch: Colors.orange,
   primaryColor: primaryColor,
+  canvasColor: lightGrey,
   appBarTheme: appTheme.appBarTheme.copyWith(color: primaryColor, elevation: 0),
   scaffoldBackgroundColor: darkGrey,
   textTheme: appTheme.textTheme
@@ -86,4 +87,12 @@ final ThemeData darkTheme = ThemeData(
     ),
   ),
   listTileTheme: ListTileThemeData(iconColor: Colors.white),
+  popupMenuTheme: PopupMenuThemeData(
+      textStyle: TextStyle().copyWith(color: Colors.white), color: darkGrey),
+  bottomSheetTheme: BottomSheetThemeData()
+      .copyWith(backgroundColor: darkGrey, modalBackgroundColor: darkGrey),
+  dialogBackgroundColor: darkGrey,
+  inputDecorationTheme: InputDecorationTheme()
+      .copyWith(hintStyle: TextStyle().copyWith(color: lightGrey)),
+  backgroundColor: darkGrey,
 );

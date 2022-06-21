@@ -20,7 +20,7 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  String country = "-";
+  String country = "";
 
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _confirmPasswordController = TextEditingController();
@@ -103,12 +103,18 @@ class _SettingsState extends State<Settings> {
                                     _language.country,
                                     softWrap: false,
                                   ),
-                                  trailing: Text(
-                                    country,
-                                    textAlign: TextAlign.right,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.fade,
-                                  ),
+                                  trailing: country.isEmpty
+                                      ? Container(
+                                          child: CircularProgressIndicator(),
+                                          height: 20.0,
+                                          width: 20.0,
+                                        )
+                                      : Text(
+                                          country,
+                                          textAlign: TextAlign.right,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.fade,
+                                        ),
                                   onTap: () => Navigator.of(context)
                                       .push(MaterialPageRoute(
                                           builder: (context) => SelectCountry(

@@ -7,7 +7,6 @@ import 'package:smartrr/components/widgets/circular_progress.dart';
 import 'package:smartrr/components/widgets/show_action.dart';
 import 'package:smartrr/components/widgets/smart_text_field.dart';
 import 'package:smartrr/provider/language_provider.dart';
-import 'package:smartrr/services/auth_service.dart';
 import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/utils/utils.dart';
 import '../../widgets/auth_container.dart';
@@ -240,14 +239,12 @@ class _LoginPageState extends State<LoginPage> {
               border: Border.all(width: 1, color: lightGrey)),
           child: InternationalPhoneNumberInput(
             onInputChanged: (PhoneNumber val) {
-              setState(() {
-                number = val;
-              });
+              number = val;
             },
             selectorConfig: SelectorConfig(
               selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
             ),
-            selectorTextStyle: TextStyle(color: Colors.black),
+            selectorTextStyle: Theme.of(context).inputDecorationTheme.hintStyle,
             initialValue: number,
             textFieldController: phoneNumberController,
             inputBorder: InputBorder.none,
@@ -419,11 +416,13 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _loginWithPhone() async {
+    print(
+        "PHONE $number DIAL_CODE: ${number.dialCode} ISO_CODE: ${number.isoCode}");
     if (_formKey.currentState.validate()) {
       setState(() => isLoading = true);
 
       await _auth.verifyPhoneNumber(
-        phoneNumber: number.toString(),
+        phoneNumber: number.phoneNumber,
         verificationCompleted: (PhoneAuthCredential credential) async {
           await _handleSignInWithPhone(
               credential: credential, context: context);

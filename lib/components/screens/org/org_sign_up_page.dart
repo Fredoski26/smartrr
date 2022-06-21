@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:smartrr/components/widgets/auth_container.dart';
 import 'package:smartrr/models/country.dart';
 import 'package:smartrr/models/location.dart';
@@ -34,6 +35,10 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
   TextEditingController cFocalEmail;
   TextEditingController cFocalPhone;
   TextEditingController cFocalDesignation;
+  TextEditingController phoneNumberController;
+
+  String initialCountry = 'NG';
+  PhoneNumber number = PhoneNumber(isoCode: 'NG');
 
   String errorMsg;
   double _hPadding = 18.0;
@@ -81,6 +86,7 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
     cFocalEmail = TextEditingController();
     cFocalPhone = TextEditingController();
     cFocalDesignation = TextEditingController();
+    phoneNumberController = TextEditingController();
 
     _getDataFromFirebase();
     _getCountries();
@@ -186,7 +192,7 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
         await FirebaseFirestore.instance.collection('organizations').doc().set({
           'name': cName.text,
           'type': _orgType,
-          'telephone': cTelephone.text,
+          'telephone': number.phoneNumber,
           'orgEmail': cOrgEmail.text,
           'password': cPassword.text,
           'language': cLanguage.text,
@@ -210,7 +216,6 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
             func: _goBack,
             context: context,
           );
-          debugPrint("I am back ===> }");
         });
       });
     } catch (error) {
@@ -328,6 +333,9 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+              SizedBox(
+                height: 20,
+              ),
               Text(
                 'REGISTER',
                 style: TextStyle(
@@ -348,7 +356,9 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
                   Expanded(
                     child: DropdownButtonHideUnderline(
                       child: DropdownButtonFormField(
-                          decoration: InputDecoration(
+                          decoration: InputDecoration().copyWith(
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 25.0, vertical: 6.0),
                             enabledBorder: OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(50)),
@@ -362,7 +372,12 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
                                     BorderRadius.all(Radius.circular(50)),
                                 borderSide: BorderSide(color: Colors.red)),
                           ),
-                          hint: Expanded(child: Text(_orgTypeLabel)),
+                          hint: Text(
+                            _orgTypeLabel,
+                            style: Theme.of(context)
+                                .inputDecorationTheme
+                                .hintStyle,
+                          ),
                           elevation: 0,
                           items: _orgTypes,
                           validator: (val) =>
@@ -377,11 +392,28 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
                 ],
               ),
               SizedBox(height: 20.0),
-              smartTextField(
-                title: 'Telephone',
-                controller: cTelephone,
-                textInputType: TextInputType.phone,
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 0),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                    border: Border.all(width: 1, color: lightGrey)),
+                child: InternationalPhoneNumberInput(
+                  onInputChanged: (PhoneNumber val) {
+                    number = val;
+                  },
+                  selectorConfig: SelectorConfig(
+                    selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                  ),
+                  selectorTextStyle:
+                      Theme.of(context).inputDecorationTheme.hintStyle,
+                  initialValue: number,
+                  textFieldController: phoneNumberController,
+                  inputBorder: InputBorder.none,
+                  selectorButtonOnErrorPadding: 0,
+                  spaceBetweenSelectorAndTextField: 0,
+                ),
               ),
+              SizedBox(height: 20.0),
               smartTextField(
                 title: 'Organization Email',
                 controller: cOrgEmail,
@@ -654,7 +686,7 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
           ),
         );
       }
-      setState(() => isLoading = false);
+      if (mounted) setState(() => isLoading = false);
     });
   }
 
@@ -781,5 +813,11 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
       },
       cancelFunc: () => Navigator.pop(context),
     );
+  }
+
+  @override
+  void dispose() {
+    phoneNumberController.dispose();
+    super.dispose();
   }
 }
