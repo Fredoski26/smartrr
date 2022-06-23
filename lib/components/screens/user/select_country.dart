@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:smartrr/generated/l10n.dart';
 import 'package:smartrr/services/country_service.dart';
 import 'package:smartrr/services/database_service.dart';
-import 'package:smartrr/utils/utils.dart';
 
 class SelectCountry extends StatefulWidget {
   const SelectCountry({Key key, this.userCountry}) : super(key: key);
@@ -83,9 +82,7 @@ class _SelectCountryState extends State<SelectCountry> {
     setState(() {
       _isLoading = true;
     });
-    final String uId = await getUserIdPref();
-
-    await DatabaseService(uId: uId).updateUser({"country": country}).then(
+    await DatabaseService().updateUser({"country": country}).then(
         (value) => Navigator.of(context).pop());
   }
 }

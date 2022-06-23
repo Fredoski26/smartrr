@@ -85,10 +85,10 @@ class S {
     );
   }
 
-  /// `Enter the email address associated with your Amrt RR account aand we will send a reset password link`
+  /// `Enter the email address associated with your Smart RR account and we will send a reset password link`
   String get forgotPasswordDescription {
     return Intl.message(
-      'Enter the email address associated with your Amrt RR account aand we will send a reset password link',
+      'Enter the email address associated with your Smart RR account and we will send a reset password link',
       name: 'forgotPasswordDescription',
       desc: '',
       args: [],
@@ -745,10 +745,10 @@ class S {
     );
   }
 
-  /// `Access to modern contraception and reproductive health, including access to safe abortion, is an essential aspect of gender equality, economic development, humanitarian response,and progress for all.`
+  /// `Access to modern contraception and reproductive health, including access to safe abortion, is an essential aspect of gender equality, economic development, humanitarian response and progress for all.`
   String get srhrParagraph2 {
     return Intl.message(
-      'Access to modern contraception and reproductive health, including access to safe abortion, is an essential aspect of gender equality, economic development, humanitarian response,and progress for all.',
+      'Access to modern contraception and reproductive health, including access to safe abortion, is an essential aspect of gender equality, economic development, humanitarian response and progress for all.',
       name: 'srhrParagraph2',
       desc: '',
       args: [],
@@ -815,10 +815,10 @@ class S {
     );
   }
 
-  /// `Is a state of physical, emotional,  mental, and social wellbeing in relation to sexual feelings, considerations, attractions and practices towards others Sexuality. It encompasses the possibility of pleasurable and safe sexual experiences, free of coercion, discrimination, and violence. For sexual health to be attained and maintained, the sexual rights of all persons must be respected, protected, and fulfilled.`
+  /// `Is a state of physical, emotional,  mental, and social wellbeing in relation to sexual feelings, considerations, attractions and practices towards others Sexuality. It encompasses the possibility of pleasurable and safe sexual experiences, free of coercion, discrimination and violence. For sexual health to be attained and maintained, the sexual rights of all persons must be respected, protected, and fulfilled.`
   String get srhrDefinition1Body {
     return Intl.message(
-      'Is a state of physical, emotional,  mental, and social wellbeing in relation to sexual feelings, considerations, attractions and practices towards others Sexuality. It encompasses the possibility of pleasurable and safe sexual experiences, free of coercion, discrimination, and violence. For sexual health to be attained and maintained, the sexual rights of all persons must be respected, protected, and fulfilled.',
+      'Is a state of physical, emotional,  mental, and social wellbeing in relation to sexual feelings, considerations, attractions and practices towards others Sexuality. It encompasses the possibility of pleasurable and safe sexual experiences, free of coercion, discrimination and violence. For sexual health to be attained and maintained, the sexual rights of all persons must be respected, protected, and fulfilled.',
       name: 'srhrDefinition1Body',
       desc: '',
       args: [],

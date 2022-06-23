@@ -44,7 +44,9 @@ class CustomDrawer extends StatelessWidget {
                     ),
                   ),
             accountName: Text(_currentUser.displayName),
-            accountEmail: Text(_currentUser.phoneNumber)),
+            accountEmail: Text(_currentUser.phoneNumber == null
+                ? _currentUser.email
+                : _currentUser.phoneNumber)),
         ListTile(
           leading: Icon(Icons.info_outline_rounded),
           title: Text(_language.aboutSmartRR),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:smartrr/utils/colors.dart';
 
 Future showAction(
     {@required String actionText,
@@ -21,7 +20,7 @@ Future showAction(
           borderRadius: BorderRadius.all(Radius.circular(10))),
       title: Text(
         text,
-        style: TextStyle(fontSize: 16, color: darkGrey),
+        style: TextStyle(fontSize: 16),
       ),
       actions: <Widget>[continueButton],
     ),

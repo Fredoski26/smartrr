@@ -338,7 +338,9 @@ class _LoginPageState extends State<LoginPage> {
             switch (status) {
               // Approved
               case true:
-                _loginUser(userId: users.docs[0].id.toString());
+                _loginUser(
+                    userId: users.docs[0].get("uId"),
+                    userDocId: users.docs[0].id);
                 break;
               // DisApproved
               case false:
@@ -385,7 +387,7 @@ class _LoginPageState extends State<LoginPage> {
                 break;
               // Approved
               case 1:
-                _loginOrg(orgId: orgs.docs[0].id.toString());
+                _loginOrg(orgId: orgs.docs[0].get("uId"));
                 break;
               // DisApproved
               case 2:
@@ -416,8 +418,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _loginWithPhone() async {
-    print(
-        "PHONE $number DIAL_CODE: ${number.dialCode} ISO_CODE: ${number.isoCode}");
     if (_formKey.currentState.validate()) {
       setState(() => isLoading = true);
 
@@ -538,7 +538,7 @@ class _LoginPageState extends State<LoginPage> {
         context, '/userMain', ModalRoute.withName('Dashboard'));
   }
 
-  _loginUser({String userId}) {
+  _loginUser({String userId, String userDocId}) {
     bool _isLoginError = false;
     try {
       FirebaseAuth.instance
@@ -555,7 +555,7 @@ class _LoginPageState extends State<LoginPage> {
         (UserCredential result) {
           setState(() => isLoading = false);
           if (!_isLoginError) {
-            setUserIdPref(userId: userId).then((_) =>
+            setUserIdPref(userId: userId, userDocId: userDocId).then((_) =>
                 Navigator.pushNamedAndRemoveUntil(
                     context, '/userMain', ModalRoute.withName('Dashboard')));
           }

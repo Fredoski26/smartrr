@@ -21,7 +21,7 @@ class OrgSignUpPage extends StatefulWidget {
 
 class _OrgSignUpPageState extends State<OrgSignUpPage> {
   int _stepIndex = 0;
-  int _maxSteps = 5;
+  int _maxSteps = 4;
 
   GlobalKey<FormState> _formKey;
   TextEditingController cName;

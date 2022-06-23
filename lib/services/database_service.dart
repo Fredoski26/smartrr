@@ -5,10 +5,6 @@ import 'package:smartrr/models/location.dart';
 import 'package:smartrr/utils/utils.dart';
 
 class DatabaseService {
-  final String uId;
-
-  DatabaseService({this.uId = ""});
-
   CollectionReference userCollection =
       FirebaseFirestore.instance.collection('users');
 
@@ -26,9 +22,10 @@ class DatabaseService {
 
   Future updateUser(Map update) async {
     try {
+      String userId = await getUserIdPref();
       HashMap<String, Object> userData = HashMap.from(update);
       final id = await userCollection
-          .where("uId", isEqualTo: uId)
+          .where("uId", isEqualTo: userId)
           .get()
           .then((value) => value.docs[0].id);
 
@@ -40,10 +37,7 @@ class DatabaseService {
 
   Future getUser() async {
     try {
-      String userId = uId;
-      if (uId.isEmpty) {
-        userId = await getUserIdPref();
-      }
+      String userId = await getUserIdPref();
       final data = await userCollection
           .where("uId", isEqualTo: userId)
           .get()

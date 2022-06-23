@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:smartrr/components/widgets/circular_progress.dart';
@@ -74,8 +76,31 @@ class _CasesHistoryScreenState extends State<CasesHistoryScreen> {
     );
   }
 
+  _updateCaseUserId({@required String oldUId, @required newUId}) async {
+    FirebaseFirestore.instance
+        .collection("cases")
+        .where("userId", isEqualTo: oldUId)
+        .get()
+        .then((docs) {
+      final batch = FirebaseFirestore.instance.batch();
+
+      docs.docs.forEach((doc) {
+        var docRef = FirebaseFirestore.instance.collection("cases").doc(doc.id);
+
+        HashMap<String, Object> update = HashMap.from({"userId": newUId});
+
+        batch.set(docRef, update, SetOptions(merge: true));
+      });
+
+      batch.commit().then((_) => print("All documents updated"));
+    });
+  }
+
   _getDataFromFirebase() async {
     String userId = await getUserIdPref();
+    String userDocId = await getUserDocIdPref();
+
+    await _updateCaseUserId(oldUId: userDocId, newUId: userId);
     await FirebaseFirestore.instance
         .collection("cases")
         .where('userId', isEqualTo: userId)

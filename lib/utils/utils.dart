@@ -6,10 +6,22 @@ import 'package:smartrr/utils/colors.dart';
 
 enum More { logout }
 
-Future setUserIdPref({String userId}) async {
+Future setUserIdPref({String userId, String userDocId}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.setBool("isUser", true);
   await prefs.setString("userId", userId);
+  await _setUserDocId(userDocId: userDocId);
+}
+
+Future _setUserDocId({String userDocId}) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  await prefs.setString('userDocId', userDocId);
+}
+
+Future getUserDocIdPref() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.getString("userDocId");
 }
 
 Future<String> getUserIdPref() async {

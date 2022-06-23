@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -66,7 +65,7 @@ class _SignUpPageState extends State<SignUpPage> {
             'email': emailController.text,
             'password': passwordController.text,
             'displayName': nameController.text,
-            'phoneNumber': '${number}',
+            'phoneNumber': number.phoneNumber,
             'location': locationController.text,
             'dob': dobController.text,
             'gender': maleOrFemale,
@@ -176,9 +175,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                       Border.all(width: 1, color: lightGrey)),
                               child: InternationalPhoneNumberInput(
                                 onInputChanged: (PhoneNumber val) {
-                                  setState(() {
-                                    number = val;
-                                  });
+                                  number = val;
                                 },
                                 selectorConfig: SelectorConfig(
                                   selectorType:

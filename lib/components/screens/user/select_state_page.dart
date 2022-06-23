@@ -243,8 +243,7 @@ class _SelectStatePageState extends State<SelectStatePage> {
   }
 
   _getDataFromFirebase() async {
-    String uId = await getUserIdPref();
-    DatabaseService(uId: uId)
+    DatabaseService()
         .getUser()
         .then((user) => CountryService.getStates(
             widget.isUser ? user["country"] ?? "Nigeria" : "Nigeria"))
@@ -258,6 +257,7 @@ class _SelectStatePageState extends State<SelectStatePage> {
       });
       setState(() => isLoading = false);
     }).catchError((e) {
+      print("ERROR: ${e.toString()}");
       setState(() => isLoading = false);
       Fluttertoast.showToast(
         msg: "Something went wrong",
