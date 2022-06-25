@@ -105,9 +105,6 @@ class _SelectLocationPageState extends State<SelectLocationPage> {
   }
 
   _getDataFromFirebase() {
-    // CollectionReference stateCollection =
-    //     FirebaseFirestore.instance.collection("state");
-
     DatabaseService().getUser().then((user) {
       String country = user["country"] == null ? "Nigeria" : user["country"];
 
