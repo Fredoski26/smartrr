@@ -73,7 +73,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectCountry" : MessageLookupByLibrary.simpleMessage("Select country"),
     "selectCustomLocation" : MessageLookupByLibrary.simpleMessage("Select Custom Location"),
     "selectDescription" : MessageLookupByLibrary.simpleMessage("Please select a description"),
-    "selectLGA" : MessageLookupByLibrary.simpleMessage("Select LGA"),
+    "selectLocation" : MessageLookupByLibrary.simpleMessage("Select Location"),
     "selectOne" : MessageLookupByLibrary.simpleMessage("Select One"),
     "selectService" : MessageLookupByLibrary.simpleMessage("Select Service Type"),
     "selectServiceProvider" : MessageLookupByLibrary.simpleMessage("Select Service Provider"),

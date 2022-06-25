@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smartrr/components/screens/user/select_service_page.dart';
 import 'package:smartrr/components/screens/user/select_state_page.dart';
 import 'package:smartrr/models/case.dart';
 import 'package:smartrr/services/theme_provider.dart';
@@ -59,15 +60,13 @@ class _CaseFilePageState extends State<CaseFilePage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => SelectStatePage(
-                        isDarkTheme: themeNotifier.darkTheme,
-                        service: widget.caseFile.caseType,
-                        isUser: false,
-                        referredBy: widget.caseFile.orgId,
-                        referredName: widget.caseFile.orgName,
-                        caseId: widget.caseFile.id,
-                      ),
-                    ),
+                        builder: (BuildContext context) => SelectServicePage(
+                              isDarkTheme: themeNotifier.darkTheme,
+                              isUser: false,
+                              referredBy: widget.caseFile.orgId,
+                              referredName: widget.caseFile.orgName,
+                              caseId: widget.caseFile.id,
+                            )),
                   );
                 },
                 label: Text(

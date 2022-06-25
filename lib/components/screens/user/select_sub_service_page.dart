@@ -11,10 +11,21 @@ class SelectSubServicePage extends StatefulWidget {
   final MyLocation selectedService;
   final bool isDarkTheme;
   final String lang;
+  final bool isUser;
+  final String referredBy;
+  final String referredName;
+  final String caseId;
 
-  const SelectSubServicePage(
-      {Key key, this.selectedService, this.isDarkTheme, this.lang = "en"})
-      : super(key: key);
+  const SelectSubServicePage({
+    Key key,
+    this.selectedService,
+    this.isDarkTheme,
+    this.lang = "en",
+    this.isUser,
+    this.referredBy,
+    this.caseId,
+    this.referredName,
+  }) : super(key: key);
 
   @override
   _SelectSubServicePageState createState() => _SelectSubServicePageState();
@@ -68,10 +79,10 @@ class _SelectSubServicePageState extends State<SelectSubServicePage> {
                                     service: subServiceList[index]
                                         .title
                                         .split("_")[1],
-                                    isUser: true,
-                                    referredName: '',
-                                    referredBy: '',
-                                    caseId: '',
+                                    isUser: widget.isUser,
+                                    referredName: widget.referredName,
+                                    referredBy: widget.referredBy,
+                                    caseId: widget.caseId,
                                   ),
                                 ),
                               );

@@ -286,7 +286,6 @@ class _LoginPageState extends State<LoginPage> {
           return Container(
             height: 250,
             padding: EdgeInsets.all(10),
-            color: isDarkTheme ? darkGrey : Colors.white,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -373,8 +372,6 @@ class _LoginPageState extends State<LoginPage> {
               .where('orgEmail', isEqualTo: emailController.text)
               .get()
               .then((orgs) {
-            // debugPrint(
-            //     "ORG ===> ${orgs.docs[0].data['name'].toString()}  ::  Status: ${orgs.docs[0].data['status']}");
             int status = orgs.docs[0].get('status');
             switch (status) {
               // Awaiting
@@ -387,7 +384,7 @@ class _LoginPageState extends State<LoginPage> {
                 break;
               // Approved
               case 1:
-                _loginOrg(orgId: orgs.docs[0].get("uId"));
+                _loginOrg(orgId: orgs.docs[0].id);
                 break;
               // DisApproved
               case 2:
@@ -421,110 +418,122 @@ class _LoginPageState extends State<LoginPage> {
     if (_formKey.currentState.validate()) {
       setState(() => isLoading = true);
 
-      await _auth.verifyPhoneNumber(
-        phoneNumber: number.phoneNumber,
-        verificationCompleted: (PhoneAuthCredential credential) async {
-          await _handleSignInWithPhone(
-              credential: credential, context: context);
-        },
-        verificationFailed: (FirebaseAuthException e) {
-          setState(() => isLoading = false);
-          switch (e.code) {
-            case 'invalid-phone-number':
-              showToast(
-                  msg: 'The provided phone number is not valid', type: "error");
-              break;
-            default:
-              showToast(msg: e.message, type: "error");
-              break;
-          }
-        },
-        codeSent: (String verificationId, int resendToken) async {
-          setState(() => isLoading = false);
-          final formKey = GlobalKey<FormState>();
-          final pinController = TextEditingController();
+      if (await _userExists(number.phoneNumber)) {
+        await _auth.verifyPhoneNumber(
+          phoneNumber: number.phoneNumber,
+          verificationCompleted: (PhoneAuthCredential credential) async {
+            await _handleSignInWithPhone(
+                credential: credential, context: context);
+          },
+          verificationFailed: (FirebaseAuthException e) {
+            setState(() => isLoading = false);
+            switch (e.code) {
+              case 'invalid-phone-number':
+                showToast(
+                    msg: 'The provided phone number is not valid',
+                    type: "error");
+                break;
+              default:
+                showToast(msg: e.message, type: "error");
+                break;
+            }
+          },
+          codeSent: (String verificationId, int resendToken) async {
+            setState(() => isLoading = false);
+            final formKey = GlobalKey<FormState>();
+            final pinController = TextEditingController();
 
-          showDialog(
-            context: context,
-            builder: (context) => Dialog(
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
-                child: isLoading
-                    ? Center(child: CircularProgressIndicator())
-                    : Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Verification Code",
-                                style: TextStyle().copyWith(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 2.0),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  "Enter the verification code sent to your mobile phone",
-                                  textAlign: TextAlign.center,
+            showDialog(
+              context: context,
+              builder: (context) => Dialog(
+                child: Container(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
+                  child: isLoading
+                      ? Center(child: CircularProgressIndicator())
+                      : Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Verification Code",
+                                  style: TextStyle().copyWith(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
                                 ),
-                              )
-                            ],
-                          ),
-                          SizedBox(height: 5.0),
-                          Form(
-                              key: formKey,
-                              child: Pinput(
-                                  length: 6,
-                                  controller: pinController,
-                                  onSubmitted: (pin) async {
-                                    PhoneAuthCredential credential =
-                                        PhoneAuthProvider.credential(
-                                            verificationId: verificationId,
-                                            smsCode: pin);
+                              ],
+                            ),
+                            SizedBox(height: 2.0),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    "Enter the verification code sent to your mobile phone",
+                                    textAlign: TextAlign.center,
+                                  ),
+                                )
+                              ],
+                            ),
+                            SizedBox(height: 5.0),
+                            Form(
+                                key: formKey,
+                                child: Pinput(
+                                    length: 6,
+                                    controller: pinController,
+                                    onSubmitted: (pin) async {
+                                      PhoneAuthCredential credential =
+                                          PhoneAuthProvider.credential(
+                                              verificationId: verificationId,
+                                              smsCode: pin);
 
-                                    await _handleSignInWithPhone(
-                                        context: context,
-                                        credential: credential);
-                                  },
-                                  validator: (pin) =>
-                                      pin.length < 6 || pin.length > 6
-                                          ? "Invalid code"
-                                          : null)),
-                          SizedBox(height: 5.0),
-                          ElevatedButton(
-                              onPressed: () async {
-                                if (formKey.currentState.validate()) {
-                                  setState(() => isLoading = true);
-                                  try {
-                                    PhoneAuthCredential credential =
-                                        PhoneAuthProvider.credential(
-                                            verificationId: verificationId,
-                                            smsCode: pinController.text);
+                                      await _handleSignInWithPhone(
+                                          context: context,
+                                          credential: credential);
+                                    },
+                                    validator: (pin) =>
+                                        pin.length < 6 || pin.length > 6
+                                            ? "Invalid code"
+                                            : null)),
+                            SizedBox(height: 5.0),
+                            ElevatedButton(
+                                onPressed: () async {
+                                  if (formKey.currentState.validate()) {
+                                    setState(() => isLoading = true);
+                                    try {
+                                      PhoneAuthCredential credential =
+                                          PhoneAuthProvider.credential(
+                                              verificationId: verificationId,
+                                              smsCode: pinController.text);
 
-                                    await _handleSignInWithPhone(
-                                        context: context,
-                                        credential: credential);
-                                  } catch (e) {
-                                    showToast(msg: e.toString(), type: "error");
-                                    Navigator.pop(context);
+                                      await _handleSignInWithPhone(
+                                          context: context,
+                                          credential: credential);
+                                    } catch (e) {
+                                      showToast(
+                                          msg: e.toString(), type: "error");
+                                      Navigator.pop(context);
+                                    }
                                   }
-                                }
-                              },
-                              child: Text("Continue"))
-                        ],
-                      ),
+                                },
+                                child: Text("Continue"))
+                          ],
+                        ),
+                ),
               ),
-            ),
-          );
-        },
-        codeAutoRetrievalTimeout: (String verificationId) {},
-      );
+            );
+          },
+          codeAutoRetrievalTimeout: (String verificationId) {},
+        );
+      } else {
+        setState(() {
+          errorMsg = "Account does not exist";
+          isLoading = false;
+        });
+        _showException();
+      }
     }
   }
 
@@ -532,10 +541,27 @@ class _LoginPageState extends State<LoginPage> {
       {PhoneAuthCredential credential, BuildContext context}) async {
     UserCredential userCredential =
         await _auth.signInWithCredential(credential);
-    await setUserIdPref(userId: userCredential.user.uid);
+
+    final users = await FirebaseFirestore.instance
+        .collection("users")
+        .where("uId", isEqualTo: userCredential.user.uid)
+        .get();
+
+    await setUserIdPref(
+        userId: userCredential.user.uid, userDocId: users.docs[0].id);
 
     Navigator.pushNamedAndRemoveUntil(
         context, '/userMain', ModalRoute.withName('Dashboard'));
+  }
+
+  Future<bool> _userExists(String phoneNumber) async {
+    final user = await FirebaseFirestore.instance
+        .collection("users")
+        .where("phoneNumber", isEqualTo: phoneNumber)
+        .get();
+
+    if (!user.docs.isEmpty) return true;
+    return false;
   }
 
   _loginUser({String userId, String userDocId}) {
@@ -570,7 +596,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  _loginOrg({String orgId}) {
+  _loginOrg({@required String orgId}) {
     bool _isLoginError = false;
     try {
       FirebaseAuth.instance

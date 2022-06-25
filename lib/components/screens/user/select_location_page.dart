@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:smartrr/components/widgets/my_stepper.dart';
 import 'package:smartrr/generated/l10n.dart';
+import 'package:smartrr/services/country_service.dart';
+import 'package:smartrr/services/database_service.dart';
 import 'package:smartrr/utils/colors.dart';
 import '../../widgets/circular_progress.dart';
 import '../../widgets/location_cell.dart';
@@ -65,7 +67,7 @@ class _SelectLocationPageState extends State<SelectLocationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(S.of(context).selectLGA)),
+      appBar: AppBar(title: Text(S.of(context).selectLocation)),
       body: Container(
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 4),
@@ -81,21 +83,19 @@ class _SelectLocationPageState extends State<SelectLocationPage> {
                   Expanded(
                     child: ListView.builder(
                       itemCount: locationList.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 6),
-                          child: LocationCell(
-                            bgColor:
-                                widget.isDarkTheme ? lightGrey : Colors.white,
-                            width: MediaQuery.of(context).size.width * 1,
-                            title: locationList[index].title,
-                            borderRadius: 10,
-                            func: () {
-                              locationSelected(locationList[index]);
-                            },
-                          ),
-                        );
-                      },
+                      itemBuilder: (context, index) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 6),
+                        child: LocationCell(
+                          bgColor:
+                              widget.isDarkTheme ? lightGrey : Colors.white,
+                          width: MediaQuery.of(context).size.width * 1,
+                          title: locationList[index].title,
+                          borderRadius: 10,
+                          func: () {
+                            locationSelected(locationList[index]);
+                          },
+                        ),
+                      ),
                     ),
                   )
                 ],
@@ -105,30 +105,19 @@ class _SelectLocationPageState extends State<SelectLocationPage> {
   }
 
   _getDataFromFirebase() {
-    CollectionReference stateCollection =
-        FirebaseFirestore.instance.collection("state");
+    // CollectionReference stateCollection =
+    //     FirebaseFirestore.instance.collection("state");
 
-    stateCollection
-        .where("sName", isEqualTo: widget.selectedState.title)
-        .get()
-        .then((states) {
-      if (states.docs.length > 0) {
-        final stateId = states.docs[0].id;
+    DatabaseService().getUser().then((user) {
+      String country = user["country"] == null ? "Nigeria" : user["country"];
 
-        stateCollection
-            .doc(stateId)
-            .collection("locations")
-            .get()
-            .then((locations) {
-          for (int i = 0; i < locations.docs.length; i++) {
-            locationList.add(MyLocation(locations.docs[i].id.toString(),
-                locations.docs[i].get('location')));
-          }
-          setState(() => isLoading = false);
-        });
-      } else {
-        throw "No locations found";
-      }
+      CountryService.getCities(country, widget.selectedState.title)
+          .then((cities) {
+        for (int i = 0; i < cities.length; i++) {
+          locationList.add(MyLocation(cities[i], cities[i]));
+        }
+        setState(() => isLoading = false);
+      });
     }).catchError((e) {
       Navigator.pop(context);
       Fluttertoast.showToast(
@@ -141,5 +130,35 @@ class _SelectLocationPageState extends State<SelectLocationPage> {
         fontSize: 16.0,
       );
     });
+
+    // stateCollection
+    //     .where("sName", isEqualTo: widget.selectedState.title)
+    //     .get()
+    //     .then((states) {
+    //   final stateId = states.docs[0].id;
+
+    //   stateCollection
+    //       .doc(stateId)
+    //       .collection("locations")
+    //       .get()
+    //       .then((locations) {
+    //     for (int i = 0; i < locations.docs.length; i++) {
+    //       locationList.add(MyLocation(
+    //           locations.docs[i].id, locations.docs[i].get('location')));
+    //     }
+    //     setState(() => isLoading = false);
+    //   });
+    // }).catchError((e) {
+    //   Navigator.pop(context);
+    //   Fluttertoast.showToast(
+    //     msg: e.toString(),
+    //     toastLength: Toast.LENGTH_SHORT,
+    //     gravity: ToastGravity.TOP,
+    //     timeInSecForIosWeb: 1,
+    //     backgroundColor: Colors.black.withOpacity(.5),
+    //     textColor: Colors.white,
+    //     fontSize: 16.0,
+    //   );
+    // });
   }
 }

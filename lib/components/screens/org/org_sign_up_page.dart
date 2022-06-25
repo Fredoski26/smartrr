@@ -13,6 +13,7 @@ import '../../widgets/show_action.dart';
 import '../../widgets/show_loading.dart';
 import '../../widgets/smart_text_field.dart';
 import '../../../models/services.dart';
+import 'package:uuid/uuid.dart';
 
 class OrgSignUpPage extends StatefulWidget {
   @override
@@ -189,7 +190,10 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
       Navigator.pop(context);
       showLoading(message: 'Registering...', context: context);
       authResult.user.updateDisplayName(displayName).then((onValue) async {
-        await FirebaseFirestore.instance.collection('organizations').doc().set({
+        await FirebaseFirestore.instance
+            .collection('organizations')
+            .doc(authResult.user.uid)
+            .set({
           'name': cName.text,
           'type': _orgType,
           'telephone': number.phoneNumber,
@@ -204,7 +208,9 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
           'focalDesignation': cFocalDesignation.text,
           'servicesAvailable': FieldValue.arrayUnion(_selectedServicesList),
           'status': 0,
-          'locationId': _currentLocation.id,
+          'locationId': null,
+          'state': _currentState.title,
+          'location': _currentLocation.title,
           'uId': authResult.user.uid,
           'country': _currentCountry.name
         }).then((onValue) {
@@ -640,8 +646,8 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
               isExpanded: true,
               items: _dropDownLocationItem,
               value: _currentLocation,
-              onChanged: (MyLocation value) {
-                setState(() => _currentLocation = value);
+              onChanged: (MyLocation location) async {
+                setState(() => _currentLocation = location);
               },
               hint: Text(
                 'Select Location',
@@ -659,6 +665,35 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
     );
   }
 
+  _getLocationId(String sName, String location) async {
+    final states = await FirebaseFirestore.instance
+        .collection("state")
+        .where('sName', isEqualTo: sName)
+        .get();
+
+    if (states.docs.length > 0)
+      return states.docs[0].id;
+    else {
+      final uuid = Uuid();
+      final String stateId = uuid.v4();
+      final String locationId = uuid.v4();
+
+      await FirebaseFirestore.instance
+          .collection("state")
+          .doc(stateId)
+          .set({"sName": sName});
+
+      await FirebaseFirestore.instance
+          .collection("state")
+          .doc(stateId)
+          .collection("locations")
+          .doc(locationId)
+          .set({"location": location});
+
+      return locationId;
+    }
+  }
+
   _getDataFromFirebase() async {
     await FirebaseFirestore.instance
         .collection('services')
@@ -673,7 +708,6 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
             .get()
             .then((subServices) {
           for (int j = 0; j < subServices.docs.length; j++) {
-            debugPrint("Sub Services ===> ${subServices.docs[j].get('title')}");
             tempSubServices.add(
               SubService(title: subServices.docs[j].get('title'), value: false),
             );
@@ -769,7 +803,6 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
   }
 
   _buildExpansionList(List<SubService> list) {
-    print("********* LIST LENGTH ${list.length} **********");
     return ListView.builder(
       itemCount: list.length,
       padding: const EdgeInsets.only(bottom: 16.0),

@@ -133,21 +133,8 @@ class _SelectOrgPageState extends State<SelectOrgPage> {
                                 itemCount: serviceProviderList.length,
                                 itemBuilder: (context, index) {
                                   String location = '';
-                                  if (serviceProviderList[index]
-                                      .lga
-                                      .isNotEmpty) {
-                                    location = serviceProviderList[index].lga;
-                                  } else if (serviceProviderList[index]
-                                      .site
-                                      .isNotEmpty) {
-                                    location = serviceProviderList[index].site;
-                                  } else if (serviceProviderList[index]
-                                      .ward
-                                      .isNotEmpty) {
-                                    location = serviceProviderList[index].ward;
-                                  } else {
-                                    location = widget.selectedLocation.title;
-                                  }
+
+                                  location = widget.selectedLocation.title;
                                   return BlackLocationCell(
                                       width: MediaQuery.of(context).size.width *
                                           0.9,
@@ -215,51 +202,65 @@ class _SelectOrgPageState extends State<SelectOrgPage> {
 
   _getDataFromFirebase() {
     FirebaseFirestore.instance
-        .collection("organizations")
-        .where('locationId', isEqualTo: widget.selectedLocation.id)
+        .collectionGroup("locations")
+        .where("location", isEqualTo: widget.selectedLocation.title)
         .get()
-        .then((organizations) {
-      for (int i = 0; i < organizations.docs.length; i++) {
-        Organization organization = new Organization(
-          id: organizations.docs[i].id,
-          name: organizations.docs[i].get('name'),
-          locationId: organizations.docs[i].get('locationId'),
-          status: organizations.docs[i].get('status'),
-          ward: organizations.docs[i].get('ward'),
-          site: organizations.docs[i].get('site'),
-          lga: organizations.docs[i].get('lga'),
-          criteria: organizations.docs[i].get('criteria'),
-          comments: organizations.docs[i].get('comments'),
-          closeTime: organizations.docs[i].get('closeTime'),
-          endDate: organizations.docs[i].get('endDate'),
-          focalDesignation: organizations.docs[i].get('focalDesignation'),
-          focalEmail: organizations.docs[i].get('focalEmail'),
-          focalName: organizations.docs[i].get('focalName'),
-          focalPhone: organizations.docs[i].get('focalPhone'),
-          how: organizations.docs[i].get('how'),
-          language: organizations.docs[i].get('language'),
-          orgEmail: organizations.docs[i].get('orgEmail'),
-          password: organizations.docs[i].get('password'),
-          servicesAvailable: organizations.docs[i].get('servicesAvailable'),
-          startDate: organizations.docs[i].get('startDate'),
-          startTime: organizations.docs[i].get('startTime'),
-          telephone: organizations.docs[i].get('telephone'),
-          type: organizations.docs[i].get('type'),
-        );
-        if (organization.servicesAvailable != null) {
-          for (int j = 0; j < organization.servicesAvailable.length; j++) {
-            if (widget.service.toLowerCase().trim().contains(organization
-                .servicesAvailable[j]
-                .toString()
-                .toLowerCase()
-                .trim())) {
-              setState(() => serviceProviderList.add(organization));
-            }
+        .then((snapshot) {
+      if (snapshot.docs.length > 0) {
+        FirebaseFirestore.instance
+            .collection("organizations")
+            .where("locationId", isEqualTo: snapshot.docs[0].id)
+            .get()
+            .then((organizations) {
+          _addOrgsToList(organizations);
+        });
+      }
+      FirebaseFirestore.instance
+          .collection("organizations")
+          .where('location', isEqualTo: widget.selectedLocation.title)
+          .get()
+          .then((organizations) {
+        _addOrgsToList(organizations);
+        setState(() => isLoading = false);
+      });
+    });
+  }
+
+  _addOrgsToList(QuerySnapshot<Map<String, dynamic>> organizations) {
+    for (int i = 0; i < organizations.docs.length; i++) {
+      Organization organization = new Organization(
+        id: organizations.docs[i].id,
+        name: organizations.docs[i].get('name'),
+        locationId: organizations.docs[i].get('locationId'),
+        location: organizations.docs[i].data().containsKey("location")
+            ? organizations.docs[i].get("location")
+            : "",
+        status: organizations.docs[i].get('status'),
+        closeTime: organizations.docs[i].get('closeTime'),
+        focalDesignation: organizations.docs[i].get('focalDesignation'),
+        focalEmail: organizations.docs[i].get('focalEmail'),
+        focalName: organizations.docs[i].get('focalName'),
+        focalPhone: organizations.docs[i].get('focalPhone'),
+        language: organizations.docs[i].get('language'),
+        orgEmail: organizations.docs[i].get('orgEmail'),
+        password: organizations.docs[i].get('password'),
+        servicesAvailable: organizations.docs[i].get('servicesAvailable'),
+        startTime: organizations.docs[i].get('startTime'),
+        telephone: organizations.docs[i].get('telephone'),
+        type: organizations.docs[i].get('type'),
+      );
+      if (organization.servicesAvailable != null) {
+        for (int j = 0; j < organization.servicesAvailable.length; j++) {
+          if (widget.service.toLowerCase().trim().contains(organization
+              .servicesAvailable[j]
+              .toString()
+              .toLowerCase()
+              .trim())) {
+            setState(() => serviceProviderList.add(organization));
           }
         }
       }
-      setState(() => isLoading = false);
-    });
+    }
   }
 
   _onRefer(Organization org) {

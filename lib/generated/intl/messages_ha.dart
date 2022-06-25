@@ -73,7 +73,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectCountry" : MessageLookupByLibrary.simpleMessage("Zabi kasa"),
     "selectCustomLocation" : MessageLookupByLibrary.simpleMessage("Zabi Wuri na Musamman"),
     "selectDescription" : MessageLookupByLibrary.simpleMessage("Da fatan za a zaɓi Bayani"),
-    "selectLGA" : MessageLookupByLibrary.simpleMessage("Zabi Karamar Hukumar"),
+    "selectLocation" : MessageLookupByLibrary.simpleMessage("Zabi Karamar Hukumar"),
     "selectOne" : MessageLookupByLibrary.simpleMessage("Zabi daya"),
     "selectService" : MessageLookupByLibrary.simpleMessage("Zabi Na\'in Hidima"),
     "selectServiceProvider" : MessageLookupByLibrary.simpleMessage("Zabi mai bada hidima"),

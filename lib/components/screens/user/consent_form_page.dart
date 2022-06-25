@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:smartrr/components/widgets/language_picker.dart';
 import 'package:smartrr/components/widgets/text_to_speech.dart';
 import 'package:smartrr/provider/language_provider.dart';
+import 'package:smartrr/services/theme_provider.dart';
 import 'select_service_page.dart';
 import 'package:smartrr/generated/l10n.dart';
 
@@ -75,14 +76,16 @@ class _ConsentFormPageState extends State<ConsentFormPage> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          Consumer<LanguageNotifier>(
-                                              builder: (context, langNotifier,
+                                        builder: (BuildContext context) =>
+                                            Consumer<ThemeNotifier>(
+                                              builder: (context, themeNotifier,
                                                       child) =>
                                                   SelectServicePage(
-                                                    lang: langNotifier.locale,
-                                                  )),
-                                    ),
+                                                lang: langNotifier.locale,
+                                                isDarkTheme:
+                                                    themeNotifier.darkTheme,
+                                              ),
+                                            )),
                                   );
                                 else {
                                   Fluttertoast.showToast(

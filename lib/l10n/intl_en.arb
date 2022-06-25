@@ -36,7 +36,7 @@
   "selectService": "Select Service Type",
   "selectCustomLocation": "Select Custom Location",
   "selectState": "Select State",
-  "selectLGA": "Select LGA",
+  "selectLocation": "Select Location",
   "selectServiceProvider": "Select Service Provider",
   "selectCaseDescription": "Select Case Description",
   "fgm": "Female Genital Mutilation",

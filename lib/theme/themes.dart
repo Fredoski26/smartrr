@@ -49,7 +49,7 @@ final ThemeData appTheme = ThemeData(
 final ThemeData darkTheme = ThemeData(
   primarySwatch: Colors.orange,
   primaryColor: primaryColor,
-  canvasColor: lightGrey,
+  canvasColor: darkGrey,
   appBarTheme: appTheme.appBarTheme.copyWith(color: primaryColor, elevation: 0),
   scaffoldBackgroundColor: darkGrey,
   textTheme: appTheme.textTheme

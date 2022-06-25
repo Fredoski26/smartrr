@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:smartrr/components/widgets/circular_progress.dart';
 import 'package:smartrr/components/widgets/selected_location_cell.dart';
 import 'package:smartrr/components/widgets/show_action.dart';
 import 'package:smartrr/components/widgets/show_loading.dart';
 import 'package:smartrr/utils/colors.dart';
+import 'package:smartrr/services/theme_provider.dart';
 
 class OrgCasesScreen extends StatefulWidget {
   final String orgId;
@@ -36,135 +38,159 @@ class _OrgCasesScreenState extends State<OrgCasesScreen> {
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasError)
-                    return new Text('Error: ${snapshot.error}');
+                    return new Text("Unable to fetch cases");
+                  if (snapshot.hasData && snapshot.data.docs.length == 0) {
+                    return Center(child: Text("No cases reported"));
+                  }
                   switch (snapshot.connectionState) {
                     case ConnectionState.waiting:
                       return CircularProgress();
                     default:
-                      return new ListView(
-                        children: snapshot.data.docs
-                            .map(
-                              (doc) => BlackLocationCell(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.9,
-                                  child: Column(
-                                    children: <Widget>[
-                                      Text(
-                                        doc.get("orgName"),
-                                        textAlign: TextAlign.start,
-                                        maxLines: 2,
-                                        style: TextStyle(
-                                            color: primaryColor,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                      Text(
-                                        doc.get('caseType'),
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      Text(
-                                        'Case: ' + doc.get('caseDescription'),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      Text(
-                                        'Case No. ' + doc.get('caseNumber'),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Text(
-                                        doc.get('locationName'),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      Text(
-                                        getDate(doc.get('timestamp')),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      doc.get('referredBy') != '0'
-                                          ? Padding(
-                                              padding:
-                                                  const EdgeInsets.only(top: 8),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "Reffered by",
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    doc.get('referredByName'),
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                    ),
-                                                  ),
-                                                ],
+                      return Consumer<ThemeNotifier>(
+                          builder: (context, ThemeNotifier notifier, child) =>
+                              ListView(
+                                children: snapshot.data.docs
+                                    .map(
+                                      (doc) => BlackLocationCell(
+                                          bgColor: notifier.darkTheme
+                                              ? lightGrey
+                                              : Colors.white,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.9,
+                                          child: Column(
+                                            children: <Widget>[
+                                              Text(
+                                                doc.get("orgName"),
+                                                textAlign: TextAlign.start,
+                                                maxLines: 2,
+                                                style: TextStyle(
+                                                    color: primaryColor,
+                                                    fontSize: 20,
+                                                    fontWeight:
+                                                        FontWeight.w600),
                                               ),
-                                            )
-                                          : Container(),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Align(
-                                        alignment: Alignment.centerRight,
-                                        child: _statusWidget(
-                                            status: doc.get('status')),
-                                      ),
-                                    ],
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                  ),
-                                  borderRadius: 10,
-                                  func: () {
-                                    if (doc.get('status') == 0) {
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            AlertDialog(
-                                          elevation: 30,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(10))),
-                                          title: Text(
-                                            'Do you want to Close this Case?',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                            ),
+                                              Text(
+                                                doc.get('caseType'),
+                                                style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                              Text(
+                                                'Case: ' +
+                                                    doc.get('caseDescription'),
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                              Text(
+                                                'Case No. ' +
+                                                    doc.get('caseNumber'),
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Text(
+                                                doc.get('locationName'),
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                              Text(
+                                                getDate(doc.get('timestamp')),
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                              doc.get('referredBy') != '0'
+                                                  ? Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 8),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            "Reffered by",
+                                                            style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            doc.get(
+                                                                'referredByName'),
+                                                            style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    )
+                                                  : Container(),
+                                              SizedBox(
+                                                height: 5,
+                                              ),
+                                              Align(
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                child: _statusWidget(
+                                                    status: doc.get('status')),
+                                              ),
+                                            ],
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                           ),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
-                                              child: Text('No'),
-                                            ),
-                                            TextButton(
-                                              onPressed: () => _onClose(doc.id),
-                                              child: Text('Yes'),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    }
-                                  }),
-                            )
-                            .toList(),
-                      );
+                                          borderRadius: 10,
+                                          func: () {
+                                            if (doc.get('status') == 0) {
+                                              showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        AlertDialog(
+                                                  elevation: 30,
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  10))),
+                                                  title: Text(
+                                                    'Do you want to Close this Case?',
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                  actions: <Widget>[
+                                                    TextButton(
+                                                      onPressed: () =>
+                                                          Navigator.pop(
+                                                              context),
+                                                      child: Text('No'),
+                                                    ),
+                                                    TextButton(
+                                                      onPressed: () =>
+                                                          _onClose(doc.id),
+                                                      child: Text('Yes'),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            }
+                                          }),
+                                    )
+                                    .toList(),
+                              ));
                   }
                 },
               ),

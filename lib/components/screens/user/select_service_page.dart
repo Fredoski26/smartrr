@@ -12,8 +12,20 @@ import '../../widgets/circular_progress.dart';
 
 class SelectServicePage extends StatefulWidget {
   final String lang;
+  final bool isUser;
+  final String referredBy;
+  final String referredName;
+  final String caseId;
+  final bool isDarkTheme;
 
-  SelectServicePage({this.lang = "en"});
+  SelectServicePage({
+    this.lang = "en",
+    this.isUser = true,
+    this.referredBy = "",
+    this.referredName = "",
+    this.caseId = "",
+    this.isDarkTheme = false,
+  });
   @override
   _SelectServicePageState createState() => _SelectServicePageState();
 }
@@ -63,6 +75,10 @@ class _SelectServicePageState extends State<SelectServicePage> {
                                         MaterialPageRoute(
                                           builder: (BuildContext context) =>
                                               SelectSubServicePage(
+                                            isUser: widget.isUser,
+                                            referredBy: widget.referredBy,
+                                            referredName: widget.referredName,
+                                            caseId: widget.caseId,
                                             lang: widget.lang,
                                             isDarkTheme: notifier.darkTheme,
                                             selectedService: serviceList[index],

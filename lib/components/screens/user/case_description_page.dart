@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:provider/provider.dart';
 import 'package:smartrr/components/widgets/circular_progress.dart';
 import 'package:smartrr/components/widgets/show_action.dart';
@@ -12,7 +13,6 @@ import 'package:smartrr/models/organization.dart';
 import 'package:smartrr/provider/language_provider.dart';
 import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/utils/utils.dart';
-import '../../widgets/selected_location_cell.dart';
 import 'report_or_history_page.dart';
 
 class CaseDescriptionPage extends StatefulWidget {
@@ -44,6 +44,11 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
   TextEditingController _phone = TextEditingController();
   TextEditingController _cnic = TextEditingController();
   TextEditingController _age = TextEditingController();
+  TextEditingController phoneNumberController = TextEditingController();
+
+  String initialCountry = 'NG';
+  PhoneNumber number = PhoneNumber(isoCode: 'NG');
+
   final _formKey = GlobalKey<FormState>();
   Map<String, dynamic> currentUserInfo = Map<String, dynamic>();
 
@@ -159,44 +164,44 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
                                     ),
                                   ),
                                   SizedBox(
-                                    height: 50,
+                                    height: 20,
                                   ),
-                                  Text(
-                                    _language.caseType,
-                                    style: TextStyle(
-                                      fontSize: 18,
+                                  DropdownButtonFormField(
+                                    isExpanded: true,
+                                    value: selectedDescription,
+                                    hint: Text(
+                                      _language.caseType,
+                                      style: Theme.of(context)
+                                          .inputDecorationTheme
+                                          .hintStyle,
                                     ),
-                                  ),
-                                  Theme(
-                                    data: ThemeData(
-                                      canvasColor: dropDownCanvasColor,
-                                    ),
-                                    child: BlackLocationCell(
-                                      borderRadius: 12,
-                                      verticalPadding: 4,
-                                      child: DropdownButton<String>(
-                                        isExpanded: true,
-                                        value: selectedDescription,
-                                        hint: Text(
-                                          _language.selectOne,
-                                          style: TextStyle(color: Colors.grey),
-                                        ),
-                                        icon: Icon(Icons.keyboard_arrow_down),
-                                        underline: SizedBox(),
-                                        style: TextStyle(color: Colors.black),
-                                        items: items.map((String value) {
-                                          return new DropdownMenuItem<String>(
-                                            value: value,
-                                            child: new Text(
-                                              value,
-                                              style: TextStyle(
-                                                  color: Colors.black),
-                                            ),
-                                          );
-                                        }).toList(),
-                                        onChanged: (value) => setState(
-                                            () => selectedDescription = value),
-                                      ),
+                                    icon: Icon(Icons.keyboard_arrow_down),
+                                    items: items.map((String value) {
+                                      return new DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
+                                    onChanged: (value) => setState(
+                                        () => selectedDescription = value),
+                                    decoration: InputDecoration().copyWith(
+                                      contentPadding: EdgeInsets.symmetric(
+                                          horizontal: 25.0, vertical: 6.0),
+                                      enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(50)),
+                                          borderSide:
+                                              BorderSide(color: lightGrey)),
+                                      focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(50)),
+                                          borderSide:
+                                              BorderSide(color: lightGrey)),
+                                      errorBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(50)),
+                                          borderSide:
+                                              BorderSide(color: Colors.red)),
                                     ),
                                   ),
                                   SizedBox(
@@ -213,24 +218,34 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
                                     isForm: true,
                                     textInputType: TextInputType.number,
                                   ),
-                                  smartTextField(
-                                    title: _language.phoneNumber,
-                                    controller: _phone,
-                                    isPhone: true,
-                                    prefix: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 14, horizontal: 4),
-                                      child: Text(
-                                        '+234',
-                                        style: TextStyle(
-                                          color: lightGrey,
-                                          fontWeight: FontWeight.w700,
-                                        ),
+                                  Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 25.0, vertical: 0),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(50.0)),
+                                        border: Border.all(
+                                            width: 1, color: lightGrey)),
+                                    child: InternationalPhoneNumberInput(
+                                      onInputChanged: (PhoneNumber val) {
+                                        number = val;
+                                      },
+                                      selectorConfig: SelectorConfig(
+                                        selectorType:
+                                            PhoneInputSelectorType.BOTTOM_SHEET,
                                       ),
+                                      selectorTextStyle: Theme.of(context)
+                                          .inputDecorationTheme
+                                          .hintStyle,
+                                      initialValue: number,
+                                      textFieldController:
+                                          phoneNumberController,
+                                      inputBorder: InputBorder.none,
+                                      selectorButtonOnErrorPadding: 0,
+                                      spaceBetweenSelectorAndTextField: 0,
                                     ),
-                                    isForm: true,
-                                    textInputType: TextInputType.phone,
                                   ),
+                                  SizedBox(height: 20.0),
                                   smartTextField(
                                     title: 'National ID Card No.',
                                     controller: _cnic,
@@ -303,7 +318,7 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
                                     ],
                                   ),
                                   SizedBox(
-                                    height: 80,
+                                    height: 20,
                                   ),
                                   Row(
                                     children: [
@@ -424,12 +439,13 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
           'caseDescription': selectedDescription,
           'focalPhone': widget.org.focalPhone,
           'locationId': widget.location.id,
+          "location": widget.location.title,
           'locationName': "${widget.location.title}, ${widget.state.title}",
           'timestamp': DateTime.now(),
           'status': 0,
           'referredBy': "0",
           'referredByName': widget.org.name,
-          'isVictim': false,
+          'isVictim': true,
           'victimName': null,
           'victimAge': null,
           'victimPhone': null,
@@ -485,15 +501,16 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
           'caseType': widget.service,
           'caseDescription': selectedDescription,
           'locationId': widget.location.id,
+          "location": widget.location.title,
           'locationName': "${widget.location.title}, ${widget.state.title}",
           'timestamp': DateTime.now(),
           'status': 0,
           'referredBy': "0",
           'referredByName': widget.org.name,
-          'isVictim': true,
+          'isVictim': false,
           'victimName': _name.text,
           'victimAge': double.parse(_age.text),
-          'victimPhone': "234${_phone.text}",
+          'victimPhone': number.phoneNumber,
           'victimCnic': _cnic.text.toString(),
           'victimGender': _isMale
         }).then((onValue) {

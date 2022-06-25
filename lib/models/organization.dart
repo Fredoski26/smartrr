@@ -23,12 +23,33 @@ class Organization {
   String comments;
   String locationId;
   int status;
+  String location;
 
-  Organization({this.id, this.name, this.type, this.telephone, this.orgEmail,
-    this.password, this.language, this.ward, this.site, this.lga,
-    this.startDate, this.endDate, this.servicesAvailable, this.startTime,
-    this.closeTime, this.focalName, this.focalEmail, this.focalPhone,
-    this.focalDesignation, this.how, this.criteria, this.comments,
-    this.locationId, this.status});
-
+  Organization({
+    this.id,
+    this.name,
+    this.type,
+    this.telephone,
+    this.orgEmail,
+    this.password,
+    this.language,
+    this.ward,
+    this.site,
+    this.lga,
+    this.startDate,
+    this.endDate,
+    this.servicesAvailable,
+    this.startTime,
+    this.closeTime,
+    this.focalName,
+    this.focalEmail,
+    this.focalPhone,
+    this.focalDesignation,
+    this.how,
+    this.criteria,
+    this.comments,
+    this.locationId,
+    this.status,
+    this.location,
+  });
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartrr/utils/colors.dart';
 
 class BlackLocationCell extends StatelessWidget {
   final Widget child;
@@ -11,13 +12,13 @@ class BlackLocationCell extends StatelessWidget {
   final Color textColor;
 
   BlackLocationCell(
-      {this.textColor = Colors.white,
+      {this.textColor = null,
       this.child,
       this.func,
-      this.color = Colors.white,
+      this.color = null,
       this.borderRadius = 5,
-        this.verticalPadding = 20,
-        this.bgColor = Colors.white,
+      this.verticalPadding = 20,
+      this.bgColor = primaryColor,
       this.width});
 
   @override
@@ -27,8 +28,8 @@ class BlackLocationCell extends StatelessWidget {
         func();
       },
       child: Container(
-        padding: EdgeInsets.symmetric(
-            horizontal: 16, vertical: verticalPadding),
+        padding:
+            EdgeInsets.symmetric(horizontal: 16, vertical: verticalPadding),
         margin: EdgeInsets.symmetric(vertical: 6),
         child: child,
         decoration: BoxDecoration(

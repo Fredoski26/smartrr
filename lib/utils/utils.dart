@@ -29,10 +29,20 @@ Future<String> getUserIdPref() async {
   return prefs.getString("userId");
 }
 
-Future setOrgIdPref({String orgId}) async {
+Future setOrgIdPref({String orgId, String orgDocId}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.setBool("isUser", false);
   await prefs.setString("orgId", orgId);
+}
+
+Future _setOrgDocId({String orgDocId}) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString("orgDocId", orgDocId);
+}
+
+Future getOrgDocId() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  return await prefs.getString("orgDocId");
 }
 
 Future<String> getOrgIdPref() async {

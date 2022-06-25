@@ -405,11 +405,11 @@ class S {
     );
   }
 
-  /// `Select LGA`
-  String get selectLGA {
+  /// `Select Location`
+  String get selectLocation {
     return Intl.message(
-      'Select LGA',
-      name: 'selectLGA',
+      'Select Location',
+      name: 'selectLocation',
       desc: '',
       args: [],
     );
