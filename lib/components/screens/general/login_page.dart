@@ -5,6 +5,7 @@ import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 import 'package:smartrr/components/widgets/circular_progress.dart';
 import 'package:smartrr/components/widgets/show_action.dart';
+import 'package:smartrr/components/widgets/show_loading.dart';
 import 'package:smartrr/components/widgets/smart_text_field.dart';
 import 'package:smartrr/provider/language_provider.dart';
 import 'package:smartrr/utils/colors.dart';
@@ -426,6 +427,7 @@ class _LoginPageState extends State<LoginPage> {
                 credential: credential, context: context);
           },
           verificationFailed: (FirebaseAuthException e) {
+            Navigator.pop(context);
             setState(() => isLoading = false);
             switch (e.code) {
               case 'invalid-phone-number':
@@ -502,6 +504,9 @@ class _LoginPageState extends State<LoginPage> {
                                 onPressed: () async {
                                   if (formKey.currentState.validate()) {
                                     setState(() => isLoading = true);
+                                    showLoading(
+                                        message: "Logging in...",
+                                        context: context);
                                     try {
                                       PhoneAuthCredential credential =
                                           PhoneAuthProvider.credential(
@@ -514,7 +519,6 @@ class _LoginPageState extends State<LoginPage> {
                                     } catch (e) {
                                       showToast(
                                           msg: e.toString(), type: "error");
-                                      Navigator.pop(context);
                                     }
                                   }
                                 },

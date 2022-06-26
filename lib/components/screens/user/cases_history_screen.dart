@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:smartrr/components/widgets/circular_progress.dart';
 import 'package:smartrr/models/case.dart';
@@ -96,9 +97,20 @@ class _CasesHistoryScreenState extends State<CasesHistoryScreen> {
     });
   }
 
+  _logout() async {
+    await FirebaseAuth.instance.signOut().then((_) {
+      clearPrefs().then((_) => Navigator.pushNamedAndRemoveUntil(
+          context, '/login', ModalRoute.withName('Login')));
+    });
+  }
+
   _getDataFromFirebase() async {
     String userId = await getUserIdPref();
     String userDocId = await getUserDocIdPref();
+
+// logout user if no user doc id
+    if (userDocId == null || (userDocId != null && userDocId.isEmpty))
+      return _logout();
 
     await _updateCaseUserId(oldUId: userDocId, newUId: userId);
     await FirebaseFirestore.instance
@@ -126,10 +138,11 @@ class _CasesHistoryScreenState extends State<CasesHistoryScreen> {
                 referredByName: cases.docs[i].get('referredByName'),
                 timestamp: cases.docs[i].get('timestamp'),
                 isVictim: cases.docs[i].get('isVictim'),
-                victimAge: cases.docs[i].get('victimAge'),
-                victimGender: cases.docs[i].get('victimGender'),
-                victimName: cases.docs[i].get('victimName'),
-                victimPhone: cases.docs[i].get('victimPhone'),
+                // victimAge: int.tryParse(cases.docs[i].get('victimAge')),
+                // victimGender:
+                //     cases.docs[i].get('victimGender') == 1 ? true : false,
+                // victimName: cases.docs[i].get('victimName'),
+                // victimPhone: cases.docs[i].get('victimPhone'),
               ),
             ),
           );

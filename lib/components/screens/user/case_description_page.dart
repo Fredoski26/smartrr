@@ -41,7 +41,6 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
   User currentUser;
   String selectedDescription;
   TextEditingController _name = TextEditingController();
-  TextEditingController _phone = TextEditingController();
   TextEditingController _cnic = TextEditingController();
   TextEditingController _age = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();

@@ -145,9 +145,12 @@ class _ReferralPageState extends State<ReferralPage> {
                 referredByName: cases.docs[i].get('referredByName'),
                 timestamp: cases.docs[i].get('timestamp'),
                 isVictim: cases.docs[i].get('isVictim'),
-                victimAge: cases.docs[i].get('victimAge'),
+                victimAge: cases.docs[i].get("victimAge") != null
+                    ? int.tryParse(cases.docs[i].get('victimAge').toString())
+                    : null,
                 victimGender: cases.docs[i].get('victimGender'),
                 victimName: cases.docs[i].get('victimName'),
+                victimPhone: cases.docs[i].get("victimPhone"),
               ),
             ),
           );

@@ -22,17 +22,13 @@ import 'components/screens/user/report_or_history_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'services/theme_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:smartrr/config/config.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-      options: FirebaseOptions(
-    projectId: Configurations.projectId,
-    appId: Configurations.appId,
-    apiKey: Configurations.apiKey,
-    messagingSenderId: Configurations.messagingSenderId,
-  ));
+  await Firebase.initializeApp();
+  await FirebaseAppCheck.instance.activate();
+
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => ThemeNotifier()),

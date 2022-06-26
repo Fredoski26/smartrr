@@ -73,7 +73,7 @@ class _SignUpPageState extends State<SignUpPage> {
           };
 
           await AuthService.signUpWithPhoneMobile(
-            phoneNumber: number.toString(),
+            phoneNumber: number.phoneNumber,
             context: context,
             userData: userData,
           ).then((_) => {

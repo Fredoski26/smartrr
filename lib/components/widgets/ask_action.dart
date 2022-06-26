@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:smartrr/utils/colors.dart';
 
 Future askAction(
     {@required String actionText,

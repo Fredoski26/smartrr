@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:smartrr/generated/l10n.dart';
 import 'package:smartrr/models/location.dart';
 import 'package:smartrr/utils/utils.dart';
@@ -76,7 +77,17 @@ class DatabaseService {
   }
 
   Future submitQuickReport() async {
+    User currentUser = FirebaseAuth.instance.currentUser;
     final String bigFamily360OrId = "j1mHuKp3BKeAnnY4Wzb6";
+    final String service = "Quick Report";
+    String caseNumber = '';
+    List<String> ll = currentUser.displayName.split(' ');
+    for (int i = 0; i < ll.length; i++) {
+      caseNumber += ll[i].substring(0, 1);
+    }
+    caseNumber =
+        "$caseNumber${DateTime.now().millisecondsSinceEpoch}${service.substring(0, 1)}";
+
     final bigFamily360Org = await FirebaseFirestore.instance
         .collection("organizations")
         .doc(bigFamily360OrId)
@@ -85,12 +96,12 @@ class DatabaseService {
 
     FirebaseFirestore.instance.collection('cases').doc().set({
       'language': 'en',
-      'caseNumber': null,
+      'caseNumber': caseNumber,
       'userId': user["uId"],
       'orgId': bigFamily360Org.id,
       'orgName': bigFamily360Org.get("name"),
       'orgEmail': bigFamily360Org.get("orgEmail"),
-      'caseType': "Quick Report",
+      'caseType': service,
       'caseDescription': "Case submitted by quick report feature",
       'focalPhone': bigFamily360Org.get("focalPhone"),
       'locationId': bigFamily360Org.get("locationId"),
