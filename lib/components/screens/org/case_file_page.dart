@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartrr/components/screens/user/select_service_page.dart';
-import 'package:smartrr/components/screens/user/select_state_page.dart';
 import 'package:smartrr/models/case.dart';
 import 'package:smartrr/services/theme_provider.dart';
 import 'package:smartrr/utils/colors.dart';

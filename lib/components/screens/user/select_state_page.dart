@@ -1,12 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:smartrr/components/widgets/my_stepper.dart';
 import 'package:smartrr/services/country_service.dart';
 import 'package:smartrr/services/database_service.dart';
 import 'package:smartrr/utils/colors.dart';
-import 'package:smartrr/utils/utils.dart';
 import '../../widgets/location_cell.dart';
 import '../../../models/location.dart';
 import 'select_location_map.dart';
@@ -180,7 +178,6 @@ class _SelectStatePageState extends State<SelectStatePage> {
                                           }
                                         });
                                       } else {
-                                        debugPrint('State not foun');
                                         _isFound = false;
                                       }
                                     }
@@ -195,6 +192,10 @@ class _SelectStatePageState extends State<SelectStatePage> {
                                             service: widget.service,
                                             selectedState: myState,
                                             selectedLocation: myLocation,
+                                            referredBy: widget.referredBy,
+                                            referredName: widget.referredName,
+                                            caseId: widget.caseId,
+                                            isUser: widget.isUser,
                                           ),
                                         ),
                                       );

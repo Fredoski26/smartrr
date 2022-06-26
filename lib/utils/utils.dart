@@ -35,11 +35,6 @@ Future setOrgIdPref({String orgId, String orgDocId}) async {
   await prefs.setString("orgId", orgId);
 }
 
-Future _setOrgDocId({String orgDocId}) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setString("orgDocId", orgDocId);
-}
-
 Future getOrgDocId() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   return await prefs.getString("orgDocId");

@@ -13,7 +13,6 @@ import '../../widgets/show_action.dart';
 import '../../widgets/show_loading.dart';
 import '../../widgets/smart_text_field.dart';
 import '../../../models/services.dart';
-import 'package:uuid/uuid.dart';
 
 class OrgSignUpPage extends StatefulWidget {
   @override
@@ -663,35 +662,6 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
         ),
       ),
     );
-  }
-
-  _getLocationId(String sName, String location) async {
-    final states = await FirebaseFirestore.instance
-        .collection("state")
-        .where('sName', isEqualTo: sName)
-        .get();
-
-    if (states.docs.length > 0)
-      return states.docs[0].id;
-    else {
-      final uuid = Uuid();
-      final String stateId = uuid.v4();
-      final String locationId = uuid.v4();
-
-      await FirebaseFirestore.instance
-          .collection("state")
-          .doc(stateId)
-          .set({"sName": sName});
-
-      await FirebaseFirestore.instance
-          .collection("state")
-          .doc(stateId)
-          .collection("locations")
-          .doc(locationId)
-          .set({"location": location});
-
-      return locationId;
-    }
   }
 
   _getDataFromFirebase() async {

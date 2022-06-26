@@ -19,8 +19,7 @@ class SmartSpeechToText extends StatefulWidget {
 class _SmartSpeechToTextState extends State<SmartSpeechToText> {
   Key _rippleEffectKey = UniqueKey();
 
-  bool _hasSpeech = false;
-  bool _logEvents = false;
+  bool hasSpeech = false;
   final TextEditingController _pauseForController =
       TextEditingController(text: '3');
   final TextEditingController _listenForController =
@@ -32,7 +31,7 @@ class _SmartSpeechToTextState extends State<SmartSpeechToText> {
   String lastError = '';
   String lastStatus = '';
   String _currentLocaleId = '';
-  List<LocaleName> _localeNames = [];
+  List<LocaleName> localeNames = [];
   final SpeechToText speech = SpeechToText();
 
   ValueNotifier _recognizedWords = ValueNotifier<String>("");
@@ -54,7 +53,7 @@ class _SmartSpeechToTextState extends State<SmartSpeechToText> {
       if (hasSpeech) {
         // Get the list of languages installed on the supporting platform so they
         // can be displayed in the UI for selection by the user.
-        _localeNames = await speech.locales();
+        localeNames = await speech.locales();
 
         var systemLocale = await speech.systemLocale();
         _currentLocaleId = systemLocale?.localeId ?? '';
@@ -62,12 +61,12 @@ class _SmartSpeechToTextState extends State<SmartSpeechToText> {
       if (!mounted) return;
 
       setState(() {
-        _hasSpeech = hasSpeech;
+        hasSpeech = hasSpeech;
       });
     } catch (e) {
       showToast(msg: "Speech recognition failed: ${e.toString()}");
       setState(() {
-        _hasSpeech = false;
+        hasSpeech = false;
       });
     }
   }

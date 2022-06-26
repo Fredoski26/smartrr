@@ -162,7 +162,7 @@ class _ReferralPageState extends State<ReferralPage> {
   }
 
   List<DropdownMenuItem<Case>> buildDropDownStateItems(List<Case> list) {
-    List<DropdownMenuItem<Case>> items = List();
+    List<DropdownMenuItem<Case>> items = [];
     for (Case item in list) {
       items.add(
         DropdownMenuItem(

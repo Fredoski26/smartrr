@@ -16,7 +16,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
   TextEditingController _email = TextEditingController();
-  bool _isLoading = false;
+  bool isLoading = false;
   final _auth = FirebaseAuth.instance;
 
   submit() async {
@@ -107,7 +107,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   }
 
   void _sendResetEmail() {
-    setState(() => _isLoading = true);
+    setState(() => isLoading = true);
     bool _isError = false;
     _auth.sendPasswordResetEmail(email: _email.text).catchError(
       (onError) {
@@ -120,7 +120,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             func: () => Navigator.pop(context),
             context: context,
           );
-          setState(() => _isLoading = false);
+          setState(() => isLoading = false);
         } else {
           showAction(
             actionText: 'OK',
@@ -128,12 +128,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             func: () => Navigator.pop(context),
             context: context,
           );
-          setState(() => _isLoading = false);
+          setState(() => isLoading = false);
         }
       },
     ).then((value) async {
       if (!_isError) {
-        setState(() => _isLoading = false);
+        setState(() => isLoading = false);
         showAction(
           actionText: 'OK',
           text: 'Email sent, Check your Inbox to change password',

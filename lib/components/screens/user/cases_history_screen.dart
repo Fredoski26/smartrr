@@ -138,11 +138,12 @@ class _CasesHistoryScreenState extends State<CasesHistoryScreen> {
                 referredByName: cases.docs[i].get('referredByName'),
                 timestamp: cases.docs[i].get('timestamp'),
                 isVictim: cases.docs[i].get('isVictim'),
-                // victimAge: int.tryParse(cases.docs[i].get('victimAge')),
-                // victimGender:
-                //     cases.docs[i].get('victimGender') == 1 ? true : false,
-                // victimName: cases.docs[i].get('victimName'),
-                // victimPhone: cases.docs[i].get('victimPhone'),
+                victimAge: cases.docs[i].get("victimAge") != null
+                    ? int.tryParse(cases.docs[i].get('victimAge').toString())
+                    : null,
+                victimGender: cases.docs[i].get('victimGender'),
+                victimName: cases.docs[i].get('victimName'),
+                victimPhone: cases.docs[i].get('victimPhone'),
               ),
             ),
           );

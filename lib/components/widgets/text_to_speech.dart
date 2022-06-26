@@ -137,7 +137,7 @@ class _MyTtsState extends State<MyTts> {
   }
 
   Future _stop() async {
-    var result = await flutterTts.stop();
+    await flutterTts.stop();
     _stopTimer();
   }
 
