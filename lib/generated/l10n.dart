@@ -495,11 +495,11 @@ class S {
     );
   }
 
-  /// `Sexual Exploitation`
-  String get sexualExploitation {
+  /// `Sexual Reproductive Kits`
+  String get sexualReproductiveKits {
     return Intl.message(
-      'Sexual Exploitation',
-      name: 'sexualExploitation',
+      'Sexual Reproductive Kits',
+      name: 'sexualReproductiveKits',
       desc: '',
       args: [],
     );

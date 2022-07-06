@@ -85,7 +85,7 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
       _language.psychologicalOrEmotionalAbuse,
       _language.forcedMarriage,
       _language.denialOfResources,
-      _language.sexualExploitation
+      _language.sexualReproductiveKits
     ];
 
     return Consumer<LanguageNotifier>(

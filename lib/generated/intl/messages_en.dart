@@ -81,7 +81,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "sendResetLink" : MessageLookupByLibrary.simpleMessage("Send reset link"),
     "settings" : MessageLookupByLibrary.simpleMessage("Settings"),
     "sexualAbuse" : MessageLookupByLibrary.simpleMessage("Sexual Abuse"),
-    "sexualExploitation" : MessageLookupByLibrary.simpleMessage("Sexual Exploitation"),
+    "sexualReproductiveKits" : MessageLookupByLibrary.simpleMessage("Sexual Reproductive Kits"),
     "signUp" : MessageLookupByLibrary.simpleMessage("SignUp"),
     "someoneElse" : MessageLookupByLibrary.simpleMessage("Someone Else"),
     "srhrDefinition1Body" : MessageLookupByLibrary.simpleMessage("Is a state of physical, emotional,  mental, and social wellbeing in relation to sexual feelings, considerations, attractions and practices towards others Sexuality. It encompasses the possibility of pleasurable and safe sexual experiences, free of coercion, discrimination and violence. For sexual health to be attained and maintained, the sexual rights of all persons must be respected, protected, and fulfilled."),

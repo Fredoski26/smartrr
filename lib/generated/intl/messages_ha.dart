@@ -81,7 +81,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "sendResetLink" : MessageLookupByLibrary.simpleMessage("Aika sabon Hanyar Shiga"),
     "settings" : MessageLookupByLibrary.simpleMessage("Saiti"),
     "sexualAbuse" : MessageLookupByLibrary.simpleMessage("Cin Zarafi"),
-    "sexualExploitation" : MessageLookupByLibrary.simpleMessage("Cin Zarafi Ta Jima\'i"),
+    "sexualReproductiveKits" : MessageLookupByLibrary.simpleMessage("Kayan Haihuwar Jima\'i"),
     "signUp" : MessageLookupByLibrary.simpleMessage("  Yi Rejista"),
     "someoneElse" : MessageLookupByLibrary.simpleMessage("Wani"),
     "srhrDefinition1Body" : MessageLookupByLibrary.simpleMessage("Yanayi na lafiya da kuma kwanciyar hankali wurin nuna kawazuci, shawa\'a, da kuma saduwa wurin jima\'i tsakanin jensi biyu. Yana kunshe da yananin annashuwa ba kuma tara da fargaba ko tilastawa ba wajen saduwa ta jima\'i. Domin samar da irin wannan yanayi na Lafiya Jima\'I, dole ne a samar a kuma tsare yancin da kowa yake da shi."),

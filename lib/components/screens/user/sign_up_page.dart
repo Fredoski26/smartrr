@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 import 'package:smartrr/components/widgets/auth_container.dart';
+import 'package:smartrr/components/widgets/show_loading.dart';
 import 'package:smartrr/provider/language_provider.dart';
 import 'package:smartrr/utils/colors.dart';
 import '../../widgets/smart_text_field.dart';
@@ -48,6 +51,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
+    final _auth = FirebaseAuth.instance;
     final _language = S.of(context);
     BirthTextInputFormatter birthDateInput = BirthTextInputFormatter();
 
@@ -72,15 +76,151 @@ class _SignUpPageState extends State<SignUpPage> {
             'status': true,
           };
 
-          await AuthService.signUpWithPhoneMobile(
+          await _auth.verifyPhoneNumber(
             phoneNumber: number.phoneNumber,
-            context: context,
-            userData: userData,
-          ).then((_) => {
-                setState(() {
-                  isLoading = false;
-                })
-              });
+            verificationCompleted: (PhoneAuthCredential credential) async {
+              setState(() => isLoading = false);
+              showLoading(message: "Creating account", context: context);
+              try {
+                await AuthService.handlePhoneAuthCredentials(
+                  credential: credential,
+                  userData: userData,
+                  context: context,
+                );
+
+                Navigator.pushNamedAndRemoveUntil(
+                    context, '/userMain', ModalRoute.withName('Dashboard'));
+              } catch (error) {
+                showToast(msg: error.toString(), type: "error");
+              }
+            },
+            verificationFailed: (FirebaseAuthException e) {
+              setState(() => isLoading = false);
+              switch (e.code) {
+                case 'invalid-phone-number':
+                  showToast(
+                      msg: 'The provided phone number is not valid',
+                      type: "error");
+                  break;
+                default:
+                  showToast(msg: e.message, type: "error");
+                  break;
+              }
+            },
+            codeSent: (String verificationId, int resendToken) async {
+              setState(() => isLoading = false);
+              final formKey = GlobalKey<FormState>();
+              final pinController = TextEditingController();
+
+              showDialog(
+                context: context,
+                builder: (context) => Dialog(
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Verification Code",
+                              style: TextStyle().copyWith(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 2.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                "Enter the verification code sent to your mobile phone",
+                                textAlign: TextAlign.center,
+                              ),
+                            )
+                          ],
+                        ),
+                        SizedBox(height: 5.0),
+                        Form(
+                            key: formKey,
+                            child: Pinput(
+                                length: 6,
+                                controller: pinController,
+                                autofocus: true,
+                                onSubmitted: (pin) async {
+                                  showLoading(
+                                      message: "Creating account",
+                                      context: context);
+                                  try {
+                                    PhoneAuthCredential credential =
+                                        PhoneAuthProvider.credential(
+                                      verificationId: verificationId,
+                                      smsCode: pin,
+                                    );
+                                    await AuthService
+                                        .handlePhoneAuthCredentials(
+                                      credential: credential,
+                                      userData: userData,
+                                      context: context,
+                                    );
+
+                                    Navigator.pushNamedAndRemoveUntil(
+                                        context,
+                                        '/userMain',
+                                        ModalRoute.withName('Dashboard'));
+                                  } catch (error) {
+                                    Navigator.pop(context);
+                                    showToast(
+                                        msg: error.toString(), type: "error");
+                                  }
+                                },
+                                validator: (pin) =>
+                                    pin.length < 6 || pin.length > 6
+                                        ? "Invalid code"
+                                        : null)),
+                        SizedBox(height: 5.0),
+                        ElevatedButton(
+                            onPressed: () async {
+                              if (formKey.currentState.validate()) {
+                                showLoading(
+                                    message: "Creating account",
+                                    context: context);
+
+                                try {
+                                  PhoneAuthCredential credential =
+                                      PhoneAuthProvider.credential(
+                                          verificationId: verificationId,
+                                          smsCode: pinController.text);
+
+                                  await AuthService.handlePhoneAuthCredentials(
+                                    credential: credential,
+                                    userData: userData,
+                                    context: context,
+                                  );
+
+                                  Navigator.pushNamedAndRemoveUntil(
+                                      context,
+                                      '/userMain',
+                                      ModalRoute.withName('Dashboard'));
+                                } catch (error) {
+                                  Navigator.pop(context);
+                                  showToast(
+                                      msg: error.toString(), type: "error");
+                                }
+                              }
+                            },
+                            child: Text("Continue"))
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+            codeAutoRetrievalTimeout: (String verificationId) {},
+          );
         } catch (error) {
           switch (error.code) {
             case "ERROR_EMAIL_ALREADY_IN_USE":

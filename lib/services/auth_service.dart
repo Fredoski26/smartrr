@@ -2,7 +2,6 @@ import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:pinput/pinput.dart';
 import 'package:smartrr/utils/utils.dart';
 
 class AuthService {
@@ -16,114 +15,7 @@ class AuthService {
     }
   }
 
-  static Future signUpWithPhoneMobile({
-    @required String phoneNumber,
-    @required BuildContext context,
-    @required Map userData,
-  }) async {
-    await _auth.verifyPhoneNumber(
-      phoneNumber: phoneNumber,
-      verificationCompleted: (PhoneAuthCredential credential) async {
-        await _handlePhoneAuthCredentials(
-          credential: credential,
-          userData: userData,
-          context: context,
-        );
-      },
-      verificationFailed: (FirebaseAuthException e) {
-        switch (e.code) {
-          case 'invalid-phone-number':
-            showToast(
-                msg: 'The provided phone number is not valid', type: "error");
-            break;
-          default:
-            showToast(msg: e.message, type: "error");
-            break;
-        }
-      },
-      codeSent: (String verificationId, int resendToken) async {
-        final formKey = GlobalKey<FormState>();
-        final pinController = TextEditingController();
-
-        showDialog(
-          context: context,
-          builder: (context) => Dialog(
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Verification Code",
-                        style: TextStyle().copyWith(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 2.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          "Enter the verification code sent to your mobile phone",
-                          textAlign: TextAlign.center,
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 5.0),
-                  Form(
-                      key: formKey,
-                      child: Pinput(
-                          length: 6,
-                          controller: pinController,
-                          onSubmitted: (pin) async {
-                            PhoneAuthCredential credential =
-                                PhoneAuthProvider.credential(
-                                    verificationId: verificationId,
-                                    smsCode: pin);
-
-                            await _handlePhoneAuthCredentials(
-                              credential: credential,
-                              userData: userData,
-                              context: context,
-                            );
-                          },
-                          validator: (pin) => pin.length < 6 || pin.length > 6
-                              ? "Invalid code"
-                              : null)),
-                  SizedBox(height: 5.0),
-                  ElevatedButton(
-                      onPressed: () async {
-                        if (formKey.currentState.validate()) {
-                          PhoneAuthCredential credential =
-                              PhoneAuthProvider.credential(
-                                  verificationId: verificationId,
-                                  smsCode: pinController.text);
-
-                          await _handlePhoneAuthCredentials(
-                            credential: credential,
-                            userData: userData,
-                            context: context,
-                          );
-                        }
-                      },
-                      child: Text("Continue"))
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {},
-    );
-  }
-
-  static Future _handlePhoneAuthCredentials({
+  static Future handlePhoneAuthCredentials({
     @required Map userData,
     @required PhoneAuthCredential credential,
     @required BuildContext context,
@@ -137,11 +29,7 @@ class AuthService {
 
       userData["uId"] = auth.user.uid;
       await _updateUser(uid: auth.user.uid, update: userData);
-      await setUserIdPref(userId: auth.user.uid);
-
-      Navigator.pushNamedAndRemoveUntil(
-          context, '/userMain', ModalRoute.withName('Dashboard'));
-      ;
+      await setUserIdPref(userId: auth.user.uid, userDocId: auth.user.uid);
     }
   }
 
@@ -156,11 +44,8 @@ class AuthService {
     userCredential.user.linkWithCredential(credential);
 
     await _updateUser(uid: userCredential.user.uid, update: userData);
-    await setUserIdPref(userId: userCredential.user.uid);
-
-    Navigator.pushNamedAndRemoveUntil(
-        context, '/userMain', ModalRoute.withName('Dashboard'));
-    ;
+    await setUserIdPref(
+        userId: userCredential.user.uid, userDocId: userCredential.user.uid);
   }
 
   static Future _updateUser(

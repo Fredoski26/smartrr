@@ -39,6 +39,7 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
 
   String initialCountry = 'NG';
   PhoneNumber number = PhoneNumber(isoCode: 'NG');
+  PhoneNumber focalNumber = PhoneNumber(isoCode: "NG");
 
   String errorMsg;
   double _hPadding = 18.0;
@@ -203,7 +204,7 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
           'closeTime': cCloseTime.text,
           'focalName': cFocalName.text,
           'focalEmail': cFocalEmail.text,
-          'focalPhone': cFocalPhone.text,
+          'focalPhone': focalNumber.phoneNumber,
           'focalDesignation': cFocalDesignation.text,
           'servicesAvailable': FieldValue.arrayUnion(_selectedServicesList),
           'status': 0,
@@ -520,11 +521,29 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
                 title: 'Email',
                 controller: cFocalEmail,
                 textInputType: TextInputType.emailAddress),
-            smartTextField(
-                title: 'Phone No',
-                controller: cFocalPhone,
-                isPhone: true,
-                textInputType: TextInputType.phone),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 0),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                  border: Border.all(width: 1, color: lightGrey)),
+              child: InternationalPhoneNumberInput(
+                onInputChanged: (PhoneNumber val) {
+                  number = val;
+                },
+                ignoreBlank: true,
+                selectorConfig: SelectorConfig(
+                  selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                ),
+                selectorTextStyle:
+                    Theme.of(context).inputDecorationTheme.hintStyle,
+                initialValue: focalNumber,
+                textFieldController: cFocalPhone,
+                inputBorder: InputBorder.none,
+                selectorButtonOnErrorPadding: 0,
+                spaceBetweenSelectorAndTextField: 0,
+              ),
+            ),
+            SizedBox(height: 20),
             smartTextField(
               title: 'Designation',
               controller: cFocalDesignation,
