@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "979322367519-jq8dophg1pjplfinpa5eg3f4glgum3sm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.smartrr.smartrr",
+            "certificate_hash": "3cd6687b541721bc787a14b36b90640ee91d9b5b"
+          }
+        },
+        {
           "client_id": "979322367519-fhc1vfgu7vri7g2r73tfes816d1iur5v.apps.googleusercontent.com",
           "client_type": 3
         }
