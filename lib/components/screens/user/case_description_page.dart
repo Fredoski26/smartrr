@@ -346,64 +346,6 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
     );
   }
 
-//  void _sendMail() {
-//    bool done = false;
-//    print("Email to send to: ${widget.emailAddress}");
-//    var messageText =
-//        'Dear SP, \nBe notify that a case that concerns your area of specialty has been reported to you. Kindly respond accordingly.\n\nCase File number: $caseNo\nEmail Address: ${currentUserInfo['email']}\nPhone Number: ${currentUserInfo['phoneNumber']}\nLocation: ${currentUserInfo['location']}';
-//    if (widget.emailAddress != '') {
-//      var message = Message()
-//        ..from = Address(currentUserInfo['email'], 'SmartRR')
-//        //..recipients.add(widget.emailAddress)
-//        ..recipients.add(widget.emailAddress)
-//        ..recipients.add('oguntoyebenjamin2@gmail.com')
-//        ..recipients.add('sharjeela35@gmail.com')
-//        ..subject = 'Report from SmartRR'
-//        ..text = messageText;
-//
-//      try {
-//        print("Before sending");
-//        send(message, smtpServer).then((sendReport) {
-//          done = true;
-//          incrementCaseNo();
-//          print("after sending");
-//          print(caseNo);
-//        });
-//      } on MailerException catch (e) {
-//        done = false;
-//      }
-//    }
-//    if (widget.phoneNummber != '') {
-//      done = true;
-//      var finalPhoneNumber = widget.phoneNummber;
-//      print('Final phone number: $finalPhoneNumber');
-//      ApiClient()
-//          .sendSMS(finalPhoneNumber, messageText)
-//          .then((returnedResponse) {
-//        print("Response from text: $returnedResponse");
-//      });
-//    }
-//    print('done value: $done');
-//    if (done) {
-//      showAction(
-//          actionText: 'OK',
-//          text: 'Case Registered Successfully!',
-//          func: _caseRegistered,
-//          context: context);
-//    } else {
-//      showDialog(
-//        context: context,
-//        builder: (BuildContext context) {
-//          return AlertDialog(
-//            content: Container(
-//              child: Text('Message not sent'),
-//            ),
-//          );
-//        },
-//      );
-//    }
-//  }
-
   void _showException({@required String errorMsg}) {
     showAction(
       actionText: 'OK',
@@ -436,7 +378,7 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
           'orgEmail': widget.org.orgEmail,
           'caseType': widget.service,
           'caseDescription': selectedDescription,
-          'focalPhone': widget.org.focalPhone,
+          'focalPhone': currentUser.phoneNumber,
           'locationId': widget.location.id,
           "location": widget.location.title,
           'locationName': "${widget.location.title}, ${widget.state.title}",
@@ -496,7 +438,7 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
           'orgId': widget.org.id,
           'orgName': widget.org.name,
           'orgEmail': widget.org.orgEmail,
-          'focalPhone': widget.org.focalPhone,
+          'focalPhone': currentUser.phoneNumber,
           'caseType': widget.service,
           'caseDescription': selectedDescription,
           'locationId': widget.location.id,
