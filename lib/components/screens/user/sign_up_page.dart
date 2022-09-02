@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:smartrr/components/widgets/auth_container.dart';
 import 'package:smartrr/components/widgets/show_loading.dart';
 import 'package:smartrr/provider/language_provider.dart';
+import 'package:smartrr/services/country_service.dart';
 import 'package:smartrr/utils/colors.dart';
 import '../../widgets/smart_text_field.dart';
 import '../../widgets/circular_progress.dart';
@@ -38,6 +39,9 @@ class _SignUpPageState extends State<SignUpPage> {
   String initialCountry = 'NG';
   PhoneNumber number = PhoneNumber(isoCode: 'NG');
 
+  List<DropdownMenuItem<String>> _countries = [];
+  String _country;
+
   @override
   void initState() {
     super.initState();
@@ -47,6 +51,7 @@ class _SignUpPageState extends State<SignUpPage> {
     phoneNumberController = TextEditingController();
     dobController = TextEditingController();
     locationController = TextEditingController();
+    _fetchCountries();
   }
 
   @override
@@ -74,6 +79,7 @@ class _SignUpPageState extends State<SignUpPage> {
             'dob': dobController.text,
             'gender': maleOrFemale,
             'status': true,
+            'country': _country,
           };
 
           await _auth.verifyPhoneNumber(
@@ -350,6 +356,49 @@ class _SignUpPageState extends State<SignUpPage> {
                               ],
                               textInputType: TextInputType.phone,
                             ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButtonFormField<String>(
+                                        isExpanded: true,
+                                        decoration: InputDecoration().copyWith(
+                                          contentPadding: EdgeInsets.symmetric(
+                                              horizontal: 25.0, vertical: 6.0),
+                                          enabledBorder: OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(50)),
+                                              borderSide:
+                                                  BorderSide(color: lightGrey)),
+                                          focusedBorder: OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(50)),
+                                              borderSide:
+                                                  BorderSide(color: lightGrey)),
+                                          errorBorder: OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(50)),
+                                              borderSide: BorderSide(
+                                                  color: Colors.red)),
+                                        ),
+                                        hint: Text(
+                                          _language.country,
+                                          style: Theme.of(context)
+                                              .inputDecorationTheme
+                                              .hintStyle,
+                                        ),
+                                        elevation: 0,
+                                        items: _countries,
+                                        validator: (val) =>
+                                            val == null ? "" : null,
+                                        onChanged: (String val) {
+                                          setState(() => _country = val);
+                                        }),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 20.0),
                             smartTextField(
                               title: _language.location,
                               isForm: true,
@@ -461,6 +510,19 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ),
                     )));
+  }
+
+  _fetchCountries() {
+    CountryService.getCountries().then((countries) {
+      countries.forEach((country) {
+        setState(() {
+          _countries.add(DropdownMenuItem(
+            child: Text(country.name),
+            value: country.name,
+          ));
+        });
+      });
+    });
   }
 
   @override
