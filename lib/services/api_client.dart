@@ -25,7 +25,7 @@ class ApiClient {
 //    EWXULOE0HO87RjBn
     var response = await http.post(
         Uri.parse(
-            'https://rest.nexmo.com/sms/json?api_key=d11a9692&api_secret=HTouvYw3rHSOcV0C&to=$phoneNumber&from=+12023866052&text=$message'),
+            'https://rest.nexmo.com/sms/json?api_key=d11a9692&api_secret=SmartRR1TYIaXsFlM&to=$phoneNumber&from=SmartRR&text=$message'),
         headers: {
           "Accept": "application/json",
           "Content-Type": "application/x-www-form-urlencoded"

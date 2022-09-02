@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:provider/provider.dart';
+import 'package:smartrr/components/screens/user/report_or_history_page.dart';
 import 'package:smartrr/components/widgets/circular_progress.dart';
 import 'package:smartrr/components/widgets/show_action.dart';
 import 'package:smartrr/components/widgets/smart_text_field.dart';
@@ -13,7 +14,7 @@ import 'package:smartrr/models/organization.dart';
 import 'package:smartrr/provider/language_provider.dart';
 import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/utils/utils.dart';
-import 'report_or_history_page.dart';
+import 'package:smartrr/services/api_client.dart';
 
 class CaseDescriptionPage extends StatefulWidget {
   final Organization org;
@@ -356,7 +357,7 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
   }
 
   Future _saveCase({String lang = "en"}) async {
-    final _language = S.current;
+    final language = S.current;
 
     if (selectedDescription != null) {
       setState(() => _isLoading = true);
@@ -368,7 +369,22 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
       }
       caseNumber =
           "$caseNumber${DateTime.now().millisecondsSinceEpoch}${widget.service.substring(0, 1)}";
+      String phoneNumber = currentUserInfo['phoneNumber'];
+
       try {
+        String orgSmsMsg = """Dear ${widget.org.name}, 
+            \n Be notified that a case concerning your area of specialty (${widget.service}) has been reported to you. Kindly respond accordingly. 
+            \n\n CASE INFO: 
+            \n Case Number: $caseNumber 
+            \n Case Description: $selectedDescription 
+            \n Phone Number: $phoneNumber
+            \n Location: ${widget.location.title}, ${widget.state.title} """;
+
+        await ApiClient().sendSMS(
+          phoneNumber: widget.org.focalPhone,
+          message: orgSmsMsg,
+        );
+
         FirebaseFirestore.instance.collection('cases').doc().set({
           'language': lang,
           'caseNumber': caseNumber,
@@ -376,9 +392,9 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
           'orgId': widget.org.id,
           'orgName': widget.org.name,
           'orgEmail': widget.org.orgEmail,
+          'focalPhone': currentUser.phoneNumber,
           'caseType': widget.service,
           'caseDescription': selectedDescription,
-          'focalPhone': currentUser.phoneNumber,
           'locationId': widget.location.id,
           "location": widget.location.title,
           'locationName': "${widget.location.title}, ${widget.state.title}",
@@ -389,12 +405,12 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
           'isVictim': true,
           'victimName': null,
           'victimAge': null,
-          'victimPhone': null,
-          'victimGender': null
+          'victimPhone': currentUserInfo["phoneNumber"],
+          'victimGender': currentUserInfo["gender"]
         }).then((onValue) {
           showAction(
             actionText: 'OK',
-            text: _language.caseRegisteredSuccesfully,
+            text: language.caseRegisteredSuccesfully,
             func: _caseRegistered,
             context: context,
           );
@@ -403,11 +419,11 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
         setState(() {
           _isLoading = false;
         });
-        _showException(errorMsg: _language.badInternet);
+        _showException(errorMsg: language.badInternet);
       }
     } else {
       Fluttertoast.showToast(
-        msg: _language.selectDescription,
+        msg: language.selectDescription,
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
@@ -450,7 +466,7 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
           'referredByName': widget.org.name,
           'isVictim': false,
           'victimName': _name.text,
-          'victimAge': double.parse(_age.text),
+          'victimAge': int.parse(_age.text),
           'victimPhone': number.phoneNumber,
           'victimCnic': _cnic.text.toString(),
           'victimGender': _isMale
