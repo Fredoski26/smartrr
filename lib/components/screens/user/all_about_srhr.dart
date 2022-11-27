@@ -59,7 +59,6 @@ class _AllAboutSRHRState extends State<AllAboutSRHR>
                   )
                 ],
                 bottom: TabBar(
-                  isScrollable: false,
                   controller: _tabController,
                   indicatorColor: Colors.white,
                   labelColor: Colors.white,

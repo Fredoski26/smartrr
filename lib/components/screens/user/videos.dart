@@ -3,7 +3,6 @@ import 'package:page_transition/page_transition.dart';
 import 'package:smartrr/components/widgets/video_player.dart';
 import 'package:smartrr/models/video.dart';
 import 'package:smartrr/services/video_service.dart';
-import 'package:video_player/video_player.dart';
 
 class Videos extends StatefulWidget {
   const Videos({Key key}) : super(key: key);
@@ -13,23 +12,70 @@ class Videos extends StatefulWidget {
 }
 
 class _VideosState extends State<Videos> {
+  Widget _errorHandler(Object error) {
+    switch (error.runtimeType.toString()) {
+      case "_ClientSocketException":
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Network Error",
+                  style: TextStyle().copyWith(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                    child: Text(
+                  "Please check that you have an active internet connection",
+                  textAlign: TextAlign.center,
+                )),
+              ],
+            ),
+          ],
+        );
+      default:
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              "Something is not right :( ${error.runtimeType}",
+              style: TextStyle()
+                  .copyWith(fontWeight: FontWeight.w500, fontSize: 18),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                    child: Text(
+                  "We encountered an error while fetching your videos",
+                  textAlign: TextAlign.center,
+                )),
+              ],
+            ),
+          ],
+        );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: VideoService.getAllVideos().asStream(),
       builder: (context, AsyncSnapshot<List<Video>> snapshot) => snapshot
               .hasError
-          ? Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Something is not right",
-                  style: TextStyle()
-                      .copyWith(fontWeight: FontWeight.w500, fontSize: 18),
-                ),
-                Text("We encountered an error fetching your videos :("),
-              ],
-            )
+          ? _errorHandler(snapshot.error)
           : Container(
               padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
               child: snapshot.hasData
@@ -55,7 +101,7 @@ class _VideosState extends State<Videos> {
                                     child: Card(
                                       shape: RoundedRectangleBorder(
                                         borderRadius:
-                                            BorderRadius.circular(9.0),
+                                            BorderRadius.circular(15.0),
                                       ),
                                       child: Column(
                                         children: [
@@ -69,9 +115,9 @@ class _VideosState extends State<Videos> {
                                                   borderRadius:
                                                       BorderRadius.only(
                                                     topLeft:
-                                                        Radius.circular(9.0),
+                                                        Radius.circular(15.0),
                                                     topRight:
-                                                        Radius.circular(9.0),
+                                                        Radius.circular(15.0),
                                                   ),
                                                   child: Image.network(
                                                     video.thumbnail,
@@ -93,7 +139,8 @@ class _VideosState extends State<Videos> {
                                                 child: Container(
                                                   decoration: BoxDecoration(
                                                     border: Border.all(
-                                                        color: Colors.white),
+                                                      color: Colors.white,
+                                                    ),
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                       20,
