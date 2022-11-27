@@ -37,14 +37,16 @@ final ThemeData appTheme = ThemeData(
       ),
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
-        style: ButtonStyle(
-      padding: MaterialStateProperty.all(
-          EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0)),
-      side: MaterialStateProperty.all(
-          BorderSide(width: 1.0, color: primaryColor)),
-      shape: MaterialStateProperty.all(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(33))),
-    )));
+      style: ButtonStyle(
+        padding: MaterialStateProperty.all(
+            EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0)),
+        side: MaterialStateProperty.all(
+            BorderSide(width: 1.0, color: primaryColor)),
+        shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(33))),
+      ),
+    ),
+    tabBarTheme: TabBarTheme().copyWith());
 
 final ThemeData darkTheme = ThemeData(
   primarySwatch: Colors.orange,

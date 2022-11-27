@@ -1,38 +1,29 @@
-import 'package:chewie/chewie.dart';
+import 'package:better_player/better_player.dart';
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
+import 'package:smartrr/models/video.dart';
+import 'package:smartrr/utils/colors.dart';
 
 class MyVideoPlayer extends StatefulWidget {
-  final String source;
-  const MyVideoPlayer({Key key, @required this.source});
+  final Video video;
+  const MyVideoPlayer({Key key, @required this.video});
 
   @override
   State<MyVideoPlayer> createState() => _MyVideoPlayerState();
 }
 
 class _MyVideoPlayerState extends State<MyVideoPlayer> {
-  VideoPlayerController _videoPlayerController;
+  BetterPlayerController _betterPlayerController;
+  BetterPlayerDataSource _betterPlayerDataSource;
 
   @override
   Widget build(BuildContext context) {
-    final _chewieController = ChewieController(
-      videoPlayerController: _videoPlayerController,
-      autoPlay: true,
-      looping: false,
-    );
-
-    final playerWidget = Chewie(controller: _chewieController);
-
-    return Scaffold(
-      body: Container(
-        child: _videoPlayerController.value.isInitialized
-            ? playerWidget
-            : Center(
-                child: CircularProgressIndicator(),
-              ),
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        color: Colors.black,
+    return Container(
+      color: Colors.black,
+      child: AspectRatio(
+        aspectRatio: 16 / 9,
+        child: BetterPlayer(
+          controller: _betterPlayerController,
+        ),
       ),
     );
   }
@@ -40,16 +31,43 @@ class _MyVideoPlayerState extends State<MyVideoPlayer> {
   @override
   void initState() {
     super.initState();
-    _videoPlayerController = VideoPlayerController.network(widget.source)
-      ..initialize().then((_) {
-        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        setState(() {});
-      });
+    _betterPlayerDataSource = BetterPlayerDataSource(
+        BetterPlayerDataSourceType.network, widget.video.url,
+        cacheConfiguration: BetterPlayerCacheConfiguration(
+          useCache: true,
+          preCacheSize: 10 * 1024 * 1024,
+          maxCacheSize: 10 * 1024 * 1024,
+          maxCacheFileSize: 10 * 1024 * 1024,
+        ),
+        notificationConfiguration: BetterPlayerNotificationConfiguration(
+          showNotification: true,
+          title: widget.video.title,
+          author: widget.video.author,
+          imageUrl: widget.video.thumbnail,
+          activityName: "MainActivity",
+        ));
+
+    _betterPlayerController = BetterPlayerController(
+      BetterPlayerConfiguration(
+        autoPlay: true,
+        looping: true,
+        allowedScreenSleep: false,
+        controlsConfiguration: BetterPlayerControlsConfiguration(
+          controlBarColor: Colors.transparent,
+          progressBarPlayedColor: primaryColor,
+          progressBarBufferedColor: Colors.yellow,
+          loadingColor: primaryColor,
+        ),
+      ),
+      betterPlayerDataSource: _betterPlayerDataSource,
+    );
+
+    _betterPlayerController.preCache(_betterPlayerDataSource);
   }
 
   @override
   void dispose() {
     super.dispose();
-    _videoPlayerController.dispose();
+    _betterPlayerController.stopPreCache(_betterPlayerDataSource);
   }
 }

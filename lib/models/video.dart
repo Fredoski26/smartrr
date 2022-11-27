@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 class Video {
   String url;
   String description;
@@ -5,12 +7,15 @@ class Video {
   int plays;
   int rating;
   String thumbnail;
+  String author;
 
-  Video(
-      {this.url,
-      this.thumbnail,
-      this.title,
-      this.description,
-      this.plays,
-      this.rating});
+  Video({
+    @required this.url,
+    this.thumbnail,
+    @required this.title,
+    this.author,
+    this.description,
+    this.plays,
+    this.rating,
+  });
 }

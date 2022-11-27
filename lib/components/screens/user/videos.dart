@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smartrr/components/widgets/circular_progress.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:smartrr/components/widgets/video_player.dart';
 import 'package:smartrr/models/video.dart';
 import 'package:smartrr/services/video_service.dart';
@@ -13,17 +13,22 @@ class Videos extends StatefulWidget {
 }
 
 class _VideosState extends State<Videos> {
-  bool _isLoading = false;
-
-  VideoPlayerController _videoPlayerController;
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: VideoService.getAllVideos().asStream(),
       builder: (context, AsyncSnapshot<List<Video>> snapshot) => snapshot
               .hasError
-          ? Center(
-              child: Text(snapshot.error.toString()),
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Something is not right",
+                  style: TextStyle()
+                      .copyWith(fontWeight: FontWeight.w500, fontSize: 18),
+                ),
+                Text("We encountered an error fetching your videos :("),
+              ],
             )
           : Container(
               padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
@@ -37,11 +42,13 @@ class _VideosState extends State<Videos> {
                         children: snapshot.data
                             .map((video) => GestureDetector(
                                   onTap: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => MyVideoPlayer(
-                                              source:
-                                                  "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4"))),
+                                    context,
+                                    PageTransition(
+                                      child: MyVideoPlayer(video: video),
+                                      type: PageTransitionType.scale,
+                                      alignment: Alignment.center,
+                                    ),
+                                  ),
                                   child: Container(
                                     width: 190,
                                     height: 200,
@@ -76,8 +83,9 @@ class _VideosState extends State<Videos> {
                                                       size: 30,
                                                       color: Colors.grey,
                                                     ),
-                                                    height: 120,
-                                                    fit: BoxFit.cover,
+                                                    fit: BoxFit.fill,
+                                                    width: 190,
+                                                    height: 200,
                                                   ),
                                                 ),
                                               ),
@@ -102,7 +110,8 @@ class _VideosState extends State<Videos> {
                                           Expanded(
                                               child: Padding(
                                             padding: const EdgeInsets.all(4.0),
-                                            child: Text(video.title),
+                                            child: Center(
+                                                child: Text(video.title)),
                                           )),
                                         ],
                                       ),
@@ -117,11 +126,5 @@ class _VideosState extends State<Videos> {
                     ),
             ),
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _videoPlayerController.dispose();
   }
 }
