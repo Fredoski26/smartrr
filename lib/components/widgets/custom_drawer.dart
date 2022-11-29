@@ -46,14 +46,35 @@ class CustomDrawer extends StatelessWidget {
             accountName: Text(_currentUser.displayName),
             accountEmail: Text(_currentUser.phoneNumber ?? _currentUser.email)),
         ListTile(
-          leading: Icon(Icons.info_outline_rounded),
-          title: Text(_language.aboutSmartRR),
-          onTap: () => Navigator.of(context).pushNamed("/about"),
-        ),
-        ListTile(
           leading: Icon(Icons.history),
           title: Text(_language.history),
           onTap: () => Navigator.pushNamed(context, '/casesHistory'),
+        ),
+        ListTile(
+          leading: Icon(Icons.shopping_bag_outlined),
+          title: Row(
+            children: [
+              Text(_language.shop),
+              Container(
+                margin: EdgeInsets.all(2),
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.green.withOpacity(.1),
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                child: Text(
+                  _language.comingSoon,
+                  style:
+                      TextStyle().copyWith(color: Colors.green, fontSize: 12),
+                ),
+              ),
+            ],
+          ),
+        ),
+        ListTile(
+          leading: Icon(Icons.info_outline_rounded),
+          title: Text(_language.aboutSmartRR),
+          onTap: () => Navigator.of(context).pushNamed("/about"),
         ),
         ListTile(
           leading: Icon(Icons.settings),

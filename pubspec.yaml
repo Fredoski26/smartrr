@@ -48,6 +48,7 @@ dependencies:
   better_player:
     git:
       url: https://github.com/tintran-dev/betterplayer.git
+  flutter_animate: ^2.0.1
 
 dev_dependencies:
   flutter_test:

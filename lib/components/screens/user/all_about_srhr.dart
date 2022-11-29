@@ -64,11 +64,11 @@ class _AllAboutSRHRState extends State<AllAboutSRHR>
                   labelColor: Colors.white,
                   tabs: [
                     Tab(
-                      text: "Read",
+                      text: _language.read,
                       icon: Icon(Icons.chrome_reader_mode_outlined),
                     ),
                     Tab(
-                      text: "Watch",
+                      text: _language.watch,
                       icon: Icon(Icons.video_collection_outlined),
                     )
                   ],

@@ -255,10 +255,10 @@ class S {
     );
   }
 
-  /// `All About SRHR`
+  /// `All About SRH/FGM`
   String get allAboutSRHR {
     return Intl.message(
-      'All About SRHR',
+      'All About SRH/FGM',
       name: 'allAboutSRHR',
       desc: '',
       args: [],
@@ -685,6 +685,26 @@ class S {
     );
   }
 
+  /// `Shop`
+  String get shop {
+    return Intl.message(
+      'Shop',
+      name: 'shop',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `coming soon`
+  String get comingSoon {
+    return Intl.message(
+      'coming soon',
+      name: 'comingSoon',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Smart Reporting and Referral (SMART RR) is a technology based mobile application that allows survivors, social workers and service providers to report and refer cases/incidents of GBV from their smart and basic phones. The tool was developed by Big Family 360 Foundation, a national non-governmental organisation in Nigeria.\n\nSmart RR application is a technology based mobile application which enables survivors, social workers and service providers to report and refer GBV incidents to relevant service providers and authorities, conducts service mapping, automatically updates referral directory, collects and analyses referral data. This idea was built on the existing referral mechanism of the GBV Sub Sector which is done manually.`
   String get aboutSmartrrData {
     return Intl.message(
@@ -900,6 +920,26 @@ class S {
     return Intl.message(
       'Reproductive health is a state of complete physical, mental, and social wellbeing, and not merely the absence of disease or infirmity, in all matters relating to the reproductive system and to its functions and processes.\n\nReproductive health means  people are able to have a satisfying and safe sex life, and that they have the capability to reproduce and the freedom to decide if, when, and how often to do so.',
       name: 'srhrDefinition3Body',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Watch`
+  String get watch {
+    return Intl.message(
+      'Watch',
+      name: 'watch',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Read`
+  String get read {
+    return Intl.message(
+      'Read',
+      name: 'read',
       desc: '',
       args: [],
     );
