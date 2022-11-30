@@ -32,6 +32,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "caseType" : MessageLookupByLibrary.simpleMessage("Nau\'in Harka"),
     "changePassword" : MessageLookupByLibrary.simpleMessage("Canja Mabudi"),
     "clickToRead" : MessageLookupByLibrary.simpleMessage("Danna don karantawa"),
+    "comingSoon" : MessageLookupByLibrary.simpleMessage("nan gaba kadan"),
     "confirmPassword" : MessageLookupByLibrary.simpleMessage("Tabbata mabudi"),
     "consentForm" : MessageLookupByLibrary.simpleMessage("Yardan bada bayani"),
     "consentFormData" : MessageLookupByLibrary.simpleMessage("Na fahimta da cewa bada izini da nake yi yanzu amincewa ne domin in sanar da mai yi mini hidima dukan bayanai da ya shafi kara da nake shigarwa ga mai hidima da na zaba, hakkan kuma domin in sami tamakon kariya da lafiya, da yanayin kwanciyar hankali na ne, tare da bukatuna da ya shafi shari’a da doka. Na kuma fahimta da kuma amimce cewa: za;a yi amfani da bayanai da naka bayarwa cikin sirri da girmamawa don kuma yanda za’a samar mini taimako da kulawa bisa ga bukata da mika. Na kuma fahimta cewa: bada wadannan bayanai na nufin jami’i daga cikin hukumomi ko ma’aikatun da na zaba zai/zata iya saduwa da ni fuska da fuska don ci gaba da tattaunawa wurin bin diddigin kara da na shigar. Kuma a kowanne lokaci zan iya canja ra’ayi game da samar da bayanai na ko game da jami\'I da ke kula da kara da na shigar."),
@@ -64,6 +65,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "proceed" : MessageLookupByLibrary.simpleMessage("Chigaba"),
     "psychologicalOrEmotionalAbuse" : MessageLookupByLibrary.simpleMessage("Zagi"),
     "rape" : MessageLookupByLibrary.simpleMessage("Fiyade"),
+    "read" : MessageLookupByLibrary.simpleMessage("Karanta"),
     "readMore" : MessageLookupByLibrary.simpleMessage("Chigaba da karaku"),
     "reportACase" : MessageLookupByLibrary.simpleMessage("Shigar da Kara"),
     "reportFor" : MessageLookupByLibrary.simpleMessage("Shigar da kara ma"),
@@ -82,6 +84,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "settings" : MessageLookupByLibrary.simpleMessage("Saiti"),
     "sexualAbuse" : MessageLookupByLibrary.simpleMessage("Cin Zarafi"),
     "sexualReproductiveKits" : MessageLookupByLibrary.simpleMessage("Kayan Haihuwar Jima\'i"),
+    "shop" : MessageLookupByLibrary.simpleMessage("Shago"),
     "signUp" : MessageLookupByLibrary.simpleMessage("  Yi Rejista"),
     "someoneElse" : MessageLookupByLibrary.simpleMessage("Wani"),
     "srhrDefinition1Body" : MessageLookupByLibrary.simpleMessage("Yanayi na lafiya da kuma kwanciyar hankali wurin nuna kawazuci, shawa\'a, da kuma saduwa wurin jima\'i tsakanin jensi biyu. Yana kunshe da yananin annashuwa ba kuma tara da fargaba ko tilastawa ba wajen saduwa ta jima\'i. Domin samar da irin wannan yanayi na Lafiya Jima\'I, dole ne a samar a kuma tsare yancin da kowa yake da shi."),
@@ -107,6 +110,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "submitReport" : MessageLookupByLibrary.simpleMessage("Shigar Da Kara"),
     "update" : MessageLookupByLibrary.simpleMessage("Sabunta"),
     "user" : MessageLookupByLibrary.simpleMessage("Mai Aiki"),
+    "watch" : MessageLookupByLibrary.simpleMessage("Kallo"),
     "yourself" : MessageLookupByLibrary.simpleMessage("kai na")
   };
 }

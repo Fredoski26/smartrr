@@ -21,7 +21,7 @@
   "alreadyHaveAnAccount": "Already have an account?",
   "language": "Language",
   "reportACase": "Report a case",
-  "allAboutSRHR": "All About SRHR",
+  "allAboutSRHR": "All About SRH/FGM",
   "impactOfSmartRR": "Impact of Smart RR",
   "aboutSmartRR": "About Smart RR",
   "history": "History",
@@ -64,6 +64,8 @@
   "selectCountry": "Select country",
   "interviewWith": "Interview with",
   "clickToRead": "Click to read",
+  "shop": "Shop",
+  "comingSoon": "coming soon",
   "aboutSmartrrData": "Smart Reporting and Referral (SMART RR) is a technology based mobile application that allows survivors, social workers and service providers to report and refer cases/incidents of GBV from their smart and basic phones. The tool was developed by Big Family 360 Foundation, a national non-governmental organisation in Nigeria.\n\nSmart RR application is a technology based mobile application which enables survivors, social workers and service providers to report and refer GBV incidents to relevant service providers and authorities, conducts service mapping, automatically updates referral directory, collects and analyses referral data. This idea was built on the existing referral mechanism of the GBV Sub Sector which is done manually.",
   "consentFormData": "I understand that in giving  my  authorization below,  I  am giving  permission to  share  the  specific  case  information from  my  incident report with the  service  provider(s)  I  have indicated, so  that I  can  receive  help  with safety,  health, psychosocial, and/or  legal  needs. I understand that shared information will  be  treated with confidentiality  and respect, and shared  only as  needed to  provide  the  assistance  I  request. I  understand that releasing  this  information means  that a  person from  the  agency  or  service  selected below may  come  to  talk to  me.   At any  point, I  have  the  right to  change  my  mind about sharing information with the  designated agency/focal  point listed below.",
   "srhrHeading1": "Sexual Reproductive Health and Rights (SRHR) Contents.",
@@ -85,5 +87,7 @@
   "srhrDefinition2Title": "Sexuality:",
   "srhrDefinition2Body": "sexual feelings, considerations, attractions and practices towards others Sexuality.",
   "srhrDefinition3Title": "Reproductive Health(RH):",
-  "srhrDefinition3Body": "Reproductive health is a state of complete physical, mental, and social wellbeing, and not merely the absence of disease or infirmity, in all matters relating to the reproductive system and to its functions and processes.\n\nReproductive health means  people are able to have a satisfying and safe sex life, and that they have the capability to reproduce and the freedom to decide if, when, and how often to do so."
+  "srhrDefinition3Body": "Reproductive health is a state of complete physical, mental, and social wellbeing, and not merely the absence of disease or infirmity, in all matters relating to the reproductive system and to its functions and processes.\n\nReproductive health means  people are able to have a satisfying and safe sex life, and that they have the capability to reproduce and the freedom to decide if, when, and how often to do so.",
+  "watch": "Watch",
+  "read": "Read"
 }

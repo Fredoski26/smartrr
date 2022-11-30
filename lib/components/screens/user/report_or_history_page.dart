@@ -32,48 +32,140 @@ class _ReportOrHistoryPageState extends State<ReportOrHistoryPage> {
                 actions: [SmartSpeechToText(), LanguagePicker()],
               ),
               body: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
-                child: Center(
-                  child: IntrinsicWidth(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ElevatedButton.icon(
-                          onPressed: () => _bottomSheet(context: context),
-                          icon: Icon(Icons.input),
-                          label: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 0, vertical: 20.0),
-                            child: Text(_language.reportACase),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 60.0, vertical: 70.0),
+                  child: Column(
+                    children: [
+                      Expanded(
+                          child: GestureDetector(
+                        onTap: () => _bottomSheet(context: context),
+                        child: Container(
+                            margin: EdgeInsets.only(bottom: 5),
+                            decoration: BoxDecoration(
+                                color: primaryColor,
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10))),
+                            child: Center(
+                                child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.input),
+                                Text(
+                                  _language.reportACase,
+                                  style: TextStyle().copyWith(
+                                      color: Colors.white, fontSize: 18),
+                                ),
+                              ],
+                            ))),
+                      )),
+                      Expanded(
+                        child: Container(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                  child: GestureDetector(
+                                onTap: () =>
+                                    Navigator.of(context).pushNamed("/srhr"),
+                                child: Container(
+                                    padding: EdgeInsets.all(5.0),
+                                    margin: EdgeInsets.only(right: 2.5),
+                                    decoration: BoxDecoration(
+                                        color: primaryColor,
+                                        borderRadius: BorderRadius.only(
+                                          bottomLeft: Radius.circular(10),
+                                        )),
+                                    child: Center(
+                                        child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.info_outline_rounded),
+                                        Text(
+                                          _language.allAboutSRHR,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle().copyWith(
+                                              color: Colors.white,
+                                              fontSize: 18),
+                                        ),
+                                      ],
+                                    ))),
+                              )),
+                              Expanded(
+                                  child: GestureDetector(
+                                onTap: () => Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ImpactOfSmartRR())),
+                                child: Container(
+                                    padding: EdgeInsets.all(5.0),
+                                    margin: EdgeInsets.only(left: 2.5),
+                                    decoration: BoxDecoration(
+                                        color: primaryColor,
+                                        borderRadius: BorderRadius.only(
+                                            bottomRight: Radius.circular(10))),
+                                    child: Center(
+                                        child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.public),
+                                        Text(
+                                          _language.impactOfSmartRR,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle().copyWith(
+                                              color: Colors.white,
+                                              fontSize: 18),
+                                        ),
+                                      ],
+                                    ))),
+                              )),
+                            ],
                           ),
                         ),
-                        ElevatedButton.icon(
-                          onPressed: () =>
-                              Navigator.of(context).pushNamed("/srhr"),
-                          icon: Icon(Icons.info_rounded),
-                          label: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 0, vertical: 20.0),
-                            child: Text(_language.allAboutSRHR),
-                          ),
-                        ),
-                        ElevatedButton.icon(
-                            onPressed: () => Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (context) => ImpactOfSmartRR())),
-                            icon: Icon(Icons.public),
-                            label: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 0, vertical: 20.0),
-                              child: Text(_language.impactOfSmartRR),
-                            )),
-                      ],
-                    ),
+                      )
+                    ],
+                  )
+                  // Center(
+                  //   child: IntrinsicWidth(
+                  //     child: Column(
+                  //       crossAxisAlignment: CrossAxisAlignment.stretch,
+                  //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  //       children: [
+                  //         ElevatedButton.icon(
+                  //           onPressed: () => _bottomSheet(context: context),
+                  //           icon: Icon(Icons.input),
+                  //           label: Padding(
+                  //             padding: const EdgeInsets.symmetric(
+                  //                 horizontal: 0, vertical: 20.0),
+                  //             child: Text(_language.reportACase),
+                  //           ),
+                  //         ),
+                  //         ElevatedButton.icon(
+                  //           onPressed: () =>
+                  //               Navigator.of(context).pushNamed("/srhr"),
+                  //           icon: Icon(Icons.info_rounded),
+                  //           label: Padding(
+                  //             padding: const EdgeInsets.symmetric(
+                  //                 horizontal: 0, vertical: 20.0),
+                  //             child: Text(_language.allAboutSRHR),
+                  //           ),
+                  //         ),
+                  //         ElevatedButton.icon(
+                  //             onPressed: () => Navigator.of(context).push(
+                  //                 MaterialPageRoute(
+                  //                     builder: (context) => ImpactOfSmartRR())),
+                  //             icon: Icon(Icons.public),
+                  //             label: Padding(
+                  //               padding: const EdgeInsets.symmetric(
+                  //                   horizontal: 0, vertical: 20.0),
+                  //               child: Text(_language.impactOfSmartRR),
+                  //             )),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
                   ),
-                ),
-              ),
               floatingActionButton: FloatingActionButton(
                   backgroundColor: primaryColor,
                   foregroundColor: Colors.white,
