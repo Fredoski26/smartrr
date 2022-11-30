@@ -75,6 +75,7 @@ class _AllAboutSRHRState extends State<AllAboutSRHR>
                 ),
               ),
               body: TabBarView(
+                physics: NeverScrollableScrollPhysics(),
                 controller: _tabController,
                 children: [
                   SingleChildScrollView(

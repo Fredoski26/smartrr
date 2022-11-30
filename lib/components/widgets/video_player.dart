@@ -19,11 +19,8 @@ class _MyVideoPlayerState extends State<MyVideoPlayer> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.black,
-      child: AspectRatio(
-        aspectRatio: 16 / 9,
-        child: BetterPlayer(
-          controller: _betterPlayerController,
-        ),
+      child: BetterPlayer(
+        controller: _betterPlayerController,
       ),
     );
   }

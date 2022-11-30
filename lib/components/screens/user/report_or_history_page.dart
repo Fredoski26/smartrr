@@ -83,6 +83,7 @@ class _ReportOrHistoryPageState extends State<ReportOrHistoryPage> {
                                         Icon(Icons.info_outline_rounded),
                                         Text(
                                           _language.allAboutSRHR,
+                                          textAlign: TextAlign.center,
                                           style: TextStyle().copyWith(
                                               color: Colors.white,
                                               fontSize: 18),
