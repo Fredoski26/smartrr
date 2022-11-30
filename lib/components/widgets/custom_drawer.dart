@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:smartrr/components/screens/user/shop.dart';
 import 'package:smartrr/components/widgets/ask_action.dart';
 import 'package:smartrr/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -69,6 +71,13 @@ class CustomDrawer extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+          onTap: () => Navigator.push(
+            context,
+            PageTransition(
+              child: Shop(),
+              type: PageTransitionType.rightToLeft,
+            ),
           ),
         ),
         ListTile(
