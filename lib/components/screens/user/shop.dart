@@ -5,7 +5,7 @@ import 'package:smartrr/models/product.dart';
 import 'package:smartrr/utils/colors.dart';
 
 class Shop extends StatefulWidget {
-  const Shop({Key key});
+  const Shop({super.key});
 
   @override
   State<Shop> createState() => _ShopState();
@@ -15,10 +15,14 @@ class _ShopState extends State<Shop> {
   List<Product> _products = [
     Product(
       name: "Birth Control Shot",
-      description: "Birth Control Shot",
+      description:
+          "Birth Control Shot Birth Control Shot Birth Control Shot Birth Control Shot Birth Control Shot Birth Control Shot Birth Control Shot",
       price: 2000,
       type: ProductType.single,
       images: [
+        ProductImage(
+          url: "assets/images/image2.jpg",
+        ),
         ProductImage(
           url: "assets/images/image2.jpg",
         )
@@ -27,10 +31,14 @@ class _ShopState extends State<Shop> {
     ),
     Product(
         name: "Sexual Health Kit",
-        description: "Sexual Health Kit",
+        description:
+            "Sexual Health Kit Sexual Health Kit Sexual Health Kit Sexual Health Kit Sexual Health Kit Sexual Health Kit Sexual Health Kit Sexual Health Kit",
         price: 12000,
         type: ProductType.multiple,
         images: [
+          ProductImage(
+            url: "assets/images/image1.jpg",
+          ),
           ProductImage(
             url: "assets/images/image1.jpg",
           )
