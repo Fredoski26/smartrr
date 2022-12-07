@@ -8,15 +8,15 @@ import 'package:smartrr/utils/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ChatBot extends StatefulWidget {
-  const ChatBot({Key key, this.title}) : super(key: key);
+  const ChatBot({super.key, this.title});
 
-  final String title;
+  final String? title;
   @override
   State<ChatBot> createState() => _ChatBotState();
 }
 
 class _ChatBotState extends State<ChatBot> {
-  DialogFlowtter dialogFlowtter;
+  late DialogFlowtter dialogFlowtter;
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
@@ -98,7 +98,7 @@ class _ChatBotState extends State<ChatBot> {
     );
 
     if (response.message == null) return;
-    addMessage(response.message);
+    addMessage(response.message!);
   }
 
   void addMessage(Message message, [bool isUserMessage = false]) {
@@ -106,7 +106,7 @@ class _ChatBotState extends State<ChatBot> {
       setState(() {
         messages.add({
           'type': "payload",
-          'counsellors': message.payload["counsellors"],
+          'counsellors': message.payload!["counsellors"],
           'isUserMessage': isUserMessage,
         });
       });
@@ -114,11 +114,11 @@ class _ChatBotState extends State<ChatBot> {
       setState(() {
         messages.add({
           'type': "text",
-          'message': message.text.text[0],
+          'message': message.text!.text![0],
           'isUserMessage': isUserMessage,
         });
       });
-      if (message.text.text[0] == "Talk to a counsellor") {
+      if (message.text!.text![0] == "Talk to a counsellor") {
         setState(() {
           messages.add({
             'type': "notification",
@@ -141,9 +141,12 @@ class _ChatBotState extends State<ChatBot> {
 }
 
 class AppBody extends StatefulWidget {
-  const AppBody(
-      {Key key, this.messages, this.sendMessage, this.scrollController})
-      : super(key: key);
+  const AppBody({
+    super.key,
+    required this.messages,
+    required this.sendMessage,
+    required this.scrollController,
+  });
 
   final List<Map> messages;
   final Function sendMessage;
@@ -226,7 +229,7 @@ class _AppBodyState extends State<AppBody> {
 }
 
 class Notification extends StatelessWidget {
-  Notification({@required this.text});
+  Notification({required this.text});
   final String text;
   @override
   Widget build(BuildContext context) {
@@ -247,11 +250,11 @@ class Notification extends StatelessWidget {
 }
 
 class ChatMessage extends StatelessWidget {
-  const ChatMessage({Key key, this.message}) : super(key: key);
+  const ChatMessage({super.key, required this.message});
   final Map message;
   @override
   Widget build(BuildContext context) {
-    final User _currentUser = FirebaseAuth.instance.currentUser;
+    final User _currentUser = FirebaseAuth.instance.currentUser!;
 
     final _random = Random();
     final counsellor = message["type"] == "payload"
@@ -281,7 +284,7 @@ class ChatMessage extends StatelessWidget {
                 onTap: () {
                   final url = Uri.parse(
                       "${counsellor["link"]}?text=Hello,%0D%0AI am ${_currentUser.displayName}");
-                  launch(url.toString());
+                  launchUrl(url);
                 },
               )
             ],

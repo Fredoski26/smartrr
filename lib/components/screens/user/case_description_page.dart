@@ -23,12 +23,12 @@ class CaseDescriptionPage extends StatefulWidget {
   final String service;
 
   const CaseDescriptionPage({
-    Key key,
-    @required this.org,
-    @required this.state,
-    @required this.location,
-    @required this.service,
-  }) : super(key: key);
+    super.key,
+    required this.org,
+    required this.state,
+    required this.location,
+    required this.service,
+  });
 
   @override
   _CaseDescriptionPageState createState() => _CaseDescriptionPageState();
@@ -39,8 +39,8 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
   bool _isLoading = true;
   bool _isMale = true;
   bool _userType = true;
-  User currentUser;
-  String selectedDescription;
+  late User currentUser;
+  late String selectedDescription;
   TextEditingController _name = TextEditingController();
   TextEditingController _cnic = TextEditingController();
   TextEditingController _age = TextEditingController();
@@ -56,7 +56,7 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
   void initState() {
     _getUserType();
     super.initState();
-    User _currentUser = FirebaseAuth.instance.currentUser;
+    User _currentUser = FirebaseAuth.instance.currentUser!;
     setState(() {
       currentUser = _currentUser;
     });
@@ -123,9 +123,9 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
                                     leading: Radio(
                                         value: items[i],
                                         groupValue: selectedDescription,
-                                        onChanged: (val) => {
+                                        onChanged: (String? val) => {
                                               setState(() {
-                                                selectedDescription = val;
+                                                selectedDescription = val!;
                                               })
                                             }),
                                     title: Text(items[i]),
@@ -182,8 +182,8 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
                                         child: Text(value),
                                       );
                                     }).toList(),
-                                    onChanged: (value) => setState(
-                                        () => selectedDescription = value),
+                                    onChanged: (String? value) => setState(
+                                        () => selectedDescription = value!),
                                     decoration: InputDecoration().copyWith(
                                       contentPadding: EdgeInsets.symmetric(
                                           horizontal: 25.0, vertical: 6.0),
@@ -275,7 +275,7 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
                                             Checkbox(
                                               value: _isMale,
                                               onChanged: (val) {
-                                                if (val)
+                                                if (val!)
                                                   setState(
                                                       () => _isMale = true);
                                                 else
@@ -301,7 +301,7 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
                                             Checkbox(
                                               value: !_isMale,
                                               onChanged: (val) {
-                                                if (val)
+                                                if (val!)
                                                   setState(
                                                       () => _isMale = false);
                                                 else
@@ -347,7 +347,7 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
     );
   }
 
-  void _showException({@required String errorMsg}) {
+  void _showException({required String errorMsg}) {
     showAction(
       actionText: 'OK',
       text: errorMsg,
@@ -363,7 +363,7 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
       setState(() => _isLoading = true);
       String userId = await getUserIdPref();
       String caseNumber = '';
-      List<String> ll = currentUser.displayName.split(' ');
+      List<String> ll = currentUser.displayName!.split(' ');
       for (int i = 0; i < ll.length; i++) {
         caseNumber += ll[i].substring(0, 1);
       }
@@ -381,7 +381,7 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
             \n Location: ${widget.location.title}, ${widget.state.title} """;
 
         await ApiClient().sendSMS(
-          phoneNumber: widget.org.focalPhone,
+          phoneNumber: widget.org.focalPhone!,
           message: orgSmsMsg,
         );
 
@@ -441,7 +441,7 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
       setState(() => _isLoading = true);
       String userId = await getUserIdPref();
       String caseNumber = '';
-      List<String> ll = currentUser.displayName.split(' ');
+      List<String> ll = currentUser.displayName!.split(' ');
       for (int i = 0; i < ll.length; i++) {
         caseNumber += ll[i].substring(0, 1);
       }

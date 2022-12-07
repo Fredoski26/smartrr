@@ -2,19 +2,20 @@ import 'package:flutter/material.dart';
 
 class CustomButtonWidth extends StatelessWidget {
   final String title;
-  final Function func;
+  final dynamic func;
   final Color color;
   final double borderRadius;
   final double width;
   final Color textColor;
 
-  CustomButtonWidth(
-      {this.textColor = Colors.black,
-      this.title,
-      this.func,
-      this.color = Colors.white,
-      this.borderRadius = 5,
-      this.width});
+  CustomButtonWidth({
+    this.textColor = Colors.black,
+    required this.title,
+    required this.func,
+    this.color = Colors.white,
+    this.borderRadius = 5,
+    required this.width,
+  });
 
   @override
   Widget build(BuildContext context) {

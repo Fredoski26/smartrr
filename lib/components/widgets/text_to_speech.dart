@@ -10,23 +10,23 @@ enum TtsState { playing, stopped, paused, continued }
 
 class MyTts extends StatefulWidget {
   const MyTts({
-    Key key,
-    @required this.text,
+    super.key,
+    required this.text,
     this.language = "en",
-    this.scrollController = null,
-  }) : super(key: key);
+    this.scrollController,
+  });
 
   final String text, language;
-  final ScrollController scrollController;
+  final ScrollController? scrollController;
 
   @override
   State<MyTts> createState() => _MyTtsState();
 }
 
 class _MyTtsState extends State<MyTts> {
-  FlutterTts flutterTts;
-  String language;
-  String engine;
+  late FlutterTts flutterTts;
+  late String language;
+  late String engine;
   double volume = 0.5;
   double pitch = 1.0;
   double rate = 0.5;
@@ -43,7 +43,7 @@ class _MyTtsState extends State<MyTts> {
   bool get isAndroid => !kIsWeb && Platform.isAndroid;
   bool get isWeb => kIsWeb;
 
-  Timer _scrollTimer;
+  late Timer _scrollTimer;
 
   initTts() {
     flutterTts = FlutterTts();
@@ -120,10 +120,10 @@ class _MyTtsState extends State<MyTts> {
 
       _scrollTimer =
           Timer.periodic(new Duration(seconds: (speed ~/ 2) - 1), (timer) {
-        if (widget.scrollController.position.pixels !=
-            widget.scrollController.position.maxScrollExtent) {
-          widget.scrollController
-              .jumpTo(widget.scrollController.offset + (speed * 2));
+        if (widget.scrollController!.position.pixels !=
+            widget.scrollController!.position.maxScrollExtent) {
+          widget.scrollController!
+              .jumpTo(widget.scrollController!.offset + (speed * 2));
         }
       });
     }

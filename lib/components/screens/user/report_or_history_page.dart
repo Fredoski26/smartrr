@@ -175,7 +175,7 @@ class _ReportOrHistoryPageState extends State<ReportOrHistoryPage> {
             ));
   }
 
-  _bottomSheet({BuildContext context}) {
+  _bottomSheet({required BuildContext context}) {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
@@ -235,7 +235,7 @@ class _ReportOrHistoryPageState extends State<ReportOrHistoryPage> {
         });
   }
 
-  _onReportTap({bool userType}) async {
+  _onReportTap({required bool userType}) async {
     Navigator.pop(context);
     await setUserTypePref(userType: userType).then((_) {
       Navigator.push(

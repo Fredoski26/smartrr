@@ -5,7 +5,7 @@ import 'package:smartrr/models/video.dart';
 
 class VideoListItem extends StatelessWidget {
   final Video video;
-  const VideoListItem({Key key, @required this.video});
+  const VideoListItem({super.key, required this.video});
 
   @override
   Widget build(BuildContext context) {

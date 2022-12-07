@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:smartrr/generated/l10n.dart';
+import 'package:smartrr/models/country.dart';
 import 'package:smartrr/services/country_service.dart';
 import 'package:smartrr/services/database_service.dart';
 
 class SelectCountry extends StatefulWidget {
-  const SelectCountry({Key key, this.userCountry}) : super(key: key);
+  const SelectCountry({super.key, this.userCountry});
 
-  final String userCountry;
+  final String? userCountry;
 
   @override
   State<SelectCountry> createState() => _SelectCountryState();
 }
 
 class _SelectCountryState extends State<SelectCountry> {
-  String country;
+  late String country;
   bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    country = widget.userCountry;
+    country = widget.userCountry!;
   }
 
   @override
@@ -41,38 +42,39 @@ class _SelectCountryState extends State<SelectCountry> {
           )
         ],
       ),
-      body: StreamBuilder(
-        builder: (context, snapshot) => snapshot.hasError
-            ? Center(child: Text("Something went wrong"))
-            : Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                snapshot.hasData
-                    ? Container(
-                        constraints: BoxConstraints(
-                            maxHeight: MediaQuery.of(context).size.height,
-                            maxWidth: MediaQuery.of(context).size.width),
-                        child: ListView.builder(
-                            itemCount: snapshot.data.length,
-                            itemBuilder: (context, index) => ListTile(
-                                  onTap: () {
-                                    setState(() {
-                                      country = snapshot.data[index].name;
-                                    });
-                                  },
-                                  contentPadding: EdgeInsets.zero,
-                                  title: Text(snapshot.data[index].name),
-                                  leading: Radio(
-                                    value: snapshot.data[index].name,
-                                    groupValue: country,
-                                    onChanged: (val) {
-                                      setState(() {
-                                        country = val;
-                                      });
-                                    },
-                                  ),
-                                )),
-                      )
-                    : Center(child: CircularProgressIndicator())
-              ]),
+      body: StreamBuilder<List<Country>>(
+        builder: (context, AsyncSnapshot<List<Country>> snapshot) =>
+            snapshot.hasError
+                ? Center(child: Text("Something went wrong"))
+                : Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    snapshot.hasData
+                        ? Container(
+                            constraints: BoxConstraints(
+                                maxHeight: MediaQuery.of(context).size.height,
+                                maxWidth: MediaQuery.of(context).size.width),
+                            child: ListView.builder(
+                                itemCount: snapshot.data!.length,
+                                itemBuilder: (context, index) => ListTile(
+                                      onTap: () {
+                                        setState(() {
+                                          country = snapshot.data![index].name;
+                                        });
+                                      },
+                                      contentPadding: EdgeInsets.zero,
+                                      title: Text(snapshot.data![index].name),
+                                      leading: Radio(
+                                        value: snapshot.data![index].name,
+                                        groupValue: country,
+                                        onChanged: (String? val) {
+                                          setState(() {
+                                            country = val!;
+                                          });
+                                        },
+                                      ),
+                                    )),
+                          )
+                        : Center(child: CircularProgressIndicator())
+                  ]),
         stream: CountryService.getCountries().asStream(),
       ),
     );

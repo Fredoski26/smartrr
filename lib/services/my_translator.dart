@@ -1,9 +1,8 @@
-import 'package:flutter/foundation.dart';
 import 'package:translator/translator.dart';
 
 class MyTranslator {
   static Future<String> translate(
-      {@required String text,
+      {required String text,
       String from = "en",
       String languageCode = "ha"}) async {
     final translator = GoogleTranslator();

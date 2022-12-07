@@ -7,9 +7,9 @@ import 'package:smartrr/models/auth_user.dart';
 import 'package:smartrr/utils/utils.dart';
 
 class Wrapper extends StatefulWidget {
-  const Wrapper({Key key, @required this.isDarkTheme}) : super(key: key);
-
   final bool isDarkTheme;
+
+  const Wrapper({super.key, required this.isDarkTheme});
 
   @override
   State<Wrapper> createState() => _WrapperState();
@@ -21,8 +21,8 @@ class _WrapperState extends State<Wrapper> {
     return StreamBuilder<AuthUser>(
         stream: _getData().asStream(),
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data.isUser) {
+          if (snapshot.hasData && snapshot.data?.user != null) {
+            if (snapshot.data!.isUser!) {
               return ReportOrHistoryPage();
             } else {
               return ReferOrCasesPage();
@@ -36,13 +36,9 @@ class _WrapperState extends State<Wrapper> {
   }
 
   Future<AuthUser> _getData() async {
-    User currentUser = FirebaseAuth.instance.currentUser;
+    User? currentUser = FirebaseAuth.instance.currentUser;
     bool isUser = await getIsUserPref();
 
-    if (currentUser == null) {
-      return null;
-    } else {
-      return AuthUser(user: currentUser, isUser: isUser);
-    }
+    return AuthUser(user: currentUser, isUser: isUser);
   }
 }

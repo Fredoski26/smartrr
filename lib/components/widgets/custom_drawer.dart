@@ -7,7 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:smartrr/generated/l10n.dart';
 
 class CustomDrawer extends StatelessWidget {
-  final User _currentUser = FirebaseAuth.instance.currentUser;
+  final User _currentUser = FirebaseAuth.instance.currentUser!;
   @override
   Widget build(BuildContext context) {
     final _language = S.of(context);
@@ -38,15 +38,16 @@ class CustomDrawer extends StatelessWidget {
       child: ListView(children: [
         UserAccountsDrawerHeader(
             currentAccountPicture: _currentUser.photoURL != null
-                ? Image.network(_currentUser.photoURL)
+                ? Image.network(_currentUser.photoURL!)
                 : CircleAvatar(
                     child: Icon(
                       Icons.person,
                       size: 50,
                     ),
                   ),
-            accountName: Text(_currentUser.displayName),
-            accountEmail: Text(_currentUser.phoneNumber ?? _currentUser.email)),
+            accountName: Text(_currentUser.displayName!),
+            accountEmail:
+                Text(_currentUser.phoneNumber ?? _currentUser.email!)),
         ListTile(
           leading: Icon(Icons.history),
           title: Text(_language.history),

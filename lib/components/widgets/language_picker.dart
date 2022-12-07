@@ -4,7 +4,7 @@ import 'package:smartrr/generated/l10n.dart';
 import 'package:smartrr/provider/language_provider.dart';
 
 class LanguagePicker extends StatefulWidget {
-  const LanguagePicker({Key key}) : super(key: key);
+  const LanguagePicker({super.key});
 
   @override
   State<LanguagePicker> createState() => _LanguagePickerState();

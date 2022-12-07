@@ -51,7 +51,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   final bool isDarkTheme;
 
-  MyApp({this.isDarkTheme});
+  MyApp({this.isDarkTheme = false});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

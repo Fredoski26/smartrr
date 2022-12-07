@@ -6,14 +6,15 @@ import 'package:smartrr/utils/colors.dart';
 
 enum More { logout }
 
-Future setUserIdPref({String userId, String userDocId}) async {
+Future setUserIdPref(
+    {required String userId, required String userDocId}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.setBool("isUser", true);
   await prefs.setString("userId", userId);
   await _setUserDocId(userDocId: userDocId);
 }
 
-Future _setUserDocId({String userDocId}) async {
+Future _setUserDocId({required String userDocId}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
   await prefs.setString('userDocId', userDocId);
@@ -26,10 +27,10 @@ Future getUserDocIdPref() async {
 
 Future<String> getUserIdPref() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  return prefs.getString("userId");
+  return prefs.getString("userId")!;
 }
 
-Future setOrgIdPref({String orgId, String orgDocId}) async {
+Future setOrgIdPref({required String orgId, String? orgDocId}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.setBool("isUser", false);
   await prefs.setString("orgId", orgId);
@@ -42,32 +43,32 @@ Future getOrgDocId() async {
 
 Future<String> getOrgIdPref() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  return prefs.getString("orgId");
+  return prefs.getString("orgId")!;
 }
 
 Future<bool> getIsUserPref() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  return prefs.getBool("isUser");
+  return prefs.getBool("isUser")!;
 }
 
-Future clearPrefs({String orgId}) async {
+Future clearPrefs({String? orgId}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.setBool("isUser", false);
   await prefs.remove("orgId");
   await prefs.remove("userId");
 }
 
-Future setUserTypePref({bool userType}) async {
+Future setUserTypePref({required bool userType}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.setBool("userType", userType);
 }
 
 Future<bool> getUserTypePref() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  return prefs.getBool("userType");
+  return prefs.getBool("userType")!;
 }
 
-Future setTheme({bool isDarkMode}) async {
+Future setTheme({required bool isDarkMode}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.setBool("isDarkMode", isDarkMode);
 }
@@ -80,7 +81,7 @@ Future<bool> getTheme() async {
   return isDarkTheme;
 }
 
-texts({String title, String value}) {
+texts({required String title, required String value}) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 10),
     child: Column(
@@ -100,7 +101,7 @@ texts({String title, String value}) {
   );
 }
 
-String birthDateValidator(String value) {
+dynamic birthDateValidator(String value) {
   final DateTime now = DateTime.now();
   final DateFormat formatter = DateFormat('yyyy', "en");
   final String formatted = formatter.format(now);
@@ -109,7 +110,7 @@ String birthDateValidator(String value) {
   String day = str2.isNotEmpty ? str2[0] : '';
   String month = str2.length > 1 ? str2[1] : '';
   String year = str2.length > 2 ? str2[2] : '';
-  print(value);
+
   if (value.isEmpty) {
     return 'Must be DD-MM-YYYY';
   } else if (int.parse(month) > 13) {
@@ -132,7 +133,7 @@ Color _toastBackgroundColor(String type) {
     return darkGrey;
 }
 
-showToast({String msg, String type = "info"}) {
+showToast({required String msg, String type = "info"}) {
   Fluttertoast.showToast(
     msg: msg,
     backgroundColor: _toastBackgroundColor(type),

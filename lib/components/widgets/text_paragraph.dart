@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TextParagraph extends StatelessWidget {
-  const TextParagraph({Key key, @required this.text}) : super(key: key);
+  const TextParagraph({super.key, required this.text});
 
   final String text;
 

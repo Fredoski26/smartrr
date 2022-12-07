@@ -20,7 +20,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _auth = FirebaseAuth.instance;
 
   submit() async {
-    final FormState form = formKey.currentState;
+    final FormState form = formKey.currentState!;
     if (form.validate()) {
       form.save();
       _sendResetEmail();

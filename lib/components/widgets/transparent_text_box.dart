@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class TransparentTextBox extends StatelessWidget {
-  final Function func;
+  final dynamic func;
   final Color color;
   final double borderRadius;
-  final double width;
+  final double? width;
   final Color textColor;
 
   TransparentTextBox(

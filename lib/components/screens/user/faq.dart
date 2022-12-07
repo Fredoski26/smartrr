@@ -33,7 +33,7 @@ class FrequentlyAskedQuestions extends StatelessWidget {
                       headerBackgroundColorOpened: primaryColor,
                       contentBackgroundColor:
                           notifier.darkTheme ? lightGrey : Colors.white,
-                      children: snapshot.data
+                      children: snapshot.data!
                           .map((faq) => AccordionSection(
                                 isOpen: false,
                                 header: Text(

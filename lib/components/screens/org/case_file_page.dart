@@ -9,7 +9,7 @@ import 'package:smartrr/utils/utils.dart';
 class CaseFilePage extends StatefulWidget {
   final Case caseFile;
 
-  const CaseFilePage({Key key, @required this.caseFile}) : super(key: key);
+  const CaseFilePage({super.key, required this.caseFile});
 
   @override
   _CaseFilePageState createState() => _CaseFilePageState();

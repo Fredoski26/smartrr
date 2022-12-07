@@ -17,7 +17,7 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 class LoginPage extends StatefulWidget {
   final bool isDarkTheme;
 
-  LoginPage({this.isDarkTheme});
+  LoginPage({required this.isDarkTheme});
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -26,10 +26,10 @@ class _LoginPageState extends State<LoginPage> {
   final _auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
   final mScaffoldState = GlobalKey<ScaffoldState>();
-  TextEditingController emailController;
-  TextEditingController passwordController;
-  TextEditingController phoneNumberController;
-  String errorMsg;
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
+  late TextEditingController phoneNumberController;
+  late String errorMsg;
   bool _isUser = true;
   bool isLoading = false;
 
@@ -170,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
                   Checkbox(
                     value: _isUser,
                     onChanged: (val) {
-                      setState(() => _isUser = val);
+                      setState(() => _isUser = val!);
                     },
                   ),
                   Text(
@@ -191,7 +191,7 @@ class _LoginPageState extends State<LoginPage> {
                   Checkbox(
                     value: !_isUser,
                     onChanged: (val) {
-                      if (val)
+                      if (val!)
                         setState(() => _isUser = false);
                       else
                         setState(() => _isUser = true);
@@ -274,7 +274,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  _bottomSheet({BuildContext context, bool isDarkTheme}) {
+  _bottomSheet({required BuildContext context, required bool isDarkTheme}) {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
@@ -323,8 +323,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _validateLoginInput() async {
-    final FormState form = _formKey.currentState;
-    if (_formKey.currentState.validate()) {
+    final FormState form = _formKey.currentState!;
+    if (_formKey.currentState!.validate()) {
       form.save();
       setState(() => isLoading = true);
       if (_isUser) {
@@ -416,10 +416,10 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _loginWithPhone() async {
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState!.validate()) {
       setState(() => isLoading = true);
 
-      if (await _userExists(number.phoneNumber)) {
+      if (await _userExists(number.phoneNumber!)) {
         await _auth.verifyPhoneNumber(
           phoneNumber: number.phoneNumber,
           verificationCompleted: (PhoneAuthCredential credential) async {
@@ -430,7 +430,7 @@ class _LoginPageState extends State<LoginPage> {
               );
             } catch (e) {
               Navigator.pop(context);
-              showToast(msg: e.message, type: "error");
+              showToast(msg: e.toString(), type: "error");
             }
           },
           verificationFailed: (FirebaseAuthException e) {
@@ -438,7 +438,7 @@ class _LoginPageState extends State<LoginPage> {
             setState(() => isLoading = false);
             _handlePhoneAuthError(e);
           },
-          codeSent: (String verificationId, int resendToken) async {
+          codeSent: (String verificationId, int? resendToken) {
             setState(() => isLoading = false);
             final formKey = GlobalKey<FormState>();
             final pinController = TextEditingController();
@@ -482,31 +482,32 @@ class _LoginPageState extends State<LoginPage> {
                             Form(
                                 key: formKey,
                                 child: Pinput(
-                                    length: 6,
-                                    controller: pinController,
-                                    onSubmitted: (pin) async {
-                                      try {
-                                        PhoneAuthCredential credential =
-                                            PhoneAuthProvider.credential(
-                                                verificationId: verificationId,
-                                                smsCode: pin);
+                                  length: 6,
+                                  controller: pinController,
+                                  onSubmitted: (pin) async {
+                                    try {
+                                      PhoneAuthCredential credential =
+                                          PhoneAuthProvider.credential(
+                                              verificationId: verificationId,
+                                              smsCode: pin);
 
-                                        await _handleSignInWithPhone(
-                                            context: context,
-                                            credential: credential);
-                                      } catch (e) {
-                                        Navigator.pop(context);
-                                        _handlePhoneAuthError(e);
-                                      }
-                                    },
-                                    validator: (pin) =>
-                                        pin.length < 6 || pin.length > 6
-                                            ? "Invalid code"
-                                            : null)),
+                                      await _handleSignInWithPhone(
+                                          context: context,
+                                          credential: credential);
+                                    } catch (e) {
+                                      Navigator.pop(context);
+                                      _handlePhoneAuthError(e);
+                                    }
+                                  },
+                                  validator: (pin) =>
+                                      pin!.length < 6 || pin.length > 6
+                                          ? "Invalid code"
+                                          : null,
+                                )),
                             SizedBox(height: 5.0),
                             ElevatedButton(
                               onPressed: () async {
-                                if (formKey.currentState.validate()) {
+                                if (formKey.currentState!.validate()) {
                                   setState(() => isLoading = true);
                                   showLoading(
                                       message: "Logging in...",
@@ -559,7 +560,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  _handlePhoneAuthError(FirebaseAuthException error) {
+  _handlePhoneAuthError(dynamic error) {
     setState(() => isLoading = false);
     switch (error.code) {
       case 'invalid-phone-number':
@@ -568,23 +569,24 @@ class _LoginPageState extends State<LoginPage> {
       case "invalid-verification-code":
         return showToast(msg: 'Invalid verification code', type: "error");
       default:
-        showToast(msg: error.message, type: "error");
+        showToast(msg: error.message!, type: "error");
         break;
     }
   }
 
   _handleSignInWithPhone(
-      {PhoneAuthCredential credential, BuildContext context}) async {
+      {required PhoneAuthCredential credential,
+      required BuildContext context}) async {
     UserCredential userCredential =
         await _auth.signInWithCredential(credential);
 
     final users = await FirebaseFirestore.instance
         .collection("users")
-        .where("uId", isEqualTo: userCredential.user.uid)
+        .where("uId", isEqualTo: userCredential.user!.uid)
         .get();
 
     await setUserIdPref(
-        userId: userCredential.user.uid, userDocId: users.docs[0].id);
+        userId: userCredential.user!.uid, userDocId: users.docs[0].id);
 
     Navigator.pushNamedAndRemoveUntil(
         context, '/userMain', ModalRoute.withName('Dashboard'));
@@ -600,7 +602,7 @@ class _LoginPageState extends State<LoginPage> {
     return false;
   }
 
-  _loginUser({String userId, String userDocId}) {
+  _loginUser({required String userId, required String userDocId}) {
     bool _isLoginError = false;
     try {
       FirebaseAuth.instance
@@ -632,7 +634,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  _loginOrg({@required String orgId}) {
+  _loginOrg({required String orgId}) {
     bool _isLoginError = false;
     try {
       FirebaseAuth.instance

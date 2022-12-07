@@ -77,7 +77,7 @@ class _CasesHistoryScreenState extends State<CasesHistoryScreen> {
     );
   }
 
-  _updateCaseUserId({@required String oldUId, @required newUId}) async {
+  _updateCaseUserId({required String oldUId, required newUId}) async {
     FirebaseFirestore.instance
         .collection("cases")
         .where("userId", isEqualTo: oldUId)
@@ -139,8 +139,8 @@ class _CasesHistoryScreenState extends State<CasesHistoryScreen> {
                 timestamp: cases.docs[i].get('timestamp'),
                 isVictim: cases.docs[i].get('isVictim'),
                 victimAge: cases.docs[i].get("victimAge") != null
-                    ? int.tryParse(cases.docs[i].get('victimAge').toString())
-                    : null,
+                    ? int.parse(cases.docs[i].get('victimAge').toString())
+                    : 0,
                 victimGender: cases.docs[i].get('victimGender'),
                 victimName: cases.docs[i].get('victimName'),
                 victimPhone: cases.docs[i].get('victimPhone'),
@@ -160,7 +160,7 @@ class _CasesHistoryScreenState extends State<CasesHistoryScreen> {
     return "${dt.day}-${dt.month}-${dt.year} ${dt.hour}:${dt.minute}";
   }
 
-  Widget _statusWidget({int status}) {
+  Widget _statusWidget({int? status}) {
     Color bgColor = Colors.green;
     Color textColor = Colors.white;
     String text = 'Active';

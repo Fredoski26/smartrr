@@ -11,7 +11,7 @@ import 'package:smartrr/provider/language_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AllAboutSRHR extends StatefulWidget {
-  AllAboutSRHR({Key key});
+  AllAboutSRHR({super.key});
 
   @override
   State<AllAboutSRHR> createState() => _AllAboutSRHRState();
@@ -21,7 +21,7 @@ class _AllAboutSRHRState extends State<AllAboutSRHR>
     with SingleTickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
 
-  TabController _tabController;
+  late TabController _tabController;
 
   @override
   Widget build(BuildContext context) {
@@ -116,16 +116,18 @@ class _AllAboutSRHRState extends State<AllAboutSRHR>
                           langNotifier.locale == "en"
                               ? TextButton(
                                   onPressed: () async {
-                                    await launch(
-                                      "https://docs.google.com/document/d/170XeWJLKtTo2GOufFgnhqqmZ1tFyfoAv/edit?usp=sharing&ouid=102250998567041919901&rtpof=true&sd=true",
+                                    await launchUrl(
+                                      Uri.parse(
+                                          "https://docs.google.com/document/d/170XeWJLKtTo2GOufFgnhqqmZ1tFyfoAv/edit?usp=sharing&ouid=102250998567041919901&rtpof=true&sd=true"),
                                     );
                                   },
                                   child: Text("${_language.readMore}.."),
                                 )
                               : TextButton(
                                   onPressed: () async {
-                                    await launch(
-                                      "https://docs.google.com/document/d/1gCIciVW4qZTHgGd8tNJDX-mtDKcIutAF/edit?usp=sharing&ouid=102250998567041919901&rtpof=true&sd=true",
+                                    await launchUrl(
+                                      Uri.parse(
+                                          "https://docs.google.com/document/d/1gCIciVW4qZTHgGd8tNJDX-mtDKcIutAF/edit?usp=sharing&ouid=102250998567041919901&rtpof=true&sd=true"),
                                     );
                                   },
                                   child: Text("${_language.readMore}..."),

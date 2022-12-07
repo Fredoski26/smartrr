@@ -16,7 +16,7 @@ class _SelectLocationMapState extends State<SelectLocationMap> {
   LatLng _lastMapPosition = LatLng(45.52, -122.67);
   MapType _currentMapType = MapType.normal;
   var location = new Location();
-  LocationData currentLocation;
+  late LocationData currentLocation;
 
 //  final kGoogleApiKey = "AIzaSyCdyE02XLdx7ExfUmx0HEhCkLqhBalMEr4";
   final kGoogleApiKey = "AIzaSyDwOvvKZ2QQnQNkTtJOa9swaPk9Ir8B6jI";
@@ -31,16 +31,12 @@ class _SelectLocationMapState extends State<SelectLocationMap> {
     var location = new Location();
     try {
       currentLocation = await location.getLocation();
-
-      print("locationLatitude: ${currentLocation.latitude}");
-      print("locationLongitude: ${currentLocation.longitude}");
       // setState(
       //     () {
       //       _center = LatLng(currentLocation.latitude, currentLocation.longitude);
       //     }); //rebuild the widget after getting the current location of the user
       return currentLocation;
     } on Exception {
-      currentLocation = null;
       return currentLocation;
     }
   }
@@ -51,13 +47,13 @@ class _SelectLocationMapState extends State<SelectLocationMap> {
       controller.moveCamera(
         CameraUpdate.newCameraPosition(
           CameraPosition(
-              target:
-                  LatLng(returnedLocation.latitude, returnedLocation.longitude),
+              target: LatLng(
+                  returnedLocation.latitude!, returnedLocation.longitude!),
               zoom: 11.0),
         ),
       );
       _lastMapPosition =
-          LatLng(returnedLocation.latitude, returnedLocation.longitude);
+          LatLng(returnedLocation.latitude!, returnedLocation.longitude!);
     });
   }
 
@@ -75,7 +71,7 @@ class _SelectLocationMapState extends State<SelectLocationMap> {
     });
   }
 
-  Widget button(Function function, IconData icon) {
+  Widget button(dynamic function, IconData icon) {
     return FloatingActionButton(
       onPressed: function,
       materialTapTargetSize: MaterialTapTargetSize.padded,

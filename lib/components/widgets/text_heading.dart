@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TextHeading extends StatelessWidget {
-  TextHeading({Key key, @required this.text}) : super(key: key);
+  TextHeading({super.key, required this.text});
   final String text;
 
   final TextStyle _headingStyle = TextStyle().copyWith(

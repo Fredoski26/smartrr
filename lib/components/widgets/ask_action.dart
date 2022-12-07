@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 Future askAction(
-    {@required String actionText,
-    @required String cancelText,
-    @required String text,
-    @required BuildContext context,
-    @required Function func,
-    @required Function cancelFunc}) {
+    {required String actionText,
+    required String cancelText,
+    required String text,
+    required BuildContext context,
+    required Function func,
+    required Function cancelFunc}) {
   Widget continueButton = TextButton(
     onPressed: () => func(),
     child: Text(actionText),

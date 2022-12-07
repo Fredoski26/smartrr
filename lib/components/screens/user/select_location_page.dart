@@ -20,15 +20,15 @@ class SelectLocationPage extends StatefulWidget {
   final bool isDarkTheme;
 
   const SelectLocationPage({
-    Key key,
-    @required this.service,
-    @required this.selectedState,
-    @required this.isUser,
-    @required this.referredBy,
-    @required this.referredName,
-    @required this.caseId,
-    this.isDarkTheme,
-  }) : super(key: key);
+    super.key,
+    required this.service,
+    required this.selectedState,
+    required this.isUser,
+    required this.referredBy,
+    required this.referredName,
+    required this.caseId,
+    required this.isDarkTheme,
+  });
 
   @override
   _SelectLocationPageState createState() => _SelectLocationPageState();

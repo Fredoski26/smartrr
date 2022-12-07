@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 class Helper {
-  void containerForSheet<T>({BuildContext context, Widget child}) {
+  void containerForSheet<T>(
+      {required BuildContext context, required Widget child}) {
     showCupertinoModalPopup<T>(
       context: context,
       builder: (BuildContext context) => child,
-    ).then<void>((T value) {});
+    ).then<void>((T? value) {});
   }
 
   // void showBottomSheet(BuildContext context, String title, String message, List<String> actionStringList, List<Function> actionList) {
@@ -60,11 +61,12 @@ class Helper {
   // }
 
   Future showModal(
-      BuildContext context,
-      Widget bottomString,
-      Function bottomFunction,
-      List<Widget> actions,
-      List<Function> actionFunctions) {
+    BuildContext context,
+    Widget bottomString,
+    Function bottomFunction,
+    List<Widget> actions,
+    List<Function> actionFunctions,
+  ) {
     return showModalBottomSheet<void>(
         context: context,
         builder: (BuildContext context) {
@@ -75,7 +77,7 @@ class Helper {
                 children: List.generate(actions.length, (index) {
                   if (actions.length == 1) {
                     return InkWell(
-                      onTap: actionFunctions[index],
+                      onTap: actionFunctions[index] as dynamic,
                       child: Container(
                         margin:
                             EdgeInsets.symmetric(vertical: 5, horizontal: 20),
@@ -90,7 +92,7 @@ class Helper {
                     if (index == 0) {
                       //top corner
                       return InkWell(
-                        onTap: actionFunctions[index],
+                        onTap: actionFunctions[index] as dynamic,
                         child: Container(
                           margin: EdgeInsets.symmetric(
                               vertical: 1.5, horizontal: 20),
@@ -106,7 +108,7 @@ class Helper {
                     } else if (index == actions.length - 1) {
                       //bottom corners
                       return InkWell(
-                        onTap: actionFunctions[index],
+                        onTap: actionFunctions[index] as dynamic,
                         child: Container(
                           margin: EdgeInsets.symmetric(
                               vertical: 1.5, horizontal: 20),
@@ -122,7 +124,7 @@ class Helper {
                     } else {
                       //no corners
                       return InkWell(
-                        onTap: actionFunctions[index],
+                        onTap: actionFunctions[index] as dynamic,
                         child: Container(
                           margin: EdgeInsets.symmetric(
                               vertical: 1.5, horizontal: 20),
@@ -139,7 +141,7 @@ class Helper {
                 height: 10,
               ),
               InkWell(
-                onTap: bottomFunction,
+                onTap: bottomFunction as dynamic,
                 child: Container(
                   margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                   height: 70,

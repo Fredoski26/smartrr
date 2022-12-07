@@ -13,7 +13,7 @@ import '../../../services/theme_provider.dart';
 import 'package:smartrr/generated/l10n.dart';
 
 class Settings extends StatefulWidget {
-  const Settings({Key key}) : super(key: key);
+  const Settings({super.key});
   @override
   State<Settings> createState() => _SettingsState();
 }
@@ -146,7 +146,7 @@ class _SettingsState extends State<Settings> {
   }
 
   _submitPassword(String password, String confirmPassword) async {
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState!.validate()) {
       if (password != confirmPassword) {
         Fluttertoast.showToast(
           msg: "Passwords don't match",

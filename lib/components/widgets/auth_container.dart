@@ -5,8 +5,7 @@ import 'package:smartrr/services/theme_provider.dart';
 import 'package:smartrr/utils/colors.dart';
 
 class AuthContainer extends StatefulWidget {
-  AuthContainer({Key key, @required this.child, this.isOrgSignUp = false})
-      : super(key: key);
+  AuthContainer({super.key, required this.child, this.isOrgSignUp = false});
 
   final Widget child;
   final isOrgSignUp;
@@ -17,9 +16,9 @@ class AuthContainer extends StatefulWidget {
 
 class _AuthContainerState extends State<AuthContainer> {
   final mScaffoldState = GlobalKey<ScaffoldState>();
-  TextEditingController emailController;
-  TextEditingController passwordController;
-  String errorMsg;
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
+  late String errorMsg;
   bool isLoading = false;
 
   final _appBarHeight = AppBar().preferredSize.height;
