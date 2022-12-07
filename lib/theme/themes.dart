@@ -4,7 +4,7 @@ import '../utils/colors.dart';
 
 final ThemeData appTheme = ThemeData(
     textTheme: GoogleFonts.poppinsTextTheme()
-        .copyWith(bodyText1: TextStyle(fontSize: 16)),
+        .copyWith(bodyText1: TextStyle().copyWith(fontSize: 16)),
     primarySwatch: Colors.orange,
     primaryColor: primaryColor,
     iconTheme: IconThemeData().copyWith(color: Colors.white),
