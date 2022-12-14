@@ -23,25 +23,25 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
   int _stepIndex = 0;
   int _maxSteps = 4;
 
-  GlobalKey<FormState> _formKey;
-  TextEditingController cName;
-  TextEditingController cTelephone;
-  TextEditingController cOrgEmail;
-  TextEditingController cPassword;
-  TextEditingController cLanguage;
-  TextEditingController cStartTime;
-  TextEditingController cCloseTime;
-  TextEditingController cFocalName;
-  TextEditingController cFocalEmail;
-  TextEditingController cFocalPhone;
-  TextEditingController cFocalDesignation;
-  TextEditingController phoneNumberController;
+  late GlobalKey<FormState> _formKey;
+  late TextEditingController cName;
+  late TextEditingController cTelephone;
+  late TextEditingController cOrgEmail;
+  late TextEditingController cPassword;
+  late TextEditingController cLanguage;
+  late TextEditingController cStartTime;
+  late TextEditingController cCloseTime;
+  late TextEditingController cFocalName;
+  late TextEditingController cFocalEmail;
+  late TextEditingController cFocalPhone;
+  late TextEditingController cFocalDesignation;
+  late TextEditingController phoneNumberController;
 
   String initialCountry = 'NG';
   PhoneNumber number = PhoneNumber(isoCode: 'NG');
   PhoneNumber focalNumber = PhoneNumber(isoCode: "NG");
 
-  String errorMsg;
+  late String errorMsg;
   double _hPadding = 18.0;
   bool isLoading = false;
   List<Services> servicesList = <Services>[];
@@ -50,17 +50,17 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
   // States
   List<MyLocation> stateList = <MyLocation>[];
   List<DropdownMenuItem<MyLocation>> _dropDownStateItem = [];
-  MyLocation _currentState;
+  late MyLocation _currentState;
 
   // Locations
   List<MyLocation> locationsList = <MyLocation>[];
   List<DropdownMenuItem<MyLocation>> _dropDownLocationItem = [];
-  MyLocation _currentLocation;
+  late MyLocation _currentLocation;
 
   // Country
   List<Country> countriesList = <Country>[];
   List<DropdownMenuItem<Country>> _dropDownCountryItem = [];
-  Country _currentCountry;
+  late Country _currentCountry;
 
   // organization types
   List<DropdownMenuItem> _orgTypes = [
@@ -189,10 +189,10 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
       displayName = cName.text;
       Navigator.pop(context);
       showLoading(message: 'Registering...', context: context);
-      authResult.user.updateDisplayName(displayName).then((onValue) async {
+      authResult.user!.updateDisplayName(displayName).then((onValue) async {
         await FirebaseFirestore.instance
             .collection('organizations')
-            .doc(authResult.user.uid)
+            .doc(authResult.user!.uid)
             .set({
           'name': cName.text,
           'type': _orgType,
@@ -211,7 +211,7 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
           'locationId': null,
           'state': _currentState.title,
           'location': _currentLocation.title,
-          'uId': authResult.user.uid,
+          'uId': authResult.user!.uid,
           'country': _currentCountry.name
         }).then((onValue) {
           FirebaseAuth.instance.signOut();
@@ -226,7 +226,7 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
       });
     } catch (error) {
       Navigator.pop(context);
-      switch (error.code) {
+      switch ((error as FirebaseAuthException).code) {
         case "ERROR_EMAIL_ALREADY_IN_USE":
           {
             setState(() {
@@ -266,10 +266,9 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
   _increaseStackIndex() {
     if (_stepIndex < _maxSteps) {
       if (_stepIndex == 0) {
-        final FormState form = _formKey.currentState;
-        if (_formKey.currentState.validate()) {
+        final FormState form = _formKey.currentState!;
+        if (_formKey.currentState!.validate()) {
           form.save();
-          debugPrint('Index Increased');
           setState(() => _stepIndex++);
         }
       } else if (_stepIndex == 4) {
@@ -284,11 +283,9 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
             fontSize: 16.0,
           );
         } else {
-          debugPrint('Index Increased');
           setState(() => _stepIndex++);
         }
       } else {
-        debugPrint('Index Increased');
         setState(() => _stepIndex++);
       }
     } else {
@@ -386,9 +383,9 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
                           ),
                           elevation: 0,
                           items: _orgTypes,
-                          validator: (val) =>
+                          validator: (dynamic val) =>
                               val == null ? "Select org type" : null,
-                          onChanged: (val) {
+                          onChanged: (dynamic val) {
                             setState(() {
                               _orgType = val;
                             });
@@ -617,8 +614,8 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
               isExpanded: true,
               items: _dropDownCountryItem,
               value: _currentCountry,
-              onChanged: (Country value) {
-                setState(() => _currentCountry = value);
+              onChanged: (Country? value) {
+                setState(() => _currentCountry = value!);
                 _getStates();
               },
               hint: Text(
@@ -639,9 +636,9 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
               isExpanded: true,
               items: _dropDownStateItem,
               value: _currentState,
-              onChanged: (MyLocation value) {
-                setState(() => _currentState = value);
-                _getLocations(state: value.title);
+              onChanged: (MyLocation? value) {
+                setState(() => _currentState = value!);
+                _getLocations(state: value!.title);
               },
               hint: Text(
                 'Select State',
@@ -664,8 +661,8 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
               isExpanded: true,
               items: _dropDownLocationItem,
               value: _currentLocation,
-              onChanged: (MyLocation location) async {
-                setState(() => _currentLocation = location);
+              onChanged: (MyLocation? location) async {
+                setState(() => _currentLocation = location!);
               },
               hint: Text(
                 'Select Location',
@@ -724,7 +721,6 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
         }
       }
       setState(() {
-        _currentState = null;
         stateList = items;
         _dropDownStateItem = buildDropDownStateItems(items);
       });
@@ -760,17 +756,15 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
     }
   }
 
-  Future _getLocations({String state}) async {
+  Future _getLocations({String? state}) async {
     locationsList = [];
     _dropDownLocationItem = [];
-    _currentLocation = null;
-    CountryService.getCities(_currentCountry.name, state).then((locations) {
+    CountryService.getCities(_currentCountry.name, state!).then((locations) {
       List<MyLocation> items = [];
       for (int i = 0; i < locations.length; i++) {
         items.add(MyLocation(locations[i], locations[i]));
       }
       setState(() {
-        _currentLocation = null;
         locationsList = items;
         _dropDownLocationItem = buildDropDownLocationItems(locationsList);
       });
@@ -801,8 +795,8 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
         return CheckboxListTile(
           value: list[index].value,
           onChanged: (value) {
-            setState(() => list[index].value = value);
-            if (value) {
+            setState(() => list[index].value = value!);
+            if (value!) {
               _selectedServicesList.add(list[index].title);
             } else {
               _selectedServicesList.removeWhere(

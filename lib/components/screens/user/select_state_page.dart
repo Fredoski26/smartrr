@@ -24,16 +24,16 @@ class SelectStatePage extends StatefulWidget {
   final String country;
 
   const SelectStatePage({
-    Key key,
-    @required this.service,
-    @required this.isUser,
-    @required this.referredBy,
-    @required this.referredName,
-    @required this.caseId,
-    this.isDarkTheme,
+    super.key,
+    required this.service,
+    required this.isUser,
+    required this.referredBy,
+    required this.referredName,
+    required this.caseId,
+    required this.isDarkTheme,
     this.lang = "en",
     this.country = "Nigeria",
-  }) : super(key: key);
+  });
 
   @override
   _SelectStatePageState createState() => _SelectStatePageState();
@@ -138,8 +138,8 @@ class _SelectStatePageState extends State<SelectStatePage> {
                                   } else {
                                     setState(() => isLoading = true);
                                     bool _isFound = true;
-                                    MyLocation myLocation;
-                                    MyLocation myState;
+                                    late MyLocation myLocation;
+                                    late MyLocation myState;
                                     for (int i = 0; i < stateList.length; i++) {
                                       if (currentSelectedAddress
                                           .toLowerCase()

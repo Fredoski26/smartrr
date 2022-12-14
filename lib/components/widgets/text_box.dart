@@ -2,31 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class CustomTextBox extends StatelessWidget {
-  final String placeholderText;
+  final String? placeholderText;
   final Color borderColor;
-  final Color textColor;
+  final Color? textColor;
   final bool required;
   final bool same;
-  final String password;
+  final String? password;
   final Color placeholderColor;
   final String errorText;
   final Color textboxBackgroundColor;
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final bool obscureText;
-  final bool readOnly;
-  final FocusNode focusNode;
+  final bool? readOnly;
+  final FocusNode? focusNode;
   final TextInputType keyboardType;
-  final Function onTap;
+  final dynamic onTap;
   final bool isForm;
-  final Icon suffixIcon;
-  final Function validator;
-  final List<TextInputFormatter> inputFormatters;
+  final Icon? suffixIcon;
+  final dynamic validator;
+  final List<TextInputFormatter>? inputFormatters;
 
   CustomTextBox(
       {this.focusNode,
       this.placeholderText,
       this.borderColor = const Color(0xFFA59B9B),
-      this.textColor = null,
+      this.textColor,
       this.placeholderColor = Colors.white,
       this.textboxBackgroundColor = Colors.transparent,
       this.controller,
@@ -39,7 +39,7 @@ class CustomTextBox extends StatelessWidget {
       this.keyboardType = TextInputType.text,
       this.onTap,
       this.isForm = false,
-      this.suffixIcon = null,
+      this.suffixIcon,
       this.validator,
       this.inputFormatters});
 
@@ -57,10 +57,10 @@ class CustomTextBox extends StatelessWidget {
               focusNode: focusNode,
               keyboardType: keyboardType,
               obscureText: obscureText,
-              readOnly: readOnly,
+              readOnly: readOnly!,
               validator: validator ??
                   (value) {
-                    if (value.isEmpty && required) {
+                    if (value!.isEmpty && required) {
                       return errorText;
                     }
                     return null;
@@ -88,7 +88,7 @@ class CustomTextBox extends StatelessWidget {
               focusNode: focusNode,
               keyboardType: keyboardType,
               obscureText: obscureText,
-              readOnly: readOnly,
+              readOnly: readOnly!,
               style: TextStyle().copyWith(color: textColor),
               controller: controller,
               decoration: InputDecoration(
@@ -113,23 +113,23 @@ class CustomTextBox extends StatelessWidget {
 }
 
 class CustomPhoneTextBox extends StatelessWidget {
-  final String placeholderText;
+  final String? placeholderText;
   final Color borderColor;
   final Color textColor;
   final bool required;
   final bool same;
-  final String password;
-  final Color placeholderColor;
+  final String? password;
+  final Color? placeholderColor;
   final String errorText;
   final Color textboxBackgroundColor;
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final bool obscureText;
   final bool readOnly;
-  final FocusNode focusNode;
+  final FocusNode? focusNode;
   final TextInputType keyboardType;
-  final Function onTap;
+  final dynamic onTap;
   final bool isForm;
-  final Widget prefix;
+  final Widget? prefix;
   final String counterText;
 
   CustomPhoneTextBox(
@@ -168,7 +168,7 @@ class CustomPhoneTextBox extends StatelessWidget {
               readOnly: readOnly,
               maxLength: 14,
               validator: (value) {
-                if (value.isEmpty && required) {
+                if (value!.isEmpty && required) {
                   return errorText;
                 }
                 return null;

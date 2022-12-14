@@ -1,21 +1,19 @@
-import 'package:flutter/foundation.dart';
-
 class Video {
   String url;
   String description;
   String title;
   int plays;
-  int rating;
+  int? rating;
   String thumbnail;
-  String author;
+  String? author;
 
   Video({
-    @required this.url,
-    this.thumbnail,
-    @required this.title,
+    required this.url,
+    required this.thumbnail,
+    required this.title,
     this.author,
-    this.description,
-    this.plays,
+    required this.description,
+    required this.plays,
     this.rating,
   });
 }

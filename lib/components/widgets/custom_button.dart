@@ -9,8 +9,8 @@ class CustomButton extends StatelessWidget {
 
   CustomButton(
       {this.textColor = Colors.black,
-      this.title,
-      this.func,
+      required this.title,
+      required this.func,
       this.color = Colors.white,
       this.borderRadius = 5});
 

@@ -18,7 +18,7 @@ class DatabaseService {
   Future<List<QueryDocumentSnapshot<Object>>> getFaqs() async {
     final docs = await faqCollection.get();
 
-    return docs.docs;
+    return docs.docs as List<QueryDocumentSnapshot<Object>>;
   }
 
   Future updateUser(Map update) async {
@@ -77,11 +77,11 @@ class DatabaseService {
   }
 
   Future submitQuickReport() async {
-    User currentUser = FirebaseAuth.instance.currentUser;
+    User currentUser = FirebaseAuth.instance.currentUser!;
     final String bigFamily360OrId = "j1mHuKp3BKeAnnY4Wzb6";
     final String service = "Quick Report";
     String caseNumber = '';
-    List<String> ll = currentUser.displayName.split(' ');
+    List<String> ll = currentUser.displayName!.split(' ');
     for (int i = 0; i < ll.length; i++) {
       caseNumber += ll[i].substring(0, 1);
     }
@@ -119,7 +119,8 @@ class DatabaseService {
       'isQuickReport': true
     }).then((onValue) {
       showToast(msg: S.current.caseRegisteredSuccesfully, type: "success");
-    }).onError((error, stackTrace) => showToast(msg: error, type: "error"));
+    }).onError(
+        (error, stackTrace) => showToast(msg: error.toString(), type: "error"));
   }
 
   int _calcVictimAge(String dob) {

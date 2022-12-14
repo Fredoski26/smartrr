@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:smartrr/components/screens/user/multiple_product_details.dart';
+import 'package:smartrr/components/screens/user/product_details.dart';
 import 'package:smartrr/models/product.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
-  const ProductCard({Key key, @required this.product});
+  const ProductCard({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class ProductCard extends StatelessWidget {
       onTap: () => Navigator.push(
         context,
         PageTransition(
-          child: MultipleProductDetails(
+          child: ProductDetails(
             product: product,
           ),
           type: PageTransitionType.rightToLeft,
@@ -32,7 +32,7 @@ class ProductCard extends StatelessWidget {
             Center(
               child: ClipRect(
                   child: Image.asset(
-                product.images[0].url,
+                product.images![0].url,
                 height: 150,
                 fit: BoxFit.cover,
               )),

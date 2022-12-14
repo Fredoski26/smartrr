@@ -10,7 +10,7 @@ import 'package:speech_to_text/speech_to_text.dart';
 import 'package:ripple_animation/ripple_animation.dart';
 
 class SmartSpeechToText extends StatefulWidget {
-  const SmartSpeechToText({Key key}) : super(key: key);
+  const SmartSpeechToText({super.key});
 
   @override
   State<SmartSpeechToText> createState() => _SmartSpeechToTextState();

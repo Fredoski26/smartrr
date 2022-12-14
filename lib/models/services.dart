@@ -9,5 +9,5 @@ class SubService {
   String title;
   bool value;
 
-  SubService({this.title, this.value});
+  SubService({required this.title, required this.value});
 }

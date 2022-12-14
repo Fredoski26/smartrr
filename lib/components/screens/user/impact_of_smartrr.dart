@@ -7,7 +7,7 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:smartrr/generated/l10n.dart';
 
 class ImpactOfSmartRR extends StatefulWidget {
-  ImpactOfSmartRR({Key key}) : super(key: key);
+  ImpactOfSmartRR({super.key});
 
   @override
   State<ImpactOfSmartRR> createState() => _ImpactOfSmartRRState();

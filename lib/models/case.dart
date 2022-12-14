@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 
 class Case {
   String id;
@@ -22,23 +21,23 @@ class Case {
   bool victimGender;
 
   Case({
-    @required this.id,
-    @required this.caseNumber,
-    @required this.userId,
-    @required this.orgId,
-    @required this.orgName,
-    @required this.caseType,
-    @required this.caseDesc,
-    @required this.locationId,
-    @required this.locationName,
-    @required this.timestamp,
-    @required this.status,
-    @required this.referredBy,
-    @required this.referredByName,
-    @required this.isVictim,
-    @required this.victimName,
-    @required this.victimAge,
-    @required this.victimPhone,
-    @required this.victimGender,
+    required this.id,
+    required this.caseNumber,
+    required this.userId,
+    required this.orgId,
+    required this.orgName,
+    required this.caseType,
+    required this.caseDesc,
+    required this.locationId,
+    required this.locationName,
+    required this.timestamp,
+    required this.status,
+    required this.referredBy,
+    required this.referredByName,
+    required this.isVictim,
+    required this.victimName,
+    required this.victimAge,
+    required this.victimPhone,
+    required this.victimGender,
   });
 }

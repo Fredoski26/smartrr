@@ -15,7 +15,7 @@ class _ReferralPageState extends State<ReferralPage> {
   bool acceptedValue = false;
   List<Case> _casesList = <Case>[];
   List<DropdownMenuItem<Case>> _dropDownCaseItem = [];
-  Case _currentCase;
+  late Case _currentCase;
   bool _isLoading = true;
 
   @override
@@ -59,8 +59,8 @@ class _ReferralPageState extends State<ReferralPage> {
                     isExpanded: true,
                     items: _dropDownCaseItem,
                     value: _currentCase,
-                    onChanged: (Case value) {
-                      setState(() => _currentCase = value);
+                    onChanged: (Case? value) {
+                      setState(() => _currentCase = value!);
                     },
                     // dropdownColor: Colors.black,
                     hint: Text(
@@ -146,8 +146,8 @@ class _ReferralPageState extends State<ReferralPage> {
                 timestamp: cases.docs[i].get('timestamp'),
                 isVictim: cases.docs[i].get('isVictim'),
                 victimAge: cases.docs[i].get("victimAge") != null
-                    ? int.tryParse(cases.docs[i].get('victimAge').toString())
-                    : null,
+                    ? int.parse(cases.docs[i].get('victimAge').toString())
+                    : 0,
                 victimGender:
                     cases.docs[i].get('victimGender') == 0 ? false : true,
                 victimName: cases.docs[i].get('victimName'),

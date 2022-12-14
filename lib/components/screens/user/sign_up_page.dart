@@ -24,15 +24,15 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController nameController;
-  TextEditingController emailController;
-  TextEditingController passwordController;
-  TextEditingController phoneNumberController;
-  TextEditingController dobController;
-  TextEditingController locationController;
-  TextEditingController ageController;
+  late TextEditingController nameController;
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
+  late TextEditingController phoneNumberController;
+  late TextEditingController dobController;
+  late TextEditingController locationController;
+  late TextEditingController ageController;
 
-  String errorMsg;
+  late String errorMsg;
   bool _isMale = true;
   bool isLoading = false;
 
@@ -40,7 +40,7 @@ class _SignUpPageState extends State<SignUpPage> {
   PhoneNumber number = PhoneNumber(isoCode: 'NG');
 
   List<DropdownMenuItem<String>> _countries = [];
-  String _country;
+  late String _country;
 
   @override
   void initState() {
@@ -61,8 +61,8 @@ class _SignUpPageState extends State<SignUpPage> {
     BirthTextInputFormatter birthDateInput = BirthTextInputFormatter();
 
     void _validateRegisterInput() async {
-      final FormState form = _formKey.currentState;
-      if (_formKey.currentState.validate()) {
+      final FormState form = _formKey.currentState!;
+      if (_formKey.currentState!.validate()) {
         form.save();
         setState(() {
           isLoading = true;
@@ -109,11 +109,11 @@ class _SignUpPageState extends State<SignUpPage> {
                       type: "error");
                   break;
                 default:
-                  showToast(msg: e.message, type: "error");
+                  showToast(msg: e.message!, type: "error");
                   break;
               }
             },
-            codeSent: (String verificationId, int resendToken) async {
+            codeSent: (String verificationId, int? resendToken) async {
               setState(() => isLoading = false);
               final formKey = GlobalKey<FormState>();
               final pinController = TextEditingController();
@@ -184,13 +184,13 @@ class _SignUpPageState extends State<SignUpPage> {
                                   }
                                 },
                                 validator: (pin) =>
-                                    pin.length < 6 || pin.length > 6
+                                    pin!.length < 6 || pin.length > 6
                                         ? "Invalid code"
                                         : null)),
                         SizedBox(height: 5.0),
                         ElevatedButton(
                             onPressed: () async {
-                              if (formKey.currentState.validate()) {
+                              if (formKey.currentState!.validate()) {
                                 showLoading(
                                     message: "Creating account",
                                     context: context);
@@ -228,7 +228,7 @@ class _SignUpPageState extends State<SignUpPage> {
             codeAutoRetrievalTimeout: (String verificationId) {},
           );
         } catch (error) {
-          switch (error.code) {
+          switch ((error as FirebaseAuthException).code) {
             case "ERROR_EMAIL_ALREADY_IN_USE":
               {
                 setState(() {
@@ -391,8 +391,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                         items: _countries,
                                         validator: (val) =>
                                             val == null ? "" : null,
-                                        onChanged: (String val) {
-                                          setState(() => _country = val);
+                                        onChanged: (String? val) {
+                                          setState(() => _country = val!);
                                         }),
                                   ),
                                 ),
@@ -425,7 +425,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                       Checkbox(
                                         value: _isMale,
                                         onChanged: (val) {
-                                          if (val)
+                                          if (val!)
                                             setState(() => _isMale = true);
                                           else
                                             setState(() => _isMale = false);
@@ -449,7 +449,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                       Checkbox(
                                         value: !_isMale,
                                         onChanged: (val) {
-                                          if (val)
+                                          if (val!)
                                             setState(() => _isMale = false);
                                           else
                                             setState(() => _isMale = true);
@@ -527,7 +527,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   void dispose() {
-    phoneNumberController?.dispose();
+    phoneNumberController.dispose();
     super.dispose();
   }
 }

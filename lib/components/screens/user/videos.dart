@@ -5,14 +5,14 @@ import 'package:smartrr/models/video.dart';
 import 'package:smartrr/services/video_service.dart';
 
 class Videos extends StatefulWidget {
-  const Videos({Key key}) : super(key: key);
+  const Videos({super.key});
 
   @override
   State<Videos> createState() => _VideosState();
 }
 
 class _VideosState extends State<Videos> {
-  StreamController<List<Video>> _streamController;
+  late StreamController<List<Video>> _streamController;
 
   loadVideos() async {
     try {
@@ -125,7 +125,7 @@ class _VideosState extends State<Videos> {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _errorHandler(snapshot.error),
+                _errorHandler(snapshot.error!),
                 TextButton.icon(
                   onPressed: _handleRefresh,
                   icon: Icon(Icons.refresh),
@@ -140,7 +140,7 @@ class _VideosState extends State<Videos> {
               onRefresh: _handleRefresh,
               child: Padding(
                 padding: const EdgeInsets.all(4.0),
-                child: _videos(snapshot.data),
+                child: _videos(snapshot.data!),
               ),
             );
           } else {

@@ -17,15 +17,15 @@ class SelectSubServicePage extends StatefulWidget {
   final String caseId;
 
   const SelectSubServicePage({
-    Key key,
-    this.selectedService,
-    this.isDarkTheme,
+    super.key,
+    required this.selectedService,
+    required this.isDarkTheme,
     this.lang = "en",
-    this.isUser,
-    this.referredBy,
-    this.caseId,
-    this.referredName,
-  }) : super(key: key);
+    required this.isUser,
+    required this.referredBy,
+    required this.caseId,
+    required this.referredName,
+  });
 
   @override
   _SelectSubServicePageState createState() => _SelectSubServicePageState();

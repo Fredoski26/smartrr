@@ -61,9 +61,9 @@ class _ConsentFormPageState extends State<ConsentFormPage> {
                                   fontSize: 14,
                                 ),
                               ),
-                              onChanged: (bool newVal) {
+                              onChanged: (bool? newVal) {
                                 setState(() {
-                                  acceptedValue = newVal;
+                                  acceptedValue = newVal!;
                                 });
                               },
                               value: acceptedValue,

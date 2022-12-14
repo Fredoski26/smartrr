@@ -4,9 +4,9 @@ import 'package:smartrr/utils/colors.dart';
 import 'text_box.dart';
 
 smartTextField({
-  @required String title,
-  @required TextEditingController controller,
-  Function onTap,
+  required String title,
+  required TextEditingController controller,
+  Function? onTap,
   bool readOnly = false,
   bool isPhone = false,
   bool required = true,
@@ -14,10 +14,10 @@ smartTextField({
   bool obscure = false,
   TextInputType textInputType = TextInputType.text,
   bool isForm = false,
-  Widget prefix,
-  Widget suffixIcon,
-  Function validator,
-  List<TextInputFormatter> inputFormatters,
+  Widget? prefix,
+  Icon? suffixIcon,
+  Function? validator,
+  List<TextInputFormatter>? inputFormatters,
 }) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -26,28 +26,28 @@ smartTextField({
           ? CustomPhoneTextBox(
               required: required,
               controller: controller,
-              onTap: onTap,
+              onTap: onTap!,
               readOnly: readOnly,
               obscureText: obscure,
               keyboardType: textInputType,
               isForm: isForm,
-              prefix: prefix,
+              prefix: prefix!,
               placeholderColor: lightGrey,
               placeholderText: title,
             )
           : CustomTextBox(
               required: required,
               controller: controller,
-              onTap: onTap,
+              onTap: onTap!,
               readOnly: readOnly,
               obscureText: obscure,
               keyboardType: textInputType,
               isForm: isForm,
               placeholderColor: lightGrey,
               placeholderText: title,
-              suffixIcon: suffixIcon,
-              validator: validator,
-              inputFormatters: inputFormatters,
+              suffixIcon: suffixIcon!,
+              validator: validator!,
+              inputFormatters: inputFormatters!,
             ),
       SizedBox(
         height: bottomPadding,

@@ -20,7 +20,8 @@ class ApiClient {
     return jsonResponse['results'][0]['formatted_address'];
   }
 
-  Future<dynamic> sendSMS({String phoneNumber, String message}) async {
+  Future<dynamic> sendSMS(
+      {required String phoneNumber, required String message}) async {
 //    ac89f1f3
 //    EWXULOE0HO87RjBn
     var response = await http.post(

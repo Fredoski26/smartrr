@@ -11,7 +11,7 @@ import 'package:smartrr/services/theme_provider.dart';
 class OrgCasesScreen extends StatefulWidget {
   final String orgId;
 
-  const OrgCasesScreen({Key key, @required this.orgId}) : super(key: key);
+  const OrgCasesScreen({super.key, required this.orgId});
 
   @override
   _OrgCasesScreenState createState() => _OrgCasesScreenState();
@@ -39,7 +39,7 @@ class _OrgCasesScreenState extends State<OrgCasesScreen> {
                     AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasError)
                     return new Text("Unable to fetch cases");
-                  if (snapshot.hasData && snapshot.data.docs.length == 0) {
+                  if (snapshot.hasData && snapshot.data!.docs.length == 0) {
                     return Center(child: Text("No cases reported"));
                   }
                   switch (snapshot.connectionState) {
@@ -49,7 +49,7 @@ class _OrgCasesScreenState extends State<OrgCasesScreen> {
                       return Consumer<ThemeNotifier>(
                           builder: (context, ThemeNotifier notifier, child) =>
                               ListView(
-                                children: snapshot.data.docs
+                                children: snapshot.data!.docs
                                     .map(
                                       (doc) => BlackLocationCell(
                                           bgColor: notifier.darkTheme
@@ -207,7 +207,7 @@ class _OrgCasesScreenState extends State<OrgCasesScreen> {
     return "${dt.day}-${dt.month}-${dt.year} ${dt.hour}:${dt.minute}";
   }
 
-  Widget _statusWidget({int status}) {
+  Widget _statusWidget({required int status}) {
     Color bgColor = Colors.green;
     Color textColor = Colors.white;
     String text = 'Active';

@@ -11,15 +11,16 @@ class BlackLocationCell extends StatelessWidget {
   final double width;
   final Color textColor;
 
-  BlackLocationCell(
-      {this.textColor = null,
-      this.child,
-      this.func,
-      this.color = null,
-      this.borderRadius = 5,
-      this.verticalPadding = 20,
-      this.bgColor = primaryColor,
-      this.width});
+  BlackLocationCell({
+    this.textColor = darkGrey,
+    required this.child,
+    required this.func,
+    this.color = darkGrey,
+    this.borderRadius = 5,
+    this.verticalPadding = 20,
+    this.bgColor = primaryColor,
+    required this.width,
+  });
 
   @override
   Widget build(BuildContext context) {

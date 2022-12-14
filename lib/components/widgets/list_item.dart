@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 
 class ListItem extends StatelessWidget {
   const ListItem(
-      {Key key, this.label = "•", @required this.body, this.title = ""})
-      : super(key: key);
+      {super.key, this.label = "•", required this.body, this.title = ""});
 
   final String label, body, title;
 
@@ -27,7 +26,7 @@ class ListItem extends StatelessWidget {
           body,
           style: Theme.of(context)
               .textTheme
-              .bodyText1
+              .bodyText1!
               .copyWith(fontWeight: FontWeight.normal),
         ),
       ),

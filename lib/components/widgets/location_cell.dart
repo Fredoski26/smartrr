@@ -11,12 +11,12 @@ class LocationCell extends StatelessWidget {
   final Color bgColor;
 
   LocationCell({
-    this.textColor,
-    this.title,
-    this.func,
+    this.textColor = darkGrey,
+    required this.title,
+    required this.func,
     this.color = darkGrey,
     this.borderRadius = 5,
-    this.width,
+    required this.width,
     this.bgColor = Colors.white,
   });
 

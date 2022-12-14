@@ -4,8 +4,7 @@ import 'package:smartrr/utils/colors.dart';
 
 class MultipleProductDetails extends StatefulWidget {
   final Product product;
-  const MultipleProductDetails({Key key, @required this.product})
-      : super(key: key);
+  const MultipleProductDetails({super.key, required this.product});
 
   @override
   State<MultipleProductDetails> createState() => _MultipleProductDetailsState();
@@ -53,7 +52,7 @@ class _MultipleProductDetailsState extends State<MultipleProductDetails> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20.0),
                             child: Image.asset(
-                              widget.product.images[0].url,
+                              widget.product.images![0].url,
                               fit: BoxFit.cover,
                               height: 140,
                             ),
@@ -106,7 +105,7 @@ class _MultipleProductDetailsState extends State<MultipleProductDetails> {
             widget.product.type == ProductType.multiple
                 ? Expanded(
                     child: ListView.separated(
-                        itemCount: widget.product.items.length,
+                        itemCount: widget.product.items!.length,
                         padding: EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 0),
                         separatorBuilder: (context, _) => Divider(),
                         itemBuilder: (context, index) {
@@ -127,9 +126,9 @@ class _MultipleProductDetailsState extends State<MultipleProductDetails> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(items[index].item),
+                                      Text(items![index].item),
                                       Checkbox(
-                                        onChanged: (val) => !val,
+                                        onChanged: (val) => !val!,
                                         value: true,
                                       ),
                                     ],
@@ -156,9 +155,9 @@ class _MultipleProductDetailsState extends State<MultipleProductDetails> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(items[index].item),
+                                  Text(items![index].item),
                                   Checkbox(
-                                    onChanged: (val) => !val,
+                                    onChanged: (val) => !val!,
                                     value: true,
                                   ),
                                 ],

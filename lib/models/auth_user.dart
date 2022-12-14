@@ -1,9 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 
 class AuthUser {
-  final bool isUser;
-  final User user;
+  final bool? isUser;
+  final User? user;
 
-  AuthUser({@required this.user, @required this.isUser});
+  AuthUser({required this.user, required this.isUser});
 }

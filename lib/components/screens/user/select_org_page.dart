@@ -22,16 +22,16 @@ class SelectOrgPage extends StatefulWidget {
   final String lang;
 
   const SelectOrgPage({
-    Key key,
-    @required this.service,
-    @required this.selectedState,
-    @required this.selectedLocation,
-    @required this.isUser,
-    @required this.referredBy,
-    @required this.referredName,
-    @required this.caseId,
-    this.lang,
-  }) : super(key: key);
+    super.key,
+    required this.service,
+    required this.selectedState,
+    required this.selectedLocation,
+    required this.isUser,
+    required this.referredBy,
+    required this.referredName,
+    required this.caseId,
+    this.lang = "en",
+  });
 
   @override
   _SelectOrgPageState createState() => _SelectOrgPageState();

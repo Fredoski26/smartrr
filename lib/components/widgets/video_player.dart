@@ -5,15 +5,15 @@ import 'package:smartrr/utils/colors.dart';
 
 class MyVideoPlayer extends StatefulWidget {
   final Video video;
-  const MyVideoPlayer({Key key, @required this.video});
+  const MyVideoPlayer({super.key, required this.video});
 
   @override
   State<MyVideoPlayer> createState() => _MyVideoPlayerState();
 }
 
 class _MyVideoPlayerState extends State<MyVideoPlayer> {
-  BetterPlayerController _betterPlayerController;
-  BetterPlayerDataSource _betterPlayerDataSource;
+  late BetterPlayerController _betterPlayerController;
+  late BetterPlayerDataSource _betterPlayerDataSource;
 
   @override
   Widget build(BuildContext context) {

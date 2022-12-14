@@ -6,39 +6,39 @@ class Organization {
   String orgEmail;
   String password;
   String language;
-  String ward;
-  String site;
-  String lga;
-  String startDate;
-  String endDate;
+  String? ward;
+  String? site;
+  String? lga;
+  String? startDate;
+  String? endDate;
   List<dynamic> servicesAvailable;
-  String startTime;
-  String closeTime;
-  String focalName;
-  String focalEmail;
-  String focalPhone;
-  String focalDesignation;
-  String how;
-  String criteria;
-  String comments;
+  String? startTime;
+  String? closeTime;
+  String? focalName;
+  String? focalEmail;
+  String? focalPhone;
+  String? focalDesignation;
+  String? how;
+  String? criteria;
+  String? comments;
   String locationId;
   int status;
   String location;
 
   Organization({
-    this.id,
-    this.name,
-    this.type,
-    this.telephone,
-    this.orgEmail,
-    this.password,
-    this.language,
+    required this.id,
+    required this.name,
+    required this.type,
+    required this.telephone,
+    required this.orgEmail,
+    required this.password,
+    required this.language,
     this.ward,
     this.site,
     this.lga,
     this.startDate,
     this.endDate,
-    this.servicesAvailable,
+    required this.servicesAvailable,
     this.startTime,
     this.closeTime,
     this.focalName,
@@ -48,8 +48,8 @@ class Organization {
     this.how,
     this.criteria,
     this.comments,
-    this.locationId,
-    this.status,
-    this.location,
+    required this.locationId,
+    required this.status,
+    required this.location,
   });
 }

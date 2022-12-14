@@ -5,7 +5,7 @@ Future<bool> _willPopCallback() async {
   return false; // return true if the route to be popped
 }
 
-showLoading({@required String message, @required BuildContext context}) {
+showLoading({required String message, required BuildContext context}) {
   showDialog(
     barrierDismissible: false,
     context: context,
