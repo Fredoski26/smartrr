@@ -72,6 +72,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "male": MessageLookupByLibrary.simpleMessage("Namiji"),
         "more": MessageLookupByLibrary.simpleMessage("Kara"),
         "name": MessageLookupByLibrary.simpleMessage("Suna"),
+        "new_": MessageLookupByLibrary.simpleMessage("sabo"),
         "organization": MessageLookupByLibrary.simpleMessage("Kungiya"),
         "password": MessageLookupByLibrary.simpleMessage("Mabudi"),
         "phoneNumber": MessageLookupByLibrary.simpleMessage("Lamba Waya"),

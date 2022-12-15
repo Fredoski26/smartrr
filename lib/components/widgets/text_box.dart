@@ -13,7 +13,7 @@ class CustomTextBox extends StatelessWidget {
   final Color textboxBackgroundColor;
   final TextEditingController? controller;
   final bool obscureText;
-  final bool? readOnly;
+  final bool readOnly;
   final FocusNode? focusNode;
   final TextInputType keyboardType;
   final dynamic onTap;
@@ -57,7 +57,7 @@ class CustomTextBox extends StatelessWidget {
               focusNode: focusNode,
               keyboardType: keyboardType,
               obscureText: obscureText,
-              readOnly: readOnly!,
+              readOnly: readOnly,
               validator: validator ??
                   (value) {
                     if (value!.isEmpty && required) {
@@ -88,7 +88,7 @@ class CustomTextBox extends StatelessWidget {
               focusNode: focusNode,
               keyboardType: keyboardType,
               obscureText: obscureText,
-              readOnly: readOnly!,
+              readOnly: readOnly,
               style: TextStyle().copyWith(color: textColor),
               controller: controller,
               decoration: InputDecoration(

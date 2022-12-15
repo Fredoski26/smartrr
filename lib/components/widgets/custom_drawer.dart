@@ -62,13 +62,13 @@ class CustomDrawer extends StatelessWidget {
                 margin: EdgeInsets.all(2),
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: Colors.green.withOpacity(.1),
+                  color: Colors.purple.withOpacity(.1),
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 child: Text(
-                  _language.comingSoon,
+                  _language.new_,
                   style:
-                      TextStyle().copyWith(color: Colors.green, fontSize: 12),
+                      TextStyle().copyWith(color: Colors.purple, fontSize: 15),
                 ),
               ),
             ],

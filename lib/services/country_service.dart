@@ -11,21 +11,31 @@ abstract class CountryService {
     final body = json.decode(response.body);
     final List data = body["data"];
 
-    return data
+    List<Country> countries = data
         .map((country) =>
             Country(name: country["country"], code: country["iso3"]))
         .toList();
+
+    // sort A-Z
+    countries.sort((a, b) => a.name.compareTo(b.name));
+
+    return countries;
   }
 
   static Future<List> getStates(String country) async {
     if (country == "Nigeria") {
       final jsonFile =
           await rootBundle.loadString("assets/nigeria-state-and-lgas.json");
-      final List states = jsonDecode(jsonFile);
+      final List decodedFile = jsonDecode(jsonFile);
 
-      return states
+      List states = decodedFile
           .map((state) => {"id": state["alias"], "name": state["state"]})
           .toList();
+
+      // sort A-Z
+      states.sort((a, b) => a.toString().compareTo(b.toString()));
+
+      return states;
     } else {
       final response = await http.get(
         Uri.parse(
@@ -53,6 +63,9 @@ abstract class CountryService {
           lgas = ng_state["lgas"];
         }
       });
+
+      // sort A-Z
+      lgas.sort();
 
       return lgas;
     } else {

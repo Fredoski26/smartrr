@@ -3,50 +3,51 @@ import 'package:google_fonts/google_fonts.dart';
 import '../utils/colors.dart';
 
 final ThemeData appTheme = ThemeData(
-    textTheme: GoogleFonts.poppinsTextTheme()
-        .copyWith(bodyText1: TextStyle().copyWith(fontSize: 16)),
-    primarySwatch: Colors.orange,
-    primaryColor: primaryColor,
+  textTheme: GoogleFonts.poppinsTextTheme()
+      .copyWith(bodyText1: TextStyle().copyWith(fontSize: 16)),
+  primarySwatch: Colors.orange,
+  primaryColor: primaryColor,
+  iconTheme: IconThemeData().copyWith(color: Colors.white),
+  appBarTheme: AppBarTheme(
+    backgroundColor: primaryColor,
+    elevation: 0,
+    centerTitle: true,
+    titleTextStyle: TextStyle().copyWith(color: Colors.white, fontSize: 20),
     iconTheme: IconThemeData().copyWith(color: Colors.white),
-    appBarTheme: AppBarTheme(
-      backgroundColor: primaryColor,
-      elevation: 0,
-      centerTitle: true,
-      titleTextStyle: TextStyle().copyWith(color: Colors.white, fontSize: 20),
-      iconTheme: IconThemeData().copyWith(color: Colors.white),
-      toolbarTextStyle: TextStyle().copyWith(color: Colors.white),
+    toolbarTextStyle: TextStyle().copyWith(color: Colors.white),
+  ),
+  textButtonTheme: TextButtonThemeData(
+    style: ButtonStyle(
+      shape: MaterialStateProperty.all(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(33))),
+      foregroundColor: MaterialStateProperty.all(Colors.white),
+      backgroundColor: MaterialStateProperty.all(primaryColor),
+      padding: MaterialStateProperty.all(
+          EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0)),
     ),
-    textButtonTheme: TextButtonThemeData(
-      style: ButtonStyle(
-        shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(33))),
-        foregroundColor: MaterialStateProperty.all(Colors.white),
-        backgroundColor: MaterialStateProperty.all(primaryColor),
-        padding: MaterialStateProperty.all(
-            EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0)),
-      ),
+  ),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ButtonStyle(
+      shape: MaterialStateProperty.all(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+      foregroundColor: MaterialStateProperty.all(Colors.white),
+      backgroundColor: MaterialStateProperty.all(primaryColor),
+      padding: MaterialStateProperty.all(
+          EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0)),
     ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ButtonStyle(
-        shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
-        foregroundColor: MaterialStateProperty.all(Colors.white),
-        backgroundColor: MaterialStateProperty.all(primaryColor),
-        padding: MaterialStateProperty.all(
-            EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0)),
-      ),
+  ),
+  outlinedButtonTheme: OutlinedButtonThemeData(
+    style: ButtonStyle(
+      padding: MaterialStateProperty.all(
+          EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0)),
+      side: MaterialStateProperty.all(
+          BorderSide(width: 1.0, color: primaryColor)),
+      shape: MaterialStateProperty.all(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(33))),
     ),
-    outlinedButtonTheme: OutlinedButtonThemeData(
-      style: ButtonStyle(
-        padding: MaterialStateProperty.all(
-            EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0)),
-        side: MaterialStateProperty.all(
-            BorderSide(width: 1.0, color: primaryColor)),
-        shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(33))),
-      ),
-    ),
-    tabBarTheme: TabBarTheme().copyWith());
+  ),
+  tabBarTheme: TabBarTheme().copyWith(),
+);
 
 final ThemeData darkTheme = ThemeData(
   primarySwatch: Colors.orange,

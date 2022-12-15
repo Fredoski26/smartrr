@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:smartrr/components/screens/user/delivery_details.dart';
 import 'package:smartrr/models/product.dart';
 import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/utils/utils.dart';
@@ -222,7 +223,20 @@ class _ProductDetailsState extends State<ProductDetails> {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 5.0),
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DeliveryDetails(
+                                    product: Product(
+                                  name: widget.product.name,
+                                  price: productPrice,
+                                  description: widget.product.description,
+                                  images: widget.product.images,
+                                  items: selectedItems,
+                                  type: widget.product.type,
+                                )),
+                              ),
+                            ),
                             child: Text("Buy"),
                           ),
                         ),
@@ -244,42 +258,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                       : SizedBox(),
                   Column(
                     children: productItems
-                        .map((item) => productItemTile(item)
-                            //     ListTile(
-                            //   title: Row(
-                            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            //     children: [
-                            //       Text(
-                            //         item.item,
-                            //         style: TextStyle()
-                            //             .copyWith(fontWeight: FontWeight.w600),
-                            //       ),
-                            //       Checkbox(
-                            //         onChanged: (val) {
-                            //           _handleCheckboxChange(val, item);
-                            //         },
-                            //         value: item.isSelected,
-                            //       ),
-                            //     ],
-                            //   ),
-                            //   dense: true,
-                            //   contentPadding: EdgeInsets.zero,
-                            //   selectedColor: darkGrey,
-                            //   textColor: lightGrey,
-                            //   selected: true,
-                            //   subtitle: Row(
-                            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            //     children: [
-                            //       Row(
-                            //         children: [
-                            //           Text("N${item.price}"),
-                            //         ],
-                            //       ),
-                            //       itemQuantitySelector(item)
-                            //     ],
-                            //   ),
-                            // ),
-                            )
+                        .map((item) => productItemTile(item))
                         .toList(),
                   )
                 ],

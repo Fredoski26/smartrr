@@ -40,7 +40,7 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
   bool _isMale = true;
   bool _userType = true;
   late User currentUser;
-  late String selectedDescription;
+  String? selectedDescription = null;
   TextEditingController _name = TextEditingController();
   TextEditingController _cnic = TextEditingController();
   TextEditingController _age = TextEditingController();
@@ -74,20 +74,20 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
     });
   }
 
+  final List<String> items = [
+    S.current.fgm,
+    S.current.physicalAbuse,
+    S.current.rape,
+    S.current.sexualAbuse,
+    S.current.psychologicalOrEmotionalAbuse,
+    S.current.forcedMarriage,
+    S.current.denialOfResources,
+    S.current.sexualReproductiveKits
+  ];
+
   @override
   Widget build(BuildContext context) {
     final _language = S.current;
-
-    final List<String> items = [
-      _language.fgm,
-      _language.physicalAbuse,
-      _language.rape,
-      _language.sexualAbuse,
-      _language.psychologicalOrEmotionalAbuse,
-      _language.forcedMarriage,
-      _language.denialOfResources,
-      _language.sexualReproductiveKits
-    ];
 
     return Consumer<LanguageNotifier>(
         builder: (context, langNotifier, child) => Scaffold(
