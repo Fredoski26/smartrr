@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -18,8 +19,9 @@ class DeliveryDetails extends StatefulWidget {
 }
 
 class _DeliveryDetailsState extends State<DeliveryDetails> {
+  late User? _currentUser;
   late bool isDarkTheme;
-  Key _formKey = new GlobalKey<FormState>();
+  final _formKey = new GlobalKey<FormState>();
 
   Country? _country = null;
   MyLocation? _state = null;
@@ -191,94 +193,73 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
                   SizedBox(
                     height: 15,
                   ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 11, vertical: 0),
-                    decoration: BoxDecoration(
-                      color: theme.darkTheme
-                          ? Colors.grey.withOpacity(.2)
-                          : Colors.grey[100],
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: DropdownButton<Country>(
-                      isExpanded: true,
-                      items: _countries,
-                      value: _country,
-                      onChanged: (Country? value) {
-                        setState(() => _country = value!);
-                        _getStates();
-                      },
-                      hint: Text(
-                        'Country',
-                        style: TextStyle().copyWith(
-                          fontSize: 16,
-                          color: theme.darkTheme ? lightGrey : darkGrey,
-                        ),
+                  DropdownButtonFormField<Country>(
+                    isExpanded: true,
+                    items: _countries,
+                    value: _country,
+                    onChanged: (Country? value) {
+                      setState(() => _country = value!);
+                      _getStates();
+                    },
+                    hint: Text(
+                      'Country',
+                      style: TextStyle().copyWith(
+                        fontSize: 16,
+                        color: theme.darkTheme ? lightGrey : darkGrey,
                       ),
-                      elevation: 1,
-                      underline: SizedBox(),
-                      icon: SvgPicture.asset("assets/icons/dropdown_icon.svg"),
                     ),
+                    elevation: 1,
+                    icon: SvgPicture.asset("assets/icons/dropdown_icon.svg"),
+                    validator: (country) =>
+                        country == null ? "Select country" : null,
+                    decoration: textInputDecoration(),
                   ),
                   SizedBox(
                     height: 20,
                   ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 11, vertical: 0),
-                    decoration: BoxDecoration(
-                      color: theme.darkTheme
-                          ? Colors.grey.withOpacity(.2)
-                          : Colors.grey[100],
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: DropdownButton<MyLocation>(
-                      isExpanded: true,
-                      items: _stateDropdownItems,
-                      value: _state,
-                      onChanged: (MyLocation? value) {
-                        setState(() => _state = value!);
-                        _getLocations();
-                      },
-                      hint: Text(
-                        'State',
-                        style: TextStyle().copyWith(
-                          fontSize: 16,
-                          color: theme.darkTheme ? lightGrey : darkGrey,
-                        ),
+                  DropdownButtonFormField<MyLocation>(
+                    isExpanded: true,
+                    items: _stateDropdownItems,
+                    value: _state,
+                    onChanged: (MyLocation? value) {
+                      setState(() => _state = value!);
+                      _getLocations();
+                    },
+                    hint: Text(
+                      'State',
+                      style: TextStyle().copyWith(
+                        fontSize: 16,
+                        color: theme.darkTheme ? lightGrey : darkGrey,
                       ),
-                      elevation: 1,
-                      underline: SizedBox(),
-                      icon: SvgPicture.asset("assets/icons/dropdown_icon.svg"),
                     ),
+                    elevation: 1,
+                    icon: SvgPicture.asset("assets/icons/dropdown_icon.svg"),
+                    validator: (country) =>
+                        country == null ? "Select state" : null,
+                    decoration: textInputDecoration(),
                   ),
                   SizedBox(
                     height: 20,
                   ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 11, vertical: 0),
-                    decoration: BoxDecoration(
-                      color: theme.darkTheme
-                          ? Colors.grey.withOpacity(.2)
-                          : Colors.grey[100],
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: DropdownButton(
-                      isExpanded: true,
-                      items: _lgaDropdownItems,
-                      value: _lga,
-                      onChanged: (MyLocation? location) async {
-                        setState(() => _lga = location!);
-                      },
-                      hint: Text(
-                        'LGA',
-                        style: TextStyle().copyWith(
-                          fontSize: 16,
-                          color: theme.darkTheme ? lightGrey : darkGrey,
-                        ),
+                  DropdownButtonFormField(
+                    isExpanded: true,
+                    items: _lgaDropdownItems,
+                    value: _lga,
+                    onChanged: (MyLocation? location) async {
+                      setState(() => _lga = location!);
+                    },
+                    hint: Text(
+                      'LGA',
+                      style: TextStyle().copyWith(
+                        fontSize: 16,
+                        color: theme.darkTheme ? lightGrey : darkGrey,
                       ),
-                      elevation: 1,
-                      underline: SizedBox(),
-                      icon: SvgPicture.asset("assets/icons/dropdown_icon.svg"),
                     ),
+                    elevation: 1,
+                    icon: SvgPicture.asset("assets/icons/dropdown_icon.svg"),
+                    validator: (country) =>
+                        country == null ? "Select LGA" : null,
+                    decoration: textInputDecoration(),
                   ),
                   SizedBox(
                     height: 20,
@@ -321,13 +302,25 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
                   Container(
                       margin: EdgeInsets.only(top: 50),
                       child: TextButton(
-                        onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                OrderSummary(product: widget.product),
-                          ),
-                        ),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OrderSummary(
+                                  product: widget.product,
+                                  name: _nameController.text,
+                                  phone: _phoneController.text,
+                                  country: _country!.name,
+                                  state: _state!.title,
+                                  address: _addressController.text,
+                                  lga: _lga!.title,
+                                  landMark: _landMarkController.text,
+                                ),
+                              ),
+                            );
+                          }
+                        },
                         child: Text("Continue"),
                       )),
                 ],
@@ -381,10 +374,13 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
 
   @override
   void initState() {
-    _nameController = new TextEditingController();
+    _currentUser = FirebaseAuth.instance.currentUser;
+    _nameController =
+        new TextEditingController(text: _currentUser!.displayName);
     _addressController = new TextEditingController();
     _landMarkController = new TextEditingController();
-    _phoneController = new TextEditingController();
+    _phoneController =
+        new TextEditingController(text: _currentUser!.phoneNumber);
     super.initState();
   }
 
