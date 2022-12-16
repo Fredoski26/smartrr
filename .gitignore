@@ -52,3 +52,5 @@ credentials.json
 config/
 
 *.jks
+*.env
+env.g.dart

@@ -228,6 +228,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               MaterialPageRoute(
                                 builder: (context) => DeliveryDetails(
                                     product: Product(
+                                  id: widget.product.id,
                                   name: widget.product.name,
                                   price: productPrice,
                                   description: widget.product.description,

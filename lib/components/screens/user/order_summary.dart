@@ -1,41 +1,116 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:provider/provider.dart';
+import 'package:smartrr/components/screens/user/orders.dart';
+import 'package:smartrr/components/widgets/show_loading.dart';
+import 'package:smartrr/env/env.dart';
+import 'package:smartrr/models/order.dart';
 import 'package:smartrr/models/product.dart';
+import 'package:smartrr/services/shop_service.dart';
 import 'package:smartrr/services/theme_provider.dart';
 import 'package:smartrr/utils/colors.dart';
+import 'package:smartrr/utils/utils.dart';
+import 'package:uuid/uuid.dart';
 
-class OrderSummary extends StatelessWidget {
+class OrderSummary extends StatefulWidget {
   final Product product;
   final String name;
   final String phone;
+  final String email;
   final String country;
   final String state;
   final String lga;
   final String address;
   final String landMark;
-  final deliveryFee;
+  final double deliveryFee;
+  final String user;
   const OrderSummary({
     super.key,
     required this.product,
     required this.name,
     required this.phone,
+    required this.email,
     required this.country,
     required this.state,
     required this.lga,
     required this.address,
     required this.landMark,
     this.deliveryFee = 2000,
+    required this.user,
   });
 
   @override
-  Widget build(BuildContext context) {
-    String content = "Content: ";
+  State<OrderSummary> createState() => _OrderSummaryState();
+}
 
-    if (product.type == ProductType.multiple) {
-      content += product.items!.map((item) => "${item.item}").join(", ");
-    } else {
-      content += product.name;
+class _OrderSummaryState extends State<OrderSummary> {
+  String content = "Content: ";
+
+  final publicKey = Env.paystackPublicKey;
+  final plugin = PaystackPlugin();
+
+  @override
+  Widget build(BuildContext context) {
+    Charge charge = Charge()
+      ..amount = widget.product.price.toInt() * 100
+      ..reference = _getReference()
+      ..email = widget.email;
+
+    charge.putMetaData("name", widget.name);
+    charge.putMetaData("phone", widget.phone);
+    charge.putMetaData("Product", widget.product.name);
+    charge.putMetaData("product_id", widget.product.id);
+    charge.putMetaData("items", jsonEncode(widget.product.items));
+
+    charge.putCustomField("Name", widget.name);
+    charge.putCustomField("Phone", widget.phone);
+    charge.putCustomField("Product ID", widget.product.id);
+    charge.putCustomField("Product", widget.product.name);
+
+    _pay() async {
+      CheckoutResponse response = await plugin.checkout(
+        context,
+        charge: charge,
+        method: CheckoutMethod.card,
+        fullscreen: true,
+        logo: Image.asset(
+          "assets/logo.png",
+          height: 50,
+          width: 50,
+        ),
+      );
+
+      if (response.status && response.verify) {
+        showLoading(message: "Loading...", context: context);
+        ShopService.placeOrder(Order(
+          name: widget.name,
+          email: widget.email,
+          phoneNumber: widget.phone,
+          address: widget.address,
+          country: widget.country,
+          state: widget.state,
+          localGovernmentArea: widget.lga,
+          majorLandmark: widget.landMark,
+          status: "processing",
+          paymentRef: response.reference!,
+          user: widget.user,
+        )).then((_) {
+          Navigator.pop(context);
+          showToast(msg: "Order successful", type: "success");
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Orders(),
+            ),
+          );
+        });
+      } else {
+        showToast(msg: "Payment could not be processed", type: "error");
+      }
     }
+
     return Consumer<ThemeNotifier>(
       builder: (context, theme, _) => Scaffold(
         appBar: AppBar(title: Text("Order summary")),
@@ -62,7 +137,7 @@ class OrderSummary extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20.0),
                           child: Image.asset(
-                            product.images![0].url,
+                            widget.product.images![0].url,
                             fit: BoxFit.cover,
                             height: 140,
                           ),
@@ -75,7 +150,7 @@ class OrderSummary extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            product.name,
+                            widget.product.name,
                             style: TextStyle().copyWith(
                               fontSize: 20,
                               fontWeight: FontWeight.w400,
@@ -83,7 +158,7 @@ class OrderSummary extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            "N${product.price}",
+                            "N${widget.product.price}",
                             style: TextStyle().copyWith(
                               color: primaryColor,
                               fontSize: 18,
@@ -133,7 +208,7 @@ class OrderSummary extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        "Name: $name",
+                        "Name: ${widget.name}",
                         style: TextStyle().copyWith(
                           fontSize: 13,
                           height: 1.2,
@@ -144,7 +219,7 @@ class OrderSummary extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        "Phone: $phone",
+                        "Phone: ${widget.phone}",
                         style: TextStyle().copyWith(
                           fontSize: 13,
                           height: 1.2,
@@ -155,7 +230,7 @@ class OrderSummary extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        "Country: $country",
+                        "Country: ${widget.country}",
                         style: TextStyle().copyWith(
                           fontSize: 13,
                           height: 1.2,
@@ -166,7 +241,7 @@ class OrderSummary extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        "State: $state",
+                        "State: ${widget.state}",
                         style: TextStyle().copyWith(
                           fontSize: 13,
                           height: 1.2,
@@ -177,7 +252,7 @@ class OrderSummary extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        "LGA: $lga",
+                        "LGA: ${widget.lga}",
                         style: TextStyle().copyWith(
                           fontSize: 13,
                           height: 1.2,
@@ -189,7 +264,7 @@ class OrderSummary extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          "Address: $address",
+                          "Address: ${widget.address}",
                           style: TextStyle().copyWith(
                             fontSize: 13,
                             height: 1.2,
@@ -201,7 +276,7 @@ class OrderSummary extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        "Major Landmark: $landMark",
+                        "Major Landmark: ${widget.landMark}",
                         style: TextStyle().copyWith(
                           fontSize: 13,
                           height: 1.2,
@@ -238,9 +313,9 @@ class OrderSummary extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("${product.name}"),
+                      Text("${widget.product.name}"),
                       Text("------------"),
-                      Text("N${product.price}"),
+                      Text("N${widget.product.price}"),
                     ],
                   ),
                   SizedBox(height: 5.0),
@@ -249,7 +324,7 @@ class OrderSummary extends StatelessWidget {
                     children: [
                       Text("Delivery Fee"),
                       Text("------------"),
-                      Text("N${deliveryFee}"),
+                      Text("N${widget.deliveryFee}"),
                     ],
                   ),
                   SizedBox(height: 5.0),
@@ -258,7 +333,7 @@ class OrderSummary extends StatelessWidget {
                     children: [
                       Text("Total"),
                       Text("------------"),
-                      Text("N${product.price + deliveryFee}"),
+                      Text("N${widget.product.price + widget.deliveryFee}"),
                     ],
                   ),
                 ],
@@ -267,7 +342,7 @@ class OrderSummary extends StatelessWidget {
             Container(
               margin: EdgeInsets.only(top: 60),
               child: TextButton(
-                onPressed: null,
+                onPressed: _pay,
                 child: Text("Place Order"),
               ),
             )
@@ -275,5 +350,20 @@ class OrderSummary extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _getReference() {
+    return Uuid().v4();
+  }
+
+  @override
+  void initState() {
+    if (widget.product.type == ProductType.multiple) {
+      content += widget.product.items!.map((item) => "${item.item}").join(", ");
+    } else {
+      content += widget.product.name;
+    }
+    plugin.initialize(publicKey: publicKey);
+    super.initState();
   }
 }

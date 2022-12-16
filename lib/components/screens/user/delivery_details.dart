@@ -51,6 +51,7 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
         fillColor: isDarkTheme ? Colors.grey.withOpacity(.2) : Colors.grey[100],
         focusedBorder: InputBorder.none,
         counterText: "",
+        border: InputBorder.none,
       );
     }
 
@@ -311,11 +312,13 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
                                   product: widget.product,
                                   name: _nameController.text,
                                   phone: _phoneController.text,
+                                  email: _currentUser!.email!,
                                   country: _country!.name,
                                   state: _state!.title,
                                   address: _addressController.text,
                                   lga: _lga!.title,
                                   landMark: _landMarkController.text,
+                                  user: _currentUser!.uid,
                                 ),
                               ),
                             );
