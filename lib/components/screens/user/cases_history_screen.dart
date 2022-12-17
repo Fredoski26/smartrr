@@ -141,7 +141,8 @@ class _CasesHistoryScreenState extends State<CasesHistoryScreen> {
                 victimAge: cases.docs[i].get("victimAge") != null
                     ? int.parse(cases.docs[i].get('victimAge').toString())
                     : 0,
-                victimGender: cases.docs[i].get('victimGender'),
+                victimGender:
+                    cases.docs[i].get('victimGender') == 1 ? true : false,
                 victimName: cases.docs[i].get('victimName'),
                 victimPhone: cases.docs[i].get('victimPhone'),
               ),
