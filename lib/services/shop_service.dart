@@ -10,57 +10,30 @@ abstract class ShopService {
   static Future<List<Product>> getAllProducts() async {
     final res = await http.get(Uri.parse("$apiBaseUrl/products"));
     final List jsonData = jsonDecode(res.body)["products"];
-    // print(jsonData);
 
-    print("Decoded data");
-
-    List<Product> products = [];
-
-    jsonData.forEach((product) {
-      products.add(
-        Product(
-          id: "1",
-          name: "Birth Control Shot",
-          description:
-              "Birth Control Shot Birth Control Shot Birth Control Shot Birth Control Shot Birth Control Shot Birth Control Shot Birth Control Shot",
-          price: 2000,
-          type: ProductType.single,
-          images: [
-            ProductImage(
-              url: "assets/images/image2.jpg",
-            ),
-            ProductImage(
-              url: "assets/images/image2.jpg",
-            )
-          ],
-          items: [],
-        ),
-      );
-      print("Added");
-    });
-    //  = jsonData
-    //     .map(
-    //       (product) => Product(
-    //         id: product["_id"],
-    //         name: product["name"],
-    //         description: product["description"],
-    //         price: product["price"],
-    //         type: product["productType"] == ProductType.multiple
-    //             ? ProductType.multiple
-    //             : ProductType.single,
-    //         images: (product["imgUrl"] as List)
-    //             .map((img) => ProductImage(url: img["url"]))
-    //             .toList(),
-    //         items: (product["items"] as List)
-    //             .map((item) => ProductItem(
-    //                 item: item["item"],
-    //                 price: item["price"],
-    //                 quantity: item["quantity"]))
-    //             .toList(),
-    //         rating: product["rating"],
-    //       ),
-    //     )
-    //     .toList();
+    List<Product> products = jsonData
+        .map(
+          (product) => Product(
+            id: product["_id"],
+            name: product["name"],
+            description: product["description"],
+            price: double.parse(product["price"]),
+            type: product["productType"] == "multiple"
+                ? ProductType.multiple
+                : ProductType.single,
+            images: (product["imgUrl"] as List)
+                .map((img) => ProductImage(url: img["url"]))
+                .toList(),
+            items: (product["items"] as List)
+                .map((item) => ProductItem(
+                    item: item["item"],
+                    price: double.parse(item["price"]),
+                    quantity: int.parse(item["quantity"])))
+                .toList(),
+            rating: 5,
+          ),
+        )
+        .toList();
 
     return products;
   }
@@ -97,7 +70,10 @@ abstract class ShopService {
     final res = await http.get(Uri.parse("$apiBaseUrl/orders"));
     final List jsonData = jsonDecode(res.body)["orders"];
 
-    return jsonData
+    jsonData.sort((a, b) => (DateTime.parse(b["createdAt"]))
+        .compareTo(DateTime.parse(a["createdAt"])));
+
+    final List<Order> orders = jsonData
         .map(
           (order) => Order(
             name: order["name"],
@@ -114,5 +90,7 @@ abstract class ShopService {
           ),
         )
         .toList();
+
+    return orders;
   }
 }

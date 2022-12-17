@@ -95,7 +95,7 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
                           margin: EdgeInsets.only(right: 10.0),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20.0),
-                            child: Image.asset(
+                            child: Image.network(
                               widget.product.images![0].url,
                               fit: BoxFit.cover,
                               height: 140,
@@ -379,11 +379,11 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
   void initState() {
     _currentUser = FirebaseAuth.instance.currentUser;
     _nameController =
-        new TextEditingController(text: _currentUser!.displayName);
+        new TextEditingController(text: _currentUser?.displayName);
     _addressController = new TextEditingController();
     _landMarkController = new TextEditingController();
-    _phoneController =
-        new TextEditingController(text: _currentUser!.phoneNumber);
+    _phoneController = new TextEditingController(
+        text: _currentUser!.phoneNumber?.split("+")[1]);
     super.initState();
   }
 

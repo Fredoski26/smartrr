@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:smartrr/components/screens/user/orders.dart';
-import 'package:smartrr/components/screens/user/product_card.dart';
+import 'package:smartrr/components/widgets/product_card.dart';
 import 'package:smartrr/models/product.dart';
 import 'package:smartrr/services/shop_service.dart';
 import 'package:smartrr/utils/colors.dart';
@@ -21,9 +21,8 @@ class _ShopState extends State<Shop> {
 
   loadProducts() async {
     try {
-      print("Fetching products");
       List<Product> products = await ShopService.getAllProducts();
-      print("Done");
+
       _streamController.add(products);
       return products;
     } catch (e) {
@@ -33,42 +32,23 @@ class _ShopState extends State<Shop> {
 
   List<Product> _products = [
     Product(
-      id: "1",
-      name: "Birth Control Shot",
-      description:
-          "Birth Control Shot Birth Control Shot Birth Control Shot Birth Control Shot Birth Control Shot Birth Control Shot Birth Control Shot",
-      price: 2000,
-      type: ProductType.single,
-      images: [
-        ProductImage(
-          url: "assets/images/image2.jpg",
-        ),
-        ProductImage(
-          url: "assets/images/image2.jpg",
-        )
-      ],
-      items: [],
-    ),
-    Product(
         id: "2",
         name: "Sexual Health Kit",
         description:
             "Sexual Health Kit Sexual Health Kit Sexual Health Kit Sexual Health Kit Sexual Health Kit Sexual Health Kit Sexual Health Kit Sexual Health Kit",
-        price: 12000,
+        price: 9300,
         type: ProductType.multiple,
         images: [
           ProductImage(
-            url: "assets/images/image1.jpg",
-          ),
-          ProductImage(
-            url: "assets/images/image1.jpg",
+            url:
+                "https://mini-test-dashboard.s3.us-west-1.amazonaws.com/images/1671217728483-image1.jpg",
           )
         ],
         items: [
-          ProductItem(item: "External condoms", price: 1000, quantity: 10),
+          ProductItem(item: "External condoms", price: 300, quantity: 10),
           ProductItem(item: "Internal condoms", price: 1000, quantity: 3),
-          ProductItem(item: "Gloves", price: 800, quantity: 3),
-          ProductItem(item: "Lube", price: 500, quantity: 5),
+          ProductItem(item: "Gloves", price: 100, quantity: 3),
+          ProductItem(item: "Lube", price: 1500, quantity: 2),
         ])
   ];
 
@@ -131,6 +111,7 @@ class _ShopState extends State<Shop> {
               ),
             ),
             child: StreamBuilder<List<Product>>(
+                initialData: _products,
                 stream: _streamController.stream,
                 builder: (context, AsyncSnapshot<List<Product>> snapshot) {
                   if (!snapshot.hasData) {

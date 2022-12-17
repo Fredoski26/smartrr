@@ -54,7 +54,8 @@ class _OrderSummaryState extends State<OrderSummary> {
   @override
   Widget build(BuildContext context) {
     Charge charge = Charge()
-      ..amount = widget.product.price.toInt() * 100
+      ..amount =
+          (widget.product.price.toInt() + widget.deliveryFee.toInt()) * 100
       ..reference = _getReference()
       ..email = widget.email;
 
@@ -62,7 +63,13 @@ class _OrderSummaryState extends State<OrderSummary> {
     charge.putMetaData("phone", widget.phone);
     charge.putMetaData("Product", widget.product.name);
     charge.putMetaData("product_id", widget.product.id);
-    charge.putMetaData("items", jsonEncode(widget.product.items));
+
+    final items = widget.product.items!
+        .map((item) =>
+            {"item": item.item, "price": item.price, "quantity": item.quantity})
+        .toList();
+
+    charge.putMetaData("items", jsonEncode(items));
 
     charge.putCustomField("Name", widget.name);
     charge.putCustomField("Phone", widget.phone);
@@ -136,7 +143,7 @@ class _OrderSummaryState extends State<OrderSummary> {
                         margin: EdgeInsets.only(right: 10.0),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20.0),
-                          child: Image.asset(
+                          child: Image.network(
                             widget.product.images![0].url,
                             fit: BoxFit.cover,
                             height: 140,

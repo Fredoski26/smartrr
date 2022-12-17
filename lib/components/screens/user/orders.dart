@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:smartrr/components/widgets/order_card.dart';
 import 'package:smartrr/models/order.dart';
+import 'package:smartrr/services/shop_service.dart';
 
 class Orders extends StatelessWidget {
   const Orders({super.key});
@@ -9,6 +11,7 @@ class Orders extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text("Orders")),
       body: StreamBuilder<List<Order>>(
+        stream: ShopService.getAllOrders().asStream(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Center(
@@ -17,7 +20,9 @@ class Orders extends StatelessWidget {
           }
           if (snapshot.hasData) {
             return ListView.builder(
-              itemBuilder: (context, index) => Card(),
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) =>
+                  OrderCard(order: snapshot.data![index]),
             );
           } else
             return SizedBox();

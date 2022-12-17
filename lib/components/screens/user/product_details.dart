@@ -26,10 +26,10 @@ class _ProductDetailsState extends State<ProductDetails> {
 
       if (!val) {
         selectedItems.remove(item);
-        productPrice -= item.price;
+        productPrice -= item.price * item.quantity;
       } else {
         selectedItems.add(item);
-        productPrice += item.price;
+        productPrice += item.price * item.quantity;
       }
       setState(() {});
     }
@@ -75,12 +75,14 @@ class _ProductDetailsState extends State<ProductDetails> {
   void incrementItemQuantity(ProductItemWithCheckbox item) {
     int itemIndex = selectedItems.indexOf(item);
     selectedItems[itemIndex].quantity++;
+    productPrice += selectedItems[itemIndex].price;
     setState(() {});
   }
 
   void decrementItemQuantity(ProductItemWithCheckbox item) {
     int itemIndex = selectedItems.indexOf(item);
     selectedItems[itemIndex].quantity--;
+    productPrice -= selectedItems[itemIndex].price;
     setState(() {});
   }
 
@@ -167,10 +169,10 @@ class _ProductDetailsState extends State<ProductDetails> {
               child: AspectRatio(
                 aspectRatio: 16 / 9,
                 child: ListView.builder(
-                  physics: BouncingScrollPhysics(),
+                  physics: PageScrollPhysics(),
                   scrollDirection: Axis.horizontal,
                   itemCount: widget.product.images!.length,
-                  itemBuilder: (context, i) => Image.asset(
+                  itemBuilder: (context, i) => Image.network(
                     widget.product.images![i].url,
                     width: MediaQuery.of(context).size.width,
                     fit: BoxFit.contain,
