@@ -11,6 +11,7 @@ import 'package:smartrr/components/screens/user/select_country.dart';
 import 'package:smartrr/components/screens/user/settings.dart';
 import 'package:smartrr/components/screens/user/cases_history_screen.dart';
 import 'package:smartrr/components/screens/org/org_sign_up_page.dart';
+import 'package:smartrr/components/screens/user/shop.dart';
 import 'package:smartrr/components/screens/user/sign_up_page.dart';
 import 'package:smartrr/components/wrapper.dart';
 import 'package:smartrr/generated/l10n.dart';
@@ -73,7 +74,8 @@ class MyApp extends StatelessWidget {
         '/about': (context) => About(),
         '/faq': (context) => FrequentlyAskedQuestions(),
         "/countries": (context) => SelectCountry(),
-        "/srhr": (ontext) => AllAboutSRHR()
+        "/srhr": (context) => AllAboutSRHR(),
+        "/shop": (context) => Shop(),
       },
       theme: isDarkTheme ? darkTheme : appTheme,
       localizationsDelegates: [

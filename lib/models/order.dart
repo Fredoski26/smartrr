@@ -9,7 +9,10 @@ class Order {
       majorLandmark,
       status,
       paymentRef,
-      user;
+      user,
+      productName,
+      productId;
+  double deliveryFee, totalAmount;
 
   Order({
     required this.name,
@@ -23,5 +26,9 @@ class Order {
     required this.status,
     required this.paymentRef,
     required this.user,
+    required this.productName,
+    required this.productId,
+    required this.deliveryFee,
+    required this.totalAmount,
   });
 }

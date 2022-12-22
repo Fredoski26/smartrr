@@ -58,6 +58,19 @@ class OrderCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
+                  "Product: ",
+                  style: TextStyle().copyWith(fontWeight: FontWeight.w600),
+                ),
+                Expanded(child: Text(order.productName))
+              ],
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(bottom: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
                   "Email: ",
                   style: TextStyle().copyWith(fontWeight: FontWeight.w600),
                 ),

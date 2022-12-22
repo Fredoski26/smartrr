@@ -66,7 +66,7 @@ abstract class ShopService {
     print(response);
   }
 
-  static Future<List<Order>> getAllOrders() async {
+  static Future<List<Order>> getAllOrders({required String userId}) async {
     final res = await http.get(Uri.parse("$apiBaseUrl/orders"));
     final List jsonData = jsonDecode(res.body)["orders"];
 
@@ -87,6 +87,10 @@ abstract class ShopService {
             status: order["status"],
             paymentRef: order["paymentRef"],
             user: order["userId"],
+            productName: order["productName"],
+            productId: order["productId"],
+            deliveryFee: 0,
+            totalAmount: double.parse(order["totalAmount"].toString()),
           ),
         )
         .toList();

@@ -51,6 +51,7 @@ class ProductCard extends StatelessWidget {
                       style: TextStyle().copyWith(
                         fontWeight: FontWeight.w500,
                         height: 1.2,
+                        fontSize: 16,
                       ),
                     ),
                   ),
@@ -60,6 +61,7 @@ class ProductCard extends StatelessWidget {
                 "N${product.price}",
                 style: TextStyle().copyWith(
                   fontWeight: FontWeight.bold,
+                  fontSize: 16,
                 ),
               )
             ],

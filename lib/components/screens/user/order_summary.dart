@@ -4,11 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:provider/provider.dart';
 import 'package:smartrr/components/screens/user/orders.dart';
-import 'package:smartrr/components/widgets/show_loading.dart';
 import 'package:smartrr/env/env.dart';
-import 'package:smartrr/models/order.dart';
 import 'package:smartrr/models/product.dart';
-import 'package:smartrr/services/shop_service.dart';
 import 'package:smartrr/services/theme_provider.dart';
 import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/utils/utils.dart';
@@ -50,19 +47,28 @@ class _OrderSummaryState extends State<OrderSummary> {
 
   final publicKey = Env.paystackPublicKey;
   final plugin = PaystackPlugin();
+  late double totalAmount;
 
   @override
   Widget build(BuildContext context) {
     Charge charge = Charge()
-      ..amount =
-          (widget.product.price.toInt() + widget.deliveryFee.toInt()) * 100
+      ..amount = totalAmount.toInt()
       ..reference = _getReference()
       ..email = widget.email;
 
     charge.putMetaData("name", widget.name);
-    charge.putMetaData("phone", widget.phone);
-    charge.putMetaData("Product", widget.product.name);
+    charge.putMetaData("email", widget.email);
+    charge.putMetaData("phone_number", widget.phone);
+    charge.putMetaData("product_name", widget.product.name);
     charge.putMetaData("product_id", widget.product.id);
+    charge.putMetaData("user_id", widget.user);
+    charge.putMetaData("lga", widget.lga);
+    charge.putMetaData("delivery_fee", widget.deliveryFee);
+    charge.putMetaData("total_amount", totalAmount);
+    charge.putMetaData("address", widget.address);
+    charge.putMetaData("landmark", widget.landMark);
+    charge.putMetaData("state", widget.state);
+    charge.putMetaData("purpose", "order");
 
     final items = widget.product.items!
         .map((item) =>
@@ -73,8 +79,10 @@ class _OrderSummaryState extends State<OrderSummary> {
 
     charge.putCustomField("Name", widget.name);
     charge.putCustomField("Phone", widget.phone);
+    charge.putCustomField("Product Name", widget.product.name);
     charge.putCustomField("Product ID", widget.product.id);
     charge.putCustomField("Product", widget.product.name);
+    charge.putCustomField("Purpose", "order");
 
     _pay() async {
       CheckoutResponse response = await plugin.checkout(
@@ -90,29 +98,14 @@ class _OrderSummaryState extends State<OrderSummary> {
       );
 
       if (response.status && response.verify) {
-        showLoading(message: "Loading...", context: context);
-        ShopService.placeOrder(Order(
-          name: widget.name,
-          email: widget.email,
-          phoneNumber: widget.phone,
-          address: widget.address,
-          country: widget.country,
-          state: widget.state,
-          localGovernmentArea: widget.lga,
-          majorLandmark: widget.landMark,
-          status: "processing",
-          paymentRef: response.reference!,
-          user: widget.user,
-        )).then((_) {
-          Navigator.pop(context);
-          showToast(msg: "Order successful", type: "success");
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Orders(),
-            ),
-          );
-        });
+        showToast(msg: "Order successful", type: "success");
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Orders(),
+          ),
+          ModalRoute.withName("/shop"),
+        );
       } else {
         showToast(msg: "Payment could not be processed", type: "error");
       }
@@ -371,6 +364,8 @@ class _OrderSummaryState extends State<OrderSummary> {
       content += widget.product.name;
     }
     plugin.initialize(publicKey: publicKey);
+    totalAmount =
+        (widget.product.price.toInt() + widget.deliveryFee.toInt()) * 100;
     super.initState();
   }
 }

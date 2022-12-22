@@ -58,28 +58,22 @@ class CustomDrawer extends StatelessWidget {
           title: Row(
             children: [
               Text(_language.shop),
-              Container(
-                margin: EdgeInsets.all(2),
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.purple.withOpacity(.1),
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                child: Text(
-                  _language.new_,
-                  style:
-                      TextStyle().copyWith(color: Colors.purple, fontSize: 15),
-                ),
-              ),
+              // Container(
+              //   margin: EdgeInsets.all(2),
+              //   padding: EdgeInsets.all(10),
+              //   decoration: BoxDecoration(
+              //     color: Colors.purple.withOpacity(.1),
+              //     borderRadius: BorderRadius.circular(20.0),
+              //   ),
+              //   child: Text(
+              //     _language.new_,
+              //     style:
+              //         TextStyle().copyWith(color: Colors.purple, fontSize: 15),
+              //   ),
+              // ),
             ],
           ),
-          onTap: () => Navigator.push(
-            context,
-            PageTransition(
-              child: Shop(),
-              type: PageTransitionType.rightToLeft,
-            ),
-          ),
+          onTap: () => Navigator.of(context).pushNamed("/shop"),
         ),
         ListTile(
           leading: Icon(Icons.info_outline_rounded),

@@ -102,6 +102,7 @@ class _ShopState extends State<Shop> {
             )
           ],
           body: Container(
+            padding: EdgeInsets.all(10.0),
             decoration: BoxDecoration(
               color: primaryColor,
               gradient: LinearGradient(
@@ -111,7 +112,6 @@ class _ShopState extends State<Shop> {
               ),
             ),
             child: StreamBuilder<List<Product>>(
-                initialData: _products,
                 stream: _streamController.stream,
                 builder: (context, AsyncSnapshot<List<Product>> snapshot) {
                   if (!snapshot.hasData) {
@@ -144,23 +144,7 @@ class _ShopState extends State<Shop> {
                     );
                   } else
                     return SizedBox();
-                }
-
-                // GridView.count(
-                //           childAspectRatio: 9 / 12,
-                //           padding: EdgeInsets.all(20.0),
-                //           crossAxisCount: 2,
-                //           crossAxisSpacing: 10.0,
-                //           mainAxisSpacing: 10.0,
-                //           children: _products
-                //               .map(
-                //                 (product) => ProductCard(
-                //                   product: product,
-                //                 ),
-                //               )
-                //               .toList(),
-                //         )
-                ),
+                }),
           ),
         ),
       ),
