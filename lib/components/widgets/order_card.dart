@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:smartrr/models/order.dart';
+import 'package:smartrr/services/theme_provider.dart';
 import 'package:smartrr/utils/colors.dart';
 
 class OrderCard extends StatelessWidget {
@@ -49,87 +51,94 @@ class OrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Column(
-        children: [
-          Container(
-            margin: EdgeInsets.only(bottom: 10),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Product: ",
-                  style: TextStyle().copyWith(fontWeight: FontWeight.w600),
+    return Consumer<ThemeNotifier>(
+      builder: (context, theme, _) => Card(
+        elevation: 0,
+        color: theme.darkTheme ? darkGrey : Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Container(
+                margin: EdgeInsets.only(bottom: 10),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Product: ",
+                      style: TextStyle().copyWith(fontWeight: FontWeight.w600),
+                    ),
+                    Expanded(child: Text(order.productName))
+                  ],
                 ),
-                Expanded(child: Text(order.productName))
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(bottom: 10),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Email: ",
-                  style: TextStyle().copyWith(fontWeight: FontWeight.w600),
+              ),
+              Container(
+                margin: EdgeInsets.only(bottom: 10),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Email: ",
+                      style: TextStyle().copyWith(fontWeight: FontWeight.w600),
+                    ),
+                    Expanded(child: Text(order.email))
+                  ],
                 ),
-                Expanded(child: Text(order.email))
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(bottom: 10),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Phone: ",
-                  style: TextStyle().copyWith(fontWeight: FontWeight.w600),
+              ),
+              Container(
+                margin: EdgeInsets.only(bottom: 10),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Phone: ",
+                      style: TextStyle().copyWith(fontWeight: FontWeight.w600),
+                    ),
+                    Expanded(child: Text(order.phoneNumber))
+                  ],
                 ),
-                Expanded(child: Text(order.phoneNumber))
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(bottom: 10),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Payment Reference: ",
-                  style: TextStyle().copyWith(fontWeight: FontWeight.w600),
+              ),
+              Container(
+                margin: EdgeInsets.only(bottom: 10),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Payment Reference: ",
+                      style: TextStyle().copyWith(fontWeight: FontWeight.w600),
+                    ),
+                    Expanded(child: Text(order.paymentRef))
+                  ],
                 ),
-                Expanded(child: Text(order.paymentRef))
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(bottom: 10),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Address: ",
-                  style: TextStyle().copyWith(fontWeight: FontWeight.w600),
+              ),
+              Container(
+                margin: EdgeInsets.only(bottom: 10),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Address: ",
+                      style: TextStyle().copyWith(fontWeight: FontWeight.w600),
+                    ),
+                    Expanded(child: Text(order.address))
+                  ],
                 ),
-                Expanded(child: Text(order.address))
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(bottom: 5),
-            child: Row(
-              children: [
-                Text(
-                  "Status: ",
-                  style: TextStyle().copyWith(fontWeight: FontWeight.w600),
+              ),
+              Container(
+                margin: EdgeInsets.only(bottom: 5),
+                child: Row(
+                  children: [
+                    Text(
+                      "Status: ",
+                      style: TextStyle().copyWith(fontWeight: FontWeight.w600),
+                    ),
+                    orderStatus(order.status),
+                  ],
                 ),
-                orderStatus(order.status),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

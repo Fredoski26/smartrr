@@ -50,17 +50,17 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
   // States
   List<MyLocation> stateList = <MyLocation>[];
   List<DropdownMenuItem<MyLocation>> _dropDownStateItem = [];
-  late MyLocation _currentState;
+  late MyLocation? _currentState = null;
 
   // Locations
   List<MyLocation> locationsList = <MyLocation>[];
   List<DropdownMenuItem<MyLocation>> _dropDownLocationItem = [];
-  late MyLocation _currentLocation;
+  late MyLocation? _currentLocation = null;
 
   // Country
   List<Country> countriesList = <Country>[];
   List<DropdownMenuItem<Country>> _dropDownCountryItem = [];
-  late Country _currentCountry;
+  late Country? _currentCountry = null;
 
   // organization types
   List<DropdownMenuItem> _orgTypes = [
@@ -187,8 +187,10 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
               email: cOrgEmail.text, password: cPassword.text);
       var displayName = "";
       displayName = cName.text;
+
       Navigator.pop(context);
       showLoading(message: 'Registering...', context: context);
+
       authResult.user!.updateDisplayName(displayName).then((onValue) async {
         await FirebaseFirestore.instance
             .collection('organizations')
@@ -209,10 +211,10 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
           'servicesAvailable': FieldValue.arrayUnion(_selectedServicesList),
           'status': 0,
           'locationId': null,
-          'state': _currentState.title,
-          'location': _currentLocation.title,
+          'state': _currentState?.title,
+          'location': _currentLocation?.title,
           'uId': authResult.user!.uid,
-          'country': _currentCountry.name
+          'country': _currentCountry?.name
         }).then((onValue) {
           FirebaseAuth.instance.signOut();
           Navigator.pop(context);
@@ -227,7 +229,8 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
     } catch (error) {
       Navigator.pop(context);
       switch ((error as FirebaseAuthException).code) {
-        case "ERROR_EMAIL_ALREADY_IN_USE":
+        case "email-already-in-use":
+          print("CONFLICT");
           {
             setState(() {
               errorMsg = "This email is already in use.";
@@ -240,7 +243,8 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
             );
           }
           break;
-        case "ERROR_WEAK_PASSWORD":
+        case "weak-password":
+          print("WEAK");
           {
             setState(() {
               errorMsg = "The password must be 6 characters long or more.";
@@ -711,7 +715,7 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
   }
 
   _getStates() async {
-    await CountryService.getStates(_currentCountry.name).then((states) {
+    await CountryService.getStates(_currentCountry!.name).then((states) {
       List<MyLocation> items = [];
       for (int i = 0; i < states.length; i++) {
         if (states[i]["name"] == "Federal Capital Territory") {
@@ -759,7 +763,7 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
   Future _getLocations({String? state}) async {
     locationsList = [];
     _dropDownLocationItem = [];
-    CountryService.getCities(_currentCountry.name, state!).then((locations) {
+    CountryService.getCities(_currentCountry!.name, state!).then((locations) {
       List<MyLocation> items = [];
       for (int i = 0; i < locations.length; i++) {
         items.add(MyLocation(locations[i], locations[i]));

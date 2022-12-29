@@ -6,9 +6,9 @@ import 'package:smartrr/models/product.dart';
 import 'package:smartrr/services/theme_provider.dart';
 import 'package:smartrr/utils/colors.dart';
 
-class ProductCard extends StatelessWidget {
+class PortraitProductCard extends StatelessWidget {
   final Product product;
-  const ProductCard({super.key, required this.product});
+  const PortraitProductCard({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {

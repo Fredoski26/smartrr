@@ -9,6 +9,7 @@ import 'package:smartrr/models/product.dart';
 import 'package:smartrr/services/country_service.dart';
 import 'package:smartrr/services/theme_provider.dart';
 import 'package:smartrr/utils/colors.dart';
+import 'package:smartrr/utils/emailValidator.dart';
 
 class DeliveryDetails extends StatefulWidget {
   final Product product;
@@ -40,6 +41,7 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
   late TextEditingController _addressController;
   late TextEditingController _landMarkController;
   late TextEditingController _phoneController;
+  late TextEditingController _emailController;
 
   @override
   Widget build(BuildContext context) {
@@ -300,6 +302,17 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
                     keyboardType: TextInputType.phone,
                     decoration: textInputDecoration(hint: "Phone"),
                   ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    controller: _emailController,
+                    validator: ((value) => !EmailValidator.isValidEmail(value!)
+                        ? "Enter a valid email"
+                        : null),
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: textInputDecoration(hint: "Email Address"),
+                  ),
                   Container(
                       margin: EdgeInsets.only(top: 50),
                       child: TextButton(
@@ -312,7 +325,7 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
                                   product: widget.product,
                                   name: _nameController.text,
                                   phone: _phoneController.text,
-                                  email: _currentUser!.email!,
+                                  email: _emailController.text,
                                   country: _country!.name,
                                   state: _state!.title,
                                   address: _addressController.text,
@@ -383,7 +396,8 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
     _addressController = new TextEditingController();
     _landMarkController = new TextEditingController();
     _phoneController = new TextEditingController(
-        text: _currentUser!.phoneNumber?.split("+")[1]);
+        text: _currentUser?.phoneNumber?.split("+")[1]);
+    _emailController = new TextEditingController(text: _currentUser?.email);
     super.initState();
   }
 
@@ -393,6 +407,7 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
     _addressController.dispose();
     _landMarkController.dispose();
     _phoneController.dispose();
+    _emailController.dispose();
     super.dispose();
   }
 }

@@ -16,7 +16,7 @@ class Case {
   String referredByName;
   bool isVictim;
   String victimName;
-  int victimAge;
+  dynamic victimAge;
   String victimPhone;
   bool victimGender;
 

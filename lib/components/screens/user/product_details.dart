@@ -224,7 +224,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 5.0),
-                          child: ElevatedButton(
+                          child: ElevatedButton.icon(
+                            icon: Icon(Icons.shopping_cart_outlined),
                             onPressed: () => Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -240,7 +241,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 )),
                               ),
                             ),
-                            child: Text("Buy"),
+                            label: Text("Buy"),
                           ),
                         ),
                       )

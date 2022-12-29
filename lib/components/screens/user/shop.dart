@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:smartrr/components/screens/user/orders.dart';
-import 'package:smartrr/components/widgets/product_card.dart';
+import 'package:smartrr/components/widgets/landscape_product_card.dart';
+import 'package:smartrr/components/widgets/portrait_product_card.dart';
 import 'package:smartrr/models/product.dart';
 import 'package:smartrr/services/shop_service.dart';
 import 'package:smartrr/utils/colors.dart';
@@ -54,6 +55,8 @@ class _ShopState extends State<Shop> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    print(screenWidth);
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
         statusBarBrightness: Brightness.dark,
@@ -124,14 +127,21 @@ class _ShopState extends State<Shop> {
                       return GridView.builder(
                         itemCount: snapshot.data!.length,
                         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 200,
-                          childAspectRatio: 9 / 12,
+                          maxCrossAxisExtent:
+                              screenWidth >= 400 ? 200 : screenWidth,
+                          childAspectRatio:
+                              screenWidth >= 400 ? 9 / 12 : 16 / 9,
                           crossAxisSpacing: 10.0,
                           mainAxisSpacing: 10.0,
                         ),
-                        itemBuilder: (context, index) => ProductCard(
-                          product: snapshot.data![index],
-                        ),
+                        itemBuilder: (context, index) {
+                          if (screenWidth >= 400) {
+                            return PortraitProductCard(
+                                product: snapshot.data![index]);
+                          } else
+                            return LandscapeProductCard(
+                                product: snapshot.data![index]);
+                        },
                       );
                     } else {
                       return Center(child: Text("No products to display"));

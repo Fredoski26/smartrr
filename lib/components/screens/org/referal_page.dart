@@ -15,7 +15,7 @@ class _ReferralPageState extends State<ReferralPage> {
   bool acceptedValue = false;
   List<Case> _casesList = <Case>[];
   List<DropdownMenuItem<Case>> _dropDownCaseItem = [];
-  late Case _currentCase;
+  late Case? _currentCase = null;
   bool _isLoading = true;
 
   @override
@@ -88,7 +88,7 @@ class _ReferralPageState extends State<ReferralPage> {
                               context,
                               MaterialPageRoute(
                                 builder: (BuildContext context) => CaseFilePage(
-                                  caseFile: _currentCase,
+                                  caseFile: _currentCase!,
                                 ),
                               ),
                             );

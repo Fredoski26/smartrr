@@ -70,18 +70,22 @@ class _OrderSummaryState extends State<OrderSummary> {
     charge.putMetaData("state", widget.state);
     charge.putMetaData("purpose", "order");
 
-    final items = widget.product.items!
-        .map((item) =>
-            {"item": item.item, "price": item.price, "quantity": item.quantity})
-        .toList();
+    if (widget.product.type == ProductType.multiple) {
+      final items = widget.product.items!
+          .map((item) => {
+                "item": item.item,
+                "price": item.price,
+                "quantity": item.quantity
+              })
+          .toList();
 
-    charge.putMetaData("items", jsonEncode(items));
+      charge.putMetaData("items", jsonEncode(items));
+    }
 
     charge.putCustomField("Name", widget.name);
     charge.putCustomField("Phone", widget.phone);
     charge.putCustomField("Product Name", widget.product.name);
     charge.putCustomField("Product ID", widget.product.id);
-    charge.putCustomField("Product", widget.product.name);
     charge.putCustomField("Purpose", "order");
 
     _pay() async {

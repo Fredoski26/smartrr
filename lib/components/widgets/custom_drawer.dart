@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:smartrr/components/screens/user/shop.dart';
 import 'package:smartrr/components/widgets/ask_action.dart';
 import 'package:smartrr/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,12 +23,13 @@ class CustomDrawer extends StatelessWidget {
 
     _confirmLogout() {
       askAction(
-          actionText: 'Yes',
-          cancelText: 'No',
-          text: 'Do you want to logout?',
-          context: context,
-          func: _logout,
-          cancelFunc: _stayHere);
+        actionText: 'Yes',
+        cancelText: 'No',
+        text: 'Do you want to logout?',
+        context: context,
+        func: _logout,
+        cancelFunc: _stayHere,
+      );
     }
 
     return Drawer(
@@ -39,15 +38,23 @@ class CustomDrawer extends StatelessWidget {
         UserAccountsDrawerHeader(
             currentAccountPicture: _currentUser.photoURL != null
                 ? Image.network(_currentUser.photoURL!)
-                : CircleAvatar(
-                    child: Icon(
-                      Icons.person,
-                      size: 50,
+                : Container(
+                    margin: EdgeInsets.only(bottom: 10.0),
+                    child: CircleAvatar(
+                      child: Icon(
+                        Icons.person,
+                        size: 60,
+                      ),
                     ),
                   ),
             accountName: Text(_currentUser.displayName!),
-            accountEmail:
-                Text(_currentUser.phoneNumber ?? _currentUser.email!)),
+            accountEmail: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(_currentUser.email ?? ""),
+                Text(_currentUser.phoneNumber ?? ""),
+              ],
+            )),
         ListTile(
           leading: Icon(Icons.history),
           title: Text(_language.history),

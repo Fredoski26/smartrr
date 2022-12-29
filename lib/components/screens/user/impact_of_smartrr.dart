@@ -50,8 +50,7 @@ class _ImpactOfSmartRRState extends State<ImpactOfSmartRR> {
                           Divider(),
                           ListTile(
                             onTap: () async {
-                              await launch(voaInterviewLink,
-                                  forceWebView: true, enableJavaScript: true);
+                              await launchUrl(Uri.parse(voaInterviewLink));
                             },
                             title: Text("${_language.interviewWith} VOA"),
                             subtitle: Text(_language.clickToRead),

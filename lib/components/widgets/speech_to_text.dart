@@ -7,6 +7,7 @@ import 'package:smartrr/utils/utils.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:ripple_animation/ripple_animation.dart';
 
 class SmartSpeechToText extends StatefulWidget {

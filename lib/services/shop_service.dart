@@ -67,7 +67,7 @@ abstract class ShopService {
   }
 
   static Future<List<Order>> getAllOrders({required String userId}) async {
-    final res = await http.get(Uri.parse("$apiBaseUrl/orders"));
+    final res = await http.get(Uri.parse("$apiBaseUrl/orders?userId=$userId"));
     final List jsonData = jsonDecode(res.body)["orders"];
 
     jsonData.sort((a, b) => (DateTime.parse(b["createdAt"]))
