@@ -98,4 +98,5 @@ final ThemeData darkTheme = ThemeData(
   inputDecorationTheme: InputDecorationTheme()
       .copyWith(hintStyle: TextStyle().copyWith(color: lightGrey)),
   backgroundColor: darkGrey,
+  cardTheme: CardTheme().copyWith(color: darkGrey),
 );

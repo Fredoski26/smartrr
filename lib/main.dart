@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:smartrr/components/screens/user/about.dart';
 import 'package:smartrr/components/screens/user/all_about_srhr.dart';
 import 'package:smartrr/components/screens/user/faq.dart';
@@ -29,6 +30,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await FirebaseAppCheck.instance.activate();
+  await Hive.initFlutter();
+  await Hive.openBox("messages");
 
   runApp(MultiProvider(
     providers: [
