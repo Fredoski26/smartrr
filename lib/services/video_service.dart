@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:smartrr/env/env.dart';
 import 'package:smartrr/models/video.dart';
 import 'package:http/http.dart' as http;
@@ -10,8 +11,7 @@ abstract class VideoService {
   static Future<List<Video>> getAllVideos() async {
     final res = await http.get(Uri.parse("$apiBaseUrl/videos"));
     final List jsonData = jsonDecode(res.body)["videos"];
-
-    return jsonData
+    List<Video> videos = jsonData
         .map((video) => Video(
               title: video["title"],
               author: video["author"] ?? "Smart RR",
@@ -22,5 +22,7 @@ abstract class VideoService {
               rating: 5,
             ))
         .toList();
+
+    return videos;
   }
 }

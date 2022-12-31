@@ -158,7 +158,12 @@ class _ChatBotState extends State<ChatBot> {
     _controller = TextEditingController();
     DialogFlowtter.fromFile(
             path: "assets/credentials.json", projectId: "smartrr-d5615")
-        .then((instance) => dialogFlowtter = instance);
+        .then((instance) => dialogFlowtter = instance)
+        .then((_) {
+      if (messageBox.isEmpty) {
+        sendMessage("Hi");
+      }
+    });
   }
 
   @override
