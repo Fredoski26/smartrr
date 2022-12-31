@@ -34,6 +34,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Already have an account?"),
         "badInternet": MessageLookupByLibrary.simpleMessage(
             "Please check your internet connection"),
+        "buyPoducts": MessageLookupByLibrary.simpleMessage("Buy Products"),
         "caseRegisteredSuccesfully": MessageLookupByLibrary.simpleMessage(
             "Case Registered Successfully"),
         "caseType": MessageLookupByLibrary.simpleMessage("Case Type"),

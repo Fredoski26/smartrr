@@ -4,7 +4,7 @@ import 'package:smartrr/generated/l10n.dart';
 
 class LanguageNotifier extends ChangeNotifier {
   String key = "locale";
-  late SharedPreferences _pref;
+  SharedPreferences? _pref = null;
 
   String _locale = "en";
 
@@ -28,13 +28,13 @@ class LanguageNotifier extends ChangeNotifier {
 
   _loadFromPrefs() async {
     await _initPrefs();
-    _locale = _pref.getString(key) ?? "en";
+    _locale = _pref?.getString(key) ?? "en";
     S.load(Locale(_locale));
     notifyListeners();
   }
 
   _saveToPrefs() async {
     await _initPrefs();
-    _pref.setString(key, _locale);
+    _pref?.setString(key, _locale);
   }
 }

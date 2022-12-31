@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:smartrr/components/screens/general/login_page.dart';
 import 'package:smartrr/components/screens/org/refer_or_cases_page.dart';
-import 'package:smartrr/components/screens/user/report_or_history_page.dart';
+import 'package:smartrr/components/screens/user/home.dart';
 import 'package:smartrr/models/auth_user.dart';
 import 'package:smartrr/utils/utils.dart';
 
@@ -23,7 +23,7 @@ class _WrapperState extends State<Wrapper> {
         builder: (context, snapshot) {
           if (snapshot.hasData && snapshot.data?.user != null) {
             if (snapshot.data!.isUser!) {
-              return ReportOrHistoryPage();
+              return Home();
             } else {
               return ReferOrCasesPage();
             }

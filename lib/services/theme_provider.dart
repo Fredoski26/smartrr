@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeNotifier extends ChangeNotifier {
   final String key = "theme";
-  late SharedPreferences _pref;
+  SharedPreferences? _pref = null;
   late bool _darkTheme;
   bool get darkTheme => _darkTheme;
 
@@ -25,12 +25,12 @@ class ThemeNotifier extends ChangeNotifier {
 
   _loadFromPrefs() async {
     await _initPrefs();
-    _darkTheme = _pref.getBool(key) ?? false;
+    _darkTheme = _pref?.getBool(key) ?? false;
     notifyListeners();
   }
 
   _saveToPrefs() async {
     await _initPrefs();
-    _pref.setBool(key, _darkTheme);
+    _pref?.setBool(key, _darkTheme);
   }
 }

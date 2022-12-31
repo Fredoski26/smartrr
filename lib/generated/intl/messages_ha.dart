@@ -34,6 +34,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Akwai Akwati?"),
         "badInternet": MessageLookupByLibrary.simpleMessage(
             "Da fatan za a duba haɗin intanet ɗin ku"),
+        "buyPoducts": MessageLookupByLibrary.simpleMessage("Saya kayayyakin"),
         "caseRegisteredSuccesfully":
             MessageLookupByLibrary.simpleMessage("An Karbi Kara"),
         "caseType": MessageLookupByLibrary.simpleMessage("Nau\'in Harka"),

@@ -19,7 +19,7 @@ class AllAboutSRHR extends StatefulWidget {
 
 class _AllAboutSRHRState extends State<AllAboutSRHR>
     with SingleTickerProviderStateMixin {
-  final ScrollController _scrollController = ScrollController();
+  late ScrollController _scrollController;
 
   late TabController _tabController;
 
@@ -146,11 +146,13 @@ class _AllAboutSRHRState extends State<AllAboutSRHR>
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, initialIndex: 0, vsync: this);
+    _scrollController = ScrollController();
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 }

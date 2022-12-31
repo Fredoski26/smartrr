@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartrr/components/screens/user/impact_of_smartrr.dart';
@@ -11,12 +13,12 @@ import 'consent_form_page.dart';
 import '../../widgets/custom_drawer.dart';
 import 'package:smartrr/generated/l10n.dart';
 
-class ReportOrHistoryPage extends StatefulWidget {
+class Home extends StatefulWidget {
   @override
-  _ReportOrHistoryPageState createState() => _ReportOrHistoryPageState();
+  _HomeState createState() => _HomeState();
 }
 
-class _ReportOrHistoryPageState extends State<ReportOrHistoryPage> {
+class _HomeState extends State<Home> {
   final mScaffoldState = GlobalKey<ScaffoldState>();
 
   @override
@@ -33,7 +35,7 @@ class _ReportOrHistoryPageState extends State<ReportOrHistoryPage> {
               ),
               body: Padding(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 60.0, vertical: 70.0),
+                      horizontal: 40.0, vertical: 50.0),
                   child: Column(
                     children: [
                       Expanded(
@@ -59,6 +61,26 @@ class _ReportOrHistoryPageState extends State<ReportOrHistoryPage> {
                               ],
                             ))),
                       )),
+                      GestureDetector(
+                        onTap: () => Navigator.pushNamed(context, "/shop"),
+                        child: Container(
+                          padding: EdgeInsets.all(20.0),
+                          margin: EdgeInsets.only(bottom: 5.0),
+                          color: primaryColor,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                _language.buyPoducts,
+                                style: TextStyle().copyWith(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                       Expanded(
                         child: Container(
                           child: Row(
@@ -85,8 +107,9 @@ class _ReportOrHistoryPageState extends State<ReportOrHistoryPage> {
                                           _language.allAboutSRHR,
                                           textAlign: TextAlign.center,
                                           style: TextStyle().copyWith(
-                                              color: Colors.white,
-                                              fontSize: 18),
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                          ),
                                         ),
                                       ],
                                     ))),
@@ -125,47 +148,7 @@ class _ReportOrHistoryPageState extends State<ReportOrHistoryPage> {
                         ),
                       )
                     ],
-                  )
-                  // Center(
-                  //   child: IntrinsicWidth(
-                  //     child: Column(
-                  //       crossAxisAlignment: CrossAxisAlignment.stretch,
-                  //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  //       children: [
-                  //         ElevatedButton.icon(
-                  //           onPressed: () => _bottomSheet(context: context),
-                  //           icon: Icon(Icons.input),
-                  //           label: Padding(
-                  //             padding: const EdgeInsets.symmetric(
-                  //                 horizontal: 0, vertical: 20.0),
-                  //             child: Text(_language.reportACase),
-                  //           ),
-                  //         ),
-                  //         ElevatedButton.icon(
-                  //           onPressed: () =>
-                  //               Navigator.of(context).pushNamed("/srhr"),
-                  //           icon: Icon(Icons.info_rounded),
-                  //           label: Padding(
-                  //             padding: const EdgeInsets.symmetric(
-                  //                 horizontal: 0, vertical: 20.0),
-                  //             child: Text(_language.allAboutSRHR),
-                  //           ),
-                  //         ),
-                  //         ElevatedButton.icon(
-                  //             onPressed: () => Navigator.of(context).push(
-                  //                 MaterialPageRoute(
-                  //                     builder: (context) => ImpactOfSmartRR())),
-                  //             icon: Icon(Icons.public),
-                  //             label: Padding(
-                  //               padding: const EdgeInsets.symmetric(
-                  //                   horizontal: 0, vertical: 20.0),
-                  //               child: Text(_language.impactOfSmartRR),
-                  //             )),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-                  ),
+                  )),
               floatingActionButton: FloatingActionButton(
                   backgroundColor: primaryColor,
                   foregroundColor: Colors.white,

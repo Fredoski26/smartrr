@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:provider/provider.dart';
-import 'package:smartrr/components/screens/user/report_or_history_page.dart';
+import 'package:smartrr/components/screens/user/home.dart';
 import 'package:smartrr/components/widgets/circular_progress.dart';
 import 'package:smartrr/components/widgets/show_action.dart';
 import 'package:smartrr/components/widgets/smart_text_field.dart';
@@ -341,7 +341,7 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-        builder: (BuildContext context) => ReportOrHistoryPage(),
+        builder: (BuildContext context) => Home(),
       ),
       ModalRoute.withName('/'),
     );

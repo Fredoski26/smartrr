@@ -19,7 +19,7 @@ import 'package:smartrr/provider/language_provider.dart';
 import 'package:smartrr/theme/themes.dart';
 import 'package:smartrr/utils/colors.dart';
 import 'components/screens/general/login_page.dart';
-import 'components/screens/user/report_or_history_page.dart';
+import 'components/screens/user/home.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'services/theme_provider.dart';
 import 'package:provider/provider.dart';
@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
         '/userSignup': (context) => SignUpPage(),
         '/orgSignup': (context) => OrgSignUpPage(),
         '/casesHistory': (context) => CasesHistoryScreen(),
-        '/userMain': (context) => ReportOrHistoryPage(),
+        '/userMain': (context) => Home(),
         '/orgMain': (context) => ReferOrCasesPage(),
         '/refer': (context) => ReferralPage(),
         '/forgot': (context) => ForgotPasswordScreen(),
