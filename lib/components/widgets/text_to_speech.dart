@@ -43,7 +43,7 @@ class _MyTtsState extends State<MyTts> {
   bool get isAndroid => !kIsWeb && Platform.isAndroid;
   bool get isWeb => kIsWeb;
 
-  late Timer _scrollTimer;
+  Timer? _scrollTimer = null;
 
   initTts() {
     flutterTts = FlutterTts();
@@ -143,7 +143,7 @@ class _MyTtsState extends State<MyTts> {
 
   void _stopTimer() {
     if (widget.scrollController != null && _scrollTimer != null) {
-      _scrollTimer.cancel();
+      _scrollTimer?.cancel();
     }
   }
 

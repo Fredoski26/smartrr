@@ -17,6 +17,10 @@ class _VideosState extends State<Videos> {
   loadVideos() async {
     try {
       List<Video> videos = await VideoService.getAllVideos();
+      // cache image thumbnails
+      videos.forEach((video) {
+        precacheImage(Image.network(video.thumbnail).image, context);
+      });
       _streamController.add(videos);
       return videos;
     } catch (e) {
