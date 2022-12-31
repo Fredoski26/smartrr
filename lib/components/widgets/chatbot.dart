@@ -120,7 +120,7 @@ class _ChatBotState extends State<ChatBot> {
   }
 
   void addMessage(Message message, [bool isUserMessage = false]) {
-    int timestamp = DateTime.now().millisecondsSinceEpoch;
+    int timestamp = DateTime.now().timestamp;
 
     if (message.payload != null) {
       messageBox.put(timestamp.toString(), {
@@ -341,7 +341,7 @@ class ChatMessage extends StatelessWidget {
               child: Text("${message['message']}"),
             ),
             Text(
-              DateTime.fromMicrosecondsSinceEpoch(message["timestamp"])
+              DateTime.fromMillisecondsSinceEpoch(message["timestamp"])
                   .timeago(allowFromNow: true),
               style: timestampStyle,
             ),
@@ -372,8 +372,9 @@ class ChatMessage extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    DateTime.fromMicrosecondsSinceEpoch(message["timestamp"])
-                        .timeago(allowFromNow: true),
+                    DateTime.fromMillisecondsSinceEpoch(
+                      message["timestamp"],
+                    ).timeago(),
                     style: timestampStyle,
                   ),
                 ],
