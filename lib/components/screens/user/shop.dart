@@ -23,6 +23,10 @@ class _ShopState extends State<Shop> {
   loadProducts() async {
     try {
       List<Product> products = await ShopService.getAllProducts();
+      // cache first prduct image
+      products.forEach((product) {
+        precacheImage(NetworkImage(product.images![0].url), context);
+      });
 
       _streamController.add(products);
       return products;
@@ -31,32 +35,20 @@ class _ShopState extends State<Shop> {
     }
   }
 
-  List<Product> _products = [
-    Product(
-        id: "2",
-        name: "Sexual Health Kit",
-        description:
-            "Sexual Health Kit Sexual Health Kit Sexual Health Kit Sexual Health Kit Sexual Health Kit Sexual Health Kit Sexual Health Kit Sexual Health Kit",
-        price: 9300,
-        type: ProductType.multiple,
-        images: [
-          ProductImage(
-            url:
-                "https://mini-test-dashboard.s3.us-west-1.amazonaws.com/images/1671217728483-image1.jpg",
-          )
-        ],
-        items: [
-          ProductItem(item: "External condoms", price: 300, quantity: 10),
-          ProductItem(item: "Internal condoms", price: 1000, quantity: 3),
-          ProductItem(item: "Gloves", price: 100, quantity: 3),
-          ProductItem(item: "Lube", price: 1500, quantity: 2),
-        ])
-  ];
+  Future<Null> _handleRefresh() async {
+    try {
+      List<Product> products = await ShopService.getAllProducts();
+      _streamController.add(products);
+      return null;
+    } catch (e) {
+      _streamController.addError(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    print(screenWidth);
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
         statusBarBrightness: Brightness.dark,
@@ -104,57 +96,64 @@ class _ShopState extends State<Shop> {
               ],
             )
           ],
-          body: Container(
-            padding: EdgeInsets.all(10.0),
-            decoration: BoxDecoration(
-              color: primaryColor,
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [primaryColor, Colors.white],
+          body: RefreshIndicator(
+            onRefresh: _handleRefresh,
+            child: Container(
+              padding: EdgeInsets.all(10.0),
+              decoration: BoxDecoration(
+                color: primaryColor,
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [primaryColor, Colors.white],
+                ),
               ),
-            ),
-            child: StreamBuilder<List<Product>>(
-                stream: _streamController.stream,
-                builder: (context, AsyncSnapshot<List<Product>> snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  if (snapshot.hasData) {
-                    if (snapshot.data!.isNotEmpty) {
-                      return GridView.builder(
-                        itemCount: snapshot.data!.length,
-                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent:
-                              screenWidth >= 400 ? 200 : screenWidth,
-                          childAspectRatio:
-                              screenWidth >= 400 ? 9 / 12 : 16 / 9,
-                          crossAxisSpacing: 10.0,
-                          mainAxisSpacing: 10.0,
-                        ),
-                        itemBuilder: (context, index) {
-                          if (screenWidth >= 400) {
-                            return PortraitProductCard(
-                                product: snapshot.data![index]);
-                          } else
-                            return LandscapeProductCard(
-                                product: snapshot.data![index]);
-                        },
+              child: StreamBuilder<List<Product>>(
+                  stream: _streamController.stream,
+                  builder: (context, AsyncSnapshot<List<Product>> snapshot) {
+                    if (!snapshot.hasData) {
+                      return Center(
+                        child: CircularProgressIndicator(),
                       );
-                    } else {
-                      return Center(child: Text("No products to display"));
                     }
-                  }
+                    if (snapshot.hasData) {
+                      if (snapshot.data!.isNotEmpty) {
+                        return GridView.builder(
+                          itemCount: snapshot.data!.length,
+                          gridDelegate:
+                              SliverGridDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent:
+                                screenWidth >= 400 ? 200 : screenWidth,
+                            childAspectRatio:
+                                screenWidth >= 400 ? 9 / 12 : 16 / 9,
+                            crossAxisSpacing: 10.0,
+                            mainAxisSpacing: 10.0,
+                          ),
+                          itemBuilder: (context, index) {
+                            if (screenWidth >= 400) {
+                              return PortraitProductCard(
+                                  product: snapshot.data![index]);
+                            } else
+                              return LandscapeProductCard(
+                                  product: snapshot.data![index]);
+                          },
+                        );
+                      } else {
+                        return Center(child: Text("No products to display"));
+                      }
+                    }
 
-                  if (snapshot.hasError) {
-                    return Center(
-                      child: Text(snapshot.error.toString()),
-                    );
-                  } else
-                    return SizedBox();
-                }),
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text(
+                          "${snapshot.error.toString()}\n Pull down to refresh",
+                          textAlign: TextAlign.center,
+                        ),
+                      );
+                    } else
+                      return SizedBox();
+                  }),
+            ),
           ),
         ),
       ),
