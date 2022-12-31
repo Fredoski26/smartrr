@@ -16,7 +16,7 @@ smartTextField({
   bool isForm = false,
   Widget? prefix,
   Icon? suffixIcon,
-  Function? validator,
+  String? Function(String?)? validator,
   List<TextInputFormatter>? inputFormatters,
 }) {
   return Column(

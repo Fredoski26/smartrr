@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartrr/components/widgets/show_action.dart';
+import 'package:smartrr/components/widgets/show_loading.dart';
 import 'package:smartrr/components/widgets/smart_text_field.dart';
 import 'package:smartrr/provider/language_provider.dart';
 import 'package:smartrr/generated/l10n.dart';
@@ -107,13 +108,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   }
 
   void _sendResetEmail() {
-    setState(() => isLoading = true);
+    showLoading(message: "Please wait", context: context);
     bool _isError = false;
     _auth.sendPasswordResetEmail(email: _email.text).catchError(
       (onError) {
         debugPrint("Error ===> ${onError.code}");
         _isError = true;
-        if (onError.code == 'ERROR_USER_NOT_FOUND') {
+        if (onError.code == 'user-not-found') {
           showAction(
             actionText: 'OK',
             text: 'User Not Found',

@@ -19,7 +19,7 @@ class CustomTextBox extends StatelessWidget {
   final dynamic onTap;
   final bool isForm;
   final Icon? suffixIcon;
-  final dynamic validator;
+  final String? Function(String?)? validator;
   final List<TextInputFormatter>? inputFormatters;
 
   CustomTextBox(
@@ -58,13 +58,14 @@ class CustomTextBox extends StatelessWidget {
               keyboardType: keyboardType,
               obscureText: obscureText,
               readOnly: readOnly,
-              validator: validator ??
-                  (value) {
-                    if (value!.isEmpty && required) {
-                      return errorText;
-                    }
-                    return null;
-                  },
+              validator: validator != null
+                  ? validator
+                  : (value) {
+                      if (value!.isEmpty && required) {
+                        return errorText;
+                      }
+                      return null;
+                    },
               style: TextStyle(color: textColor),
               controller: controller,
               decoration: InputDecoration(

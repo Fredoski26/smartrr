@@ -8,6 +8,7 @@ import 'package:smartrr/components/widgets/show_loading.dart';
 import 'package:smartrr/provider/language_provider.dart';
 import 'package:smartrr/services/country_service.dart';
 import 'package:smartrr/utils/colors.dart';
+import 'package:smartrr/utils/emailValidator.dart';
 import '../../widgets/smart_text_field.dart';
 import '../../widgets/circular_progress.dart';
 import 'package:smartrr/generated/l10n.dart';
@@ -307,6 +308,10 @@ class _SignUpPageState extends State<SignUpPage> {
                             smartTextField(
                               title: 'Email',
                               controller: emailController,
+                              validator: (val) =>
+                                  EmailValidator.isValidEmail(val!)
+                                      ? null
+                                      : "Enter a valid email",
                               isForm: true,
                               textInputType: TextInputType.emailAddress,
                               required: false,
@@ -348,7 +353,8 @@ class _SignUpPageState extends State<SignUpPage> {
                               title: _language.dob,
                               controller: dobController,
                               isForm: true,
-                              validator: birthDateValidator,
+                              validator: (String? val) =>
+                                  birthDateValidator(val!),
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(10),
                                 FilteringTextInputFormatter.singleLineFormatter,
