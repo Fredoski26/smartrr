@@ -379,6 +379,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.11.0"
+  flutter_local_notifications:
+    dependency: "direct main"
+    description:
+      name: flutter_local_notifications
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "8.2.0"
+  flutter_local_notifications_platform_interface:
+    dependency: transitive
+    description:
+      name: flutter_local_notifications_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.1"
   flutter_localizations:
     dependency: "direct main"
     description: flutter
@@ -390,7 +404,7 @@ packages:
       name: flutter_paystack
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.6"
+    version: "1.0.7"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -961,6 +975,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.3"
+  simple_gesture_detector:
+    dependency: transitive
+    description:
+      name: simple_gesture_detector
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -1050,6 +1071,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.1"
+  table_calendar:
+    dependency: "direct main"
+    description:
+      name: table_calendar
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.8"
   term_glyph:
     dependency: transitive
     description:
@@ -1071,6 +1099,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.3.0"
+  timezone:
+    dependency: transitive
+    description:
+      name: timezone
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.8.0"
   timing:
     dependency: transitive
     description:
