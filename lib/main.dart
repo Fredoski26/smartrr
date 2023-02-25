@@ -17,6 +17,7 @@ import 'package:smartrr/components/screens/user/sign_up_page.dart';
 import 'package:smartrr/components/wrapper.dart';
 import 'package:smartrr/generated/l10n.dart';
 import 'package:smartrr/provider/language_provider.dart';
+import 'package:smartrr/services/local_notification_service.dart';
 import 'package:smartrr/theme/themes.dart';
 import 'package:smartrr/utils/colors.dart';
 import 'components/screens/general/login_page.dart';
@@ -32,6 +33,9 @@ void main() async {
   await FirebaseAppCheck.instance.activate();
   await Hive.initFlutter();
   await Hive.openBox("messages");
+  await Hive.openBox("period_tracker");
+
+  await LocalNotificationService.initialize();
 
   runApp(MultiProvider(
     providers: [

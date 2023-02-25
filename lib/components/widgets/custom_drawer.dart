@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartrr/components/screens/period_tracker/period_tracker.dart';
+import 'package:smartrr/components/screens/period_tracker/period_tracker_wrapper.dart';
 import 'package:smartrr/components/widgets/ask_action.dart';
 import 'package:smartrr/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -65,7 +66,7 @@ class CustomDrawer extends StatelessWidget {
           leading: Icon(Icons.history),
           title: Text("Period Tracker"),
           onTap: () => Navigator.push(context,
-              MaterialPageRoute(builder: (context) => PeriodTracker())),
+              MaterialPageRoute(builder: (context) => PeriodTrackerWrapper())),
         ),
         ListTile(
           leading: Icon(Icons.shopping_bag_outlined),

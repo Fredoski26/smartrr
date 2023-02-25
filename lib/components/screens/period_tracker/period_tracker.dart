@@ -1,10 +1,13 @@
 import "package:flutter/material.dart";
 import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smartrr/services/theme_provider.dart';
 import 'package:smartrr/utils/colors.dart';
 import "package:table_calendar/table_calendar.dart";
-import "package:page_transition/page_transition.dart";
+import "package:smartrr/utils/fertilityCalculator.dart";
+import 'package:smartrr/models/event.dart';
 
 class PeriodTracker extends StatefulWidget {
   const PeriodTracker({super.key});
@@ -14,13 +17,16 @@ class PeriodTracker extends StatefulWidget {
 }
 
 class _PeriodTrackerState extends State<PeriodTracker> {
+  late SharedPreferences _prefs;
   DateTime _focusedDay = DateTime.now();
 
   ValueNotifier<CalendarFormat> _calendarFormat =
       ValueNotifier(CalendarFormat.week);
-  DateTime lastPeriod = DateTime.parse("2023-01-31 00:00:00.000Z");
+
+  late DateTime lastPeriod;
 
   Map<DateTime, List<Event>> allEvents = {};
+
   @override
   Widget build(BuildContext context) {
     DateTime? _selectedDay = _focusedDay;
@@ -249,63 +255,11 @@ class _PeriodTrackerState extends State<PeriodTracker> {
           )
         ];
   }
-}
-
-enum EventType { FERTILE_WINDOW, OVULATION, MESTRUAL_FLOW, NORMAL }
-
-class Event {
-  final String title;
-  final EventType type;
-  final MaterialColor color;
-
-  const Event({
-    required this.title,
-    required this.type,
-    this.color = Colors.grey,
-  });
 
   @override
-  String toString() => title;
-}
-
-class FertilityCalculator {
-  int cycleLength;
-  DateTime lastPeriod;
-  int lutealPhaseLength;
-
-  FertilityCalculator({
-    required this.cycleLength,
-    required this.lastPeriod,
-    this.lutealPhaseLength = 14,
-  });
-
-  DateTime get nextPeriod {
-    return lastPeriod.add(Duration(days: cycleLength));
-  }
-
-  DateTime get ovulation {
-    return lastPeriod.add(Duration(days: cycleLength - lutealPhaseLength));
-  }
-
-  List<DateTime> get fertileWindow {
-    int fertileWindowStart = cycleLength - 18;
-    int fertileWindowEnd = cycleLength - 11;
-
-    DateTime fertileWindowFirstDay =
-        lastPeriod.add(Duration(days: fertileWindowStart));
-    DateTime fertileWindowEndDay =
-        lastPeriod.add(Duration(days: fertileWindowEnd));
-    int differenceInDays =
-        fertileWindowEndDay.difference(fertileWindowFirstDay).inDays;
-
-    List<DateTime> fertileWindow = [];
-    while (differenceInDays > 0) {
-      fertileWindow.add(lastPeriod
-          .add(Duration(days: fertileWindowEnd - differenceInDays, hours: 1))
-          .toUtc());
-      differenceInDays--;
-    }
-
-    return fertileWindow;
+  void initState() {
+    lastPeriod = DateTime.fromMillisecondsSinceEpoch(
+        Hive.box("period_tracker").get("lastPeriod"));
+    super.initState();
   }
 }
