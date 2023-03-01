@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hive/hive.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smartrr/components/screens/period_tracker/period_tracker.dart';
 
 class PeriodTrackerOnboarding extends StatefulWidget {
@@ -15,7 +14,6 @@ class PeriodTrackerOnboarding extends StatefulWidget {
 
 class _PeriodTrackerOnboardingState extends State<PeriodTrackerOnboarding> {
   int _stepIndex = 0;
-  DateTime _selectedDate = DateTime.now();
   DateTime now = DateTime.now();
   DateTime? _lastPeriod = null;
 

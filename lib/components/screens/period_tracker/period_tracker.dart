@@ -91,19 +91,37 @@ class _PeriodTrackerState extends State<PeriodTracker> {
                       _calendarFormat.value = format;
                     },
                     eventLoader: (day) {
-                      if (FertilityCalculator(
-                            lastCalendarDay: _lastCalendarDay,
-                            cycleLength: 28,
-                            lastPeriod: lastPeriod,
-                          ).ovulation.day ==
-                          day.day) {
-                        return [
-                          Event(
-                            title: 'Ovulation day',
-                            type: EventType.OVULATION,
-                            color: Colors.blue,
-                          )
-                        ];
+                      final ovulationDays = FertilityCalculator(
+                        lastCalendarDay: _lastCalendarDay,
+                        cycleLength: 28,
+                        lastPeriod: lastPeriod,
+                      ).ovulation;
+                      for (int i = 0; i < ovulationDays.length; i++) {
+                        if (isSameDay(ovulationDays[i], day)) {
+                          return [
+                            Event(
+                              title: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("Ovulation Day",
+                                      style: TextStyle().copyWith(
+                                          color: materialWhite,
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.w900)),
+                                  Text('High possibility of getting pregnant',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle().copyWith(
+                                        color: materialWhite,
+                                        fontSize: 18,
+                                      ))
+                                ],
+                              ),
+                              type: EventType.OVULATION,
+                              color: Colors.blue,
+                            )
+                          ];
+                        }
                       }
 
                       final fertileWindow = FertilityCalculator(
@@ -112,15 +130,36 @@ class _PeriodTrackerState extends State<PeriodTracker> {
                         lastPeriod: lastPeriod,
                       ).fertileWindow;
 
-                      for (DateTime date in fertileWindow) {
-                        if (date.day == day.day) {
-                          return [
-                            Event(
-                              title: 'Fertile window',
-                              type: EventType.FERTILE_WINDOW,
-                              color: Colors.teal,
-                            )
-                          ];
+                      for (int i = 0; i < fertileWindow.length; i++) {
+                        for (int j = 0; j < fertileWindow[i].length; j++) {
+                          if (isSameDay(fertileWindow[i][j], day)) {
+                            return [
+                              Event(
+                                title: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Fertile Window",
+                                      style: TextStyle().copyWith(
+                                        color: materialWhite,
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.w900,
+                                      ),
+                                    ),
+                                    Text('Possibility of getting pregnant',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle().copyWith(
+                                          color: materialWhite,
+                                          fontSize: 18,
+                                        ))
+                                  ],
+                                ),
+                                type: EventType.FERTILE_WINDOW,
+                                color: Colors.teal,
+                              )
+                            ];
+                          }
                         }
                       }
 
@@ -135,7 +174,14 @@ class _PeriodTrackerState extends State<PeriodTracker> {
                           if (isSameDay(period[i][j], day)) {
                             return [
                               Event(
-                                title: 'Period day ${j + 1}',
+                                title: Text(
+                                  'Period day ${j + 1}',
+                                  style: TextStyle().copyWith(
+                                    color: materialWhite,
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                ),
                                 type: EventType.MESTRUAL_FLOW,
                                 color: Colors.pink,
                               )
@@ -172,33 +218,33 @@ class _PeriodTrackerState extends State<PeriodTracker> {
                             day: events as List<Event>
                           };
 
-                          if (events[0].type == EventType.MESTRUAL_FLOW) {
+                          if (events[0].type == EventType.FERTILE_WINDOW) {
                             return Center(
                               child: Container(
                                 height: 40,
                                 width: 40,
                                 padding: EdgeInsets.all(8),
                                 decoration: BoxDecoration(
-                                    color: Colors.pink,
+                                    border: Border.all(
+                                        width: 2, color: events[0].color),
                                     borderRadius: BorderRadius.circular(100)),
                                 child: Center(
                                   child: Text(
                                     day.day.toString(),
                                     style: TextStyle()
-                                        .copyWith(color: Colors.white),
+                                        .copyWith(color: events[0].color),
                                   ),
                                 ),
                               ),
                             );
-                          } else if (events[0].type ==
-                              EventType.FERTILE_WINDOW) {
+                          } else {
                             return Center(
                               child: Container(
                                 height: 40,
                                 width: 40,
                                 padding: EdgeInsets.all(8),
                                 decoration: BoxDecoration(
-                                    color: Colors.teal,
+                                    color: events[0].color,
                                     borderRadius: BorderRadius.circular(100)),
                                 child: Center(
                                   child: Text(
@@ -210,23 +256,6 @@ class _PeriodTrackerState extends State<PeriodTracker> {
                               ),
                             );
                           }
-                          return Center(
-                            child: Container(
-                              height: 40,
-                              width: 40,
-                              padding: EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                  color: Colors.blue,
-                                  borderRadius: BorderRadius.circular(100)),
-                              child: Center(
-                                child: Text(
-                                  day.day.toString(),
-                                  style:
-                                      TextStyle().copyWith(color: Colors.white),
-                                ),
-                              ),
-                            ),
-                          );
                         }
                         return null;
                       },
@@ -276,17 +305,18 @@ class _PeriodTrackerState extends State<PeriodTracker> {
                             ]),
                       ),
                       child: Center(
-                          child: Text(
-                        selectedDayEvents.isNotEmpty
+                        child: selectedDayEvents.isNotEmpty
                             ? selectedDayEvents.first.title
-                            : "Today seems like a good day",
-                        textAlign: TextAlign.center,
-                        style: TextStyle().copyWith(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      )),
+                            : Text(
+                                "Today seems like a good day",
+                                textAlign: TextAlign.center,
+                                style: TextStyle().copyWith(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                      ),
                     ),
                   )
                 ],
@@ -302,7 +332,7 @@ class _PeriodTrackerState extends State<PeriodTracker> {
     return allEvents[day] ??
         [
           Event(
-            title: "Today seems like a good day",
+            title: Text("Today seems like a good day"),
             type: EventType.NORMAL,
           )
         ];

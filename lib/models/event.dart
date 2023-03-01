@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 enum EventType { FERTILE_WINDOW, OVULATION, MESTRUAL_FLOW, NORMAL }
 
 class Event {
-  final String title;
+  final Widget title;
   final EventType type;
   final MaterialColor color;
 
@@ -12,7 +12,4 @@ class Event {
     required this.type,
     this.color = Colors.grey,
   });
-
-  @override
-  String toString() => title;
 }

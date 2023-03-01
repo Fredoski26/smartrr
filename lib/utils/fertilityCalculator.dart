@@ -47,8 +47,21 @@ class FertilityCalculator {
     return menstrualCycle;
   }
 
-  DateTime get ovulation {
-    return lastPeriod.add(Duration(days: cycleLength - lutealPhaseLength));
+  List<DateTime> get ovulation {
+    List<DateTime> ovulationByCycle = [];
+
+    DateTime nextCycleOvulation =
+        lastPeriod.add(Duration(days: cycleLength - lutealPhaseLength));
+
+    while (lastCalendarDay.isAfter(nextCycleOvulation)) {
+      ovulationByCycle
+          .add(lastPeriod.add(Duration(days: cycleLength - lutealPhaseLength)));
+
+      lastPeriod = lastPeriod.add(Duration(days: cycleLength));
+      nextCycleOvulation = lastPeriod.add(Duration(days: cycleLength));
+    }
+
+    return ovulationByCycle;
   }
 
   List<List<DateTime>> get fertileWindow {
@@ -58,6 +71,25 @@ class FertilityCalculator {
     List<List<DateTime>> menstrualCycle = [];
     DateTime nextCycleFirstPeriod = lastPeriod.add(Duration(days: cycleLength));
 
+// record first fertile window
+    DateTime fertileWindowFirstDay =
+        lastPeriod.add(Duration(days: fertileWindowStart));
+    DateTime fertileWindowEndDay =
+        lastPeriod.add(Duration(days: fertileWindowEnd));
+    int differenceInDays =
+        fertileWindowEndDay.difference(fertileWindowFirstDay).inDays;
+
+    List<DateTime> fertileWindow = [];
+    while (differenceInDays > 0) {
+      fertileWindow.add(lastPeriod
+          .add(Duration(days: fertileWindowEnd - differenceInDays, hours: 1))
+          .toUtc());
+      differenceInDays--;
+    }
+    menstrualCycle.add(fertileWindow);
+
+    // =============================================
+    // record  fertile period for following months
     while (lastCalendarDay.isAfter(nextCycleFirstPeriod)) {
       DateTime fertileWindowFirstDay =
           nextCycleFirstPeriod.add(Duration(days: fertileWindowStart));
