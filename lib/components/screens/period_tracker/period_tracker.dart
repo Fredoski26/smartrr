@@ -17,11 +17,11 @@ class PeriodTracker extends StatefulWidget {
 }
 
 class _PeriodTrackerState extends State<PeriodTracker> {
-  late SharedPreferences _prefs;
   DateTime _focusedDay = DateTime.now();
+  DateTime _lastCalendarDay = DateTime.utc(2030, 1, 1);
 
   ValueNotifier<CalendarFormat> _calendarFormat =
-      ValueNotifier(CalendarFormat.week);
+      ValueNotifier(CalendarFormat.month);
 
   late DateTime lastPeriod;
 
@@ -44,6 +44,16 @@ class _PeriodTrackerState extends State<PeriodTracker> {
         ),
         child: Material(
           child: Container(
+            decoration: BoxDecoration(
+              gradient: RadialGradient(
+                colors: [
+                  Colors.white,
+                  selectedDayEvents.isNotEmpty
+                      ? selectedDayEvents.first.color.withOpacity(.1)
+                      : Colors.pink.shade200,
+                ],
+              ),
+            ),
             child: ValueListenableBuilder(
               valueListenable: _calendarFormat,
               builder: (context, _, __) => ListView(
@@ -66,27 +76,23 @@ class _PeriodTrackerState extends State<PeriodTracker> {
                   TableCalendar(
                     calendarFormat: _calendarFormat.value,
                     firstDay: DateTime.utc(2010, 10, 16),
-                    lastDay: DateTime.utc(2030, 3, 14),
+                    lastDay: _lastCalendarDay,
                     focusedDay: _focusedDay,
                     selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+                    daysOfWeekHeight: 20,
+                    daysOfWeekStyle:
+                        DaysOfWeekStyle(dowTextFormatter: weekDayBuilder),
+                    headerStyle: HeaderStyle(
+                      leftChevronVisible: false,
+                      rightChevronVisible: false,
+                    ),
+                    calendarStyle: CalendarStyle(outsideDaysVisible: false),
                     onFormatChanged: (format) {
                       _calendarFormat.value = format;
                     },
                     eventLoader: (day) {
                       if (FertilityCalculator(
-                            cycleLength: 28,
-                            lastPeriod: lastPeriod,
-                          ).nextPeriod.day ==
-                          day.day) {
-                        return [
-                          Event(
-                            title: 'Start of menstrual flow',
-                            type: EventType.MESTRUAL_FLOW,
-                            color: Colors.teal,
-                          )
-                        ];
-                      }
-                      if (FertilityCalculator(
+                            lastCalendarDay: _lastCalendarDay,
                             cycleLength: 28,
                             lastPeriod: lastPeriod,
                           ).ovulation.day ==
@@ -101,6 +107,7 @@ class _PeriodTrackerState extends State<PeriodTracker> {
                       }
 
                       final fertileWindow = FertilityCalculator(
+                        lastCalendarDay: _lastCalendarDay,
                         cycleLength: 28,
                         lastPeriod: lastPeriod,
                       ).fertileWindow;
@@ -111,40 +118,50 @@ class _PeriodTrackerState extends State<PeriodTracker> {
                             Event(
                               title: 'Fertile window',
                               type: EventType.FERTILE_WINDOW,
-                              color: Colors.pink,
+                              color: Colors.teal,
                             )
                           ];
+                        }
+                      }
+
+                      final period = FertilityCalculator(
+                              lastCalendarDay: _lastCalendarDay,
+                              cycleLength: 28,
+                              lastPeriod: lastPeriod)
+                          .nextPeriod;
+
+                      for (int i = 0; i < period.length; i++) {
+                        for (int j = 0; j < period[i].length; j++) {
+                          if (isSameDay(period[i][j], day)) {
+                            return [
+                              Event(
+                                title: 'Period day ${j + 1}',
+                                type: EventType.MESTRUAL_FLOW,
+                                color: Colors.pink,
+                              )
+                            ];
+                          }
                         }
                       }
                       return [];
                     },
                     calendarBuilders: CalendarBuilders(
-                      todayBuilder: (context, day, _focusedDay) => SizedBox(),
-                      selectedBuilder: (context, day, _focusedDay) => Container(
-                        margin: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                            color: theme.darkTheme
-                                ? Colors.white
-                                : Colors.purple.shade200,
-                            borderRadius: BorderRadius.circular(100),
-                            gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [
-                                  Colors.grey.shade200,
-                                  Colors.grey.shade300,
-                                  Colors.grey.shade400,
-                                  Colors.grey.shade500
-                                ],
-                                stops: [
-                                  0.1,
-                                  0.3,
-                                  0.8,
-                                  0.9
-                                ])),
-                        child: Center(
-                          child: Text(
-                            day.day.toString(),
+                      todayBuilder: (context, day, _focusedDay) => Center(
+                        child: Text(day.day.toString()),
+                      ),
+                      selectedBuilder: (context, day, _focusedDay) => Center(
+                        child: Container(
+                          height: 40,
+                          width: 40,
+                          padding: EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(100)),
+                          child: Center(
+                            child: Text(
+                              day.day.toString(),
+                              style: TextStyle().copyWith(color: darkGrey),
+                            ),
                           ),
                         ),
                       ),
@@ -157,24 +174,57 @@ class _PeriodTrackerState extends State<PeriodTracker> {
 
                           if (events[0].type == EventType.MESTRUAL_FLOW) {
                             return Center(
-                              child: Text(
-                                day.day.toString(),
-                                style: TextStyle().copyWith(color: Colors.teal),
+                              child: Container(
+                                height: 40,
+                                width: 40,
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                    color: Colors.pink,
+                                    borderRadius: BorderRadius.circular(100)),
+                                child: Center(
+                                  child: Text(
+                                    day.day.toString(),
+                                    style: TextStyle()
+                                        .copyWith(color: Colors.white),
+                                  ),
+                                ),
                               ),
                             );
                           } else if (events[0].type ==
                               EventType.FERTILE_WINDOW) {
                             return Center(
-                              child: Text(
-                                day.day.toString(),
-                                style: TextStyle().copyWith(color: Colors.pink),
+                              child: Container(
+                                height: 40,
+                                width: 40,
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                    color: Colors.teal,
+                                    borderRadius: BorderRadius.circular(100)),
+                                child: Center(
+                                  child: Text(
+                                    day.day.toString(),
+                                    style: TextStyle()
+                                        .copyWith(color: Colors.white),
+                                  ),
+                                ),
                               ),
                             );
                           }
                           return Center(
-                            child: Text(
-                              day.day.toString(),
-                              style: TextStyle().copyWith(color: Colors.blue),
+                            child: Container(
+                              height: 40,
+                              width: 40,
+                              padding: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  borderRadius: BorderRadius.circular(100)),
+                              child: Center(
+                                child: Text(
+                                  day.day.toString(),
+                                  style:
+                                      TextStyle().copyWith(color: Colors.white),
+                                ),
+                              ),
                             ),
                           );
                         }
@@ -205,7 +255,7 @@ class _PeriodTrackerState extends State<PeriodTracker> {
                         boxShadow: [
                           BoxShadow(
                             color: selectedDayEvents.first.color.shade300,
-                            blurRadius: 15.0,
+                            blurRadius: 0.0,
                             spreadRadius: 1.0,
                           ),
                         ],
@@ -232,7 +282,9 @@ class _PeriodTrackerState extends State<PeriodTracker> {
                             : "Today seems like a good day",
                         textAlign: TextAlign.center,
                         style: TextStyle().copyWith(
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
+                          color: Colors.white,
                         ),
                       )),
                     ),
@@ -254,6 +306,25 @@ class _PeriodTrackerState extends State<PeriodTracker> {
             type: EventType.NORMAL,
           )
         ];
+  }
+
+  String weekDayBuilder(DateTime date, dynamic locale) {
+    switch (date.weekday) {
+      case DateTime.monday:
+        return "MON";
+      case DateTime.tuesday:
+        return "TUE";
+      case DateTime.wednesday:
+        return "WED";
+      case DateTime.thursday:
+        return "THU";
+      case DateTime.friday:
+        return "FRI";
+      case DateTime.saturday:
+        return "SAT";
+      default:
+        return "SUN";
+    }
   }
 
   @override

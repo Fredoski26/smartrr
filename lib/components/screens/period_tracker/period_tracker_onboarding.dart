@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smartrr/components/screens/period_tracker/period_tracker.dart';
@@ -29,7 +30,7 @@ class _PeriodTrackerOnboardingState extends State<PeriodTrackerOnboarding> {
             child: IndexedStack(
               key: ValueKey<int>(_stepIndex),
               index: _stepIndex,
-              children: [_welcomePage(), _selectDOB(), _selectLastPeriod()],
+              children: [_welcomePage(), _selectLastPeriod()],
             ),
           )),
     );
@@ -41,29 +42,41 @@ class _PeriodTrackerOnboardingState extends State<PeriodTrackerOnboarding> {
       children: [
         Expanded(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Hello!"),
-              Text("Welcome to SmartRR Period Tracker"),
+              Container(
+                child: SvgPicture.asset(
+                  "assets/images/menstrual-calendar-pana.svg",
+                  width: MediaQuery.of(context).size.width,
+                ),
+              ),
+              Text(
+                "Hello!",
+                style: TextStyle()
+                    .copyWith(fontSize: 40, fontWeight: FontWeight.w900),
+              ),
+              Text(
+                "Welcome to SmartRR Period Tracker",
+                style: TextStyle().copyWith(fontSize: 20),
+              ),
+              Text("Easily keep track of your period with no surprises")
             ],
           ),
         ),
-        Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              ElevatedButton.icon(
-                  onPressed: () {
-                    setState(() {
-                      _stepIndex++;
-                    });
-                  },
-                  icon: Icon(Icons.arrow_forward),
-                  label: Text(
-                    "Get Started",
-                  )),
-            ],
-          ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            ElevatedButton.icon(
+                onPressed: () {
+                  setState(() {
+                    _stepIndex++;
+                  });
+                },
+                icon: Icon(Icons.arrow_forward),
+                label: Text(
+                  "Get Started",
+                )),
+          ],
         )
       ],
     );
@@ -107,7 +120,12 @@ class _PeriodTrackerOnboardingState extends State<PeriodTrackerOnboarding> {
 
   Widget _selectLastPeriod() {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
+        Text(
+          "When did your last period start?",
+          style: TextStyle().copyWith(fontSize: 20),
+        ),
         CalendarDatePicker(
           initialDate: now,
           firstDate: DateTime(now.year - 100),
