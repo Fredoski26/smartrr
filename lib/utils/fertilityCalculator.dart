@@ -11,7 +11,7 @@ class FertilityCalculator {
     this.lutealPhaseLength = 14,
   });
 
-  List<List<DateTime>> get nextPeriod {
+  List<List<DateTime>> get menstrualCycle {
     List<List<DateTime>> menstrualCycle = [];
     DateTime lastPeriodDay = lastPeriod;
 
@@ -39,7 +39,7 @@ class FertilityCalculator {
 
       menstrualCycle.add(period);
       // update last period to the last day of the current cycle
-      lastPeriodDay = period.first.add(Duration(days: 1));
+      lastPeriodDay = period.first;
       nextCycleFirstPeriod = lastPeriodDay.add(Duration(days: cycleLength));
     }
     // =================================================
@@ -65,8 +65,8 @@ class FertilityCalculator {
   }
 
   List<List<DateTime>> get fertileWindow {
-    int fertileWindowStart = cycleLength - 18;
-    int fertileWindowEnd = cycleLength - 11;
+    int fertileWindowStart = cycleLength - 19;
+    int fertileWindowEnd = cycleLength - 12;
 
     List<List<DateTime>> menstrualCycle = [];
     DateTime nextCycleFirstPeriod = lastPeriod.add(Duration(days: cycleLength));

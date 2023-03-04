@@ -16,18 +16,17 @@ class PeriodTracker extends StatefulWidget {
 }
 
 class _PeriodTrackerState extends State<PeriodTracker> {
-  late DateTime _focusedDay;
+  late DateTime now;
+  late DateTime lastPeriod;
+  late List<Event> _selectedDayEvents;
+  late ValueNotifier<DateTime> _selectedDay = ValueNotifier(now);
+
   DateTime _lastCalendarDay = DateTime(2030, 1, 1);
 
   ValueNotifier<CalendarFormat> _calendarFormat =
       ValueNotifier(CalendarFormat.month);
 
-  late DateTime lastPeriod;
-
   Map<DateTime, List<Event>> allEvents = {};
-
-  late DateTime _selectedDay;
-  late List<Event> _selectedDayEvents;
 
   @override
   Widget build(BuildContext context) {
@@ -77,9 +76,9 @@ class _PeriodTrackerState extends State<PeriodTracker> {
                       calendarFormat: _calendarFormat.value,
                       firstDay: DateTime(2010, 10, 16),
                       lastDay: _lastCalendarDay,
-                      focusedDay: _focusedDay,
+                      focusedDay: _selectedDay.value,
                       selectedDayPredicate: (day) =>
-                          isSameDay(_selectedDay, day),
+                          isSameDay(_selectedDay.value, day),
                       daysOfWeekHeight: 20,
                       daysOfWeekStyle:
                           DaysOfWeekStyle(dowTextFormatter: weekDayBuilder),
@@ -91,6 +90,8 @@ class _PeriodTrackerState extends State<PeriodTracker> {
                       onFormatChanged: (format) {
                         _calendarFormat.value = format;
                       },
+                      // onPageChanged: (focusedDay) =>
+                      //     onDaySelected(focusedDay, _selectedDay.value),
                       eventLoader: (day) {
                         final ovulationDays = FertilityCalculator(
                           lastCalendarDay: _lastCalendarDay,
@@ -122,7 +123,6 @@ class _PeriodTrackerState extends State<PeriodTracker> {
                                 color: Colors.blue,
                               )
                             ];
-                            allEvents[day] = [...?allEvents[day], ...events];
                             return events;
                           }
                         }
@@ -163,7 +163,6 @@ class _PeriodTrackerState extends State<PeriodTracker> {
                                   color: Colors.teal,
                                 )
                               ];
-                              allEvents[day] = [...?allEvents[day], ...events];
                               return events;
                             }
                           }
@@ -173,7 +172,7 @@ class _PeriodTrackerState extends State<PeriodTracker> {
                                 lastCalendarDay: _lastCalendarDay,
                                 cycleLength: 28,
                                 lastPeriod: lastPeriod)
-                            .nextPeriod;
+                            .menstrualCycle;
 
                         for (int i = 0; i < period.length; i++) {
                           for (int j = 0; j < period[i].length; j++) {
@@ -192,7 +191,6 @@ class _PeriodTrackerState extends State<PeriodTracker> {
                                   color: Colors.pink,
                                 )
                               ];
-                              allEvents[day] = [...?allEvents[day], ...events];
                               return events;
                             }
                           }
@@ -338,10 +336,9 @@ class _PeriodTrackerState extends State<PeriodTracker> {
   }
 
   void onDaySelected(DateTime selectedDay, DateTime focusedDay) {
-    if (!isSameDay(selectedDay, _selectedDay)) {
+    if (!isSameDay(selectedDay, _selectedDay.value)) {
       setState(() {
-        _selectedDay = selectedDay;
-        _focusedDay = selectedDay;
+        _selectedDay.value = selectedDay;
         _selectedDayEvents = _getEventsForDay(selectedDay);
       });
     }
@@ -375,7 +372,7 @@ class _PeriodTrackerState extends State<PeriodTracker> {
             lastCalendarDay: _lastCalendarDay,
             cycleLength: 28,
             lastPeriod: lastPeriod)
-        .nextPeriod;
+        .menstrualCycle;
 
     for (int i = 0; i < period.length; i++) {
       for (int j = 0; j < period[i].length; j++) {
@@ -484,15 +481,14 @@ class _PeriodTrackerState extends State<PeriodTracker> {
             Hive.box("period_tracker").get("lastPeriod"))
         .toLocal();
 
-    DateTime now = DateTime.now();
-    _focusedDay = DateTime(now.year, now.month, now.day);
-    _selectedDay = _focusedDay;
+    now = DateTime.now();
+    _selectedDay.value = DateTime(now.year, now.month, now.day);
 
     _getAllMenstrualFlowDays();
     _getAllFertileWindows();
     _getAllOvulationDays();
 
-    _selectedDayEvents = _getEventsForDay(_selectedDay);
+    _selectedDayEvents = _getEventsForDay(_selectedDay.value);
     super.initState();
   }
 }
