@@ -37,6 +37,7 @@ void main() async {
 
   await LocalNotificationService.initialize();
 
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => ThemeNotifier()),
