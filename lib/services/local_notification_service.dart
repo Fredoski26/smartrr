@@ -2,12 +2,14 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import "package:flutter_local_notifications/flutter_local_notifications.dart";
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:smartrr/utils/colors.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 abstract class LocalNotificationService {
   static FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
+  static final _notificationsBox = Hive.box("notifications");
 
   static Future initialize() async {
     _flutterLocalNotificationsPlugin
@@ -48,25 +50,38 @@ abstract class LocalNotificationService {
     }
   }
 
-  static void scheduleNotification({
+  static Future<bool> scheduleNotification({
     required String title,
     required String body,
     required tz.TZDateTime scheduledDate,
     NotificationDetails? notificationDetails,
-  }) {
-    final double dt = DateTime.now().millisecondsSinceEpoch / 1000;
-    final int id = dt.toInt();
+  }) async {
+    try {
+      final double dt = DateTime.now().millisecondsSinceEpoch / 1000;
+      final int id = dt.toInt();
 
-    _flutterLocalNotificationsPlugin.zonedSchedule(
-      id,
-      title,
-      body,
-      scheduledDate,
-      notificationDetails ?? _defaultNotificationDetails,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-      androidAllowWhileIdle: true,
-    );
+      await _flutterLocalNotificationsPlugin.zonedSchedule(
+        id,
+        title,
+        body,
+        scheduledDate,
+        notificationDetails ?? _defaultNotificationDetails,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        androidAllowWhileIdle: true,
+      );
+
+      _notificationsBox.put(scheduledDate, {id: id});
+
+      return true;
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
+    }
+  }
+
+  static bool hasBeenScheduled(DateTime datetime) {
+    return _notificationsBox.containsKey(datetime);
   }
 
   static final NotificationDetails _defaultNotificationDetails =

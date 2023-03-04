@@ -19,9 +19,9 @@ class _PeriodTrackerState extends State<PeriodTracker> {
   late DateTime now;
   late DateTime lastPeriod;
   late List<Event> _selectedDayEvents;
-  late ValueNotifier<DateTime> _selectedDay = ValueNotifier(now);
+  late DateTime _selectedDay;
 
-  DateTime _lastCalendarDay = DateTime(2030, 1, 1);
+  DateTime _lastCalendarDay = DateTime.utc(2030, 1, 1);
 
   ValueNotifier<CalendarFormat> _calendarFormat =
       ValueNotifier(CalendarFormat.month);
@@ -74,11 +74,11 @@ class _PeriodTrackerState extends State<PeriodTracker> {
                   builder: (context, _, __) {
                     return TableCalendar(
                       calendarFormat: _calendarFormat.value,
-                      firstDay: DateTime(2010, 10, 16),
+                      firstDay: DateTime.utc(2010, 10, 16),
                       lastDay: _lastCalendarDay,
-                      focusedDay: _selectedDay.value,
+                      focusedDay: _selectedDay,
                       selectedDayPredicate: (day) =>
-                          isSameDay(_selectedDay.value, day),
+                          isSameDay(_selectedDay, day),
                       daysOfWeekHeight: 20,
                       daysOfWeekStyle:
                           DaysOfWeekStyle(dowTextFormatter: weekDayBuilder),
@@ -91,7 +91,7 @@ class _PeriodTrackerState extends State<PeriodTracker> {
                         _calendarFormat.value = format;
                       },
                       // onPageChanged: (focusedDay) =>
-                      //     onDaySelected(focusedDay, _selectedDay.value),
+                      //     onDaySelected(focusedDay, _selectedDay),
                       eventLoader: (day) {
                         final ovulationDays = FertilityCalculator(
                           lastCalendarDay: _lastCalendarDay,
@@ -336,9 +336,11 @@ class _PeriodTrackerState extends State<PeriodTracker> {
   }
 
   void onDaySelected(DateTime selectedDay, DateTime focusedDay) {
-    if (!isSameDay(selectedDay, _selectedDay.value)) {
+    if (!isSameDay(selectedDay, _selectedDay)) {
+      selectedDay =
+          DateTime(selectedDay.year, selectedDay.month, selectedDay.day);
       setState(() {
-        _selectedDay.value = selectedDay;
+        _selectedDay = selectedDay;
         _selectedDayEvents = _getEventsForDay(selectedDay);
       });
     }
@@ -422,7 +424,7 @@ class _PeriodTrackerState extends State<PeriodTracker> {
             ],
           ),
           type: EventType.OVULATION,
-          color: Colors.teal,
+          color: Colors.blue,
         )
       ];
       allEvents[ovulationDays[i]] = [
@@ -477,18 +479,16 @@ class _PeriodTrackerState extends State<PeriodTracker> {
 
   @override
   void initState() {
-    lastPeriod = DateTime.fromMillisecondsSinceEpoch(
-            Hive.box("period_tracker").get("lastPeriod"))
-        .toLocal();
+    lastPeriod = Hive.box("period_tracker").get("lastPeriod");
 
     now = DateTime.now();
-    _selectedDay.value = DateTime(now.year, now.month, now.day);
+    _selectedDay = DateTime(now.year, now.month, now.day);
 
     _getAllMenstrualFlowDays();
     _getAllFertileWindows();
     _getAllOvulationDays();
 
-    _selectedDayEvents = _getEventsForDay(_selectedDay.value);
+    _selectedDayEvents = _getEventsForDay(_selectedDay);
     super.initState();
   }
 }

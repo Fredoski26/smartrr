@@ -34,6 +34,7 @@ void main() async {
   await Hive.initFlutter();
   await Hive.openBox("messages");
   await Hive.openBox("period_tracker");
+  await Hive.openBox("notifications");
 
   await LocalNotificationService.initialize();
 

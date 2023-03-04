@@ -81,8 +81,8 @@ class FertilityCalculator {
 
     List<DateTime> fertileWindow = [];
     while (differenceInDays > 0) {
-      fertileWindow.add(lastPeriod
-          .add(Duration(days: fertileWindowEnd - differenceInDays, hours: 1)));
+      fertileWindow.add(
+          lastPeriod.add(Duration(days: fertileWindowEnd - differenceInDays)));
       differenceInDays--;
     }
     menstrualCycle.add(fertileWindow);
@@ -99,15 +99,14 @@ class FertilityCalculator {
 
       List<DateTime> fertileWindow = [];
       while (differenceInDays > 0) {
-        fertileWindow.add(nextCycleFirstPeriod.add(
-            Duration(days: fertileWindowEnd - differenceInDays, hours: 1)));
+        fertileWindow.add(nextCycleFirstPeriod
+            .add(Duration(days: fertileWindowEnd - differenceInDays)));
         differenceInDays--;
       }
       menstrualCycle.add(fertileWindow);
       nextCycleFirstPeriod =
           nextCycleFirstPeriod.add(Duration(days: cycleLength));
     }
-
     return menstrualCycle;
   }
 }

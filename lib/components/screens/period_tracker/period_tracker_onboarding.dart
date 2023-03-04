@@ -139,7 +139,7 @@ class _PeriodTrackerOnboardingState extends State<PeriodTrackerOnboarding> {
               ? null
               : () async {
                   Hive.box("period_tracker")
-                      .put("lastPeriod", _lastPeriod!.millisecondsSinceEpoch);
+                      .put("lastPeriod", _lastPeriod?.toLocal());
                   Navigator.push(
                     context,
                     MaterialPageRoute(
