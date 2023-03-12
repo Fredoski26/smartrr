@@ -19,7 +19,6 @@ import 'package:smartrr/generated/l10n.dart';
 import 'package:smartrr/provider/language_provider.dart';
 import 'package:smartrr/services/local_notification_service.dart';
 import 'package:smartrr/theme/themes.dart';
-import 'package:smartrr/utils/colors.dart';
 import 'components/screens/general/login_page.dart';
 import 'components/screens/user/home.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -39,23 +38,19 @@ void main() async {
   await LocalNotificationService.initialize();
 
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(create: (_) => ThemeNotifier()),
-      ChangeNotifierProvider(create: (context) => LanguageNotifier())
-    ],
-    child: Consumer<ThemeNotifier>(
-      builder: (context, ThemeNotifier notifier, child) =>
-          AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle().copyWith(
-            statusBarColor: primaryColor,
-            statusBarIconBrightness: Brightness.light),
-        child: MyApp(
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeNotifier()),
+        ChangeNotifierProvider(create: (context) => LanguageNotifier())
+      ],
+      child: Consumer<ThemeNotifier>(
+        builder: (context, ThemeNotifier notifier, child) => MyApp(
           isDarkTheme: notifier.darkTheme,
         ),
       ),
     ),
-  ));
+  );
 }
 
 class MyApp extends StatelessWidget {

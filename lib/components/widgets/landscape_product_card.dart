@@ -55,7 +55,7 @@ class LandscapeProductCard extends StatelessWidget {
                         Text(
                           product.name,
                           style: TextStyle().copyWith(
-                            fontWeight: FontWeight.w500,
+                            color: Color(0xFF222227),
                             height: 1.2,
                             fontSize: 18,
                           ),
@@ -63,7 +63,7 @@ class LandscapeProductCard extends StatelessWidget {
                         Text(
                           "N${product.price}",
                           style: TextStyle().copyWith(
-                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF595959),
                             fontSize: 16,
                             height: 2,
                           ),
@@ -77,7 +77,7 @@ class LandscapeProductCard extends StatelessWidget {
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 5.0),
                                   child: ElevatedButton.icon(
-                                    icon: Icon(Icons.shopping_cart_outlined),
+                                    icon: Icon(Icons.add),
                                     onPressed: () => Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -93,7 +93,7 @@ class LandscapeProductCard extends StatelessWidget {
                                         )),
                                       ),
                                     ),
-                                    label: Text("Buy"),
+                                    label: Text("Add"),
                                   ),
                                 ),
                               )

@@ -1,5 +1,7 @@
 import "package:flutter/material.dart";
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:smartrr/components/screens/user/delivery_details.dart';
+import 'package:smartrr/components/widgets/shopping_cart.dart';
 import 'package:smartrr/models/product.dart';
 import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/utils/utils.dart';
@@ -13,6 +15,7 @@ class ProductDetails extends StatefulWidget {
 }
 
 class _ProductDetailsState extends State<ProductDetails> {
+  late Product product;
   late double productPrice = widget.product.price;
   late List<ProductItemWithCheckbox> productItems;
   late List<ProductItemWithCheckbox> selectedItems;
@@ -99,22 +102,6 @@ class _ProductDetailsState extends State<ProductDetails> {
             size: 20,
           ),
         ),
-        // GestureDetector(
-        //   onTap: () => item.quantity > 1 ? decrementItemQuantity(item) : null,
-        //   child: Container(
-        //     padding: EdgeInsets.zero,
-        //     decoration: BoxDecoration(
-        //       color: primaryColor,
-        //       borderRadius: BorderRadius.circular(5.0),
-        //     ),
-        //     child: Center(
-        //       child: Icon(
-        //         Icons.remove,
-        //         size: 20,
-        //       ),
-        //     ),
-        //   ),
-        // ),
         SizedBox(width: 5.0),
         Text(item.quantity.toString()),
         SizedBox(width: 5.0),
@@ -127,22 +114,47 @@ class _ProductDetailsState extends State<ProductDetails> {
             size: 20,
           ),
         ),
-        // GestureDetector(
-        //   onTap: () => item.quantity < 20 ? incrementItemQuantity(item) : null,
-        //   child: Container(
-        //     padding: EdgeInsets.zero,
-        //     decoration: BoxDecoration(
-        //       color: primaryColor,
-        //       borderRadius: BorderRadius.circular(5.0),
-        //     ),
-        //     child: Center(
-        //       child: Icon(
-        //         Icons.add,
-        //         size: 20,
-        //       ),
-        //     ),
-        //   ),
-        // ),
+      ],
+    );
+  }
+
+  Widget productQuantitySelector() {
+    incrementProductQuantity() {
+      ++product.quantity;
+      productPrice += product.price;
+      setState(() {});
+    }
+
+    decrementProductQuantity() {
+      --product.quantity;
+      productPrice -= product.price;
+      setState(() {});
+    }
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        IconButton(
+          onPressed:
+              product.quantity > 1 ? () => decrementProductQuantity() : null,
+          color: primaryColor,
+          icon: Icon(
+            FeatherIcons.minus,
+            size: 20,
+          ),
+        ),
+        SizedBox(width: 5.0),
+        Text(product.quantity.toString()),
+        SizedBox(width: 5.0),
+        IconButton(
+          onPressed:
+              product.quantity < 10 ? () => incrementProductQuantity() : null,
+          color: primaryColor,
+          icon: Icon(
+            FeatherIcons.plus,
+            size: 20,
+          ),
+        ),
       ],
     );
   }
@@ -150,32 +162,36 @@ class _ProductDetailsState extends State<ProductDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.product.name)),
+      appBar: AppBar(actions: [ShoppingCart()]),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: darkGrey.withOpacity(.2),
-                    offset: Offset(0, 5),
-                    blurRadius: 20,
-                  )
-                ],
+            ClipRRect(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(24),
+                bottomRight: Radius.circular(24),
               ),
-              child: AspectRatio(
-                aspectRatio: 16 / 9,
+              child: Container(
+                height: MediaQuery.of(context).size.height / 2,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: darkGrey.withOpacity(.2),
+                      offset: Offset(0, 5),
+                      blurRadius: 20,
+                    )
+                  ],
+                ),
                 child: ListView.builder(
                   physics: PageScrollPhysics(),
                   scrollDirection: Axis.horizontal,
-                  itemCount: widget.product.images!.length,
+                  itemCount: product.images!.length,
                   itemBuilder: (context, i) => Image.network(
-                    widget.product.images![i].url,
+                    product.images![i].url,
                     width: MediaQuery.of(context).size.width,
-                    fit: BoxFit.contain,
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
@@ -186,22 +202,24 @@ class _ProductDetailsState extends State<ProductDetails> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        widget.product.name,
+                        product.name,
                         style: TextStyle().copyWith(
                           fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
+                      productQuantitySelector()
                     ],
                   ),
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 5.0),
                     child: Text(
-                      "N${productPrice}",
+                      "N${productPrice.toStringAsFixed(2)}",
                       style: TextStyle().copyWith(
-                        color: primaryColor,
+                        color: faintGrey,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
@@ -214,6 +232,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           margin: EdgeInsets.symmetric(vertical: 5.0),
                           child: Text(
                             widget.product.description,
+                            style: TextStyle().copyWith(color: faintGrey),
                           ),
                         ),
                       ),
@@ -222,27 +241,29 @@ class _ProductDetailsState extends State<ProductDetails> {
                   Row(
                     children: [
                       Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5.0),
-                          child: ElevatedButton.icon(
-                            icon: Icon(Icons.shopping_cart_outlined),
-                            onPressed: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DeliveryDetails(
-                                    product: Product(
-                                  id: widget.product.id,
-                                  name: widget.product.name,
-                                  price: productPrice,
-                                  description: widget.product.description,
-                                  images: widget.product.images,
-                                  items: selectedItems,
-                                  type: widget.product.type,
-                                )),
-                              ),
+                          child: TextButton(
+                        child: Text("Add to Cart"),
+                        onPressed: null,
+                      )),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: TextButton(
+                          onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DeliveryDetails(
+                                  product: Product(
+                                id: product.id,
+                                name: product.name,
+                                price: productPrice,
+                                description: product.description,
+                                images: product.images,
+                                items: selectedItems,
+                                type: product.type,
+                              )),
                             ),
-                            label: Text("Buy"),
                           ),
+                          child: Text("Buy"),
                         ),
                       )
                     ],
@@ -276,6 +297,7 @@ class _ProductDetailsState extends State<ProductDetails> {
 
   @override
   void initState() {
+    product = widget.product;
     productItems = widget.product.items!
         .map((item) => ProductItemWithCheckbox(
             item: item.item, price: item.price, quantity: item.quantity))

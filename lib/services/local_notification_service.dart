@@ -1,10 +1,10 @@
-import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import "package:flutter_local_notifications/flutter_local_notifications.dart";
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:smartrr/utils/colors.dart';
-import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
+import "package:timezone/timezone.dart";
 
 abstract class LocalNotificationService {
   static FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
@@ -34,12 +34,8 @@ abstract class LocalNotificationService {
       initializationSettings,
     );
 
-    await _flutterLocalNotificationsPlugin.show(
-      Random().nextInt(2 ^ 32),
-      "Initialization successul",
-      "Flutter local notifications initialization successul",
-      _defaultNotificationDetails,
-    );
+    tz.initializeTimeZones();
+    print(_notificationsBox.keys);
   }
 
   Future onSelectNotification(notificationResponse) async {
@@ -53,7 +49,7 @@ abstract class LocalNotificationService {
   static Future<bool> scheduleNotification({
     required String title,
     required String body,
-    required tz.TZDateTime scheduledDate,
+    required TZDateTime scheduledDate,
     NotificationDetails? notificationDetails,
   }) async {
     try {
@@ -71,7 +67,7 @@ abstract class LocalNotificationService {
         androidAllowWhileIdle: true,
       );
 
-      _notificationsBox.put(scheduledDate, {id: id});
+      _notificationsBox.put(scheduledDate.toIso8601String(), {id: id});
 
       return true;
     } catch (e) {
@@ -81,7 +77,7 @@ abstract class LocalNotificationService {
   }
 
   static bool hasBeenScheduled(DateTime datetime) {
-    return _notificationsBox.containsKey(datetime);
+    return _notificationsBox.containsKey(datetime.toIso8601String());
   }
 
   static final NotificationDetails _defaultNotificationDetails =

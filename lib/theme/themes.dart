@@ -3,18 +3,19 @@ import 'package:google_fonts/google_fonts.dart';
 import '../utils/colors.dart';
 
 final ThemeData appTheme = ThemeData(
+  useMaterial3: true,
   textTheme: GoogleFonts.poppinsTextTheme()
-      .copyWith(bodyText1: TextStyle().copyWith(fontSize: 16)),
-  primarySwatch: Colors.orange,
+      .copyWith(bodyLarge: TextStyle().copyWith(fontSize: 16)),
+  primarySwatch: Colors.pink,
   primaryColor: primaryColor,
-  iconTheme: IconThemeData().copyWith(color: Colors.white),
+  iconTheme: IconThemeData().copyWith(color: darkGrey),
   appBarTheme: AppBarTheme(
-    backgroundColor: primaryColor,
+    backgroundColor: materialWhite,
     elevation: 0,
     centerTitle: true,
-    titleTextStyle: TextStyle().copyWith(color: Colors.white, fontSize: 20),
-    iconTheme: IconThemeData().copyWith(color: Colors.white),
-    toolbarTextStyle: TextStyle().copyWith(color: Colors.white),
+    titleTextStyle: TextStyle().copyWith(fontSize: 20),
+    iconTheme: IconThemeData().copyWith(color: darkGrey),
+    toolbarTextStyle: TextStyle().copyWith(color: darkGrey),
   ),
   textButtonTheme: TextButtonThemeData(
     style: ButtonStyle(
@@ -50,6 +51,7 @@ final ThemeData appTheme = ThemeData(
 );
 
 final ThemeData darkTheme = ThemeData(
+  useMaterial3: true,
   primarySwatch: Colors.orange,
   primaryColor: primaryColor,
   canvasColor: darkGrey,

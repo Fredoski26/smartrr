@@ -7,6 +7,7 @@ class Product {
   double price;
   ProductType type;
   double? rating;
+  int quantity;
   List<ProductItem>? items;
   List<ProductImage>? images;
 
@@ -19,6 +20,7 @@ class Product {
     required this.images,
     this.rating,
     this.items,
+    this.quantity = 1,
   });
 }
 
