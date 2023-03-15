@@ -94,7 +94,7 @@ texts({required String title, required String value}) {
         ),
         Text(
           value,
-          style: TextStyle(fontSize: 20, fontWeight: 600),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
         ),
       ],
     ),

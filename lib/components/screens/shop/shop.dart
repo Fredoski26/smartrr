@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:smartrr/components/screens/user/orders.dart';
+import 'package:smartrr/components/screens/shop/orders.dart';
 import 'package:smartrr/components/widgets/landscape_product_card.dart';
 import 'package:smartrr/components/widgets/portrait_product_card.dart';
-import 'package:smartrr/components/widgets/shopping_cart.dart';
+import 'package:smartrr/components/screens/shop/shopping_cart.dart';
+import 'package:smartrr/components/widgets/shopping_cart_widget.dart';
 import 'package:smartrr/models/product.dart';
 import 'package:smartrr/services/shop_service.dart';
 import 'package:smartrr/utils/colors.dart';
@@ -126,7 +127,7 @@ class _ShopState extends State<Shop> {
                   titlePadding: EdgeInsets.all(20.0),
                 ),
                 actions: [
-                  ShoppingCart()
+                  ShoppingCartWidget()
                   // IconButton(
                   //   tooltip: "Orders",
                   //   onPressed: () => Navigator.push(

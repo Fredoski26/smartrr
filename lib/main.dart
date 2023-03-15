@@ -12,7 +12,7 @@ import 'package:smartrr/components/screens/user/select_country.dart';
 import 'package:smartrr/components/screens/user/settings.dart';
 import 'package:smartrr/components/screens/user/cases_history_screen.dart';
 import 'package:smartrr/components/screens/org/org_sign_up_page.dart';
-import 'package:smartrr/components/screens/user/shop.dart';
+import 'package:smartrr/components/screens/shop/shop.dart';
 import 'package:smartrr/components/screens/user/sign_up_page.dart';
 import 'package:smartrr/components/wrapper.dart';
 import 'package:smartrr/generated/l10n.dart';
@@ -25,15 +25,27 @@ import 'package:firebase_core/firebase_core.dart';
 import 'services/theme_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:smartrr/models/product.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // initialize flutter firebase library
   await Firebase.initializeApp();
   await FirebaseAppCheck.instance.activate();
+
+  // initialize flutter hive database
   await Hive.initFlutter();
+// register hive database adapters
+  Hive.registerAdapter(ProductAdapter());
+  Hive.registerAdapter(ProductTypeAdapter());
+  Hive.registerAdapter(ProductItemAdapter());
+  Hive.registerAdapter(ProductImageAdapter());
+//  open boxs
   await Hive.openBox("messages");
   await Hive.openBox("period_tracker");
   await Hive.openBox("notifications");
+  await Hive.openBox("cart");
 
   await LocalNotificationService.initialize();
 

@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import 'package:smartrr/components/screens/user/product_details.dart';
+import 'package:smartrr/components/screens/shop/product_details.dart';
 import 'package:smartrr/models/product.dart';
+import 'package:smartrr/services/shop_service.dart';
 import 'package:smartrr/services/theme_provider.dart';
 import 'package:smartrr/utils/colors.dart';
 
 class PortraitProductCard extends StatelessWidget {
   final Product product;
-  const PortraitProductCard({super.key, required this.product});
+  PortraitProductCard({super.key, required this.product});
+
+  final _cartBox = Hive.box("cart");
 
   @override
   Widget build(BuildContext context) {
@@ -94,11 +98,25 @@ class PortraitProductCard extends StatelessWidget {
                             fontSize: 16,
                           ),
                         ),
-                        TextButton.icon(
-                          onPressed: () {},
-                          icon: Icon(Icons.add),
-                          label: Text("Add"),
-                        )
+                        ValueListenableBuilder(
+                            valueListenable: _cartBox.listenable(),
+                            builder: (context, cart, __) {
+                              if (!ShopService.isInCart(product.id)) {
+                                return TextButton.icon(
+                                  onPressed: () => ShopService.addtoCart(
+                                      {product.id: product}),
+                                  icon: Icon(Icons.add),
+                                  label: Text("Add"),
+                                );
+                              } else {
+                                return TextButton.icon(
+                                  onPressed: () =>
+                                      ShopService.removeFromCart(product.id),
+                                  icon: Icon(Icons.remove),
+                                  label: Text("Remove"),
+                                );
+                              }
+                            })
                       ],
                     ),
                   )

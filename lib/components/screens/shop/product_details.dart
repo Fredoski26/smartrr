@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:smartrr/components/screens/user/delivery_details.dart';
-import 'package:smartrr/components/widgets/shopping_cart.dart';
+import 'package:smartrr/components/screens/shop/delivery_details.dart';
+import 'package:smartrr/components/screens/shop/shopping_cart.dart';
 import 'package:smartrr/models/product.dart';
 import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/utils/utils.dart';

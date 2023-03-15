@@ -38,7 +38,7 @@ dependencies:
   youtube_player_flutter: ^8.0.0
   flutter_svg: ^1.0.3
   intl_phone_number_input: ^0.7.0+2
-  pinput: ^2.2.10
+  pinput: ^2.2.31
   speech_to_text: ^6.1.0
   ripple_animation: ^0.0.1+2
   uuid: ^3.0.6

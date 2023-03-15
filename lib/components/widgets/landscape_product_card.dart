@@ -1,9 +1,10 @@
 import "package:flutter/material.dart";
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import 'package:smartrr/components/screens/user/delivery_details.dart';
-import 'package:smartrr/components/screens/user/product_details.dart';
+import 'package:smartrr/components/screens/shop/delivery_details.dart';
+import 'package:smartrr/components/screens/shop/product_details.dart';
 import 'package:smartrr/models/product.dart';
+import 'package:smartrr/services/shop_service.dart';
 import 'package:smartrr/services/theme_provider.dart';
 import 'package:smartrr/utils/colors.dart';
 
@@ -78,21 +79,8 @@ class LandscapeProductCard extends StatelessWidget {
                                       const EdgeInsets.symmetric(vertical: 5.0),
                                   child: ElevatedButton.icon(
                                     icon: Icon(Icons.add),
-                                    onPressed: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => DeliveryDetails(
-                                            product: Product(
-                                          id: product.id,
-                                          name: product.name,
-                                          price: product.price,
-                                          description: product.description,
-                                          images: product.images,
-                                          items: product.items,
-                                          type: product.type,
-                                        )),
-                                      ),
-                                    ),
+                                    onPressed: () => ShopService.addtoCart(
+                                        {product.id: product}),
                                     label: Text("Add"),
                                   ),
                                 ),

@@ -19,6 +19,9 @@ final ThemeData appTheme = ThemeData(
   ),
   textButtonTheme: TextButtonThemeData(
     style: ButtonStyle(
+      textStyle:
+          MaterialStateProperty.all(TextStyle().copyWith(fontSize: 12.0)),
+      iconSize: MaterialStateProperty.all(12),
       shape: MaterialStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(33))),
       foregroundColor: MaterialStateProperty.all(Colors.white),
