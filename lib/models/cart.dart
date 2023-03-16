@@ -2,7 +2,7 @@ import 'package:smartrr/models/product.dart';
 
 class Cart {
   List<Product> products;
-  int total;
+  double total;
 
   Cart({required this.products, required this.total});
 }

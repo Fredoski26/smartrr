@@ -2,7 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:smartrr/components/screens/user/order_summary.dart';
+import 'package:smartrr/components/screens/shop/order_summary.dart';
+import 'package:smartrr/models/cart.dart';
 import 'package:smartrr/models/country.dart';
 import 'package:smartrr/models/location.dart';
 import 'package:smartrr/models/product.dart';
@@ -12,8 +13,8 @@ import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/utils/emailValidator.dart';
 
 class DeliveryDetails extends StatefulWidget {
-  final Product product;
-  const DeliveryDetails({super.key, required this.product});
+  final Cart cart;
+  const DeliveryDetails({super.key, required this.cart});
 
   @override
   State<DeliveryDetails> createState() => _DeliveryDetailsState();
@@ -43,6 +44,8 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
   late TextEditingController _phoneController;
   late TextEditingController _emailController;
 
+  double deliveryFee = 2000.00;
+
   @override
   Widget build(BuildContext context) {
     InputDecoration textInputDecoration({String? hint}) {
@@ -60,258 +63,210 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
     return Consumer<ThemeNotifier>(builder: (context, theme, _) {
       isDarkTheme = theme.darkTheme;
       return Scaffold(
-          body: NestedScrollView(
-        floatHeaderSlivers: true,
-        headerSliverBuilder: (context, _) => [
-          SliverAppBar(
-            title: Text(widget.product.name),
-            pinned: true,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(100),
-                bottomRight: Radius.circular(100),
-              ),
-            ),
-            bottom: PreferredSize(
-              preferredSize: Size.fromHeight(180),
-              child: Container(
-                height: 150,
-                margin: EdgeInsets.symmetric(horizontal: 30.0),
-                padding: EdgeInsets.all(10.0),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    color: theme.darkTheme ? darkGrey : Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        offset: Offset(0, 5),
-                        blurRadius: 1.0,
-                        color: Colors.black.withOpacity(.1),
-                      )
-                    ]),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Container(
-                          margin: EdgeInsets.only(right: 10.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20.0),
-                            child: Image.network(
-                              widget.product.images![0].url,
-                              fit: BoxFit.cover,
-                              height: 140,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.product.name,
-                              style: TextStyle().copyWith(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w400,
-                                height: 1.2,
-                              ),
-                            ),
-                            Text(
-                              "N${widget.product.price}",
-                              style: TextStyle().copyWith(
-                                color: primaryColor,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 8.0),
-                                child: Text(
-                                  widget.product.description,
-                                  style: TextStyle().copyWith(
-                                    fontSize: 13,
-                                    height: 1.2,
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    ]),
-              ),
-            ),
-          )
-        ],
-        body: SingleChildScrollView(
-          child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-            padding: EdgeInsets.all(14),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                color: theme.darkTheme ? darkGrey : Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    offset: Offset(0, 5),
-                    blurRadius: 1.0,
-                    color: Colors.black.withOpacity(.1),
-                  )
-                ]),
-            child: Form(
+        appBar: AppBar(
+          title: Text("Checkout"),
+          backgroundColor: primaryColor,
+          centerTitle: false,
+          iconTheme: IconThemeData().copyWith(color: Colors.white),
+        ),
+        body: ListView(
+          padding: EdgeInsets.only(left: 16, right: 16, top: 18),
+          children: [
+            Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(
-                    margin: EdgeInsets.only(bottom: 15),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 5),
-                          child: SvgPicture.asset(
-                            "assets/icons/carbon_delivery.svg",
-                            width: 35,
-                            height: 35,
-                          ),
-                        ),
-                        Text(
-                          "Delivery Details",
-                          style: TextStyle().copyWith(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
                   Text(
-                    'Choose your location',
-                    style: TextStyle().copyWith(fontSize: 18),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  DropdownButtonFormField<Country>(
-                    isExpanded: true,
-                    items: _countries,
-                    value: _country,
-                    onChanged: (Country? value) {
-                      setState(() => _country = value!);
-                      _getStates();
-                    },
-                    hint: Text(
-                      'Country',
-                      style: TextStyle().copyWith(
-                        fontSize: 16,
-                        color: theme.darkTheme ? lightGrey : darkGrey,
-                      ),
+                    "Delivery Details",
+                    style: TextStyle().copyWith(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
                     ),
-                    elevation: 1,
-                    icon: SvgPicture.asset("assets/icons/dropdown_icon.svg"),
-                    validator: (country) =>
-                        country == null ? "Select country" : null,
-                    decoration: textInputDecoration(),
                   ),
-                  SizedBox(
-                    height: 20,
+                  Divider(height: 32),
+                  Container(
+                    margin: EdgeInsets.all(32),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Location',
+                            style: TextStyle().copyWith(
+                                fontSize: 18, fontWeight: FontWeight.w600),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          DropdownButtonFormField<Country>(
+                            isExpanded: true,
+                            items: _countries,
+                            value: _country,
+                            onChanged: (Country? value) {
+                              setState(() => _country = value!);
+                              _getStates();
+                            },
+                            hint: Text(
+                              'Country',
+                              style: TextStyle().copyWith(
+                                fontSize: 16,
+                                color: theme.darkTheme ? lightGrey : darkGrey,
+                              ),
+                            ),
+                            elevation: 1,
+                            validator: (country) =>
+                                country == null ? "Select country" : null,
+                            decoration: textInputDecoration(),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          DropdownButtonFormField<MyLocation>(
+                            isExpanded: true,
+                            items: _stateDropdownItems,
+                            value: _state,
+                            onChanged: (MyLocation? value) {
+                              setState(() => _state = value!);
+                              _getLocations();
+                            },
+                            hint: Text(
+                              'State',
+                              style: TextStyle().copyWith(
+                                fontSize: 16,
+                                color: theme.darkTheme ? lightGrey : darkGrey,
+                              ),
+                            ),
+                            elevation: 1,
+                            validator: (country) =>
+                                country == null ? "Select state" : null,
+                            decoration: textInputDecoration(),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          DropdownButtonFormField(
+                            isExpanded: true,
+                            items: _lgaDropdownItems,
+                            value: _lga,
+                            onChanged: (MyLocation? location) async {
+                              setState(() => _lga = location!);
+                            },
+                            hint: Text(
+                              'LGA',
+                              style: TextStyle().copyWith(
+                                fontSize: 16,
+                                color: theme.darkTheme ? lightGrey : darkGrey,
+                              ),
+                            ),
+                            elevation: 1,
+                            validator: (country) =>
+                                country == null ? "Select LGA" : null,
+                            decoration: textInputDecoration(),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                            controller: _nameController,
+                            validator: ((value) => value!.length < 3
+                                ? "Enter a valid name"
+                                : null),
+                            decoration: textInputDecoration(hint: "Name"),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                            controller: _addressController,
+                            validator: ((value) => value!.length < 5
+                                ? "Enter a valid address"
+                                : null),
+                            decoration: textInputDecoration(hint: "Address"),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                            controller: _landMarkController,
+                            validator: ((value) => value!.length < 5
+                                ? "Enter a valid landmark"
+                                : null),
+                            decoration:
+                                textInputDecoration(hint: "Major Landmark"),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                            controller: _phoneController,
+                            maxLength: 11,
+                            validator: ((value) => value!.length < 11
+                                ? "Enter a valid phone"
+                                : null),
+                            keyboardType: TextInputType.phone,
+                            decoration: textInputDecoration(hint: "Phone"),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                            controller: _emailController,
+                            validator: ((value) =>
+                                !EmailValidator.isValidEmail(value!)
+                                    ? "Enter a valid email"
+                                    : null),
+                            keyboardType: TextInputType.emailAddress,
+                            decoration:
+                                textInputDecoration(hint: "Email Address"),
+                          ),
+                        ]),
                   ),
-                  DropdownButtonFormField<MyLocation>(
-                    isExpanded: true,
-                    items: _stateDropdownItems,
-                    value: _state,
-                    onChanged: (MyLocation? value) {
-                      setState(() => _state = value!);
-                      _getLocations();
-                    },
-                    hint: Text(
-                      'State',
-                      style: TextStyle().copyWith(
-                        fontSize: 16,
-                        color: theme.darkTheme ? lightGrey : darkGrey,
-                      ),
+                  Divider(height: 32),
+                  Text(
+                    "Summary",
+                    style: TextStyle().copyWith(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
                     ),
-                    elevation: 1,
-                    icon: SvgPicture.asset("assets/icons/dropdown_icon.svg"),
-                    validator: (country) =>
-                        country == null ? "Select state" : null,
-                    decoration: textInputDecoration(),
                   ),
-                  SizedBox(
-                    height: 20,
+                  Divider(height: 52),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Subtotal"),
+                      Text("N${widget.cart.total.toStringAsFixed(2)}")
+                    ],
                   ),
-                  DropdownButtonFormField(
-                    isExpanded: true,
-                    items: _lgaDropdownItems,
-                    value: _lga,
-                    onChanged: (MyLocation? location) async {
-                      setState(() => _lga = location!);
-                    },
-                    hint: Text(
-                      'LGA',
-                      style: TextStyle().copyWith(
-                        fontSize: 16,
-                        color: theme.darkTheme ? lightGrey : darkGrey,
+                  SizedBox(height: 15),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Delivery"),
+                      Text("N${deliveryFee.toStringAsFixed(2)}")
+                    ],
+                  ),
+                  Divider(height: 52),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Total",
+                        style: TextStyle().copyWith(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
-                    elevation: 1,
-                    icon: SvgPicture.asset("assets/icons/dropdown_icon.svg"),
-                    validator: (country) =>
-                        country == null ? "Select LGA" : null,
-                    decoration: textInputDecoration(),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    controller: _nameController,
-                    validator: ((value) =>
-                        value!.length < 3 ? "Enter a valid name" : null),
-                    decoration: textInputDecoration(hint: "Name"),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    controller: _addressController,
-                    validator: ((value) =>
-                        value!.length < 5 ? "Enter a valid address" : null),
-                    decoration: textInputDecoration(hint: "Address"),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    controller: _landMarkController,
-                    validator: ((value) =>
-                        value!.length < 5 ? "Enter a valid landmark" : null),
-                    decoration: textInputDecoration(hint: "Major Landmark"),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    controller: _phoneController,
-                    maxLength: 11,
-                    validator: ((value) =>
-                        value!.length < 11 ? "Enter a valid phone" : null),
-                    keyboardType: TextInputType.phone,
-                    decoration: textInputDecoration(hint: "Phone"),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    controller: _emailController,
-                    validator: ((value) => !EmailValidator.isValidEmail(value!)
-                        ? "Enter a valid email"
-                        : null),
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: textInputDecoration(hint: "Email Address"),
+                      Text(
+                        "N${(deliveryFee + widget.cart.total).toStringAsFixed(2)}",
+                        style: TextStyle().copyWith(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                        ),
+                      )
+                    ],
                   ),
                   Container(
                       margin: EdgeInsets.only(top: 50),
@@ -322,7 +277,10 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => OrderSummary(
-                                  product: widget.product,
+                                  cart: Cart(
+                                    products: widget.cart.products,
+                                    total: widget.cart.total,
+                                  ),
                                   name: _nameController.text,
                                   phone: _phoneController.text,
                                   email: _emailController.text,
@@ -332,6 +290,7 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
                                   lga: _lga!.title,
                                   landMark: _landMarkController.text,
                                   user: _currentUser!.uid,
+                                  deliveryFee: deliveryFee,
                                 ),
                               ),
                             );
@@ -342,9 +301,9 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
                 ],
               ),
             ),
-          ),
+          ],
         ),
-      ));
+      );
     });
   }
 
