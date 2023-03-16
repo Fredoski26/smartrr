@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import 'package:smartrr/components/screens/shop/delivery_details.dart';
 import 'package:smartrr/components/screens/shop/product_details.dart';
 import 'package:smartrr/models/product.dart';
 import 'package:smartrr/services/shop_service.dart';
@@ -10,7 +10,14 @@ import 'package:smartrr/utils/colors.dart';
 
 class LandscapeProductCard extends StatelessWidget {
   final Product product;
-  const LandscapeProductCard({super.key, required this.product});
+  LandscapeProductCard({super.key, required this.product});
+
+  final _cartBox = Hive.box<Product>("cart");
+
+  ButtonStyle textButtonStyle = ButtonStyle().copyWith(
+    textStyle: MaterialStatePropertyAll(TextStyle().copyWith(fontSize: 12)),
+    iconSize: MaterialStatePropertyAll(12),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -73,18 +80,28 @@ class LandscapeProductCard extends StatelessWidget {
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Expanded(
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 5.0),
-                                  child: ElevatedButton.icon(
-                                    icon: Icon(Icons.add),
-                                    onPressed: () => ShopService.addtoCart(
-                                        {product.id: product}),
-                                    label: Text("Add"),
-                                  ),
-                                ),
-                              )
+                              ValueListenableBuilder(
+                                  valueListenable: _cartBox.listenable(),
+                                  builder: (context, cart, __) {
+                                    if (!ShopService.isInCart(product.id)) {
+                                      return TextButton.icon(
+                                        onPressed: () => ShopService.addtoCart(
+                                            {product.id: product}),
+                                        icon: Icon(Icons.add),
+                                        label: Text("Add"),
+                                        style: textButtonStyle,
+                                      );
+                                    } else {
+                                      return TextButton.icon(
+                                        onPressed: () =>
+                                            ShopService.removeFromCart(
+                                                product.id),
+                                        icon: Icon(Icons.remove),
+                                        label: Text("Remove"),
+                                        style: textButtonStyle,
+                                      );
+                                    }
+                                  }),
                             ],
                           ),
                         ),

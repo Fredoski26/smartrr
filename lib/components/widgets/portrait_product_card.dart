@@ -12,7 +12,12 @@ class PortraitProductCard extends StatelessWidget {
   final Product product;
   PortraitProductCard({super.key, required this.product});
 
-  final _cartBox = Hive.box("cart");
+  final _cartBox = Hive.box<Product>("cart");
+
+  ButtonStyle textButtonStyle = ButtonStyle().copyWith(
+    textStyle: MaterialStatePropertyAll(TextStyle().copyWith(fontSize: 12)),
+    iconSize: MaterialStatePropertyAll(12),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -107,6 +112,7 @@ class PortraitProductCard extends StatelessWidget {
                                       {product.id: product}),
                                   icon: Icon(Icons.add),
                                   label: Text("Add"),
+                                  style: textButtonStyle,
                                 );
                               } else {
                                 return TextButton.icon(
@@ -114,6 +120,7 @@ class PortraitProductCard extends StatelessWidget {
                                       ShopService.removeFromCart(product.id),
                                   icon: Icon(Icons.remove),
                                   label: Text("Remove"),
+                                  style: textButtonStyle,
                                 );
                               }
                             })

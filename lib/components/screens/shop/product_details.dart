@@ -1,10 +1,11 @@
 import "package:flutter/material.dart";
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:smartrr/components/screens/shop/delivery_details.dart';
-import 'package:smartrr/components/screens/shop/shopping_cart.dart';
 import 'package:smartrr/models/product.dart';
+import 'package:smartrr/services/shop_service.dart';
 import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/utils/utils.dart';
+import 'package:smartrr/components/widgets/shopping_cart_widget.dart';
 
 class ProductDetails extends StatefulWidget {
   final Product product;
@@ -15,6 +16,7 @@ class ProductDetails extends StatefulWidget {
 }
 
 class _ProductDetailsState extends State<ProductDetails> {
+  late Box<Product> _cartBox;
   late Product product;
   late double productPrice = widget.product.price;
   late List<ProductItemWithCheckbox> productItems;
@@ -79,6 +81,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     int itemIndex = selectedItems.indexOf(item);
     selectedItems[itemIndex].quantity++;
     productPrice += selectedItems[itemIndex].price;
+    product.price = productPrice;
     setState(() {});
   }
 
@@ -86,6 +89,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     int itemIndex = selectedItems.indexOf(item);
     selectedItems[itemIndex].quantity--;
     productPrice -= selectedItems[itemIndex].price;
+    product.price = productPrice;
     setState(() {});
   }
 
@@ -98,7 +102,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               item.quantity > 1 ? () => decrementItemQuantity(item) : null,
           color: primaryColor,
           icon: Icon(
-            Icons.remove,
+            Icons.remove_circle_outline,
             size: 20,
           ),
         ),
@@ -110,7 +114,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               item.quantity < 10 ? () => incrementItemQuantity(item) : null,
           color: primaryColor,
           icon: Icon(
-            Icons.add,
+            Icons.add_circle_outline,
             size: 20,
           ),
         ),
@@ -139,7 +143,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               product.quantity > 1 ? () => decrementProductQuantity() : null,
           color: primaryColor,
           icon: Icon(
-            FeatherIcons.minus,
+            Icons.remove_circle_outline,
             size: 20,
           ),
         ),
@@ -151,7 +155,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               product.quantity < 10 ? () => incrementProductQuantity() : null,
           color: primaryColor,
           icon: Icon(
-            FeatherIcons.plus,
+            Icons.add_circle_outline,
             size: 20,
           ),
         ),
@@ -162,7 +166,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(actions: [ShoppingCart()]),
+      appBar: AppBar(actions: [ShoppingCartWidget()]),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -225,6 +229,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                       ),
                     ),
                   ),
+                  Divider(height: 11),
                   Row(
                     children: [
                       Expanded(
@@ -241,10 +246,26 @@ class _ProductDetailsState extends State<ProductDetails> {
                   Row(
                     children: [
                       Expanded(
-                          child: TextButton(
-                        child: Text("Add to Cart"),
-                        onPressed: null,
-                      )),
+                        child: ValueListenableBuilder(
+                            valueListenable: _cartBox.listenable(),
+                            builder: (context, cart, __) {
+                              if (!ShopService.isInCart(product.id)) {
+                                return OutlinedButton.icon(
+                                  onPressed: () => ShopService.addtoCart(
+                                      {product.id: product}),
+                                  icon: Icon(Icons.add),
+                                  label: Text("Add to Cart"),
+                                );
+                              } else {
+                                return OutlinedButton.icon(
+                                  onPressed: () =>
+                                      ShopService.removeFromCart(product.id),
+                                  icon: Icon(Icons.remove),
+                                  label: Text("Remove"),
+                                );
+                              }
+                            }),
+                      ),
                       SizedBox(width: 8),
                       Expanded(
                         child: TextButton(
@@ -297,6 +318,7 @@ class _ProductDetailsState extends State<ProductDetails> {
 
   @override
   void initState() {
+    _cartBox = Hive.box<Product>("cart");
     product = widget.product;
     productItems = widget.product.items!
         .map((item) => ProductItemWithCheckbox(

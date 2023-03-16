@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:smartrr/components/screens/shop/shopping_cart.dart';
 import 'package:smartrr/components/screens/user/about.dart';
 import 'package:smartrr/components/screens/user/all_about_srhr.dart';
 import 'package:smartrr/components/screens/user/faq.dart';
@@ -45,7 +46,7 @@ void main() async {
   await Hive.openBox("messages");
   await Hive.openBox("period_tracker");
   await Hive.openBox("notifications");
-  await Hive.openBox("cart");
+  await Hive.openBox<Product>("cart");
 
   await LocalNotificationService.initialize();
 
@@ -92,6 +93,7 @@ class MyApp extends StatelessWidget {
         "/countries": (context) => SelectCountry(),
         "/srhr": (context) => AllAboutSRHR(),
         "/shop": (context) => Shop(),
+        "/cart": (context) => ShoppingCart()
       },
       theme: isDarkTheme ? darkTheme : appTheme,
       localizationsDelegates: [

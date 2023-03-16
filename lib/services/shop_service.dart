@@ -7,7 +7,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 abstract class ShopService {
   static String apiBaseUrl = Env.apiBaseUrl;
-  static Box<dynamic> _cartBox = Hive.box("cart");
+  static Box<Product> _cartBox = Hive.box<Product>("cart");
 
   static Future<List<Product>> getAllProducts() async {
     final res = await http.get(Uri.parse("$apiBaseUrl/products"));

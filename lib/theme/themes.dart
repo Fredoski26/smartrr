@@ -20,8 +20,8 @@ final ThemeData appTheme = ThemeData(
   textButtonTheme: TextButtonThemeData(
     style: ButtonStyle(
       textStyle:
-          MaterialStateProperty.all(TextStyle().copyWith(fontSize: 12.0)),
-      iconSize: MaterialStateProperty.all(12),
+          MaterialStateProperty.all(TextStyle().copyWith(fontSize: 16.0)),
+      iconSize: MaterialStateProperty.all(16),
       shape: MaterialStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(33))),
       foregroundColor: MaterialStateProperty.all(Colors.white),
@@ -42,13 +42,16 @@ final ThemeData appTheme = ThemeData(
   ),
   outlinedButtonTheme: OutlinedButtonThemeData(
     style: ButtonStyle(
-      padding: MaterialStateProperty.all(
-          EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0)),
-      side: MaterialStateProperty.all(
-          BorderSide(width: 1.0, color: primaryColor)),
-      shape: MaterialStateProperty.all(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(33))),
-    ),
+        textStyle:
+            MaterialStateProperty.all(TextStyle().copyWith(fontSize: 12.0)),
+        iconSize: MaterialStateProperty.all(12),
+        padding: MaterialStateProperty.all(
+            EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0)),
+        side: MaterialStateProperty.all(
+            BorderSide(width: 1.0, color: primaryColor)),
+        shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(33))),
+        foregroundColor: MaterialStateProperty.all(primaryColor)),
   ),
   tabBarTheme: TabBarTheme().copyWith(),
 );
