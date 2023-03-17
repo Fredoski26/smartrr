@@ -15,7 +15,7 @@ import 'package:smartrr/components/screens/user/cases_history_screen.dart';
 import 'package:smartrr/components/screens/org/org_sign_up_page.dart';
 import 'package:smartrr/components/screens/shop/shop.dart';
 import 'package:smartrr/components/screens/user/sign_up_page.dart';
-import 'package:smartrr/components/wrapper.dart';
+import 'package:smartrr/components/auth_wrapper.dart';
 import 'package:smartrr/generated/l10n.dart';
 import 'package:smartrr/provider/language_provider.dart';
 import 'package:smartrr/services/local_notification_service.dart';
@@ -76,7 +76,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/': (context) => Wrapper(isDarkTheme: isDarkTheme),
+        '/': (context) => AuthWrapper(isDarkTheme: isDarkTheme),
         '/login': (context) => LoginPage(
               isDarkTheme: isDarkTheme,
             ),

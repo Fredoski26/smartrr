@@ -35,7 +35,6 @@ abstract class LocalNotificationService {
     );
 
     tz.initializeTimeZones();
-    print(_notificationsBox.keys);
   }
 
   Future onSelectNotification(notificationResponse) async {

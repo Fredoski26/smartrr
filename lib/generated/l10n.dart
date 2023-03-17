@@ -370,20 +370,20 @@ class S {
     );
   }
 
-  /// `Yourself`
+  /// `For Yourself`
   String get yourself {
     return Intl.message(
-      'Yourself',
+      'For Yourself',
       name: 'yourself',
       desc: '',
       args: [],
     );
   }
 
-  /// `Someone Else`
+  /// `For Someone Else`
   String get someoneElse {
     return Intl.message(
-      'Someone Else',
+      'For Someone Else',
       name: 'someoneElse',
       desc: '',
       args: [],
@@ -610,10 +610,20 @@ class S {
     );
   }
 
-  /// `Accept Terms & Conditions`
+  /// `I Accept`
+  String get accept {
+    return Intl.message(
+      'I Accept',
+      name: 'accept',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `I accept all terms & conditions`
   String get acceptTerms {
     return Intl.message(
-      'Accept Terms & Conditions',
+      'I accept all terms & conditions',
       name: 'acceptTerms',
       desc: '',
       args: [],

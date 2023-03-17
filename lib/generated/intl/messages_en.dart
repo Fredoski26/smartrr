@@ -25,8 +25,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "aboutSmartRR": MessageLookupByLibrary.simpleMessage("About Smart RR"),
         "aboutSmartrrData": MessageLookupByLibrary.simpleMessage(
             "Smart Reporting and Referral (SMART RR) is a technology based mobile application that allows survivors, social workers and service providers to report and refer cases/incidents of GBV from their smart and basic phones. The tool was developed by Big Family 360 Foundation, a national non-governmental organisation in Nigeria.\n\nSmart RR application is a technology based mobile application which enables survivors, social workers and service providers to report and refer GBV incidents to relevant service providers and authorities, conducts service mapping, automatically updates referral directory, collects and analyses referral data. This idea was built on the existing referral mechanism of the GBV Sub Sector which is done manually."),
-        "acceptTerms":
-            MessageLookupByLibrary.simpleMessage("Accept Terms & Conditions"),
+        "accept": MessageLookupByLibrary.simpleMessage("I Accept"),
+        "acceptTerms": MessageLookupByLibrary.simpleMessage(
+            "I accept all terms & conditions"),
         "age": MessageLookupByLibrary.simpleMessage("Age"),
         "allAboutSRHR":
             MessageLookupByLibrary.simpleMessage("All About SRH/FGM"),
@@ -115,7 +116,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Sexual Reproductive Kits"),
         "shop": MessageLookupByLibrary.simpleMessage("Shop"),
         "signUp": MessageLookupByLibrary.simpleMessage("SignUp"),
-        "someoneElse": MessageLookupByLibrary.simpleMessage("Someone Else"),
+        "someoneElse": MessageLookupByLibrary.simpleMessage("For Someone Else"),
         "srhrDefinition1Body": MessageLookupByLibrary.simpleMessage(
             "Is a state of physical, emotional,  mental, and social wellbeing in relation to sexual feelings, considerations, attractions and practices towards others Sexuality. It encompasses the possibility of pleasurable and safe sexual experiences, free of coercion, discrimination and violence. For sexual health to be attained and maintained, the sexual rights of all persons must be respected, protected, and fulfilled."),
         "srhrDefinition1SubList1Item1": MessageLookupByLibrary.simpleMessage(
@@ -159,6 +160,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "update": MessageLookupByLibrary.simpleMessage("Update"),
         "user": MessageLookupByLibrary.simpleMessage("User"),
         "watch": MessageLookupByLibrary.simpleMessage("Watch"),
-        "yourself": MessageLookupByLibrary.simpleMessage("Yourself")
+        "yourself": MessageLookupByLibrary.simpleMessage("For Yourself")
       };
 }
