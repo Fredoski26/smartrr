@@ -261,32 +261,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   onPressed: () =>
                                       ShopService.removeFromCart(product.id),
                                   icon: Icon(Icons.remove),
-                                  label: Text("Remove"),
+                                  label: Text("Remove from Cart"),
                                 );
                               }
                             }),
                       ),
                       SizedBox(width: 8),
-                      Expanded(
-                        child: TextButton(
-                          onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => DeliveryDetails(
-                                  product: Product(
-                                id: product.id,
-                                name: product.name,
-                                price: productPrice,
-                                description: product.description,
-                                images: product.images,
-                                items: selectedItems,
-                                type: product.type,
-                              )),
-                            ),
-                          ),
-                          child: Text("Buy"),
-                        ),
-                      )
                     ],
                   ),
                   widget.product.type == ProductType.multiple

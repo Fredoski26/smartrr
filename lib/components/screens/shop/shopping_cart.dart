@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:smartrr/components/screens/shop/delivery_details.dart';
+import 'package:smartrr/models/cart.dart';
 import 'package:smartrr/models/product.dart';
 import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/components/widgets/cart_item.dart';
@@ -27,6 +29,8 @@ class _ShoppingCartState extends State<ShoppingCart> {
       appBar: AppBar(
         title: Text("Cart"),
         backgroundColor: primaryColor,
+        centerTitle: false,
+        iconTheme: IconThemeData().copyWith(color: Colors.white),
       ),
       body: ValueListenableBuilder(
         valueListenable: _cartBox.listenable(),
@@ -77,7 +81,18 @@ class _ShoppingCartState extends State<ShoppingCart> {
               children: [
                 Expanded(
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DeliveryDetails(
+                            cart: Cart(
+                                products: _cartBox.values.toList(),
+                                total: getTotalPrice()),
+                          ),
+                        ),
+                      );
+                    },
                     child: Text("Continue to Checkout"),
                   ),
                 )

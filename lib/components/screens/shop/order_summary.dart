@@ -5,6 +5,7 @@ import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:provider/provider.dart';
 import 'package:smartrr/components/screens/shop/orders.dart';
 import 'package:smartrr/env/env.dart';
+import 'package:smartrr/models/cart.dart';
 import 'package:smartrr/models/product.dart';
 import 'package:smartrr/services/theme_provider.dart';
 import 'package:smartrr/utils/colors.dart';
@@ -12,7 +13,7 @@ import 'package:smartrr/utils/utils.dart';
 import 'package:uuid/uuid.dart';
 
 class OrderSummary extends StatefulWidget {
-  final Product product;
+  final Cart cart;
   final String name;
   final String phone;
   final String email;
@@ -25,7 +26,7 @@ class OrderSummary extends StatefulWidget {
   final String user;
   const OrderSummary({
     super.key,
-    required this.product,
+    required this.cart,
     required this.name,
     required this.phone,
     required this.email,
@@ -59,8 +60,6 @@ class _OrderSummaryState extends State<OrderSummary> {
     charge.putMetaData("name", widget.name);
     charge.putMetaData("email", widget.email);
     charge.putMetaData("phone_number", widget.phone);
-    charge.putMetaData("product_name", widget.product.name);
-    charge.putMetaData("product_id", widget.product.id);
     charge.putMetaData("user_id", widget.user);
     charge.putMetaData("lga", widget.lga);
     charge.putMetaData("delivery_fee", widget.deliveryFee);
@@ -70,22 +69,30 @@ class _OrderSummaryState extends State<OrderSummary> {
     charge.putMetaData("state", widget.state);
     charge.putMetaData("purpose", "order");
 
-    if (widget.product.type == ProductType.multiple) {
-      final items = widget.product.items!
-          .map((item) => {
-                "item": item.item,
-                "price": item.price,
-                "quantity": item.quantity
-              })
-          .toList();
+    final items = widget.cart.products
+        .map((product) => {
+              "productId": product.id,
+              "productName": product.name,
+              "price": product.price,
+              "quantity": product.quantity,
+            })
+        .toList();
+    charge.putMetaData("items", jsonEncode(items));
 
-      charge.putMetaData("items", jsonEncode(items));
-    }
+    // if (widget.product.type == ProductType.multiple) {
+    //   final items = widget.product.items!
+    //       .map((item) => {
+    //             "item": item.item,
+    //             "price": item.price,
+    //             "quantity": item.quantity
+    //           })
+    //       .toList();
+
+    //   charge.putMetaData("items", jsonEncode(items));
+    // }
 
     charge.putCustomField("Name", widget.name);
     charge.putCustomField("Phone", widget.phone);
-    charge.putCustomField("Product Name", widget.product.name);
-    charge.putCustomField("Product ID", widget.product.id);
     charge.putCustomField("Purpose", "order");
 
     _pay() async {
@@ -117,75 +124,15 @@ class _OrderSummaryState extends State<OrderSummary> {
 
     return Consumer<ThemeNotifier>(
       builder: (context, theme, _) => Scaffold(
-        appBar: AppBar(title: Text("Order summary")),
+        appBar: AppBar(
+          title: Text("Order SUmmary"),
+          backgroundColor: primaryColor,
+          centerTitle: false,
+          iconTheme: IconThemeData().copyWith(color: Colors.white),
+        ),
         body: ListView(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           children: [
-            SizedBox(height: 20.0),
-            Container(
-              height: 150,
-              padding: EdgeInsets.all(10.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                color: theme.darkTheme
-                    ? Colors.grey.withOpacity(.2)
-                    : Colors.white,
-              ),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Container(
-                        margin: EdgeInsets.only(right: 10.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20.0),
-                          child: Image.network(
-                            widget.product.images![0].url,
-                            fit: BoxFit.cover,
-                            height: 140,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.product.name,
-                            style: TextStyle().copyWith(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w400,
-                              height: 1.2,
-                            ),
-                          ),
-                          Text(
-                            "N${widget.product.price}",
-                            style: TextStyle().copyWith(
-                              color: primaryColor,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(vertical: 8.0),
-                              child: Text(
-                                content,
-                                style: TextStyle().copyWith(
-                                  fontSize: 13,
-                                  height: 1.2,
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  ]),
-            ),
             SizedBox(height: 20.0),
             Container(
               padding: EdgeInsets.all(10.0),
@@ -196,23 +143,27 @@ class _OrderSummaryState extends State<OrderSummary> {
                     : Colors.white,
               ),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     "Delivery Details",
-                    textAlign: TextAlign.center,
                     style: TextStyle().copyWith(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400,
-                      height: 1.2,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
+                  Divider(height: 52),
                   SizedBox(height: 5.0),
                   Row(
                     children: [
                       Text(
-                        "Name: ${widget.name}",
+                        "Name: ",
+                        style: TextStyle().copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        "${widget.name}",
                         style: TextStyle().copyWith(
                           fontSize: 13,
                           height: 1.2,
@@ -223,7 +174,13 @@ class _OrderSummaryState extends State<OrderSummary> {
                   Row(
                     children: [
                       Text(
-                        "Phone: ${widget.phone}",
+                        "Phone: ",
+                        style: TextStyle().copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        "${widget.phone}",
                         style: TextStyle().copyWith(
                           fontSize: 13,
                           height: 1.2,
@@ -234,7 +191,13 @@ class _OrderSummaryState extends State<OrderSummary> {
                   Row(
                     children: [
                       Text(
-                        "Country: ${widget.country}",
+                        "Country: ",
+                        style: TextStyle().copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        "${widget.country}",
                         style: TextStyle().copyWith(
                           fontSize: 13,
                           height: 1.2,
@@ -245,7 +208,13 @@ class _OrderSummaryState extends State<OrderSummary> {
                   Row(
                     children: [
                       Text(
-                        "State: ${widget.state}",
+                        "State: ",
+                        style: TextStyle().copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        "${widget.state}",
                         style: TextStyle().copyWith(
                           fontSize: 13,
                           height: 1.2,
@@ -256,7 +225,13 @@ class _OrderSummaryState extends State<OrderSummary> {
                   Row(
                     children: [
                       Text(
-                        "LGA: ${widget.lga}",
+                        "LGA: ",
+                        style: TextStyle().copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        "${widget.lga}",
                         style: TextStyle().copyWith(
                           fontSize: 13,
                           height: 1.2,
@@ -266,13 +241,17 @@ class _OrderSummaryState extends State<OrderSummary> {
                   ),
                   Row(
                     children: [
-                      Expanded(
-                        child: Text(
-                          "Address: ${widget.address}",
-                          style: TextStyle().copyWith(
-                            fontSize: 13,
-                            height: 1.2,
-                          ),
+                      Text(
+                        "Address: ",
+                        style: TextStyle().copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        "${widget.address}",
+                        style: TextStyle().copyWith(
+                          fontSize: 13,
+                          height: 1.2,
                         ),
                       ),
                     ],
@@ -280,7 +259,13 @@ class _OrderSummaryState extends State<OrderSummary> {
                   Row(
                     children: [
                       Text(
-                        "Major Landmark: ${widget.landMark}",
+                        "Major Landmark: ",
+                        style: TextStyle().copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        "${widget.landMark}",
                         style: TextStyle().copyWith(
                           fontSize: 13,
                           height: 1.2,
@@ -305,46 +290,55 @@ class _OrderSummaryState extends State<OrderSummary> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    "Payment Details",
-                    textAlign: TextAlign.center,
+                    "Summary",
                     style: TextStyle().copyWith(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400,
-                      height: 1.2,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                  SizedBox(height: 5.0),
+                  Divider(height: 52),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("${widget.product.name}"),
-                      Text("------------"),
-                      Text("N${widget.product.price}"),
+                      Text("Subtotal"),
+                      Text("N${widget.cart.total.toStringAsFixed(2)}")
                     ],
                   ),
-                  SizedBox(height: 5.0),
+                  SizedBox(height: 15),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Delivery Fee"),
-                      Text("------------"),
-                      Text("N${widget.deliveryFee}"),
+                      Text("Delivery"),
+                      Text("N${widget.deliveryFee.toStringAsFixed(2)}")
                     ],
                   ),
-                  SizedBox(height: 5.0),
+                  Divider(height: 52),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Total"),
-                      Text("------------"),
-                      Text("N${widget.product.price + widget.deliveryFee}"),
+                      Text(
+                        "Total",
+                        style: TextStyle().copyWith(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Text(
+                        "N${(widget.deliveryFee + widget.cart.total).toStringAsFixed(2)}",
+                        style: TextStyle().copyWith(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                        ),
+                      )
                     ],
                   ),
                 ],
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 60),
+              margin: EdgeInsets.only(top: 55),
               child: TextButton(
                 onPressed: _pay,
                 child: Text("Place Order"),
@@ -362,14 +356,13 @@ class _OrderSummaryState extends State<OrderSummary> {
 
   @override
   void initState() {
-    if (widget.product.type == ProductType.multiple) {
-      content += widget.product.items!.map((item) => "${item.item}").join(", ");
-    } else {
-      content += widget.product.name;
-    }
+    // if (widget.product.type == ProductType.multiple) {
+    //   content += widget.product.items!.map((item) => "${item.item}").join(", ");
+    // } else {
+    //   content += widget.product.name;
+    // }
     plugin.initialize(publicKey: publicKey);
-    totalAmount =
-        (widget.product.price.toInt() + widget.deliveryFee.toInt()) * 100;
+    totalAmount = (widget.cart.total + widget.deliveryFee.toInt()) * 100;
     super.initState();
   }
 }
