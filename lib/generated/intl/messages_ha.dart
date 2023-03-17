@@ -26,6 +26,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Dandane da SmartRR"),
         "aboutSmartrrData": MessageLookupByLibrary.simpleMessage(
             "Manahajar Smart RR wata kimiyya ce ta wayan tafi da gidanka wanda take baiwa wadanda aka ci zarafinsu, jami\'ai da masu aikin samar da ingantacce  zamantakawa dama, don yin mu\'amala da zummar shigar da kara da kuma mika nau\'in bukatun kara ga wanda ya dace daga wayoyinsu na salula. Kungiya mai zaman kanta mai suna Big Family 360 Foundation da kasar Najeriya ce ta kirkiri wannan manahajar.\n\n Wannan wata kimiyya ce da ke bada dama wa wandanda aka ci zarafinsu, jami’an tsaro, ma’aikatan lafiya da masu aikin agiji cikin al’umma da su kai karar abubuwanda suka shafi cin zarafin ‘ya’ya mata, cin zarafin jinsi. Yakan kuma bada dama ma ma’aikata da jami’ai dabam-dabam su yi bincike, kayyade wurin sa kulawa, samun sabbin bayanai, mika kara zuwa abokan hulda da nazari da samun alkaluma da suka shafi cin zarafin jinsi bisa tsari da ke samuwa a bayyane. "),
+        "accept": MessageLookupByLibrary.simpleMessage("Na yarda"),
         "acceptTerms": MessageLookupByLibrary.simpleMessage("Na yarda"),
         "age": MessageLookupByLibrary.simpleMessage("Shekaru"),
         "allAboutSRHR": MessageLookupByLibrary.simpleMessage(
@@ -114,7 +115,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Kayan Haihuwar Jima\'i"),
         "shop": MessageLookupByLibrary.simpleMessage("Shago"),
         "signUp": MessageLookupByLibrary.simpleMessage("  Yi Rejista"),
-        "someoneElse": MessageLookupByLibrary.simpleMessage("Wani"),
+        "someoneElse": MessageLookupByLibrary.simpleMessage("Ma Wani"),
         "srhrDefinition1Body": MessageLookupByLibrary.simpleMessage(
             "Yanayi na lafiya da kuma kwanciyar hankali wurin nuna kawazuci, shawa\'a, da kuma saduwa wurin jima\'i tsakanin jensi biyu. Yana kunshe da yananin annashuwa ba kuma tara da fargaba ko tilastawa ba wajen saduwa ta jima\'i. Domin samar da irin wannan yanayi na Lafiya Jima\'I, dole ne a samar a kuma tsare yancin da kowa yake da shi."),
         "srhrDefinition1SubList1Item1": MessageLookupByLibrary.simpleMessage(
@@ -157,6 +158,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "update": MessageLookupByLibrary.simpleMessage("Sabunta"),
         "user": MessageLookupByLibrary.simpleMessage("Mai Aiki"),
         "watch": MessageLookupByLibrary.simpleMessage("Kallo"),
-        "yourself": MessageLookupByLibrary.simpleMessage("kai na")
+        "yourself": MessageLookupByLibrary.simpleMessage("Ma kai na")
       };
 }

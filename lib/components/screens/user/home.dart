@@ -1,15 +1,19 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:smartrr/components/screens/user/impact_of_smartrr.dart';
+import 'package:smartrr/components/screens/user/select_service_page.dart';
 import 'package:smartrr/components/widgets/chatbot.dart';
 import 'package:smartrr/components/widgets/language_picker.dart';
 import 'package:smartrr/components/widgets/speech_to_text.dart';
 import 'package:smartrr/provider/language_provider.dart';
+import 'package:smartrr/services/theme_provider.dart';
 import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/utils/utils.dart';
 import 'consent_form_page.dart';
-import '../../widgets/custom_drawer.dart';
 import 'package:smartrr/generated/l10n.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -18,199 +22,272 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final mScaffoldState = GlobalKey<ScaffoldState>();
+  final User _currentUser = FirebaseAuth.instance.currentUser!;
 
   @override
   Widget build(BuildContext context) {
     final _language = S.of(context);
 
     return Consumer<LanguageNotifier>(
-        builder: (context, _, child) => Scaffold(
-              key: mScaffoldState,
-              drawer: CustomDrawer(),
-              appBar: AppBar(
-                title: Text("Smart RR"),
-                actions: [SmartSpeechToText(), LanguagePicker()],
+      builder: (context, _, child) => Scaffold(
+        key: mScaffoldState,
+        appBar: AppBar(
+          title: Text(
+            "Smart RR",
+            style: TextStyle().copyWith(
+              color: primaryColor,
+              fontWeight: FontWeight.w900,
+              fontSize: 20,
+            ),
+          ),
+          centerTitle: false,
+          actions: [SmartSpeechToText(), LanguagePicker()],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20.0,
+            vertical: 20,
+          ),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Welcome ${_currentUser.displayName?.split(' ')[0]}.",
+                    style: TextStyle().copyWith(
+                      color: darkGrey,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 20,
+                    ),
+                  ),
+                ],
               ),
-              body: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 40.0, vertical: 50.0),
-                  child: Column(
-                    children: [
-                      Expanded(
-                          child: GestureDetector(
-                        onTap: () => _bottomSheet(context: context),
-                        child: Container(
-                            margin: EdgeInsets.only(bottom: 5),
-                            decoration: BoxDecoration(
-                                color: primaryColor,
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10))),
-                            child: Center(
-                                child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.input),
-                                Text(
-                                  _language.reportACase,
-                                  style: TextStyle().copyWith(
-                                      color: Colors.white, fontSize: 18),
-                                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "How may we help you today?",
+                    style: TextStyle().copyWith(
+                      color: darkGrey,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 30),
+              Container(
+                height: 220,
+                margin: EdgeInsets.only(bottom: 12),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: GestureDetector(
+                    onTap: () => _showDialog(context: context),
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        Image.asset(
+                          "assets/images/report_case.png",
+                          fit: BoxFit.cover,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                              colors: [
+                                Colors.black,
+                                Color(0xFF1E1E1E).withOpacity(.36)
                               ],
-                            ))),
-                      )),
-                      GestureDetector(
-                        onTap: () => Navigator.pushNamed(context, "/shop"),
-                        child: Container(
-                          padding: EdgeInsets.all(20.0),
-                          margin: EdgeInsets.only(bottom: 5.0),
-                          color: primaryColor,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                _language.shop,
+                            ),
+                          ),
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(18.0),
+                              child: Text(
+                                _language.reportACase,
                                 style: TextStyle().copyWith(
                                   color: Colors.white,
                                   fontSize: 18,
                                 ),
                               ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                height: 220,
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: Container(
+                      height: 220,
+                      margin: EdgeInsets.only(right: 6),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: GestureDetector(
+                          onTap: () => Navigator.of(context).pushNamed("/srhr"),
+                          child: Stack(
+                            fit: StackFit.expand,
+                            children: [
+                              Image.asset(
+                                "assets/images/period_tracker_image.png",
+                                fit: BoxFit.cover,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(6.0),
+                                  gradient: LinearGradient(
+                                    begin: Alignment.bottomCenter,
+                                    end: Alignment.topCenter,
+                                    colors: [
+                                      Colors.black,
+                                      Color(0xFF1E1E1E).withOpacity(.36)
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(18.0),
+                                    child: Text(
+                                      _language.allAboutSRHR,
+                                      style: TextStyle().copyWith(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
                             ],
                           ),
                         ),
                       ),
-                      Expanded(
+                    )),
+                    Expanded(
                         child: Container(
-                          child: Row(
+                      height: 220,
+                      margin: EdgeInsets.only(left: 6),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: GestureDetector(
+                          onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) => ImpactOfSmartRR())),
+                          child: Stack(
+                            fit: StackFit.expand,
                             children: [
-                              Expanded(
-                                  child: GestureDetector(
-                                onTap: () =>
-                                    Navigator.of(context).pushNamed("/srhr"),
-                                child: Container(
-                                    padding: EdgeInsets.all(5.0),
-                                    margin: EdgeInsets.only(right: 2.5),
-                                    decoration: BoxDecoration(
-                                        color: primaryColor,
-                                        borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(10),
-                                        )),
-                                    child: Center(
-                                        child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(Icons.info_outline_rounded),
-                                        Text(
-                                          _language.allAboutSRHR,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle().copyWith(
-                                            color: Colors.white,
-                                            fontSize: 18,
-                                          ),
-                                        ),
-                                      ],
-                                    ))),
-                              )),
-                              Expanded(
-                                  child: GestureDetector(
-                                onTap: () => Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            ImpactOfSmartRR())),
-                                child: Container(
-                                    padding: EdgeInsets.all(5.0),
-                                    margin: EdgeInsets.only(left: 2.5),
-                                    decoration: BoxDecoration(
-                                        color: primaryColor,
-                                        borderRadius: BorderRadius.only(
-                                            bottomRight: Radius.circular(10))),
-                                    child: Center(
-                                        child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(Icons.public),
-                                        Text(
-                                          _language.impactOfSmartRR,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle().copyWith(
-                                              color: Colors.white,
-                                              fontSize: 18),
-                                        ),
-                                      ],
-                                    ))),
-                              )),
+                              Image.asset(
+                                "assets/images/report_case.png",
+                                fit: BoxFit.cover,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.bottomCenter,
+                                    end: Alignment.topCenter,
+                                    colors: [
+                                      Colors.black,
+                                      Color(0xFF1E1E1E).withOpacity(.36)
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(18.0),
+                                    child: Text(
+                                      _language.impactOfSmartRR,
+                                      style: TextStyle().copyWith(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
                             ],
                           ),
                         ),
-                      )
-                    ],
-                  )),
-              floatingActionButton: FloatingActionButton(
-                  backgroundColor: primaryColor,
-                  foregroundColor: Colors.white,
-                  child: Icon(Icons.chat),
-                  onPressed: () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => ChatBot()))),
-            ));
-  }
-
-  _bottomSheet({required BuildContext context}) {
-    showModalBottomSheet(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(20),
+                      ),
+                    )),
+                  ],
+                ),
+              )
+            ],
           ),
         ),
-        clipBehavior: Clip.antiAliasWithSaveLayer,
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: secondaryColor,
+          foregroundColor: Colors.white,
+          child: Text("SOS"),
+          onPressed: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => ChatBot(),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  _showDialog({required BuildContext context}) {
+    showDialog(
         context: context,
         builder: (context) {
-          return Container(
-            height: 250,
-            padding: EdgeInsets.all(10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      S.current.reportFor,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+          return Dialog(
+            child: Container(
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: secondaryColor,
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  InkWell(
+                    child: Text(
+                      S.current.yourself,
+                      style: TextStyle().copyWith(color: materialWhite),
                     ),
-                  ],
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        child: Text(S.current.yourself),
-                        onPressed: () => _onReportTap(userType: true),
-                      ),
+                    onTap: () => _onReportTap(userType: true),
+                  ),
+                  Divider(),
+                  InkWell(
+                    child: Text(
+                      S.current.someoneElse,
+                      style: TextStyle().copyWith(color: materialWhite),
                     ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        child: Text(S.current.someoneElse),
-                        onPressed: () => _onReportTap(userType: false),
-                      ),
-                    ),
-                  ],
-                )
-              ],
+                    onTap: () => _onReportTap(userType: false),
+                  )
+                ],
+              ),
             ),
           );
         });
@@ -219,12 +296,25 @@ class _HomeState extends State<Home> {
   _onReportTap({required bool userType}) async {
     Navigator.pop(context);
     await setUserTypePref(userType: userType).then((_) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (BuildContext context) => ConsentFormPage(),
-        ),
-      );
+      _showConsent();
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (BuildContext context) => ConsentFormPage(),
+      //   ),
+      // );
     });
+  }
+
+  _showConsent() {
+    bool acceptedValue = false;
+
+    showModalBottomSheet(
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      useSafeArea: true,
+      context: context,
+      builder: (context) => ConsentFormPage(),
+    );
   }
 }
