@@ -1,15 +1,23 @@
 import "package:flutter/material.dart";
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import 'package:smartrr/components/screens/user/delivery_details.dart';
-import 'package:smartrr/components/screens/user/product_details.dart';
+import 'package:smartrr/components/screens/shop/product_details.dart';
 import 'package:smartrr/models/product.dart';
+import 'package:smartrr/services/shop_service.dart';
 import 'package:smartrr/services/theme_provider.dart';
 import 'package:smartrr/utils/colors.dart';
 
 class LandscapeProductCard extends StatelessWidget {
   final Product product;
-  const LandscapeProductCard({super.key, required this.product});
+  LandscapeProductCard({super.key, required this.product});
+
+  final _cartBox = Hive.box<Product>("cart");
+
+  ButtonStyle textButtonStyle = ButtonStyle().copyWith(
+    textStyle: MaterialStatePropertyAll(TextStyle().copyWith(fontSize: 12)),
+    iconSize: MaterialStatePropertyAll(12),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +63,7 @@ class LandscapeProductCard extends StatelessWidget {
                         Text(
                           product.name,
                           style: TextStyle().copyWith(
-                            fontWeight: FontWeight.w500,
+                            color: Color(0xFF222227),
                             height: 1.2,
                             fontSize: 18,
                           ),
@@ -63,7 +71,7 @@ class LandscapeProductCard extends StatelessWidget {
                         Text(
                           "N${product.price}",
                           style: TextStyle().copyWith(
-                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF595959),
                             fontSize: 16,
                             height: 2,
                           ),
@@ -72,31 +80,28 @@ class LandscapeProductCard extends StatelessWidget {
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Expanded(
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 5.0),
-                                  child: ElevatedButton.icon(
-                                    icon: Icon(Icons.shopping_cart_outlined),
-                                    onPressed: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => DeliveryDetails(
-                                            product: Product(
-                                          id: product.id,
-                                          name: product.name,
-                                          price: product.price,
-                                          description: product.description,
-                                          images: product.images,
-                                          items: product.items,
-                                          type: product.type,
-                                        )),
-                                      ),
-                                    ),
-                                    label: Text("Buy"),
-                                  ),
-                                ),
-                              )
+                              ValueListenableBuilder(
+                                  valueListenable: _cartBox.listenable(),
+                                  builder: (context, cart, __) {
+                                    if (!ShopService.isInCart(product.id)) {
+                                      return TextButton.icon(
+                                        onPressed: () => ShopService.addtoCart(
+                                            {product.id: product}),
+                                        icon: Icon(Icons.add),
+                                        label: Text("Add"),
+                                        style: textButtonStyle,
+                                      );
+                                    } else {
+                                      return TextButton.icon(
+                                        onPressed: () =>
+                                            ShopService.removeFromCart(
+                                                product.id),
+                                        icon: Icon(Icons.remove),
+                                        label: Text("Remove"),
+                                        style: textButtonStyle,
+                                      );
+                                    }
+                                  }),
                             ],
                           ),
                         ),

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:provider/provider.dart';
-import 'package:smartrr/components/screens/user/orders.dart';
+import 'package:smartrr/components/screens/shop/orders.dart';
 import 'package:smartrr/env/env.dart';
 import 'package:smartrr/models/product.dart';
 import 'package:smartrr/services/theme_provider.dart';

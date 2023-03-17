@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartrr/components/screens/user/impact_of_smartrr.dart';
@@ -71,7 +69,7 @@ class _HomeState extends State<Home> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                _language.buyPoducts,
+                                _language.shop,
                                 style: TextStyle().copyWith(
                                   color: Colors.white,
                                   fontSize: 18,

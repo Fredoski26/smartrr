@@ -54,3 +54,4 @@ config/
 *.jks
 *.env
 env.g.dart
+*.g.dart

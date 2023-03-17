@@ -3,21 +3,25 @@ import 'package:google_fonts/google_fonts.dart';
 import '../utils/colors.dart';
 
 final ThemeData appTheme = ThemeData(
+  useMaterial3: true,
   textTheme: GoogleFonts.poppinsTextTheme()
-      .copyWith(bodyText1: TextStyle().copyWith(fontSize: 16)),
-  primarySwatch: Colors.orange,
+      .copyWith(bodyLarge: TextStyle().copyWith(fontSize: 16)),
+  primarySwatch: Colors.pink,
   primaryColor: primaryColor,
-  iconTheme: IconThemeData().copyWith(color: Colors.white),
+  iconTheme: IconThemeData().copyWith(color: darkGrey),
   appBarTheme: AppBarTheme(
-    backgroundColor: primaryColor,
+    backgroundColor: materialWhite,
     elevation: 0,
     centerTitle: true,
-    titleTextStyle: TextStyle().copyWith(color: Colors.white, fontSize: 20),
-    iconTheme: IconThemeData().copyWith(color: Colors.white),
-    toolbarTextStyle: TextStyle().copyWith(color: Colors.white),
+    titleTextStyle: TextStyle().copyWith(fontSize: 20),
+    iconTheme: IconThemeData().copyWith(color: darkGrey),
+    toolbarTextStyle: TextStyle().copyWith(color: darkGrey),
   ),
   textButtonTheme: TextButtonThemeData(
     style: ButtonStyle(
+      textStyle:
+          MaterialStateProperty.all(TextStyle().copyWith(fontSize: 16.0)),
+      iconSize: MaterialStateProperty.all(16),
       shape: MaterialStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(33))),
       foregroundColor: MaterialStateProperty.all(Colors.white),
@@ -38,18 +42,22 @@ final ThemeData appTheme = ThemeData(
   ),
   outlinedButtonTheme: OutlinedButtonThemeData(
     style: ButtonStyle(
-      padding: MaterialStateProperty.all(
-          EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0)),
-      side: MaterialStateProperty.all(
-          BorderSide(width: 1.0, color: primaryColor)),
-      shape: MaterialStateProperty.all(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(33))),
-    ),
+        textStyle:
+            MaterialStateProperty.all(TextStyle().copyWith(fontSize: 12.0)),
+        iconSize: MaterialStateProperty.all(12),
+        padding: MaterialStateProperty.all(
+            EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0)),
+        side: MaterialStateProperty.all(
+            BorderSide(width: 1.0, color: primaryColor)),
+        shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(33))),
+        foregroundColor: MaterialStateProperty.all(primaryColor)),
   ),
   tabBarTheme: TabBarTheme().copyWith(),
 );
 
 final ThemeData darkTheme = ThemeData(
+  useMaterial3: true,
   primarySwatch: Colors.orange,
   primaryColor: primaryColor,
   canvasColor: darkGrey,
