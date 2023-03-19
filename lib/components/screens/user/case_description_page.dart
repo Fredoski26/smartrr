@@ -91,7 +91,11 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
 
     return Consumer<LanguageNotifier>(
         builder: (context, langNotifier, child) => Scaffold(
-              appBar: AppBar(title: Text(_language.selectCaseDescription)),
+              appBar: AppBar(
+                  title: Text(
+                _language.selectCaseDescription,
+                style: TextStyle(color: darkGrey),
+              )),
               body: Container(
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
@@ -99,54 +103,57 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
                 child: _isLoading
                     ? CircularProgress()
                     : _userType
-                        ? Column(mainAxisSize: MainAxisSize.min, children: [
-                            Text(
-                              '${widget.org.name}',
-                              textAlign: TextAlign.center,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Expanded(
-                              child: ListView.builder(
-                                itemBuilder: (context, i) {
-                                  return ListTile(
-                                    contentPadding: EdgeInsets.zero,
-                                    onTap: () {
-                                      setState(() {
-                                        selectedDescription = items[i];
-                                      });
-                                    },
-                                    leading: Radio(
-                                        value: items[i],
-                                        groupValue: selectedDescription,
-                                        onChanged: (String? val) => {
-                                              setState(() {
-                                                selectedDescription = val!;
-                                              })
-                                            }),
-                                    title: Text(items[i]),
-                                  );
-                                },
-                                itemCount: items.length,
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                    child: TextButton(
-                                  onPressed: () =>
-                                      _saveCase(lang: langNotifier.locale),
-                                  child: Text(
-                                    _language.submitReport,
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                                Text(
+                                  'Organization: ${widget.org.name}',
+                                  textAlign: TextAlign.start,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 18,
                                   ),
-                                ))
-                              ],
-                            )
-                          ])
+                                ),
+                                SizedBox(height: 20),
+                                Expanded(
+                                  child: ListView.builder(
+                                    itemBuilder: (context, i) {
+                                      return ListTile(
+                                        contentPadding: EdgeInsets.zero,
+                                        onTap: () {
+                                          setState(() {
+                                            selectedDescription = items[i];
+                                          });
+                                        },
+                                        leading: Radio(
+                                            value: items[i],
+                                            groupValue: selectedDescription,
+                                            onChanged: (String? val) => {
+                                                  setState(() {
+                                                    selectedDescription = val!;
+                                                  })
+                                                }),
+                                        title: Text(items[i]),
+                                      );
+                                    },
+                                    itemCount: items.length,
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                        child: TextButton(
+                                      onPressed: () =>
+                                          _saveCase(lang: langNotifier.locale),
+                                      child: Text(
+                                        _language.submitReport,
+                                      ),
+                                    ))
+                                  ],
+                                )
+                              ])
                         : SingleChildScrollView(
                             child: Form(
                               key: _formKey,

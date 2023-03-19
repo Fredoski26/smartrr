@@ -59,8 +59,6 @@ class _SelectSubServicePageState extends State<SelectSubServicePage> {
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  MyStepper(activeIndex: 1),
-                  SizedBox(height: 31),
                   Expanded(
                     child: ListView.builder(
                       itemCount: subServiceList.length,

@@ -92,7 +92,12 @@ class _SelectOrgPageState extends State<SelectOrgPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(S.of(context).selectServiceProvider)),
+      appBar: AppBar(
+        title: Text(
+          S.of(context).selectServiceProvider,
+          style: TextStyle().copyWith(color: darkGrey),
+        ),
+      ),
       body: Container(
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 4),
@@ -103,18 +108,16 @@ class _SelectOrgPageState extends State<SelectOrgPage> {
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  MyStepper(activeIndex: 4),
-                  SizedBox(height: 31),
                   Text(
-                    "${widget.selectedLocation.title}, ${widget.selectedState.title}",
+                    "Location: ${widget.selectedLocation.title}, ${widget.selectedState.title}",
                     textAlign: TextAlign.center,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
                     ),
                   ),
+                  SizedBox(height: 20),
                   isLoading
                       ? Center(
                           child: CircularProgress(),

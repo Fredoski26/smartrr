@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:smartrr/components/screens/shop/shop.dart';
 import 'package:smartrr/components/screens/user/home.dart';
 import 'package:smartrr/components/screens/user/settings.dart';
-import 'package:smartrr/components/widgets/chatbot.dart';
+import 'package:smartrr/components/screens/chatbot/chatbot.dart';
 import 'package:smartrr/theme/svg_icons.dart';
+import 'package:smartrr/utils/colors.dart';
 
 class MainWrapper extends StatefulWidget {
   const MainWrapper({super.key});
@@ -28,6 +29,7 @@ class _MainWrapperState extends State<MainWrapper> {
         type: BottomNavigationBarType.fixed,
         showSelectedLabels: false,
         showUnselectedLabels: false,
+        backgroundColor: materialWhite,
         items: [
           BottomNavigationBarItem(
               icon:

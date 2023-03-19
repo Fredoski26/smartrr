@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:dialog_flowtter/dialog_flowtter.dart';
 import "package:hive_flutter/hive_flutter.dart";
@@ -19,7 +20,7 @@ class ChatBot extends StatefulWidget {
 
 class _ChatBotState extends State<ChatBot> {
   late DialogFlowtter dialogFlowtter;
-  late TextEditingController _controller;
+  late TextEditingController _messageController;
   late ScrollController _scrollController;
   late Box messageBox;
 
@@ -38,13 +39,17 @@ class _ChatBotState extends State<ChatBot> {
 
     return Scaffold(
         resizeToAvoidBottomInset: true,
+        backgroundColor: Color(0xFFEEEEEE),
         appBar: AppBar(
-          title: Text("Smart RR Bot"),
+          title: Text("SmartRR Bot"),
+          centerTitle: true,
           actions: [
             PopupMenuButton(
               itemBuilder: (context) => popupMenuItems,
             ),
           ],
+          backgroundColor: primaryColor,
+          iconTheme: IconThemeData().copyWith(color: materialWhite),
         ),
         body: Container(
           child: Column(
@@ -72,26 +77,29 @@ class _ChatBotState extends State<ChatBot> {
                   horizontal: 10,
                   vertical: 5,
                 ),
-                color: Color(0xFFFFF2DF),
+                color: materialWhite,
                 child: Row(
                   children: [
                     Expanded(
                       child: TextField(
                         style: TextStyle(color: darkGrey),
-                        controller: _controller,
+                        controller: _messageController,
                         onSubmitted: (val) {
                           sendMessage(val);
-                          _controller.clear();
+                          _messageController.clear();
                         },
-                        // style: TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                          hintText: "Type message",
+                          border: InputBorder.none,
+                        ),
                       ),
                     ),
                     IconButton(
                       color: primaryColor,
                       icon: Icon(Icons.send),
                       onPressed: () {
-                        sendMessage(_controller.text);
-                        _controller.clear();
+                        sendMessage(_messageController.text);
+                        _messageController.clear();
                       },
                     ),
                   ],
@@ -147,7 +155,11 @@ class _ChatBotState extends State<ChatBot> {
       }
     }
     // always scroll to buttom
-    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: Duration(milliseconds: 200),
+      curve: Curves.linear,
+    );
   }
 
   @override
@@ -155,22 +167,24 @@ class _ChatBotState extends State<ChatBot> {
     super.initState();
     messageBox = Hive.box("messages");
     _scrollController = ScrollController();
-    _controller = TextEditingController();
+    _messageController = TextEditingController();
     DialogFlowtter.fromFile(
-            path: "assets/credentials.json", projectId: "smartrr-d5615")
-        .then((instance) => dialogFlowtter = instance)
-        .then((_) {
+      path: "assets/credentials.json",
+      projectId: "smartrr-d5615",
+    ).then((instance) => dialogFlowtter = instance).then((_) {
       if (messageBox.isEmpty) {
         sendMessage("Hi");
       }
     });
+    // scroll to bottom
+    // _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
   }
 
   @override
   void dispose() {
     dialogFlowtter.dispose();
     _scrollController.dispose();
-    _controller.dispose();
+    _messageController.dispose();
     super.dispose();
   }
 }
@@ -192,6 +206,15 @@ class AppBody extends StatefulWidget {
 }
 
 class _AppBodyState extends State<AppBody> {
+  final ButtonStyle actionButtonStyle = ButtonStyle().copyWith(
+    backgroundColor: MaterialStatePropertyAll(
+      Color(0xFFD9D9D9),
+    ),
+    textStyle: MaterialStatePropertyAll(TextStyle().copyWith(fontSize: 12)),
+    foregroundColor: MaterialStatePropertyAll(
+      darkGrey,
+    ),
+  );
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -211,42 +234,49 @@ class _AppBodyState extends State<AppBody> {
                         Wrap(
                           spacing: 5.0,
                           children: [
-                            OutlinedButton(
-                                onPressed: () =>
-                                    widget.sendMessage("Talk to a counsellor"),
-                                child: Text("Talk to a counsellor")),
-                            OutlinedButton(
-                                onPressed: () =>
-                                    Navigator.of(context).pushNamed("/srhr"),
-                                child: Text("Read about SRHR")),
-                            OutlinedButton(
-                                onPressed: () async {
-                                  await setUserTypePref(userType: true)
-                                      .then((_) {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            ConsentFormPage(),
-                                      ),
-                                    );
-                                  });
-                                },
-                                child: Text("Report a case for yourself")),
-                            OutlinedButton(
-                                onPressed: () async {
-                                  await setUserTypePref(userType: false)
-                                      .then((_) {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            ConsentFormPage(),
-                                      ),
-                                    );
-                                  });
-                                },
-                                child: Text("Report a case for someone"))
+                            TextButton(
+                              onPressed: () =>
+                                  widget.sendMessage("Talk to a counsellor"),
+                              child: Text("Talk to a counsellor"),
+                              style: actionButtonStyle,
+                            ),
+                            TextButton(
+                              onPressed: () =>
+                                  Navigator.of(context).pushNamed("/srhr"),
+                              child: Text("Read about SRHR"),
+                              style: actionButtonStyle,
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                await setUserTypePref(userType: true).then((_) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          ConsentFormPage(),
+                                    ),
+                                  );
+                                });
+                              },
+                              child: Text("Report a case for yourself"),
+                              style: actionButtonStyle,
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                await setUserTypePref(userType: false)
+                                    .then((_) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          ConsentFormPage(),
+                                    ),
+                                  );
+                                });
+                              },
+                              child: Text("Report a case for someone"),
+                              style: actionButtonStyle,
+                            )
                           ],
                         )
                       ],
@@ -312,7 +342,13 @@ class ChatMessage extends StatelessWidget {
           ),
           padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           decoration: BoxDecoration(
-              color: lightGrey, borderRadius: BorderRadius.circular(12)),
+            color: materialWhite,
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(20),
+              bottomRight: Radius.circular(20),
+              bottomLeft: Radius.circular(20),
+            ),
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -342,7 +378,13 @@ class ChatMessage extends StatelessWidget {
               ),
               padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
               decoration: BoxDecoration(
-                  color: lightGrey, borderRadius: BorderRadius.circular(12)),
+                color: materialWhite,
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(20),
+                  bottomRight: Radius.circular(20),
+                  bottomLeft: Radius.circular(20),
+                ),
+              ),
               child: Text("${message['message']}"),
             ),
             Text(
@@ -369,8 +411,13 @@ class ChatMessage extends StatelessWidget {
                     ),
                     padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     decoration: BoxDecoration(
-                        color: primaryColor,
-                        borderRadius: BorderRadius.circular(12)),
+                      color: secondaryColor,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                        bottomLeft: Radius.circular(20),
+                      ),
+                    ),
                     child: Text(
                       "${message['message']}",
                       style: TextStyle().copyWith(color: Colors.white),

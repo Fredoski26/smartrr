@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:smartrr/components/screens/user/report_case.dart';
 import 'package:smartrr/components/widgets/language_picker.dart';
 import 'package:smartrr/components/widgets/text_to_speech.dart';
 import 'package:smartrr/provider/language_provider.dart';
@@ -82,10 +83,8 @@ class _ConsentFormPageState extends State<ConsentFormPage> {
                                         Consumer<ThemeNotifier>(
                                           builder:
                                               (context, themeNotifier, child) =>
-                                                  SelectServicePage(
+                                                  ReportCase(
                                             lang: langNotifier.locale,
-                                            isDarkTheme:
-                                                themeNotifier.darkTheme,
                                           ),
                                         )),
                               );

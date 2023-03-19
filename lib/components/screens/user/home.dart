@@ -4,7 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:smartrr/components/screens/user/impact_of_smartrr.dart';
 import 'package:smartrr/components/screens/user/select_service_page.dart';
-import 'package:smartrr/components/widgets/chatbot.dart';
+import 'package:smartrr/components/screens/chatbot/chatbot.dart';
 import 'package:smartrr/components/widgets/language_picker.dart';
 import 'package:smartrr/components/widgets/speech_to_text.dart';
 import 'package:smartrr/provider/language_provider.dart';

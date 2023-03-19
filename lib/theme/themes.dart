@@ -12,7 +12,7 @@ final ThemeData appTheme = ThemeData(
   appBarTheme: AppBarTheme(
     backgroundColor: materialWhite,
     elevation: 0,
-    centerTitle: true,
+    centerTitle: false,
     titleTextStyle: TextStyle().copyWith(fontSize: 20),
     iconTheme: IconThemeData().copyWith(color: darkGrey),
     toolbarTextStyle: TextStyle().copyWith(color: darkGrey),
