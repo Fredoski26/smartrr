@@ -83,7 +83,6 @@ class MyApp extends StatelessWidget {
         '/userSignup': (context) => SignUpPage(),
         '/orgSignup': (context) => OrgSignUpPage(),
         '/casesHistory': (context) => CasesHistoryScreen(),
-        '/userMain': (context) => Home(),
         '/orgMain': (context) => ReferOrCasesPage(),
         '/refer': (context) => ReferralPage(),
         '/forgot': (context) => ForgotPasswordScreen(),

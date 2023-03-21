@@ -72,7 +72,6 @@ class _ShopState extends State<Shop> {
         statusBarColor: materialWhite,
       ),
       child: Scaffold(
-        backgroundColor: materialWhite,
         body: GestureDetector(
           onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
           child: NestedScrollView(
@@ -81,7 +80,9 @@ class _ShopState extends State<Shop> {
               SliverAppBar(
                 floating: true,
                 snap: true,
+                pinned: true,
                 centerTitle: false,
+                surfaceTintColor: Colors.transparent,
                 title: Text(
                   "Shop",
                   style: TextStyle().copyWith(
@@ -91,60 +92,46 @@ class _ShopState extends State<Shop> {
                 ),
                 automaticallyImplyLeading: false,
                 leading: null,
-                expandedHeight: 130,
-                flexibleSpace: FlexibleSpaceBar(
-                  collapseMode: CollapseMode.pin,
-                  title: Form(
-                      child: TextField(
-                    onSubmitted: _search,
-                    controller: _searchController,
-                    decoration: InputDecoration(
-                      hintText: "Search items...",
-                      hintStyle: TextStyle().copyWith(fontSize: 14),
-                      prefixIcon: Icon(FeatherIcons.search),
-                      contentPadding: EdgeInsets.symmetric(vertical: 11.5),
-                      isDense: true,
-                      filled: true,
-                      fillColor: Color(0xFFEBEBEB),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(100),
+                // expandedHeight: 130,
+                bottom: PreferredSize(
+                  preferredSize: Size.fromHeight(kTextTabBarHeight),
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20),
+                    child: Form(
+                        child: TextField(
+                      onSubmitted: _search,
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        hintText: "Search items...",
+                        hintStyle: TextStyle().copyWith(fontSize: 14),
+                        prefixIcon: Icon(FeatherIcons.search),
+                        contentPadding: EdgeInsets.symmetric(vertical: 11.5),
+                        isDense: true,
+                        filled: true,
+                        fillColor: Color(0xFFEBEBEB),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(100),
+                          ),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(100),
+                          ),
                         ),
                       ),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(100),
-                        ),
-                      ),
-                    ),
-                  )),
-                  expandedTitleScale: 1,
-                  titlePadding: EdgeInsets.all(20.0),
+                    )),
+                  ),
                 ),
-                actions: [
-                  ShoppingCartWidget()
-                  // IconButton(
-                  //   tooltip: "Orders",
-                  //   onPressed: () => Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(builder: (context) => Orders()),
-                  //   ),
-                  //   icon: SvgPicture.asset(
-                  //     "assets/icons/carbon_delivery.svg",
-                  //     height: 30,
-                  //     width: 30,
-                  //   ),
-                  // )
-                ],
+                actions: [ShoppingCartWidget()],
               )
             ],
             body: RefreshIndicator(
               onRefresh: _handleRefresh,
               child: Container(
                 padding: EdgeInsets.all(10.0),
-                decoration: BoxDecoration(),
                 child: StreamBuilder<List<Product>>(
                     stream: _streamController.stream,
                     builder: (context, AsyncSnapshot<List<Product>> snapshot) {

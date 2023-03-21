@@ -39,7 +39,6 @@ class _ChatBotState extends State<ChatBot> {
 
     return Scaffold(
         resizeToAvoidBottomInset: true,
-        backgroundColor: Color(0xFFEEEEEE),
         appBar: AppBar(
           title: Text("SmartRR Bot"),
           centerTitle: true,
@@ -352,7 +351,10 @@ class ChatMessage extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text("Click link below to chat with a counsellor"),
+              Text(
+                "Click link below to chat with a counsellor",
+                style: TextStyle().copyWith(color: darkGrey),
+              ),
               InkWell(
                 child: Text(
                   counsellor["link"],
@@ -385,7 +387,10 @@ class ChatMessage extends StatelessWidget {
                   bottomLeft: Radius.circular(20),
                 ),
               ),
-              child: Text("${message['message']}"),
+              child: Text(
+                "${message['message']}",
+                style: TextStyle().copyWith(color: darkGrey),
+              ),
             ),
             Text(
               DateTime.fromMillisecondsSinceEpoch(message["timestamp"])

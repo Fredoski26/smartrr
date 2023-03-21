@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../utils/colors.dart';
 
-final ThemeData appTheme = ThemeData(
+final ThemeData appTheme = ThemeData.light().copyWith(
   useMaterial3: true,
+  colorScheme: ColorScheme.fromSeed(
+    seedColor: primaryColor,
+    primary: primaryColor,
+    secondary: secondaryColor,
+    tertiary: Color(0xFFEEEEEE),
+  ),
   textTheme: GoogleFonts.poppinsTextTheme()
       .copyWith(bodyLarge: TextStyle().copyWith(fontSize: 16)),
-  primarySwatch: Colors.pink,
-  primaryColor: primaryColor,
   iconTheme: IconThemeData().copyWith(color: darkGrey),
   appBarTheme: AppBarTheme(
-    backgroundColor: materialWhite,
+    // backgroundColor: materialWhite,
     elevation: 0,
     centerTitle: false,
     titleTextStyle: TextStyle().copyWith(fontSize: 20),
@@ -56,12 +60,20 @@ final ThemeData appTheme = ThemeData(
   tabBarTheme: TabBarTheme().copyWith(),
 );
 
-final ThemeData darkTheme = ThemeData(
+final ThemeData darkTheme = ThemeData.dark().copyWith(
   useMaterial3: true,
-  primarySwatch: Colors.orange,
-  primaryColor: primaryColor,
   canvasColor: darkGrey,
-  appBarTheme: appTheme.appBarTheme.copyWith(color: primaryColor, elevation: 0),
+  colorScheme: ColorScheme.fromSeed(
+    seedColor: primaryColor,
+    primary: primaryColor,
+    secondary: secondaryColor,
+    tertiary: darkGrey,
+  ),
+  appBarTheme: appTheme.appBarTheme.copyWith(
+    color: darkGrey,
+    elevation: 0,
+    iconTheme: IconThemeData().copyWith(color: faintGrey),
+  ),
   scaffoldBackgroundColor: darkGrey,
   textTheme: appTheme.textTheme
       .apply(bodyColor: Colors.white, displayColor: Colors.white),
@@ -105,6 +117,5 @@ final ThemeData darkTheme = ThemeData(
   dialogBackgroundColor: darkGrey,
   inputDecorationTheme: InputDecorationTheme()
       .copyWith(hintStyle: TextStyle().copyWith(color: lightGrey)),
-  backgroundColor: darkGrey,
   cardTheme: CardTheme().copyWith(color: darkGrey),
 );

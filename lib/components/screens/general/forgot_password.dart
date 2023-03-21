@@ -6,6 +6,8 @@ import 'package:smartrr/components/widgets/show_loading.dart';
 import 'package:smartrr/components/widgets/smart_text_field.dart';
 import 'package:smartrr/provider/language_provider.dart';
 import 'package:smartrr/generated/l10n.dart';
+import 'package:smartrr/utils/colors.dart';
+import 'package:smartrr/utils/emailValidator.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   @override
@@ -34,74 +36,117 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
     return Consumer<LanguageNotifier>(
         builder: (context, langNotifier, child) => Scaffold(
-              appBar: AppBar(title: Text(_language.forgotPassword)),
               resizeToAvoidBottomInset: false,
-              body: Container(
-                padding: EdgeInsets.symmetric(horizontal: 18),
-                height: MediaQuery.of(context).size.height,
-                width: double.infinity,
-                child: Form(
-                  key: formKey,
-                  child: Container(
-                    padding: EdgeInsets.all(32.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        SizedBox(
-                          height: kToolbarHeight,
-                        ),
-                        Text(
-                          _language.forgotPassword,
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 13),
-                        Text(
-                          _language.forgotPasswordDescription,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 40,
-                        ),
-                        smartTextField(
-                          title: 'Email',
-                          controller: _email,
-                          isForm: true,
-                          textInputType: TextInputType.emailAddress,
-                        ),
-                        SizedBox(
-                          height: 30,
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: TextButton(
-                                onPressed: submit,
-                                child: Text(_language.sendResetLink),
-                                style: ButtonStyle(
-                                  shape: MaterialStateProperty.all(
-                                      RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(33))),
-                                  foregroundColor:
-                                      MaterialStateProperty.all(Colors.white),
-                                  backgroundColor: MaterialStateProperty.all(
-                                      Color(0xFFF59405)),
-                                  padding: MaterialStateProperty.all(
-                                      EdgeInsets.all(5.0)),
+              body: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(
+                        top: 10,
+                        bottom: 30,
+                        left: 25,
+                        right: 25,
+                      ),
+                      margin: EdgeInsets.only(bottom: 63),
+                      decoration: BoxDecoration(
+                        color: inputBackground,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Form(
+                        key: formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: IconButton(
+                                onPressed: () => Navigator.pop(context),
+                                icon: Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                        width: 1,
+                                        color: red,
+                                      ),
+                                      borderRadius: BorderRadius.circular(100),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: red.withOpacity(0.1),
+                                        )
+                                      ]),
+                                  child: Icon(
+                                    Icons.close_rounded,
+                                    color: red,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Text(
+                              _language.forgotPassword,
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(bottom: 27, top: 6),
+                              child: Text(
+                                _language.forgotPasswordDescription,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                            TextFormField(
+                              controller: _email,
+                              keyboardType: TextInputType.emailAddress,
+                              validator: (email) =>
+                                  EmailValidator.isValidEmail(email!)
+                                      ? null
+                                      : "Invalid email",
+                              decoration: InputDecoration(
+                                hintText: "Email Address",
+                                hintStyle:
+                                    TextStyle().copyWith(color: faintGrey),
+                                fillColor: materialWhite,
+                                filled: true,
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 12, horizontal: 20),
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                  borderRadius: BorderRadius.circular(6),
                                 ),
                               ),
                             ),
                           ],
                         ),
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextButton(
+                            onPressed: submit,
+                            child: Text(_language.sendResetLink),
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(33))),
+                              foregroundColor:
+                                  MaterialStateProperty.all(Colors.white),
+                              backgroundColor:
+                                  MaterialStateProperty.all(primaryColor),
+                              padding: MaterialStateProperty.all(
+                                  EdgeInsets.all(5.0)),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
-                  ),
+                  ],
                 ),
               ),
             ));

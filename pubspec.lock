@@ -1046,14 +1046,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.2"
-  ripple_animation:
-    dependency: "direct main"
-    description:
-      name: ripple_animation
-      sha256: "8d9e5e0a20452ab32a0bc26321b245d628b984250d6be7c54f6216d6ba64476e"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.1+2"
   scroll_to_index:
     dependency: transitive
     description:
@@ -1142,6 +1134,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.0"
+  simple_ripple_animation:
+    dependency: "direct main"
+    description:
+      name: simple_ripple_animation
+      sha256: e194718e95e77be86a8a6421d236ef4dc5ded1113c26e938e3e7f1a722b922a4
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.7"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -1540,5 +1540,5 @@ packages:
     source: hosted
     version: "8.1.2"
 sdks:
-  dart: ">=2.18.0 <3.0.0"
+  dart: ">=2.19.0 <3.0.0"
   flutter: ">=3.7.0"

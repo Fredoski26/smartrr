@@ -77,6 +77,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "new_": MessageLookupByLibrary.simpleMessage("sabo"),
         "organization": MessageLookupByLibrary.simpleMessage("Kungiya"),
         "password": MessageLookupByLibrary.simpleMessage("Mabudi"),
+        "periodTracker":
+            MessageLookupByLibrary.simpleMessage("period Tracker & Kalanda"),
         "phoneNumber": MessageLookupByLibrary.simpleMessage("Lamba Waya"),
         "physicalAbuse":
             MessageLookupByLibrary.simpleMessage("Cin zarafi na jiki"),
@@ -90,6 +92,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "readMore": MessageLookupByLibrary.simpleMessage("Chigaba da karaku"),
         "reportACase": MessageLookupByLibrary.simpleMessage("Shigar da Kara"),
         "reportFor": MessageLookupByLibrary.simpleMessage("Shigar da kara ma"),
+        "requestOTP": MessageLookupByLibrary.simpleMessage("Nemi OTP"),
         "resetHere": MessageLookupByLibrary.simpleMessage("Sake Mabudi"),
         "resetPassword": MessageLookupByLibrary.simpleMessage("Canja Mabudi"),
         "selectCaseDescription":
@@ -114,7 +117,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sexualReproductiveKits":
             MessageLookupByLibrary.simpleMessage("Kayan Haihuwar Jima\'i"),
         "shop": MessageLookupByLibrary.simpleMessage("Shago"),
-        "signUp": MessageLookupByLibrary.simpleMessage("  Yi Rejista"),
+        "signUp": MessageLookupByLibrary.simpleMessage("Yi Rejista"),
         "someoneElse": MessageLookupByLibrary.simpleMessage("Ma Wani"),
         "srhrDefinition1Body": MessageLookupByLibrary.simpleMessage(
             "Yanayi na lafiya da kuma kwanciyar hankali wurin nuna kawazuci, shawa\'a, da kuma saduwa wurin jima\'i tsakanin jensi biyu. Yana kunshe da yananin annashuwa ba kuma tara da fargaba ko tilastawa ba wajen saduwa ta jima\'i. Domin samar da irin wannan yanayi na Lafiya Jima\'I, dole ne a samar a kuma tsare yancin da kowa yake da shi."),

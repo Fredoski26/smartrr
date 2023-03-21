@@ -3,12 +3,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
+import 'package:smartrr/components/screens/main_wrapper.dart';
 import 'package:smartrr/components/widgets/circular_progress.dart';
+import 'package:smartrr/components/widgets/language_picker.dart';
 import 'package:smartrr/components/widgets/show_action.dart';
 import 'package:smartrr/components/widgets/show_loading.dart';
+import 'package:smartrr/components/widgets/smart_input.dart';
 import 'package:smartrr/components/widgets/smart_text_field.dart';
 import 'package:smartrr/provider/language_provider.dart';
 import 'package:smartrr/utils/colors.dart';
+import 'package:smartrr/utils/emailValidator.dart';
 import 'package:smartrr/utils/utils.dart';
 import '../../widgets/auth_container.dart';
 import 'package:smartrr/generated/l10n.dart';
@@ -55,103 +59,119 @@ class _LoginPageState extends State<LoginPage> {
     final _language = S.of(context);
 
     return Consumer<LanguageNotifier>(
-        builder: (context, LanguageNotifier notifier, child) => AuthContainer(
-                child: Form(
-              key: _formKey,
-              child: isLoading
-                  ? Center(
-                      child: CircularProgress(),
-                    )
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                          SizedBox(
-                            height: kToolbarHeight,
-                          ),
-                          Text(
-                            "${_language.logIn} smart rr".toUpperCase(),
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+        builder: (context, LanguageNotifier notifier, child) => Scaffold(
+              appBar: AppBar(actions: [LanguagePicker()]),
+              body: Form(
+                key: _formKey,
+                child: isLoading
+                    ? Center(
+                        child: CircularProgress(),
+                      )
+                    : ListView(
+                        padding: EdgeInsets.symmetric(horizontal: 30),
+                        children: <Widget>[
+                            SizedBox(
+                              height: 74,
                             ),
-                          ),
-                          SizedBox(
-                            height: 40,
-                          ),
-                          ValueListenableBuilder(
-                              valueListenable: _signInWithPhone,
-                              builder: (context, _, __) {
-                                if (_signInWithPhone.value)
-                                  return _phoneSignInWidgets();
-                                return _emailSignInWidgets();
-                              }),
-                          SizedBox(height: 38.0),
-                          GestureDetector(
-                            onTap: () => _bottomSheet(
-                                context: context,
-                                isDarkTheme: widget.isDarkTheme),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  "${_language.dontHaveAccount} ",
-                                  style: TextStyle(
-                                    fontSize: 12.0,
-                                  ),
+                            Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                "${_language.logIn}",
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                                Text(
-                                  _language.signUp,
-                                  style: TextStyle(
-                                    color: Color(0xFFF59405),
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 21),
-                          GestureDetector(
-                            onTap: () =>
-                                Navigator.pushNamed(context, '/forgot'),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "${_language.forgotPassword} ",
-                                  style: TextStyle(
-                                    fontSize: 12.0,
-                                  ),
-                                ),
-                                Text(S.of(context).resetHere,
+                            SizedBox(
+                              height: 40,
+                            ),
+                            ValueListenableBuilder(
+                                valueListenable: _signInWithPhone,
+                                builder: (context, _, __) {
+                                  if (_signInWithPhone.value)
+                                    return _phoneSignInWidgets();
+                                  return _emailSignInWidgets();
+                                }),
+                            SizedBox(height: 38.0),
+                            GestureDetector(
+                              onTap: () => _bottomSheet(
+                                  context: context,
+                                  isDarkTheme: widget.isDarkTheme),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    "${_language.dontHaveAccount} ",
                                     style: TextStyle(
-                                      color: Color(0xFFF59405),
+                                      fontSize: 12.0,
+                                    ),
+                                  ),
+                                  Text(
+                                    _language.signUp,
+                                    style: TextStyle(
+                                      color: primaryColor,
                                       fontWeight: FontWeight.w600,
-                                    ))
-                              ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 20),
-                        ]),
-            )));
+                            SizedBox(height: 20),
+                          ]),
+              ),
+            ));
   }
 
   Widget _emailSignInWidgets() {
     return Column(
       children: [
-        smartTextField(
-          title: 'Email',
-          controller: emailController,
-          isForm: true,
-          textInputType: TextInputType.emailAddress,
+        Align(
+          alignment: Alignment.centerRight,
+          child: InkWell(
+            child: Text(
+              "Use phone number instead",
+              style: TextStyle().copyWith(
+                color: primaryColor,
+                decoration: TextDecoration.underline,
+              ),
+            ),
+            onTap: _toggleSignInMode,
+          ),
         ),
-        smartTextField(
-            title: S.current.password,
-            controller: passwordController,
-            obscure: true,
-            isForm: true,
-            suffixIcon: Icon(Icons.e_mobiledata)),
+        SmartInput(
+          controller: emailController,
+          label: "Email",
+          keyboardType: TextInputType.emailAddress,
+          isRequired: true,
+          validator: (email) {
+            if (!EmailValidator.isValidEmail(email)) {
+              return "Invalid email";
+            }
+            return null;
+          },
+        ),
+        SmartInput(
+          controller: passwordController,
+          label: S.current.password,
+          obscureText: true,
+          isRequired: true,
+        ),
+        Align(
+          alignment: Alignment.centerRight,
+          child: GestureDetector(
+            onTap: () => Navigator.pushNamed(context, '/forgot'),
+            child: Text(
+              "${S.current.forgotPassword} ",
+              style: TextStyle(
+                fontSize: 12.0,
+                color: primaryColor,
+                decoration: TextDecoration.underline,
+              ),
+            ),
+          ),
+        ),
         SizedBox(
           height: 5,
         ),
@@ -218,13 +238,6 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ],
         ),
-        InkWell(
-          child: Text(
-            "Sign in with phone",
-            style: TextStyle().copyWith(color: primaryColor),
-          ),
-          onTap: _toggleSignInMode,
-        ),
       ],
     );
   }
@@ -232,13 +245,30 @@ class _LoginPageState extends State<LoginPage> {
   Widget _phoneSignInWidgets() {
     return Column(
       children: [
+        Align(
+          alignment: Alignment.centerRight,
+          child: InkWell(
+            child: Text(
+              "Use email instead",
+              style: TextStyle().copyWith(
+                color: primaryColor,
+                decoration: TextDecoration.underline,
+              ),
+            ),
+            onTap: _toggleSignInMode,
+          ),
+        ),
+        SizedBox(height: 14),
+        Align(alignment: Alignment.centerLeft, child: Text("Mobile Number")),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 0),
-          margin: EdgeInsets.only(bottom: 15.0),
+          padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 6),
+          margin: EdgeInsets.only(bottom: 15.0, top: 6),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(50.0)),
-              border: Border.all(width: 1, color: lightGrey)),
+            color: inputBackground,
+            borderRadius: BorderRadius.all(Radius.circular(6.0)),
+          ),
           child: InternationalPhoneNumberInput(
+            textStyle: TextStyle().copyWith(color: darkGrey),
             onInputChanged: (PhoneNumber val) {
               number = val;
             },
@@ -251,6 +281,7 @@ class _LoginPageState extends State<LoginPage> {
             inputBorder: InputBorder.none,
             selectorButtonOnErrorPadding: 0,
             spaceBetweenSelectorAndTextField: 0,
+            hintText: "",
           ),
         ),
         Row(
@@ -258,17 +289,10 @@ class _LoginPageState extends State<LoginPage> {
             Expanded(
               child: TextButton(
                 onPressed: _loginWithPhone,
-                child: Text(S.current.logIn),
+                child: Text(S.current.requestOTP),
               ),
             ),
           ],
-        ),
-        InkWell(
-          child: Text(
-            "Sign in with email",
-            style: TextStyle().copyWith(color: primaryColor),
-          ),
-          onTap: _toggleSignInMode,
         ),
       ],
     );
@@ -588,8 +612,12 @@ class _LoginPageState extends State<LoginPage> {
     await setUserIdPref(
         userId: userCredential.user!.uid, userDocId: users.docs[0].id);
 
-    Navigator.pushNamedAndRemoveUntil(
-        context, '/userMain', ModalRoute.withName('Dashboard'));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MainWrapper(),
+      ),
+    );
   }
 
   Future<bool> _userExists(String phoneNumber) async {
@@ -619,9 +647,14 @@ class _LoginPageState extends State<LoginPage> {
         (UserCredential result) {
           setState(() => isLoading = false);
           if (!_isLoginError) {
-            setUserIdPref(userId: userId, userDocId: userDocId).then((_) =>
-                Navigator.pushNamedAndRemoveUntil(
-                    context, '/userMain', ModalRoute.withName('Dashboard')));
+            setUserIdPref(userId: userId, userDocId: userDocId).then(
+              (_) => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MainWrapper(),
+                ),
+              ),
+            );
           }
         },
       );
