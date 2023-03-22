@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_tts/flutter_tts.dart';
 import 'dart:io' show Platform;
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:smartrr/utils/colors.dart';
 
 enum TtsState { playing, stopped, paused, continued }
 
@@ -168,8 +169,10 @@ class _MyTtsState extends State<MyTts> {
             margin: EdgeInsets.symmetric(horizontal: 10.0),
             child: GestureDetector(
               onTap: _speak,
-              child: SvgPicture.asset("assets/icons/tts_icon.svg",
-                  semanticsLabel: "Read aloud"),
+              child: SvgPicture.asset(
+                "assets/icons/tts_icon.svg",
+                semanticsLabel: "Read aloud",
+              ),
             ),
           )
         : IconButton(onPressed: _stop, icon: Icon(Icons.stop_circle_rounded));

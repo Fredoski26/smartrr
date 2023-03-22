@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../utils/colors.dart';
 
-final ThemeData appTheme = ThemeData.light().copyWith(
+final ThemeData appTheme = ThemeData(
   useMaterial3: true,
   colorScheme: ColorScheme.fromSeed(
     seedColor: primaryColor,
@@ -12,7 +12,7 @@ final ThemeData appTheme = ThemeData.light().copyWith(
   ),
   textTheme: GoogleFonts.poppinsTextTheme()
       .copyWith(bodyLarge: TextStyle().copyWith(fontSize: 16)),
-  iconTheme: IconThemeData().copyWith(color: darkGrey),
+  iconTheme: IconThemeData().copyWith(color: lightGrey),
   appBarTheme: AppBarTheme(
     // backgroundColor: materialWhite,
     elevation: 0,
@@ -60,7 +60,7 @@ final ThemeData appTheme = ThemeData.light().copyWith(
   tabBarTheme: TabBarTheme().copyWith(),
 );
 
-final ThemeData darkTheme = ThemeData.dark().copyWith(
+final ThemeData darkTheme = ThemeData(
   useMaterial3: true,
   canvasColor: darkGrey,
   colorScheme: ColorScheme.fromSeed(
