@@ -34,72 +34,72 @@ class _ShoppingCartState extends State<ShoppingCart> {
       ),
       body: ValueListenableBuilder(
         valueListenable: _cartBox.listenable(),
-        builder: (context, Box<Product> cart, __) => ListView(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          children: [
-            ListView.separated(
-              itemCount: cart.length,
-              separatorBuilder: (context, _) => Divider(),
-              shrinkWrap: true,
-              physics: ClampingScrollPhysics(),
-              itemBuilder: ((context, index) {
-                if (cart.isNotEmpty) {
+        builder: (context, Box<Product> cart, __) {
+          if (cart.isEmpty) {
+            return Center(
+              child: Text("Your cart is empty"),
+            );
+          }
+          return ListView(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            children: [
+              ListView.separated(
+                itemCount: cart.length,
+                separatorBuilder: (context, _) => Divider(),
+                shrinkWrap: true,
+                physics: ClampingScrollPhysics(),
+                itemBuilder: ((context, index) {
                   return CartItem(
                     product: cart.getAt(index)!,
                     productKey: index,
                   );
-                }
-                return Center(
-                  child: Text("Your cart is empty"),
-                );
-              }),
-            ),
-            SizedBox(height: 54),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Total",
-                  style: TextStyle().copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFF222227),
-                    fontSize: 20,
+                }),
+              ),
+              SizedBox(height: 54),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Total",
+                    style: TextStyle().copyWith(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 20,
+                    ),
                   ),
-                ),
-                Text(
-                  "N${getTotalPrice().toStringAsFixed(2)}",
-                  style: TextStyle().copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFF222227),
-                    fontSize: 20,
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: 36),
-            Row(
-              children: [
-                Expanded(
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DeliveryDetails(
-                            cart: Cart(
-                                products: _cartBox.values.toList(),
-                                total: getTotalPrice()),
+                  Text(
+                    "N${getTotalPrice().toStringAsFixed(2)}",
+                    style: TextStyle().copyWith(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 20,
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(height: 36),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DeliveryDetails(
+                              cart: Cart(
+                                  products: _cartBox.values.toList(),
+                                  total: getTotalPrice()),
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                    child: Text("Continue to Checkout"),
-                  ),
-                )
-              ],
-            )
-          ],
-        ),
+                        );
+                      },
+                      child: Text("Continue to Checkout"),
+                    ),
+                  )
+                ],
+              )
+            ],
+          );
+        },
       ),
     );
   }

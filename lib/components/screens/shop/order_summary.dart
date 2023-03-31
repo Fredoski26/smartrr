@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:smartrr/components/screens/shop/orders.dart';
 import 'package:smartrr/env/env.dart';
 import 'package:smartrr/models/cart.dart';
-import 'package:smartrr/models/product.dart';
 import 'package:smartrr/services/theme_provider.dart';
 import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/utils/utils.dart';
@@ -125,7 +124,10 @@ class _OrderSummaryState extends State<OrderSummary> {
     return Consumer<ThemeNotifier>(
       builder: (context, theme, _) => Scaffold(
         appBar: AppBar(
-          title: Text("Order SUmmary"),
+          title: Text(
+            "Order SUmmary",
+            style: TextStyle().copyWith(color: materialWhite),
+          ),
           backgroundColor: primaryColor,
           centerTitle: false,
           iconTheme: IconThemeData().copyWith(color: Colors.white),
@@ -321,7 +323,6 @@ class _OrderSummaryState extends State<OrderSummary> {
                         style: TextStyle().copyWith(
                           fontSize: 20,
                           fontWeight: FontWeight.w600,
-                          color: Colors.black,
                         ),
                       ),
                       Text(
@@ -329,7 +330,6 @@ class _OrderSummaryState extends State<OrderSummary> {
                         style: TextStyle().copyWith(
                           fontSize: 24,
                           fontWeight: FontWeight.w600,
-                          color: Colors.black,
                         ),
                       )
                     ],

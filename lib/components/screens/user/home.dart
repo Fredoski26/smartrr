@@ -319,25 +319,13 @@ class _HomeState extends State<Home> {
   _onReportTap({required bool userType}) async {
     Navigator.pop(context);
     await setUserTypePref(userType: userType).then((_) {
-      _showConsent();
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (BuildContext context) => ConsentFormPage(),
-      //   ),
-      // );
+      showModalBottomSheet(
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        useSafeArea: true,
+        context: context,
+        builder: (context) => ConsentFormPage(),
+      );
     });
-  }
-
-  _showConsent() {
-    bool acceptedValue = false;
-
-    showModalBottomSheet(
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      useSafeArea: true,
-      context: context,
-      builder: (context) => ConsentFormPage(),
-    );
   }
 }

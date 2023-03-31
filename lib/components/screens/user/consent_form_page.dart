@@ -7,9 +7,7 @@ import 'package:smartrr/components/screens/user/report_case.dart';
 import 'package:smartrr/components/widgets/language_picker.dart';
 import 'package:smartrr/components/widgets/text_to_speech.dart';
 import 'package:smartrr/provider/language_provider.dart';
-import 'package:smartrr/services/theme_provider.dart';
 import 'package:smartrr/utils/colors.dart';
-import 'select_service_page.dart';
 import 'package:smartrr/generated/l10n.dart';
 
 class ConsentFormPage extends StatefulWidget {
@@ -79,14 +77,10 @@ class _ConsentFormPageState extends State<ConsentFormPage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        Consumer<ThemeNotifier>(
-                                          builder:
-                                              (context, themeNotifier, child) =>
-                                                  ReportCase(
-                                            lang: langNotifier.locale,
-                                          ),
-                                        )),
+                                  builder: (BuildContext context) => ReportCase(
+                                    lang: langNotifier.locale,
+                                  ),
+                                ),
                               );
                             else {
                               Fluttertoast.showToast(

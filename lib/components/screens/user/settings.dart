@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:smartrr/components/screens/user/select_country.dart';
 import 'package:smartrr/components/widgets/language_picker.dart';
+import 'package:smartrr/components/widgets/smart_input.dart';
 import 'package:smartrr/components/widgets/smart_text_field.dart';
 import 'package:smartrr/provider/language_provider.dart';
 import 'package:smartrr/services/auth_service.dart';
@@ -40,7 +41,10 @@ class _SettingsState extends State<Settings> {
 
     return Consumer<LanguageNotifier>(
         builder: (context, _, child) => Scaffold(
-              appBar: AppBar(title: Text(_language.settings)),
+              appBar: AppBar(
+                  title: Text(
+                _language.settings,
+              )),
               body: Consumer<ThemeNotifier>(
                 builder: (context, ThemeNotifier notifier, child) =>
                     ListView(children: [
@@ -51,7 +55,7 @@ class _SettingsState extends State<Settings> {
                     ),
                     title: Text(_language.changePassword),
                     onTap: () =>
-                        _changePasswordDialod(context, notifier.darkTheme),
+                        _changePasswordDialog(context, notifier.darkTheme),
                   ),
                   Divider(),
                   ListTile(
@@ -128,11 +132,12 @@ class _SettingsState extends State<Settings> {
     }
   }
 
-  _changePasswordDialod(BuildContext context, bool isDarkTheme) {
-    return showDialog(
+  _changePasswordDialog(BuildContext context, bool isDarkTheme) {
+    return showCupertinoModalPopup(
         context: context,
         builder: (context) => Dialog(
               backgroundColor: isDarkTheme ? darkGrey : Colors.white,
+              surfaceTintColor: Colors.transparent,
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
                 child: Form(
@@ -147,16 +152,18 @@ class _SettingsState extends State<Settings> {
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(height: 10.0),
-                        smartTextField(
-                            title: S.of(context).password,
-                            controller: _passwordController,
-                            obscure: true,
-                            isForm: true),
-                        smartTextField(
-                            title: S.of(context).confirmPassword,
-                            controller: _confirmPasswordController,
-                            obscure: true,
-                            isForm: true),
+                        SmartInput(
+                          controller: _passwordController,
+                          label: S.current.password,
+                          isRequired: true,
+                          obscureText: true,
+                        ),
+                        SmartInput(
+                          controller: _confirmPasswordController,
+                          label: S.current.confirmPassword,
+                          obscureText: true,
+                          isRequired: true,
+                        ),
                         Row(
                           children: [
                             Expanded(

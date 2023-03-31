@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:dialog_flowtter/dialog_flowtter.dart';
 import "package:hive_flutter/hive_flutter.dart";
@@ -40,7 +39,10 @@ class _ChatBotState extends State<ChatBot> {
     return Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
-          title: Text("SmartRR Bot"),
+          title: Text(
+            "SmartRR Bot",
+            style: TextStyle().copyWith(color: materialWhite),
+          ),
           centerTitle: true,
           actions: [
             PopupMenuButton(

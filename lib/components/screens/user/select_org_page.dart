@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:smartrr/components/widgets/my_stepper.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:smartrr/components/widgets/show_action.dart';
 import 'package:smartrr/components/widgets/show_loading.dart';
 import 'package:smartrr/generated/l10n.dart';
 import 'package:smartrr/utils/colors.dart';
+import 'package:smartrr/utils/utils.dart';
 import '../../widgets/selected_location_cell.dart';
 import '../../../models/location.dart';
 import '../../../models/organization.dart';
@@ -203,54 +204,62 @@ class _SelectOrgPageState extends State<SelectOrgPage> {
     );
   }
 
-  _getDataFromFirebase() {
-    FirebaseFirestore.instance
-        .collectionGroup("locations")
-        .where("location", isEqualTo: widget.selectedLocation.title)
-        .get()
-        .then((snapshot) {
-      if (snapshot.docs.length > 0) {
-        FirebaseFirestore.instance
+  _getDataFromFirebase() async {
+    try {
+      await FirebaseFirestore.instance
+          .collectionGroup("locations")
+          .where("location", isEqualTo: widget.selectedLocation.title)
+          .get()
+          .then((snapshot) async {
+        List<QueryDocumentSnapshot<Map<String, dynamic>>> organizations = [];
+        await FirebaseFirestore.instance
             .collection("organizations")
             .where("locationId", isEqualTo: snapshot.docs[0].id)
             .get()
-            .then((organizations) {
-          _addOrgsToList(organizations);
+            .then((orgs) async {
+          organizations = [...organizations, ...orgs.docs];
         });
-      }
-      FirebaseFirestore.instance
-          .collection("organizations")
-          .where('location', isEqualTo: widget.selectedLocation.title)
-          .get()
-          .then((organizations) {
+
+        await FirebaseFirestore.instance
+            .collection("organizations")
+            .where('location', isEqualTo: widget.selectedLocation.title)
+            .get()
+            .then((orgsByLocationName) {
+          organizations = [...organizations, ...orgsByLocationName.docs];
+        });
         _addOrgsToList(organizations);
-        setState(() => isLoading = false);
       });
-    });
+    } catch (e, stackTrace) {
+      showToast(msg: e.toString(), type: "error");
+      await Sentry.captureException(e, stackTrace: stackTrace);
+    } finally {
+      setState(() => isLoading = false);
+    }
   }
 
-  _addOrgsToList(QuerySnapshot<Map<String, dynamic>> organizations) {
-    for (int i = 0; i < organizations.docs.length; i++) {
+  _addOrgsToList(
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> organizations) {
+    for (int i = 0; i < organizations.length; i++) {
       Organization organization = new Organization(
-        id: organizations.docs[i].id,
-        name: organizations.docs[i].get('name'),
-        locationId: organizations.docs[i].get('locationId'),
-        location: organizations.docs[i].data().containsKey("location")
-            ? organizations.docs[i].get("location")
+        id: organizations[i].id,
+        name: organizations[i].get('name'),
+        locationId: organizations[i].get('locationId'),
+        location: organizations[i].data().containsKey("location")
+            ? organizations[i].get("location")
             : "",
-        status: organizations.docs[i].get('status'),
-        closeTime: organizations.docs[i].get('closeTime'),
-        focalDesignation: organizations.docs[i].get('focalDesignation'),
-        focalEmail: organizations.docs[i].get('focalEmail'),
-        focalName: organizations.docs[i].get('focalName'),
-        focalPhone: organizations.docs[i].get('focalPhone'),
-        language: organizations.docs[i].get('language'),
-        orgEmail: organizations.docs[i].get('orgEmail'),
-        password: organizations.docs[i].get('password'),
-        servicesAvailable: organizations.docs[i].get('servicesAvailable'),
-        startTime: organizations.docs[i].get('startTime'),
-        telephone: organizations.docs[i].get('telephone'),
-        type: organizations.docs[i].get('type'),
+        status: organizations[i].get('status'),
+        closeTime: organizations[i].get('closeTime'),
+        focalDesignation: organizations[i].get('focalDesignation'),
+        focalEmail: organizations[i].get('focalEmail'),
+        focalName: organizations[i].get('focalName'),
+        focalPhone: organizations[i].get('focalPhone'),
+        language: organizations[i].get('language'),
+        orgEmail: organizations[i].get('orgEmail'),
+        password: organizations[i].get('password'),
+        servicesAvailable: organizations[i].get('servicesAvailable'),
+        startTime: organizations[i].get('startTime'),
+        telephone: organizations[i].get('telephone'),
+        type: organizations[i].get('type'),
       );
       if (organization.servicesAvailable != null) {
         for (int j = 0; j < organization.servicesAvailable.length; j++) {

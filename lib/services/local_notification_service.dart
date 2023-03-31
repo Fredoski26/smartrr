@@ -54,7 +54,6 @@ abstract class LocalNotificationService {
     try {
       final double dt = DateTime.now().millisecondsSinceEpoch / 1000;
       final int id = dt.toInt();
-
       await _flutterLocalNotificationsPlugin.zonedSchedule(
         id,
         title,
@@ -73,6 +72,21 @@ abstract class LocalNotificationService {
       debugPrint(e.toString());
       return false;
     }
+  }
+
+  static Future<void> showNotification({
+    required String title,
+    required String body,
+    NotificationDetails? notificationDetails,
+  }) async {
+    final double dt = DateTime.now().millisecondsSinceEpoch / 1000;
+    final int id = dt.toInt();
+    _flutterLocalNotificationsPlugin.show(
+      id,
+      title,
+      body,
+      notificationDetails ?? _defaultNotificationDetails,
+    );
   }
 
   static bool hasBeenScheduled(DateTime datetime) {

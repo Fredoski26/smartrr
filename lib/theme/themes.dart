@@ -9,15 +9,15 @@ final ThemeData appTheme = ThemeData(
     primary: primaryColor,
     secondary: secondaryColor,
     tertiary: Color(0xFFEEEEEE),
+    surfaceTint: Colors.transparent,
   ),
   textTheme: GoogleFonts.poppinsTextTheme()
       .copyWith(bodyLarge: TextStyle().copyWith(fontSize: 16)),
   iconTheme: IconThemeData().copyWith(color: lightGrey),
   appBarTheme: AppBarTheme(
-    // backgroundColor: materialWhite,
     elevation: 0,
     centerTitle: false,
-    titleTextStyle: TextStyle().copyWith(fontSize: 20),
+    titleTextStyle: TextStyle().copyWith(fontSize: 20, color: darkGrey),
     iconTheme: IconThemeData().copyWith(color: darkGrey),
     toolbarTextStyle: TextStyle().copyWith(color: darkGrey),
   ),
@@ -57,7 +57,6 @@ final ThemeData appTheme = ThemeData(
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(33))),
         foregroundColor: MaterialStateProperty.all(primaryColor)),
   ),
-  tabBarTheme: TabBarTheme().copyWith(),
 );
 
 final ThemeData darkTheme = ThemeData(
@@ -68,6 +67,7 @@ final ThemeData darkTheme = ThemeData(
     primary: primaryColor,
     secondary: secondaryColor,
     tertiary: darkGrey,
+    surfaceTint: Colors.transparent,
   ),
   appBarTheme: appTheme.appBarTheme.copyWith(
     color: darkGrey,

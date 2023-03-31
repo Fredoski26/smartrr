@@ -6,6 +6,8 @@ import 'package:smartrr/models/location.dart';
 import 'package:smartrr/models/smart_service.dart';
 import 'package:smartrr/services/my_translator.dart';
 import 'package:smartrr/utils/utils.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class DatabaseService {
   CollectionReference userCollection =
@@ -19,6 +21,10 @@ class DatabaseService {
 
   CollectionReference serviceCollection =
       FirebaseFirestore.instance.collection("services");
+
+  Box configBox = Hive.box("config");
+
+  String? get getDeviceToken => configBox.get("deviceToken");
 
   Future<List<QueryDocumentSnapshot<Object>>> getFaqs() async {
     final docs = await faqCollection.get();
@@ -53,6 +59,14 @@ class DatabaseService {
     } catch (e) {
       return null;
     }
+  }
+
+  Future setDeviceToken(User user) async {
+    final deviceToken = await FirebaseMessaging.instance.getToken();
+    print("DEVICE: $deviceToken");
+
+    configBox.put("deviceToken", deviceToken);
+    await DatabaseService().updateUser({"deviceToken": deviceToken});
   }
 
   Future getLocations(String state) async {

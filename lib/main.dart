@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:smartrr/components/screens/main_wrapper.dart';
 import 'package:smartrr/components/screens/shop/shopping_cart.dart';
 import 'package:smartrr/components/screens/user/about.dart';
 import 'package:smartrr/components/screens/user/all_about_srhr.dart';
@@ -21,12 +22,13 @@ import 'package:smartrr/provider/language_provider.dart';
 import 'package:smartrr/services/local_notification_service.dart';
 import 'package:smartrr/theme/themes.dart';
 import 'components/screens/general/login_page.dart';
-import 'components/screens/user/home.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'services/theme_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:smartrr/models/product.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:smartrr/env/env.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,20 +48,30 @@ void main() async {
   await Hive.openBox("messages");
   await Hive.openBox("period_tracker");
   await Hive.openBox("notifications");
+  await Hive.openBox("config");
   await Hive.openBox<Product>("cart");
 
   await LocalNotificationService.initialize();
 
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => ThemeNotifier()),
-        ChangeNotifierProvider(create: (context) => LanguageNotifier())
-      ],
-      child: Consumer<ThemeNotifier>(
-        builder: (context, ThemeNotifier notifier, child) => MyApp(
-          isDarkTheme: notifier.darkTheme,
+
+  await SentryFlutter.init(
+    (options) {
+      options.dsn = Env.sentryDsn;
+      // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+      // We recommend adjusting this value in production.
+      options.tracesSampleRate = 1.0;
+    },
+    appRunner: () => runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => ThemeNotifier()),
+          ChangeNotifierProvider(create: (context) => LanguageNotifier())
+        ],
+        child: Consumer<ThemeNotifier>(
+          builder: (context, ThemeNotifier notifier, child) => MyApp(
+            isDarkTheme: notifier.darkTheme,
+          ),
         ),
       ),
     ),
@@ -76,13 +88,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/': (context) => AuthWrapper(isDarkTheme: isDarkTheme),
-        '/login': (context) => LoginPage(
-              isDarkTheme: isDarkTheme,
-            ),
+        '/': (context) => AuthWrapper(),
+        '/login': (context) => LoginPage(),
         '/userSignup': (context) => SignUpPage(),
         '/orgSignup': (context) => OrgSignUpPage(),
         '/casesHistory': (context) => CasesHistoryScreen(),
+        '/userMain': (context) => MainWrapper(),
         '/orgMain': (context) => ReferOrCasesPage(),
         '/refer': (context) => ReferralPage(),
         '/forgot': (context) => ForgotPasswordScreen(),

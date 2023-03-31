@@ -126,8 +126,6 @@ class _ReportCaseState extends State<ReportCase> {
                                       service != null &&
                                       subService != null
                                   ? () {
-                                      print(subService?.name.split("_")[1]);
-                                      print(service?.name);
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(

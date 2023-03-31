@@ -60,8 +60,6 @@ class _AllAboutSRHRState extends State<AllAboutSRHR>
                 ],
                 bottom: TabBar(
                   controller: _tabController,
-                  indicatorColor: Colors.white,
-                  labelColor: Colors.white,
                   tabs: [
                     Tab(
                       text: _language.read,
