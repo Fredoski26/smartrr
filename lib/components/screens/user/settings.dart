@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:smartrr/components/screens/user/select_country.dart';
 import 'package:smartrr/components/widgets/language_picker.dart';
+import 'package:smartrr/components/widgets/smart_input.dart';
 import 'package:smartrr/components/widgets/smart_text_field.dart';
 import 'package:smartrr/provider/language_provider.dart';
 import 'package:smartrr/services/auth_service.dart';
@@ -40,107 +41,72 @@ class _SettingsState extends State<Settings> {
 
     return Consumer<LanguageNotifier>(
         builder: (context, _, child) => Scaffold(
-              appBar: AppBar(title: Text(_language.settings)),
+              appBar: AppBar(
+                  title: Text(
+                _language.settings,
+              )),
               body: Consumer<ThemeNotifier>(
-                builder: (context, ThemeNotifier notifier, child) => Container(
-                  height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
-                  child: Stack(
-                    children: [
-                      Container(
-                        height: 162 - AppBar().preferredSize.height,
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(color: primaryColor),
-                        child: Container(),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            height: 503,
-                            width: 302,
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 11, vertical: 69),
-                            decoration: BoxDecoration(
-                                color: notifier.darkTheme
-                                    ? darkGrey
-                                    : Colors.white,
-                                borderRadius: BorderRadius.circular(13),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: notifier.darkTheme
-                                          ? Colors.white.withOpacity(0.18)
-                                          : Colors.black.withOpacity(0.18),
-                                      offset: Offset(0, 4),
-                                      blurRadius: 55)
-                                ]),
-                            child: ListView(children: [
-                              ListTile(
-                                leading: Icon(
-                                  Icons.password_outlined,
-                                  color: primaryColor,
-                                ),
-                                title: Text(_language.changePassword),
-                                onTap: () => _changePasswordDialod(
-                                    context, notifier.darkTheme),
-                              ),
-                              Divider(),
-                              ListTile(
-                                  leading: Icon(
-                                    Icons.language,
-                                    color: primaryColor,
-                                  ),
-                                  title: Text(_language.language),
-                                  trailing: LanguagePicker()),
-                              Divider(),
-                              ListTile(
-                                  leading: Icon(
-                                    Icons.public,
-                                    color: primaryColor,
-                                  ),
-                                  title: Text(
-                                    _language.country,
-                                    softWrap: false,
-                                  ),
-                                  trailing: country.isEmpty
-                                      ? Container(
-                                          child: CircularProgressIndicator(),
-                                          height: 20.0,
-                                          width: 20.0,
-                                        )
-                                      : Text(
-                                          country,
-                                          textAlign: TextAlign.right,
-                                          maxLines: 2,
-                                          overflow: TextOverflow.fade,
-                                        ),
-                                  onTap: () => Navigator.of(context)
-                                      .push(MaterialPageRoute(
-                                          builder: (context) => SelectCountry(
-                                                userCountry: country,
-                                              )))),
-                              Divider(),
-                              ListTile(
-                                leading: Icon(
-                                  Icons.light_mode_outlined,
-                                  color: primaryColor,
-                                ),
-                                title: Text(_language.darkMode),
-                                trailing: CupertinoSwitch(
-                                  activeColor: primaryColor,
-                                  value: notifier.darkTheme,
-                                  onChanged: (val) {
-                                    notifier.toggleTheme();
-                                  },
-                                ),
-                              )
-                            ]),
-                          ),
-                        ],
-                      )
-                    ],
+                builder: (context, ThemeNotifier notifier, child) =>
+                    ListView(children: [
+                  ListTile(
+                    leading: Icon(
+                      Icons.password_outlined,
+                      color: primaryColor,
+                    ),
+                    title: Text(_language.changePassword),
+                    onTap: () =>
+                        _changePasswordDialog(context, notifier.darkTheme),
                   ),
-                ),
+                  Divider(),
+                  ListTile(
+                      leading: Icon(
+                        Icons.language,
+                        color: primaryColor,
+                      ),
+                      title: Text(_language.language),
+                      trailing: LanguagePicker()),
+                  Divider(),
+                  ListTile(
+                      leading: Icon(
+                        Icons.public,
+                        color: primaryColor,
+                      ),
+                      title: Text(
+                        _language.country,
+                        softWrap: false,
+                      ),
+                      trailing: country.isEmpty
+                          ? Container(
+                              child: CircularProgressIndicator(),
+                              height: 20.0,
+                              width: 20.0,
+                            )
+                          : Text(
+                              country,
+                              textAlign: TextAlign.right,
+                              maxLines: 2,
+                              overflow: TextOverflow.fade,
+                            ),
+                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => SelectCountry(
+                                userCountry: country,
+                              )))),
+                  Divider(),
+                  ListTile(
+                    leading: Icon(
+                      Icons.light_mode_outlined,
+                      color: primaryColor,
+                    ),
+                    title: Text(_language.darkMode),
+                    trailing: CupertinoSwitch(
+                      activeColor: primaryColor,
+                      value: notifier.darkTheme,
+                      onChanged: (val) {
+                        notifier.toggleTheme();
+                      },
+                    ),
+                  )
+                ]),
               ),
             ));
   }
@@ -166,11 +132,12 @@ class _SettingsState extends State<Settings> {
     }
   }
 
-  _changePasswordDialod(BuildContext context, bool isDarkTheme) {
-    return showDialog(
+  _changePasswordDialog(BuildContext context, bool isDarkTheme) {
+    return showCupertinoModalPopup(
         context: context,
         builder: (context) => Dialog(
               backgroundColor: isDarkTheme ? darkGrey : Colors.white,
+              surfaceTintColor: Colors.transparent,
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
                 child: Form(
@@ -185,16 +152,18 @@ class _SettingsState extends State<Settings> {
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(height: 10.0),
-                        smartTextField(
-                            title: S.of(context).password,
-                            controller: _passwordController,
-                            obscure: true,
-                            isForm: true),
-                        smartTextField(
-                            title: S.of(context).confirmPassword,
-                            controller: _confirmPasswordController,
-                            obscure: true,
-                            isForm: true),
+                        SmartInput(
+                          controller: _passwordController,
+                          label: S.current.password,
+                          isRequired: true,
+                          obscureText: true,
+                        ),
+                        SmartInput(
+                          controller: _confirmPasswordController,
+                          label: S.current.confirmPassword,
+                          obscureText: true,
+                          isRequired: true,
+                        ),
                         Row(
                           children: [
                             Expanded(

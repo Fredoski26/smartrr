@@ -1,12 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:smartrr/components/screens/shop/order_summary.dart';
 import 'package:smartrr/models/cart.dart';
 import 'package:smartrr/models/country.dart';
 import 'package:smartrr/models/location.dart';
-import 'package:smartrr/models/product.dart';
 import 'package:smartrr/services/country_service.dart';
 import 'package:smartrr/services/theme_provider.dart';
 import 'package:smartrr/utils/colors.dart';
@@ -64,7 +62,10 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
       isDarkTheme = theme.darkTheme;
       return Scaffold(
         appBar: AppBar(
-          title: Text("Checkout"),
+          title: Text(
+            "Checkout",
+            style: TextStyle().copyWith(color: materialWhite),
+          ),
           backgroundColor: primaryColor,
           centerTitle: false,
           iconTheme: IconThemeData().copyWith(color: Colors.white),
@@ -255,7 +256,6 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
                         style: TextStyle().copyWith(
                           fontSize: 20,
                           fontWeight: FontWeight.w600,
-                          color: Colors.black,
                         ),
                       ),
                       Text(
@@ -263,7 +263,6 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
                         style: TextStyle().copyWith(
                           fontSize: 24,
                           fontWeight: FontWeight.w600,
-                          color: Colors.black,
                         ),
                       )
                     ],

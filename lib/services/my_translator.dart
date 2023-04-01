@@ -1,10 +1,12 @@
 import 'package:translator/translator.dart';
 
-class MyTranslator {
-  static Future<String> translate(
-      {required String text,
-      String from = "en",
-      String languageCode = "ha"}) async {
+abstract class MyTranslator {
+  static Future<String> translate({
+    required String text,
+    String from = "en",
+    String languageCode = "ha",
+  }) async {
+    if (from == languageCode) return text;
     final translator = GoogleTranslator();
 
     final translation =

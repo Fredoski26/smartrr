@@ -82,7 +82,7 @@ class PortraitProductCard extends StatelessWidget {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle().copyWith(
-                              color: Color(0xFF222227),
+                              fontWeight: FontWeight.w600,
                               height: 1.2,
                               fontSize: 16,
                             ),
@@ -99,7 +99,7 @@ class PortraitProductCard extends StatelessWidget {
                         Text(
                           "N${product.price.toStringAsFixed(2)}",
                           style: TextStyle().copyWith(
-                            color: Color(0xFF595959),
+                            fontWeight: FontWeight.w200,
                             fontSize: 16,
                           ),
                         ),

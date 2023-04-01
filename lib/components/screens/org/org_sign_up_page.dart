@@ -728,7 +728,6 @@ class _OrgSignUpPageState extends State<OrgSignUpPage> {
         stateList = items;
         _dropDownStateItem = buildDropDownStateItems(items);
       });
-      ;
     });
   }
 

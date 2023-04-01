@@ -10,4 +10,6 @@ abstract class Env {
   static final apiAccessToken = _Env.apiAccessToken;
   @EnviedField(varName: "API_BASE_URL", obfuscate: true)
   static final apiBaseUrl = _Env.apiBaseUrl;
+  @EnviedField(varName: "SENTRY_DSN", obfuscate: true)
+  static final sentryDsn = _Env.sentryDsn;
 }

@@ -7,8 +7,7 @@ import 'package:smartrr/utils/utils.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:ripple_animation/ripple_animation.dart';
+import 'package:simple_ripple_animation/simple_ripple_animation.dart';
 
 class SmartSpeechToText extends StatefulWidget {
   const SmartSpeechToText({super.key});
@@ -44,7 +43,6 @@ class _SmartSpeechToTextState extends State<SmartSpeechToText> {
   }
 
   Future<void> initSpeechState() async {
-    _logEvent('Initialize');
     try {
       var hasSpeech = await speech.initialize(
         onError: errorListener,
@@ -85,7 +83,6 @@ class _SmartSpeechToTextState extends State<SmartSpeechToText> {
   }
 
   void _startListening(BuildContext context) {
-    _logEvent('start listening');
     lastWords = '';
     lastError = '';
     final pauseFor = int.tryParse(_pauseForController.text);
@@ -142,7 +139,6 @@ class _SmartSpeechToTextState extends State<SmartSpeechToText> {
   }
 
   void stopListening() {
-    _logEvent('stop');
     speech.stop();
     setState(() {
       level = 0.0;
@@ -150,7 +146,6 @@ class _SmartSpeechToTextState extends State<SmartSpeechToText> {
   }
 
   void cancelListening() {
-    _logEvent('cancel');
     speech.cancel();
     setState(() {
       level = 0.0;
@@ -196,7 +191,6 @@ class _SmartSpeechToTextState extends State<SmartSpeechToText> {
   void soundLevelListener(double level) {
     minSoundLevel = min(minSoundLevel, level);
     maxSoundLevel = max(maxSoundLevel, level);
-    _logEvent('sound level $level: $minSoundLevel - $maxSoundLevel ');
     setState(() {
       this.level = level;
     });
@@ -227,10 +221,10 @@ class _SmartSpeechToTextState extends State<SmartSpeechToText> {
     }
   }
 
-  void _logEvent(String eventDescription) {
-    var eventTime = DateTime.now().toIso8601String();
-    print('$eventTime $eventDescription');
-  }
+  // void _logEvent(String eventDescription) {
+  //   var eventTime = DateTime.now().toIso8601String();
+  //   print('$eventTime $eventDescription');
+  // }
 
   @override
   void dispose() {

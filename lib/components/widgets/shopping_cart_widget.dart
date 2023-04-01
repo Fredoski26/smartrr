@@ -17,7 +17,7 @@ class ShoppingCartWidget extends StatelessWidget {
             return GestureDetector(
               onTap: () => Navigator.pushNamed(context, "/cart"),
               child: Badge.count(
-                count: cart.length!,
+                count: cart.length,
                 child: SmartIcons.Cart,
               ),
             );

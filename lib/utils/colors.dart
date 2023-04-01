@@ -8,6 +8,8 @@ const Color secondaryColor = Color(0xFFDA70D6);
 const Color darkGrey = Color(0xFF444444);
 const Color lightGrey = Color(0xFFA59B9B);
 const Color faintGrey = Color(0xFFA59B9B);
+const Color inputBackground = Color(0xFFEBEBEB);
+const Color red = Color(0xFFB30126);
 
 Map<int, Color> color = {
   50: Color.fromRGBO(255, 255, 255, .1),

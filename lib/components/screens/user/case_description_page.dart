@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:provider/provider.dart';
-import 'package:smartrr/components/screens/user/home.dart';
+import 'package:smartrr/components/screens/main_wrapper.dart';
 import 'package:smartrr/components/widgets/circular_progress.dart';
 import 'package:smartrr/components/widgets/show_action.dart';
+import 'package:smartrr/components/widgets/smart_input.dart';
 import 'package:smartrr/components/widgets/smart_text_field.dart';
 import 'package:smartrr/generated/l10n.dart';
 import 'package:smartrr/models/location.dart';
@@ -91,7 +92,11 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
 
     return Consumer<LanguageNotifier>(
         builder: (context, langNotifier, child) => Scaffold(
-              appBar: AppBar(title: Text(_language.selectCaseDescription)),
+              appBar: AppBar(
+                  title: Text(
+                _language.selectCaseDescription,
+                style: TextStyle(color: darkGrey),
+              )),
               body: Container(
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
@@ -99,54 +104,57 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
                 child: _isLoading
                     ? CircularProgress()
                     : _userType
-                        ? Column(mainAxisSize: MainAxisSize.min, children: [
-                            Text(
-                              '${widget.org.name}',
-                              textAlign: TextAlign.center,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Expanded(
-                              child: ListView.builder(
-                                itemBuilder: (context, i) {
-                                  return ListTile(
-                                    contentPadding: EdgeInsets.zero,
-                                    onTap: () {
-                                      setState(() {
-                                        selectedDescription = items[i];
-                                      });
-                                    },
-                                    leading: Radio(
-                                        value: items[i],
-                                        groupValue: selectedDescription,
-                                        onChanged: (String? val) => {
-                                              setState(() {
-                                                selectedDescription = val!;
-                                              })
-                                            }),
-                                    title: Text(items[i]),
-                                  );
-                                },
-                                itemCount: items.length,
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                    child: TextButton(
-                                  onPressed: () =>
-                                      _saveCase(lang: langNotifier.locale),
-                                  child: Text(
-                                    _language.submitReport,
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                                Text(
+                                  'Organization: ${widget.org.name}',
+                                  textAlign: TextAlign.start,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 18,
                                   ),
-                                ))
-                              ],
-                            )
-                          ])
+                                ),
+                                SizedBox(height: 20),
+                                Expanded(
+                                  child: ListView.builder(
+                                    itemBuilder: (context, i) {
+                                      return ListTile(
+                                        contentPadding: EdgeInsets.zero,
+                                        onTap: () {
+                                          setState(() {
+                                            selectedDescription = items[i];
+                                          });
+                                        },
+                                        leading: Radio(
+                                            value: items[i],
+                                            groupValue: selectedDescription,
+                                            onChanged: (String? val) => {
+                                                  setState(() {
+                                                    selectedDescription = val!;
+                                                  })
+                                                }),
+                                        title: Text(items[i]),
+                                      );
+                                    },
+                                    itemCount: items.length,
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                        child: TextButton(
+                                      onPressed: () =>
+                                          _saveCase(lang: langNotifier.locale),
+                                      child: Text(
+                                        _language.submitReport,
+                                      ),
+                                    ))
+                                  ],
+                                )
+                              ])
                         : SingleChildScrollView(
                             child: Form(
                               key: _formKey,
@@ -166,67 +174,54 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
                                   SizedBox(
                                     height: 20,
                                   ),
-                                  DropdownButtonFormField(
-                                    isExpanded: true,
-                                    value: selectedDescription,
-                                    hint: Text(
-                                      _language.caseType,
-                                      style: Theme.of(context)
-                                          .inputDecorationTheme
-                                          .hintStyle,
-                                    ),
-                                    icon: Icon(Icons.keyboard_arrow_down),
-                                    items: items.map((String value) {
-                                      return new DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(value),
-                                      );
-                                    }).toList(),
-                                    onChanged: (String? value) => setState(
-                                        () => selectedDescription = value!),
-                                    decoration: InputDecoration().copyWith(
-                                      contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 25.0, vertical: 6.0),
-                                      enabledBorder: OutlineInputBorder(
+                                  SmartInput(
+                                    controller: TextEditingController(),
+                                    label: _language.caseType,
+                                    widget: DropdownButtonFormField(
+                                      isExpanded: true,
+                                      value: selectedDescription,
+                                      hint: Text(
+                                        _language.caseType,
+                                        style: Theme.of(context)
+                                            .inputDecorationTheme
+                                            .hintStyle,
+                                      ),
+                                      icon: Icon(Icons.keyboard_arrow_down),
+                                      items: items.map((String value) {
+                                        return new DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                      onChanged: (String? value) => setState(
+                                          () => selectedDescription = value!),
+                                      decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.symmetric(
+                                            horizontal: 0, vertical: 0),
+                                        border: OutlineInputBorder(
                                           borderRadius: BorderRadius.all(
-                                              Radius.circular(50)),
-                                          borderSide:
-                                              BorderSide(color: lightGrey)),
-                                      focusedBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(50)),
-                                          borderSide:
-                                              BorderSide(color: lightGrey)),
-                                      errorBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(50)),
-                                          borderSide:
-                                              BorderSide(color: Colors.red)),
+                                            Radius.circular(6),
+                                          ),
+                                          borderSide: BorderSide.none,
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                  SizedBox(
-                                    height: 18,
-                                  ),
-                                  smartTextField(
-                                    title: _language.name,
+                                  SmartInput(
                                     controller: _name,
-                                    isForm: true,
+                                    label: _language.name,
+                                    isRequired: true,
                                   ),
-                                  smartTextField(
-                                    title: _language.age,
+                                  SmartInput(
                                     controller: _age,
-                                    isForm: true,
-                                    textInputType: TextInputType.number,
+                                    label: _language.age,
+                                    isRequired: true,
+                                    keyboardType: TextInputType.number,
                                   ),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 25.0, vertical: 0),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(50.0)),
-                                        border: Border.all(
-                                            width: 1, color: lightGrey)),
-                                    child: InternationalPhoneNumberInput(
+                                  SmartInput(
+                                    controller: phoneNumberController,
+                                    label: _language.phoneNumber,
+                                    widget: InternationalPhoneNumberInput(
                                       onInputChanged: (PhoneNumber val) {
                                         number = val;
                                       },
@@ -245,13 +240,10 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
                                       spaceBetweenSelectorAndTextField: 0,
                                     ),
                                   ),
-                                  SizedBox(height: 20.0),
-                                  smartTextField(
-                                    title: 'National ID Card No.',
+                                  SmartInput(
                                     controller: _cnic,
-                                    isForm: false,
-                                    required: false,
-                                    textInputType: TextInputType.number,
+                                    label: "National ID Card No.",
+                                    keyboardType: TextInputType.number,
                                   ),
                                   Text(
                                     _language.gender,
@@ -341,9 +333,9 @@ class _CaseDescriptionPageState extends State<CaseDescriptionPage> {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-        builder: (BuildContext context) => Home(),
+        builder: (BuildContext context) => MainWrapper(),
       ),
-      ModalRoute.withName('/'),
+      ModalRoute.withName('/userMain'),
     );
   }
 

@@ -88,7 +88,7 @@ class _CartItemState extends State<CartItem> {
     return Consumer<ThemeNotifier>(
       builder: (context, theme, _) => Container(
         width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(10.0),
         decoration: BoxDecoration(
           color: theme.darkTheme ? darkGrey : Colors.white,
           borderRadius: BorderRadius.circular(20.0),
@@ -125,7 +125,7 @@ class _CartItemState extends State<CartItem> {
                           Text(
                             widget.product.name,
                             style: TextStyle().copyWith(
-                              color: Color(0xFF222227),
+                              fontWeight: FontWeight.w600,
                               height: 1.2,
                               fontSize: 18,
                             ),
@@ -133,7 +133,7 @@ class _CartItemState extends State<CartItem> {
                           Text(
                             "N${productPrice.toStringAsFixed(2)}",
                             style: TextStyle().copyWith(
-                              color: Color(0xFF595959),
+                              fontWeight: FontWeight.w200,
                               fontSize: 16,
                               height: 2,
                             ),

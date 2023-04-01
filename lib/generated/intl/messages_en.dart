@@ -79,6 +79,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "new_": MessageLookupByLibrary.simpleMessage("new"),
         "organization": MessageLookupByLibrary.simpleMessage("Organization"),
         "password": MessageLookupByLibrary.simpleMessage("Password"),
+        "periodTracker":
+            MessageLookupByLibrary.simpleMessage("Period Tacker & Calendar"),
         "phoneNumber": MessageLookupByLibrary.simpleMessage("Phone Number"),
         "physicalAbuse": MessageLookupByLibrary.simpleMessage("Physical Abuse"),
         "pleaseAcceptTerms": MessageLookupByLibrary.simpleMessage(
@@ -91,6 +93,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "readMore": MessageLookupByLibrary.simpleMessage("Read more"),
         "reportACase": MessageLookupByLibrary.simpleMessage("Report a case"),
         "reportFor": MessageLookupByLibrary.simpleMessage("Report for"),
+        "requestOTP": MessageLookupByLibrary.simpleMessage("Request OTP"),
         "resetHere": MessageLookupByLibrary.simpleMessage("Reset Here"),
         "resetPassword": MessageLookupByLibrary.simpleMessage("Reset Password"),
         "selectCaseDescription":

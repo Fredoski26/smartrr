@@ -2,10 +2,31 @@ import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:smartrr/services/database_service.dart';
 import 'package:smartrr/utils/utils.dart';
 
-class AuthService {
+abstract class AuthService {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  static Future handleSignInWithPhone({
+    required PhoneAuthCredential credential,
+    required BuildContext context,
+  }) async {
+    UserCredential userCredential =
+        await _auth.signInWithCredential(credential);
+
+    final users = await FirebaseFirestore.instance
+        .collection("users")
+        .where("uId", isEqualTo: userCredential.user!.uid)
+        .get();
+
+    await setUserIdPref(
+        userId: userCredential.user!.uid, userDocId: users.docs[0].id);
+
+    await DatabaseService().setDeviceToken(userCredential.user!);
+
+    return true;
+  }
 
   static Future updatePassword({required String password}) async {
     try {

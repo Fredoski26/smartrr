@@ -3,7 +3,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:smartrr/generated/l10n.dart';
 import 'package:smartrr/models/location.dart';
+import 'package:smartrr/models/smart_service.dart';
+import 'package:smartrr/services/my_translator.dart';
 import 'package:smartrr/utils/utils.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class DatabaseService {
   CollectionReference userCollection =
@@ -14,6 +18,13 @@ class DatabaseService {
 
   CollectionReference faqCollection =
       FirebaseFirestore.instance.collection("faq");
+
+  CollectionReference serviceCollection =
+      FirebaseFirestore.instance.collection("services");
+
+  Box configBox = Hive.box("config");
+
+  String? get getDeviceToken => configBox.get("deviceToken");
 
   Future<List<QueryDocumentSnapshot<Object>>> getFaqs() async {
     final docs = await faqCollection.get();
@@ -48,6 +59,14 @@ class DatabaseService {
     } catch (e) {
       return null;
     }
+  }
+
+  Future setDeviceToken(User user) async {
+    final deviceToken = await FirebaseMessaging.instance.getToken();
+    print("DEVICE: $deviceToken");
+
+    configBox.put("deviceToken", deviceToken);
+    await DatabaseService().updateUser({"deviceToken": deviceToken});
   }
 
   Future getLocations(String state) async {
@@ -127,5 +146,55 @@ class DatabaseService {
     DateTime now = new DateTime.now();
     int age = now.year - int.parse(dob.split("-")[2]);
     return age;
+  }
+
+  Future<List<SmartService>> getServices(String lang) async {
+    return serviceCollection.get().then((docs) async {
+      List<SmartService> services = [];
+      docs.docs.forEach((service) async {
+        services.add(SmartService(id: service.id, name: service.get("title")));
+      });
+
+      if (lang == "ha") {
+        for (int i = 0; i < services.length; i++) {
+          final String translated =
+              await MyTranslator.translate(text: services[i].name);
+
+          services[i] = SmartService(id: services[i].id, name: translated);
+        }
+      }
+      return services;
+    });
+  }
+
+  Future<List<SmartService>> getSubServices(String docId, String lang) async {
+    return serviceCollection
+        .doc(docId)
+        .collection("sub-services")
+        .get()
+        .then((subServices) async {
+      List<SmartService> services = [];
+
+      subServices.docs.forEach((subService) async {
+        services.add(
+          SmartService(
+            id: subService.id,
+            name: "${subService.get('title')}_${subService.get('title')}",
+          ),
+        );
+      });
+
+      if (lang == "ha") {
+        for (int i = 0; i < services.length; i++) {
+          final String translated =
+              await MyTranslator.translate(text: services[i].name);
+
+          services[i] = SmartService(
+              id: services[i].id, name: "${translated}_${services[i].name}");
+        }
+      }
+
+      return services;
+    });
   }
 }

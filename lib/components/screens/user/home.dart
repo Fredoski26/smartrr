@@ -2,9 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:smartrr/components/screens/period_tracker/period_tracker.dart';
+import 'package:smartrr/components/screens/period_tracker/period_tracker_wrapper.dart';
+import 'package:smartrr/components/screens/user/all_about_srhr.dart';
 import 'package:smartrr/components/screens/user/impact_of_smartrr.dart';
 import 'package:smartrr/components/screens/user/select_service_page.dart';
-import 'package:smartrr/components/widgets/chatbot.dart';
+import 'package:smartrr/components/screens/chatbot/chatbot.dart';
 import 'package:smartrr/components/widgets/language_picker.dart';
 import 'package:smartrr/components/widgets/speech_to_text.dart';
 import 'package:smartrr/provider/language_provider.dart';
@@ -14,6 +17,7 @@ import 'package:smartrr/utils/utils.dart';
 import 'consent_form_page.dart';
 import 'package:smartrr/generated/l10n.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -140,7 +144,11 @@ class _HomeState extends State<Home> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: GestureDetector(
-                          onTap: () => Navigator.of(context).pushNamed("/srhr"),
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PeriodTrackerWrapper(),
+                              )),
                           child: Stack(
                             fit: StackFit.expand,
                             children: [
@@ -151,6 +159,59 @@ class _HomeState extends State<Home> {
                               Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(6.0),
+                                  gradient: LinearGradient(
+                                    begin: Alignment.bottomCenter,
+                                    end: Alignment.topCenter,
+                                    colors: [
+                                      Colors.black,
+                                      Color(0xFF1E1E1E).withOpacity(.36)
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(18.0),
+                                    child: Text(
+                                      _language.periodTracker,
+                                      style: TextStyle().copyWith(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    )),
+                    Expanded(
+                        child: Container(
+                      height: 220,
+                      margin: EdgeInsets.only(left: 6),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: GestureDetector(
+                          onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) => AllAboutSRHR())),
+                          child: Stack(
+                            fit: StackFit.expand,
+                            children: [
+                              Image.asset(
+                                "assets/images/about_srh.png",
+                                fit: BoxFit.cover,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
                                   gradient: LinearGradient(
                                     begin: Alignment.bottomCenter,
                                     end: Alignment.topCenter,
@@ -182,59 +243,6 @@ class _HomeState extends State<Home> {
                         ),
                       ),
                     )),
-                    Expanded(
-                        child: Container(
-                      height: 220,
-                      margin: EdgeInsets.only(left: 6),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: GestureDetector(
-                          onTap: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (context) => ImpactOfSmartRR())),
-                          child: Stack(
-                            fit: StackFit.expand,
-                            children: [
-                              Image.asset(
-                                "assets/images/report_case.png",
-                                fit: BoxFit.cover,
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.bottomCenter,
-                                    end: Alignment.topCenter,
-                                    colors: [
-                                      Colors.black,
-                                      Color(0xFF1E1E1E).withOpacity(.36)
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(18.0),
-                                    child: Text(
-                                      _language.impactOfSmartRR,
-                                      style: TextStyle().copyWith(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    )),
                   ],
                 ),
               )
@@ -242,13 +250,28 @@ class _HomeState extends State<Home> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          backgroundColor: secondaryColor,
-          foregroundColor: Colors.white,
-          child: Text("SOS"),
-          onPressed: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => ChatBot(),
+          backgroundColor: materialWhite,
+          foregroundColor: materialWhite,
+          child: Container(
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: secondaryColor,
             ),
+            child: Text(
+              "SOS",
+              style: TextStyle()
+                  .copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+            ),
+          ),
+          onPressed: null,
+          // () => Navigator.of(context).push(
+          //   MaterialPageRoute(
+          //     builder: (context) => ChatBot(),
+          //   ),
+          // ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(100),
           ),
         ),
       ),
@@ -296,25 +319,13 @@ class _HomeState extends State<Home> {
   _onReportTap({required bool userType}) async {
     Navigator.pop(context);
     await setUserTypePref(userType: userType).then((_) {
-      _showConsent();
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (BuildContext context) => ConsentFormPage(),
-      //   ),
-      // );
+      showModalBottomSheet(
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        useSafeArea: true,
+        context: context,
+        builder: (context) => ConsentFormPage(),
+      );
     });
-  }
-
-  _showConsent() {
-    bool acceptedValue = false;
-
-    showModalBottomSheet(
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      useSafeArea: true,
-      context: context,
-      builder: (context) => ConsentFormPage(),
-    );
   }
 }

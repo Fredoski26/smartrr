@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
+import 'package:smartrr/components/screens/main_wrapper.dart';
 import 'package:smartrr/components/widgets/auth_container.dart';
+import 'package:smartrr/components/widgets/language_picker.dart';
 import 'package:smartrr/components/widgets/show_loading.dart';
+import 'package:smartrr/components/widgets/smart_input.dart';
 import 'package:smartrr/provider/language_provider.dart';
 import 'package:smartrr/services/country_service.dart';
 import 'package:smartrr/utils/colors.dart';
@@ -42,289 +45,61 @@ class _SignUpPageState extends State<SignUpPage> {
 
   List<DropdownMenuItem<String>> _countries = [];
   late String _country;
-
-  @override
-  void initState() {
-    super.initState();
-    nameController = TextEditingController();
-    emailController = TextEditingController();
-    passwordController = TextEditingController();
-    phoneNumberController = TextEditingController();
-    dobController = TextEditingController();
-    locationController = TextEditingController();
-    _fetchCountries();
-  }
+  final _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
-    final _auth = FirebaseAuth.instance;
     final _language = S.of(context);
     BirthTextInputFormatter birthDateInput = BirthTextInputFormatter();
 
-    void _validateRegisterInput() async {
-      final FormState form = _formKey.currentState!;
-      if (_formKey.currentState!.validate()) {
-        form.save();
-        setState(() {
-          isLoading = true;
-        });
-        try {
-          int maleOrFemale = 1;
-          if (!_isMale) maleOrFemale = 0;
-          Map userData = {
-            'email': emailController.text,
-            'password': passwordController.text,
-            'displayName': nameController.text,
-            'phoneNumber': number.phoneNumber,
-            'location': locationController.text,
-            'dob': dobController.text,
-            'gender': maleOrFemale,
-            'status': true,
-            'country': _country,
-          };
-
-          await _auth.verifyPhoneNumber(
-            phoneNumber: number.phoneNumber,
-            verificationCompleted: (PhoneAuthCredential credential) async {
-              setState(() => isLoading = false);
-              showLoading(message: "Creating account", context: context);
-              try {
-                await AuthService.handlePhoneAuthCredentials(
-                  credential: credential,
-                  userData: userData,
-                  context: context,
-                );
-
-                Navigator.pushNamedAndRemoveUntil(
-                    context, '/userMain', ModalRoute.withName('Dashboard'));
-              } catch (error) {
-                showToast(msg: error.toString(), type: "error");
-              }
-            },
-            verificationFailed: (FirebaseAuthException e) {
-              setState(() => isLoading = false);
-              switch (e.code) {
-                case 'invalid-phone-number':
-                  showToast(
-                      msg: 'The provided phone number is not valid',
-                      type: "error");
-                  break;
-                default:
-                  showToast(msg: e.message!, type: "error");
-                  break;
-              }
-            },
-            codeSent: (String verificationId, int? resendToken) async {
-              setState(() => isLoading = false);
-              final formKey = GlobalKey<FormState>();
-              final pinController = TextEditingController();
-
-              showDialog(
-                context: context,
-                builder: (context) => Dialog(
-                  child: Container(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Verification Code",
-                              style: TextStyle().copyWith(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 2.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                "Enter the verification code sent to your mobile phone",
-                                textAlign: TextAlign.center,
-                              ),
-                            )
-                          ],
-                        ),
-                        SizedBox(height: 5.0),
-                        Form(
-                            key: formKey,
-                            child: Pinput(
-                                length: 6,
-                                controller: pinController,
-                                autofocus: true,
-                                onSubmitted: (pin) async {
-                                  showLoading(
-                                      message: "Creating account",
-                                      context: context);
-                                  try {
-                                    PhoneAuthCredential credential =
-                                        PhoneAuthProvider.credential(
-                                      verificationId: verificationId,
-                                      smsCode: pin,
-                                    );
-                                    await AuthService
-                                        .handlePhoneAuthCredentials(
-                                      credential: credential,
-                                      userData: userData,
-                                      context: context,
-                                    );
-
-                                    Navigator.pushNamedAndRemoveUntil(
-                                        context,
-                                        '/userMain',
-                                        ModalRoute.withName('Dashboard'));
-                                  } catch (error) {
-                                    Navigator.pop(context);
-                                    showToast(
-                                        msg: error.toString(), type: "error");
-                                  }
-                                },
-                                validator: (pin) =>
-                                    pin!.length < 6 || pin.length > 6
-                                        ? "Invalid code"
-                                        : null)),
-                        SizedBox(height: 5.0),
-                        ElevatedButton(
-                            onPressed: () async {
-                              if (formKey.currentState!.validate()) {
-                                showLoading(
-                                    message: "Creating account",
-                                    context: context);
-
-                                try {
-                                  PhoneAuthCredential credential =
-                                      PhoneAuthProvider.credential(
-                                          verificationId: verificationId,
-                                          smsCode: pinController.text);
-
-                                  await AuthService.handlePhoneAuthCredentials(
-                                    credential: credential,
-                                    userData: userData,
-                                    context: context,
-                                  );
-
-                                  Navigator.pushNamedAndRemoveUntil(
-                                      context,
-                                      '/userMain',
-                                      ModalRoute.withName('Dashboard'));
-                                } catch (error) {
-                                  Navigator.pop(context);
-                                  showToast(
-                                      msg: error.toString(), type: "error");
-                                }
-                              }
-                            },
-                            child: Text("Continue"))
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            },
-            codeAutoRetrievalTimeout: (String verificationId) {},
-          );
-        } catch (error) {
-          switch ((error as FirebaseAuthException).code) {
-            case "ERROR_EMAIL_ALREADY_IN_USE":
-              {
-                setState(() {
-                  errorMsg = "This email is already in use.";
-                  isLoading = false;
-                });
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        content: Container(
-                          child: Text(errorMsg),
-                        ),
-                      );
-                    });
-              }
-              break;
-            case "ERROR_WEAK_PASSWORD":
-              {
-                setState(() {
-                  errorMsg = "The password must be 6 characters long or more.";
-                  isLoading = false;
-                });
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        content: Container(
-                          child: Text(errorMsg),
-                        ),
-                      );
-                    });
-              }
-              break;
-            default:
-              {
-                setState(() {
-                  errorMsg = "";
-                });
-              }
-          }
-        }
-      }
-    }
-
-    return AuthContainer(
-        child: isLoading
-            ? Center(
-                child: CircularProgress(),
-              )
-            : Consumer<LanguageNotifier>(
-                builder: (context, _, child) => SingleChildScrollView(
-                      child: Form(
+    return Scaffold(
+      appBar: AppBar(actions: [LanguagePicker()]),
+      body: isLoading
+          ? Center(
+              child: CircularProgress(),
+            )
+          : Consumer<LanguageNotifier>(
+              builder: (context, _, child) => ListView(
+                    padding: EdgeInsets.symmetric(horizontal: 30),
+                    children: [
+                      Form(
                         key: _formKey,
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            SizedBox(
-                              height: 22,
-                            ),
-                            Text(
-                              _language.signUp.toUpperCase(),
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
+                            SizedBox(height: 20),
+                            Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                _language.signUp,
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
-                            SizedBox(
-                              height: 47,
-                            ),
-                            smartTextField(
-                              title: _language.name,
+                            SizedBox(height: 47),
+                            SmartInput(
                               controller: nameController,
-                              isForm: true,
+                              label: _language.name,
+                              isRequired: true,
                             ),
-                            smartTextField(
-                              title: 'Email',
+                            SmartInput(
                               controller: emailController,
-                              validator: (val) =>
-                                  EmailValidator.isValidEmail(val!)
+                              label: "Email",
+                              isRequired: true,
+                              validator: (email) =>
+                                  EmailValidator.isValidEmail(email!)
                                       ? null
-                                      : "Enter a valid email",
-                              isForm: true,
-                              textInputType: TextInputType.emailAddress,
-                              required: false,
+                                      : "Invalid email",
+                              keyboardType: TextInputType.emailAddress,
                             ),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 25.0, vertical: 0),
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(50.0)),
-                                  border:
-                                      Border.all(width: 1, color: lightGrey)),
-                              child: InternationalPhoneNumberInput(
+                            SmartInput(
+                              controller: nameController,
+                              label: _language.name,
+                              widget: InternationalPhoneNumberInput(
+                                textStyle:
+                                    TextStyle().copyWith(color: darkGrey),
                                 onInputChanged: (PhoneNumber val) {
                                   number = val;
                                 },
@@ -342,73 +117,56 @@ class _SignUpPageState extends State<SignUpPage> {
                                 spaceBetweenSelectorAndTextField: 0,
                               ),
                             ),
-                            SizedBox(height: 20.0),
-                            smartTextField(
-                              title: _language.password,
+                            SmartInput(
                               controller: passwordController,
-                              isForm: true,
-                              obscure: true,
+                              label: _language.password,
+                              isRequired: true,
+                              obscureText: true,
                             ),
-                            smartTextField(
-                              title: _language.dob,
+                            SmartInput(
                               controller: dobController,
-                              isForm: true,
-                              validator: (String? val) =>
-                                  birthDateValidator(val!),
+                              label: _language.dob,
+                              keyboardType: TextInputType.phone,
+                              isRequired: true,
+                              validator: (val) => birthDateValidator(val!),
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(10),
                                 FilteringTextInputFormatter.singleLineFormatter,
                                 birthDateInput,
                               ],
-                              textInputType: TextInputType.phone,
                             ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: DropdownButtonHideUnderline(
-                                    child: DropdownButtonFormField<String>(
-                                        isExpanded: true,
-                                        decoration: InputDecoration().copyWith(
-                                          contentPadding: EdgeInsets.symmetric(
-                                              horizontal: 25.0, vertical: 6.0),
-                                          enabledBorder: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(50)),
-                                              borderSide:
-                                                  BorderSide(color: lightGrey)),
-                                          focusedBorder: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(50)),
-                                              borderSide:
-                                                  BorderSide(color: lightGrey)),
-                                          errorBorder: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(50)),
-                                              borderSide: BorderSide(
-                                                  color: Colors.red)),
-                                        ),
-                                        hint: Text(
-                                          _language.country,
-                                          style: Theme.of(context)
-                                              .inputDecorationTheme
-                                              .hintStyle,
-                                        ),
-                                        elevation: 0,
-                                        items: _countries,
-                                        validator: (val) =>
-                                            val == null ? "" : null,
-                                        onChanged: (String? val) {
-                                          setState(() => _country = val!);
-                                        }),
+                            Text(_language.country),
+                            SizedBox(height: 6),
+                            DropdownButtonHideUnderline(
+                              child: DropdownButtonFormField<String>(
+                                  isExpanded: true,
+                                  // style: TextStyle().copyWith(color: darkGrey),
+                                  decoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: inputBackground,
+                                    contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 25.0,
+                                      vertical: 18.0,
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(6)),
+                                      borderSide: BorderSide.none,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                  elevation: 0,
+                                  items: _countries,
+                                  validator: (val) =>
+                                      val == null ? "Select a country" : null,
+                                  onChanged: (String? val) {
+                                    setState(() => _country = val!);
+                                  }),
                             ),
-                            SizedBox(height: 20.0),
-                            smartTextField(
-                              title: _language.location,
-                              isForm: true,
+                            SizedBox(height: 15),
+                            SmartInput(
                               controller: locationController,
+                              label: _language.location,
+                              isRequired: true,
                             ),
                             Text(
                               _language.gender,
@@ -503,7 +261,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                   Text(
                                     _language.logIn,
                                     style: TextStyle(
-                                        color: Color(0xFFFD9A05),
+                                        color: primaryColor,
                                         fontWeight: FontWeight.w600),
                                   ),
                                 ],
@@ -515,7 +273,229 @@ class _SignUpPageState extends State<SignUpPage> {
                           ],
                         ),
                       ),
-                    )));
+                    ],
+                  )),
+    );
+  }
+
+  void _validateRegisterInput() async {
+    final FormState form = _formKey.currentState!;
+    if (_formKey.currentState!.validate()) {
+      form.save();
+      setState(() {
+        isLoading = true;
+      });
+      try {
+        int maleOrFemale = 1;
+        if (!_isMale) maleOrFemale = 0;
+        Map userData = {
+          'email': emailController.text,
+          'password': passwordController.text,
+          'displayName': nameController.text,
+          'phoneNumber': number.phoneNumber,
+          'location': locationController.text,
+          'dob': dobController.text,
+          'gender': maleOrFemale,
+          'status': true,
+          'country': _country,
+        };
+
+        await _auth.verifyPhoneNumber(
+          phoneNumber: number.phoneNumber,
+          verificationCompleted: (PhoneAuthCredential credential) async {
+            setState(() => isLoading = false);
+            showLoading(message: "Creating account", context: context);
+            try {
+              await AuthService.handlePhoneAuthCredentials(
+                credential: credential,
+                userData: userData,
+                context: context,
+              );
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MainWrapper(),
+                ),
+              );
+            } catch (error) {
+              showToast(msg: error.toString(), type: "error");
+            }
+          },
+          verificationFailed: (FirebaseAuthException e) {
+            setState(() => isLoading = false);
+            switch (e.code) {
+              case 'invalid-phone-number':
+                showToast(
+                    msg: 'The provided phone number is not valid',
+                    type: "error");
+                break;
+              default:
+                showToast(msg: e.message!, type: "error");
+                break;
+            }
+          },
+          codeSent: (String verificationId, int? resendToken) async {
+            setState(() => isLoading = false);
+            final formKey = GlobalKey<FormState>();
+            final pinController = TextEditingController();
+
+            showDialog(
+              context: context,
+              builder: (context) => Dialog(
+                child: Container(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Verification Code",
+                            style: TextStyle().copyWith(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 2.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              "Enter the verification code sent to your mobile phone",
+                              textAlign: TextAlign.center,
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 5.0),
+                      Form(
+                          key: formKey,
+                          child: Pinput(
+                              length: 6,
+                              controller: pinController,
+                              autofocus: true,
+                              onSubmitted: (pin) async {
+                                showLoading(
+                                    message: "Creating account",
+                                    context: context);
+                                try {
+                                  PhoneAuthCredential credential =
+                                      PhoneAuthProvider.credential(
+                                    verificationId: verificationId,
+                                    smsCode: pin,
+                                  );
+                                  await AuthService.handlePhoneAuthCredentials(
+                                    credential: credential,
+                                    userData: userData,
+                                    context: context,
+                                  );
+
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => MainWrapper(),
+                                    ),
+                                  );
+                                } catch (error) {
+                                  Navigator.pop(context);
+                                  showToast(
+                                      msg: error.toString(), type: "error");
+                                }
+                              },
+                              validator: (pin) =>
+                                  pin!.length < 6 || pin.length > 6
+                                      ? "Invalid code"
+                                      : null)),
+                      SizedBox(height: 5.0),
+                      ElevatedButton(
+                          onPressed: () async {
+                            if (formKey.currentState!.validate()) {
+                              showLoading(
+                                  message: "Creating account",
+                                  context: context);
+
+                              try {
+                                PhoneAuthCredential credential =
+                                    PhoneAuthProvider.credential(
+                                        verificationId: verificationId,
+                                        smsCode: pinController.text);
+
+                                await AuthService.handlePhoneAuthCredentials(
+                                  credential: credential,
+                                  userData: userData,
+                                  context: context,
+                                );
+
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MainWrapper(),
+                                  ),
+                                );
+                              } catch (error) {
+                                Navigator.pop(context);
+                                showToast(msg: error.toString(), type: "error");
+                              }
+                            }
+                          },
+                          child: Text("Continue"))
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+          codeAutoRetrievalTimeout: (String verificationId) {},
+        );
+      } catch (error) {
+        switch ((error as FirebaseAuthException).code) {
+          case "ERROR_EMAIL_ALREADY_IN_USE":
+            {
+              setState(() {
+                errorMsg = "This email is already in use.";
+                isLoading = false;
+              });
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      content: Container(
+                        child: Text(errorMsg),
+                      ),
+                    );
+                  });
+            }
+            break;
+          case "ERROR_WEAK_PASSWORD":
+            {
+              setState(() {
+                errorMsg = "The password must be 6 characters long or more.";
+                isLoading = false;
+              });
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      content: Container(
+                        child: Text(errorMsg),
+                      ),
+                    );
+                  });
+            }
+            break;
+          default:
+            {
+              setState(() {
+                errorMsg = "";
+              });
+            }
+        }
+      }
+    }
   }
 
   _fetchCountries() {
@@ -529,6 +509,18 @@ class _SignUpPageState extends State<SignUpPage> {
         });
       });
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    nameController = TextEditingController();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+    phoneNumberController = TextEditingController();
+    dobController = TextEditingController();
+    locationController = TextEditingController();
+    _fetchCountries();
   }
 
   @override

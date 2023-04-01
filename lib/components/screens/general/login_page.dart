@@ -1,23 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:smartrr/components/auth_wrapper.dart';
+import 'package:smartrr/components/screens/main_wrapper.dart';
+import 'package:smartrr/components/screens/user/otp.dart';
 import 'package:smartrr/components/widgets/circular_progress.dart';
+import 'package:smartrr/components/widgets/language_picker.dart';
 import 'package:smartrr/components/widgets/show_action.dart';
-import 'package:smartrr/components/widgets/show_loading.dart';
-import 'package:smartrr/components/widgets/smart_text_field.dart';
+import 'package:smartrr/components/widgets/smart_input.dart';
 import 'package:smartrr/provider/language_provider.dart';
+import 'package:smartrr/services/auth_service.dart';
+import 'package:smartrr/services/database_service.dart';
 import 'package:smartrr/utils/colors.dart';
+import 'package:smartrr/utils/emailValidator.dart';
 import 'package:smartrr/utils/utils.dart';
-import '../../widgets/auth_container.dart';
 import 'package:smartrr/generated/l10n.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class LoginPage extends StatefulWidget {
-  final bool isDarkTheme;
-
-  LoginPage({required this.isDarkTheme});
+  LoginPage();
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -55,103 +58,117 @@ class _LoginPageState extends State<LoginPage> {
     final _language = S.of(context);
 
     return Consumer<LanguageNotifier>(
-        builder: (context, LanguageNotifier notifier, child) => AuthContainer(
-                child: Form(
-              key: _formKey,
-              child: isLoading
-                  ? Center(
-                      child: CircularProgress(),
-                    )
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                          SizedBox(
-                            height: kToolbarHeight,
-                          ),
-                          Text(
-                            "${_language.logIn} smart rr".toUpperCase(),
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+        builder: (context, LanguageNotifier notifier, child) => Scaffold(
+              appBar: AppBar(actions: [LanguagePicker()]),
+              body: Form(
+                key: _formKey,
+                child: isLoading
+                    ? Center(
+                        child: CircularProgress(),
+                      )
+                    : ListView(
+                        padding: EdgeInsets.symmetric(horizontal: 30),
+                        children: <Widget>[
+                            SizedBox(
+                              height: 74,
                             ),
-                          ),
-                          SizedBox(
-                            height: 40,
-                          ),
-                          ValueListenableBuilder(
-                              valueListenable: _signInWithPhone,
-                              builder: (context, _, __) {
-                                if (_signInWithPhone.value)
-                                  return _phoneSignInWidgets();
-                                return _emailSignInWidgets();
-                              }),
-                          SizedBox(height: 38.0),
-                          GestureDetector(
-                            onTap: () => _bottomSheet(
-                                context: context,
-                                isDarkTheme: widget.isDarkTheme),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  "${_language.dontHaveAccount} ",
-                                  style: TextStyle(
-                                    fontSize: 12.0,
-                                  ),
+                            Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                "${_language.logIn}",
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                                Text(
-                                  _language.signUp,
-                                  style: TextStyle(
-                                    color: Color(0xFFF59405),
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 21),
-                          GestureDetector(
-                            onTap: () =>
-                                Navigator.pushNamed(context, '/forgot'),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "${_language.forgotPassword} ",
-                                  style: TextStyle(
-                                    fontSize: 12.0,
-                                  ),
-                                ),
-                                Text(S.of(context).resetHere,
+                            SizedBox(
+                              height: 40,
+                            ),
+                            ValueListenableBuilder(
+                                valueListenable: _signInWithPhone,
+                                builder: (context, _, __) {
+                                  if (_signInWithPhone.value)
+                                    return _phoneSignInWidgets();
+                                  return _emailSignInWidgets();
+                                }),
+                            SizedBox(height: 38.0),
+                            GestureDetector(
+                              onTap: () => _bottomSheet(context: context),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    "${_language.dontHaveAccount} ",
                                     style: TextStyle(
-                                      color: Color(0xFFF59405),
+                                      fontSize: 12.0,
+                                    ),
+                                  ),
+                                  Text(
+                                    _language.signUp,
+                                    style: TextStyle(
+                                      color: primaryColor,
                                       fontWeight: FontWeight.w600,
-                                    ))
-                              ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 20),
-                        ]),
-            )));
+                            SizedBox(height: 20),
+                          ]),
+              ),
+            ));
   }
 
   Widget _emailSignInWidgets() {
     return Column(
       children: [
-        smartTextField(
-          title: 'Email',
-          controller: emailController,
-          isForm: true,
-          textInputType: TextInputType.emailAddress,
+        Align(
+          alignment: Alignment.centerRight,
+          child: InkWell(
+            child: Text(
+              "Use phone number instead",
+              style: TextStyle().copyWith(
+                color: primaryColor,
+                decoration: TextDecoration.underline,
+              ),
+            ),
+            onTap: _toggleSignInMode,
+          ),
         ),
-        smartTextField(
-            title: S.current.password,
-            controller: passwordController,
-            obscure: true,
-            isForm: true,
-            suffixIcon: Icon(Icons.e_mobiledata)),
+        SmartInput(
+          controller: emailController,
+          label: "Email",
+          keyboardType: TextInputType.emailAddress,
+          isRequired: true,
+          validator: (email) {
+            if (!EmailValidator.isValidEmail(email)) {
+              return "Invalid email";
+            }
+            return null;
+          },
+        ),
+        SmartInput(
+          controller: passwordController,
+          label: S.current.password,
+          obscureText: true,
+          isRequired: true,
+        ),
+        Align(
+          alignment: Alignment.centerRight,
+          child: GestureDetector(
+            onTap: () => Navigator.pushNamed(context, '/forgot'),
+            child: Text(
+              "${S.current.forgotPassword} ",
+              style: TextStyle(
+                fontSize: 12.0,
+                color: primaryColor,
+                decoration: TextDecoration.underline,
+              ),
+            ),
+          ),
+        ),
         SizedBox(
           height: 5,
         ),
@@ -218,13 +235,6 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ],
         ),
-        InkWell(
-          child: Text(
-            "Sign in with phone",
-            style: TextStyle().copyWith(color: primaryColor),
-          ),
-          onTap: _toggleSignInMode,
-        ),
       ],
     );
   }
@@ -232,13 +242,30 @@ class _LoginPageState extends State<LoginPage> {
   Widget _phoneSignInWidgets() {
     return Column(
       children: [
+        Align(
+          alignment: Alignment.centerRight,
+          child: InkWell(
+            child: Text(
+              "Use email instead",
+              style: TextStyle().copyWith(
+                color: primaryColor,
+                decoration: TextDecoration.underline,
+              ),
+            ),
+            onTap: _toggleSignInMode,
+          ),
+        ),
+        SizedBox(height: 14),
+        Align(alignment: Alignment.centerLeft, child: Text("Mobile Number")),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 0),
-          margin: EdgeInsets.only(bottom: 15.0),
+          padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 6),
+          margin: EdgeInsets.only(bottom: 15.0, top: 6),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(50.0)),
-              border: Border.all(width: 1, color: lightGrey)),
+            color: inputBackground,
+            borderRadius: BorderRadius.all(Radius.circular(6.0)),
+          ),
           child: InternationalPhoneNumberInput(
+            textStyle: TextStyle().copyWith(color: darkGrey),
             onInputChanged: (PhoneNumber val) {
               number = val;
             },
@@ -251,6 +278,7 @@ class _LoginPageState extends State<LoginPage> {
             inputBorder: InputBorder.none,
             selectorButtonOnErrorPadding: 0,
             spaceBetweenSelectorAndTextField: 0,
+            hintText: "",
           ),
         ),
         Row(
@@ -258,23 +286,16 @@ class _LoginPageState extends State<LoginPage> {
             Expanded(
               child: TextButton(
                 onPressed: _loginWithPhone,
-                child: Text(S.current.logIn),
+                child: Text(S.current.requestOTP),
               ),
             ),
           ],
-        ),
-        InkWell(
-          child: Text(
-            "Sign in with email",
-            style: TextStyle().copyWith(color: primaryColor),
-          ),
-          onTap: _toggleSignInMode,
         ),
       ],
     );
   }
 
-  _bottomSheet({required BuildContext context, required bool isDarkTheme}) {
+  _bottomSheet({required BuildContext context}) {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
@@ -420,136 +441,31 @@ class _LoginPageState extends State<LoginPage> {
       setState(() => isLoading = true);
 
       if (await _userExists(number.phoneNumber!)) {
-        await _auth.verifyPhoneNumber(
+        int? _resetToken;
+
+        await _auth
+            .verifyPhoneNumber(
           phoneNumber: number.phoneNumber,
-          verificationCompleted: (PhoneAuthCredential credential) async {
-            try {
-              await _handleSignInWithPhone(
-                credential: credential,
-                context: context,
-              );
-            } catch (e) {
-              Navigator.pop(context);
-              showToast(msg: e.toString(), type: "error");
-            }
-          },
-          verificationFailed: (FirebaseAuthException e) {
-            Navigator.pop(context);
-            setState(() => isLoading = false);
-            _handlePhoneAuthError(e);
-          },
+          verificationCompleted: _onVerificationCompleted,
+          verificationFailed: _handlePhoneAuthError,
+          forceResendingToken: _resetToken,
+          codeAutoRetrievalTimeout: (String verificationId) {},
           codeSent: (String verificationId, int? resendToken) {
             setState(() => isLoading = false);
-            final formKey = GlobalKey<FormState>();
-            final pinController = TextEditingController();
-
-            showDialog(
-              barrierDismissible: false,
-              context: context,
-              builder: (context) => Dialog(
-                child: Container(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
-                  child: isLoading
-                      ? Center(child: CircularProgressIndicator())
-                      : Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Verification Code",
-                                  style: TextStyle().copyWith(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 2.0),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    "Enter the verification code sent to your mobile phone",
-                                    textAlign: TextAlign.center,
-                                  ),
-                                )
-                              ],
-                            ),
-                            SizedBox(height: 5.0),
-                            Form(
-                                key: formKey,
-                                child: Pinput(
-                                  length: 6,
-                                  controller: pinController,
-                                  onSubmitted: (pin) async {
-                                    try {
-                                      PhoneAuthCredential credential =
-                                          PhoneAuthProvider.credential(
-                                              verificationId: verificationId,
-                                              smsCode: pin);
-
-                                      await _handleSignInWithPhone(
-                                          context: context,
-                                          credential: credential);
-                                    } catch (e) {
-                                      Navigator.pop(context);
-                                      _handlePhoneAuthError(e);
-                                    }
-                                  },
-                                  validator: (pin) =>
-                                      pin!.length < 6 || pin.length > 6
-                                          ? "Invalid code"
-                                          : null,
-                                )),
-                            SizedBox(height: 5.0),
-                            ElevatedButton(
-                              onPressed: () async {
-                                if (formKey.currentState!.validate()) {
-                                  setState(() => isLoading = true);
-                                  showLoading(
-                                      message: "Logging in...",
-                                      context: context);
-                                  try {
-                                    PhoneAuthCredential credential =
-                                        PhoneAuthProvider.credential(
-                                            verificationId: verificationId,
-                                            smsCode: pinController.text);
-
-                                    await _handleSignInWithPhone(
-                                        context: context,
-                                        credential: credential);
-                                  } catch (e) {
-                                    Navigator.pop(context);
-                                    _handlePhoneAuthError(e);
-                                  }
-                                }
-                              },
-                              child: Text("Continue"),
-                            ),
-                            SizedBox(height: 5.0),
-                            InkWell(
-                              onTap: () {
-                                Navigator.pop(context);
-                                _loginWithPhone();
-                              },
-                              child: Text("Resend code"),
-                            ),
-                            SizedBox(height: 10.0),
-                            InkWell(
-                              onTap: () => Navigator.pop(context),
-                              child: Text("Cancel"),
-                            )
-                          ],
-                        ),
-                ),
+            _resetToken = resendToken;
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => OTPScreen(verificationId: verificationId),
               ),
             );
           },
-          codeAutoRetrievalTimeout: (String verificationId) {},
-        );
+        )
+            .onError((error, stackTrace) async {
+          Navigator.pop(context);
+          showToast(msg: error.toString(), type: "error");
+          await Sentry.captureException(error, stackTrace: stackTrace);
+        });
       } else {
         setState(() {
           errorMsg = "Account does not exist";
@@ -560,7 +476,23 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  _onVerificationCompleted(PhoneAuthCredential credential) async {
+    await AuthService.handleSignInWithPhone(
+      credential: credential,
+      context: context,
+    );
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MainWrapper(),
+      ),
+      ModalRoute.withName("/userMain"),
+    );
+  }
+
   _handlePhoneAuthError(dynamic error) {
+    Navigator.pop(context);
     setState(() => isLoading = false);
     switch (error.code) {
       case 'invalid-phone-number':
@@ -574,24 +506,6 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  _handleSignInWithPhone(
-      {required PhoneAuthCredential credential,
-      required BuildContext context}) async {
-    UserCredential userCredential =
-        await _auth.signInWithCredential(credential);
-
-    final users = await FirebaseFirestore.instance
-        .collection("users")
-        .where("uId", isEqualTo: userCredential.user!.uid)
-        .get();
-
-    await setUserIdPref(
-        userId: userCredential.user!.uid, userDocId: users.docs[0].id);
-
-    Navigator.pushNamedAndRemoveUntil(
-        context, '/userMain', ModalRoute.withName('Dashboard'));
-  }
-
   Future<bool> _userExists(String phoneNumber) async {
     final user = await FirebaseFirestore.instance
         .collection("users")
@@ -602,10 +516,10 @@ class _LoginPageState extends State<LoginPage> {
     return false;
   }
 
-  _loginUser({required String userId, required String userDocId}) {
+  _loginUser({required String userId, required String userDocId}) async {
     bool _isLoginError = false;
     try {
-      FirebaseAuth.instance
+      return await FirebaseAuth.instance
           .signInWithEmailAndPassword(
               email: emailController.text, password: passwordController.text)
           .catchError((error) {
@@ -616,28 +530,35 @@ class _LoginPageState extends State<LoginPage> {
         setState(() => _isLoginError = true);
         _showException();
       }).then(
-        (UserCredential result) {
-          setState(() => isLoading = false);
+        (UserCredential result) async {
           if (!_isLoginError) {
-            setUserIdPref(userId: userId, userDocId: userDocId).then((_) =>
-                Navigator.pushNamedAndRemoveUntil(
-                    context, '/userMain', ModalRoute.withName('Dashboard')));
+            await setUserIdPref(userId: userId, userDocId: userDocId);
+            await onLoginSuccessful(result.user!);
+            setState(() => isLoading = false);
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AuthWrapper(),
+              ),
+              ModalRoute.withName("/"),
+            );
           }
         },
       );
-    } catch (error) {
+    } catch (error, stackTrace) {
       setState(() {
         errorMsg = "An error occured!";
         isLoading = false;
       });
       _showException();
+      await Sentry.captureException(error, stackTrace: stackTrace);
     }
   }
 
-  _loginOrg({required String orgId}) {
+  _loginOrg({required String orgId}) async {
     bool _isLoginError = false;
     try {
-      FirebaseAuth.instance
+      return await FirebaseAuth.instance
           .signInWithEmailAndPassword(
               email: emailController.text, password: passwordController.text)
           .catchError((error) {
@@ -648,22 +569,31 @@ class _LoginPageState extends State<LoginPage> {
         setState(() => _isLoginError = true);
         _showException();
       }).then(
-        (UserCredential result) {
-          setState(() => isLoading = false);
+        (UserCredential result) async {
           if (!_isLoginError) {
-            setOrgIdPref(orgId: orgId).then((_) =>
-                Navigator.pushNamedAndRemoveUntil(
-                    context, '/orgMain', ModalRoute.withName('Dashboard')));
+            await setOrgIdPref(orgId: orgId);
+            await onLoginSuccessful(result.user!);
+            setState(() => isLoading = false);
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/orgMain',
+              ModalRoute.withName('Dashboard'),
+            );
           }
         },
       );
-    } catch (error) {
+    } catch (error, stackTrace) {
       setState(() {
         errorMsg = "User not found!";
         isLoading = false;
       });
       _showException();
+      await Sentry.captureException(error, stackTrace: stackTrace);
     }
+  }
+
+  Future onLoginSuccessful(User user) async {
+    await DatabaseService().setDeviceToken(user);
   }
 
   void _showException() {

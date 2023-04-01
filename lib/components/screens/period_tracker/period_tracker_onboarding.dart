@@ -45,6 +45,7 @@ class _PeriodTrackerOnboardingState extends State<PeriodTrackerOnboarding> {
               Container(
                 child: SvgPicture.asset(
                   "assets/images/menstrual-calendar-pana.svg",
+                  allowDrawingOutsideViewBox: true,
                   width: MediaQuery.of(context).size.width,
                 ),
               ),
