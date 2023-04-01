@@ -7,10 +7,21 @@
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
    <application
         android:label="SmartRR"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+      <provider
+      android:name="vn.hunghd.flutterdownloader.DownloadedFileProvider"
+      android:authorities="${applicationId}.flutter_downloader.provider"
+      android:exported="false"
+      android:grantUriPermissions="true">
+      <meta-data
+          android:name="android.support.FILE_PROVIDER_PATHS"
+          android:resource="@xml/provider_paths"/>
+    </provider>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDwOvvKZ2QQnQNkTtJOa9swaPk9Ir8B6jI" />

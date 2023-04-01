@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:smartrr/components/auth_wrapper.dart';
@@ -11,7 +9,6 @@ import 'package:smartrr/components/screens/user/otp.dart';
 import 'package:smartrr/components/widgets/circular_progress.dart';
 import 'package:smartrr/components/widgets/language_picker.dart';
 import 'package:smartrr/components/widgets/show_action.dart';
-import 'package:smartrr/components/widgets/show_loading.dart';
 import 'package:smartrr/components/widgets/smart_input.dart';
 import 'package:smartrr/provider/language_provider.dart';
 import 'package:smartrr/services/auth_service.dart';

@@ -27,7 +27,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Cart"),
+        title: Text(
+          "Cart",
+          style: TextStyle().copyWith(color: materialWhite),
+        ),
         backgroundColor: primaryColor,
         centerTitle: false,
         iconTheme: IconThemeData().copyWith(color: Colors.white),

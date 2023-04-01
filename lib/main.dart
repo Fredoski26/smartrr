@@ -29,6 +29,7 @@ import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:smartrr/models/product.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:smartrr/env/env.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,6 +53,9 @@ void main() async {
   await Hive.openBox<Product>("cart");
 
   await LocalNotificationService.initialize();
+
+  // Initialize flutter downloader plugin for courses
+  await FlutterDownloader.initialize(debug: true);
 
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 

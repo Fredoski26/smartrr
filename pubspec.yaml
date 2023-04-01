@@ -60,6 +60,9 @@ dependencies:
   flutter_feather_icons: ^2.0.0+1
   simple_ripple_animation: ^0.0.7
   sentry_flutter: ^7.4.0
+  dart_jsonwebtoken: ^2.7.1
+  flutter_downloader: ^1.10.2
+  permission_handler: ^10.2.0
 
 dev_dependencies:
   build_runner: ^2.3.2
