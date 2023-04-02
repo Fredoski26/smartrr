@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:smartrr/env/env.dart';
 
 class ApiClient {
   Future<String> getAddressFromCoordinates(
@@ -20,17 +21,21 @@ class ApiClient {
     return jsonResponse['results'][0]['formatted_address'];
   }
 
-  Future<dynamic> sendSMS(
-      {required String phoneNumber, required String message}) async {
-//    ac89f1f3
-//    EWXULOE0HO87RjBn
-    var response = await http.post(
-        Uri.parse(
-            'https://rest.nexmo.com/sms/json?api_key=d11a9692&api_secret=SmartRR1TYIaXsFlM&to=$phoneNumber&from=SmartRR&text=$message'),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/x-www-form-urlencoded"
-        });
+  Future<dynamic> sendSMS({
+    required String phoneNumber,
+    required String message,
+  }) async {
+    var response =
+        await http.post(Uri.parse(Env.africastalkingApiBaseUrl), headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded",
+      "apiKey": Env.africastalkingApiKey,
+    }, body: {
+      "username": Env.africastalkingUsername,
+      "message": message,
+      "from": Env.africastalkingUsername,
+      "to": [phoneNumber],
+    });
     var jsonResponse = json.decode(response.body);
     return jsonResponse;
   }
