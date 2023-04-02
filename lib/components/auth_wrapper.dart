@@ -22,7 +22,10 @@ class _AuthWrapperState extends State<AuthWrapper> {
         builder: (context, snapshot) {
           if (snapshot.hasData && snapshot.data?.user != null) {
             if (DatabaseService().getDeviceToken == null) {
-              DatabaseService().setDeviceToken(snapshot.data!.user!);
+              DatabaseService().setDeviceToken(
+                user: snapshot.data!.user!,
+                isUser: snapshot.data!.isUser,
+              );
             }
             if (snapshot.data!.isUser!) {
               return MainWrapper();

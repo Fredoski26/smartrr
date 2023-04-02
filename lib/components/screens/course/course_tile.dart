@@ -2,10 +2,12 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:smartrr/models/course.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:smartrr/services/course_service.dart';
 
 class CourseTile extends StatefulWidget {
   final Course course;
@@ -50,15 +52,15 @@ class _CourseTileState extends State<CourseTile> {
               await FlutterDownloader.open(taskId: _taskId);
             }
           : null,
-      trailing: _status == DownloadTaskStatus.complete ||
-              _status == DownloadTaskStatus.failed
+      trailing: _status == DownloadTaskStatus.complete
           ? IconButton(
               icon: Icon(Icons.file_download_done),
               tooltip: "Open",
               onPressed: () async {
                 await FlutterDownloader.open(taskId: _taskId);
               })
-          : _status == DownloadTaskStatus.undefined
+          : _status == DownloadTaskStatus.undefined ||
+                  _status == DownloadTaskStatus.failed
               ? IconButton(
                   icon: Icon(Icons.file_download),
                   tooltip: "Download",
@@ -84,6 +86,7 @@ class _CourseTileState extends State<CourseTile> {
   }
 
   Future<String> startDownload(String url, String fileName) async {
+    print(fileName);
     Directory _path = await getApplicationDocumentsDirectory();
     String _localPath = _path.path + Platform.pathSeparator + fileName;
 
@@ -137,30 +140,30 @@ class _CourseTileState extends State<CourseTile> {
   @override
   void initState() {
     super.initState();
-    loadTasks();
+    // loadTasks();
 
     final isSuccess = IsolateNameServer.registerPortWithName(
       _port.sendPort,
       'downloader_send_port',
     );
-    if (isSuccess) {
-      _port.listen((dynamic data) {
-        String id = data[0];
-        int status = data[1];
-        int progress = data[2];
+    _port.listen((dynamic data) {
+      String id = data[0];
+      int status = data[1];
+      int progress = data[2];
 
-        _status = DownloadTaskStatus(status);
+      _status = DownloadTaskStatus(status);
 
-        if (_status == DownloadTaskStatus.failed) {
-          FlutterDownloader.remove(taskId: id);
-        }
-        setState(() {});
-      });
+      if (_status == DownloadTaskStatus.failed) {
+        FlutterDownloader.remove(taskId: id);
+      }
 
-      FlutterDownloader.registerCallback(CourseTile.downloadCallback);
-    } else {
-      print("ISOLATE CREATION FAILED");
-    }
+      if (_status == DownloadTaskStatus.complete) {
+        CourseService.captureDownload(FirebaseAuth.instance.currentUser!.uid);
+      }
+      setState(() {});
+    });
+
+    FlutterDownloader.registerCallback(CourseTile.downloadCallback);
   }
 
   @override

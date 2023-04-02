@@ -20,6 +20,7 @@ import 'package:smartrr/components/auth_wrapper.dart';
 import 'package:smartrr/generated/l10n.dart';
 import 'package:smartrr/provider/language_provider.dart';
 import 'package:smartrr/services/local_notification_service.dart';
+import 'package:smartrr/services/push_notification_service.dart';
 import 'package:smartrr/theme/themes.dart';
 import 'components/screens/general/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -53,6 +54,7 @@ void main() async {
   await Hive.openBox<Product>("cart");
 
   await LocalNotificationService.initialize();
+  await PushNotificationService.initialize();
 
   // Initialize flutter downloader plugin for courses
   await FlutterDownloader.initialize(debug: true);

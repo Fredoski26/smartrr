@@ -5,6 +5,7 @@ import 'package:smartrr/components/widgets/ask_action.dart';
 import 'package:smartrr/generated/l10n.dart';
 import 'package:smartrr/services/theme_provider.dart';
 import 'package:smartrr/utils/colors.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:smartrr/utils/utils.dart';
 
 class Profile extends StatefulWidget {
@@ -128,6 +129,7 @@ class _ProfileState extends State<Profile> {
       context: context,
       func: () async {
         await FirebaseAuth.instance.signOut().then((_) {
+          Hive.box("config").clear();
           clearPrefs().then((_) => Navigator.pushNamedAndRemoveUntil(
               context, '/login', ModalRoute.withName('Login')));
         });

@@ -12,4 +12,6 @@ abstract class Env {
   static final apiBaseUrl = _Env.apiBaseUrl;
   @EnviedField(varName: "SENTRY_DSN", obfuscate: true)
   static final sentryDsn = _Env.sentryDsn;
+  @EnviedField(varName: "JWT_SECRET", obfuscate: true)
+  static final jwtSecret = _Env.jwtSecret;
 }

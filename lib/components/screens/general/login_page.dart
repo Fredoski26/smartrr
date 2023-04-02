@@ -533,7 +533,7 @@ class _LoginPageState extends State<LoginPage> {
         (UserCredential result) async {
           if (!_isLoginError) {
             await setUserIdPref(userId: userId, userDocId: userDocId);
-            await onLoginSuccessful(result.user!);
+            await onLoginSuccessful(credential: result.user!);
             setState(() => isLoading = false);
             Navigator.pushAndRemoveUntil(
               context,
@@ -572,7 +572,7 @@ class _LoginPageState extends State<LoginPage> {
         (UserCredential result) async {
           if (!_isLoginError) {
             await setOrgIdPref(orgId: orgId);
-            await onLoginSuccessful(result.user!);
+            await onLoginSuccessful(credential: result.user!, isUser: false);
             setState(() => isLoading = false);
             Navigator.pushNamedAndRemoveUntil(
               context,
@@ -592,8 +592,8 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  Future onLoginSuccessful(User user) async {
-    await DatabaseService().setDeviceToken(user);
+  Future onLoginSuccessful({required User credential, isUser = true}) async {
+    await DatabaseService().setDeviceToken(user: credential, isUser: isUser);
   }
 
   void _showException() {

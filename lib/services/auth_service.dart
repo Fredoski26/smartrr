@@ -4,9 +4,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:smartrr/services/database_service.dart';
 import 'package:smartrr/utils/utils.dart';
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
+import 'package:smartrr/env/env.dart';
 
 abstract class AuthService {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  static String generateApiToken() {
+    final jwt = JWT({"client": "mobile"});
+    final expiresIn = Duration(seconds: 30);
+    final token = jwt.sign(SecretKey(Env.jwtSecret), expiresIn: expiresIn);
+
+    return token;
+  }
 
   static Future handleSignInWithPhone({
     required PhoneAuthCredential credential,
@@ -23,7 +33,7 @@ abstract class AuthService {
     await setUserIdPref(
         userId: userCredential.user!.uid, userDocId: users.docs[0].id);
 
-    await DatabaseService().setDeviceToken(userCredential.user!);
+    await DatabaseService().setDeviceToken(user: userCredential.user!);
 
     return true;
   }
