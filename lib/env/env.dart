@@ -20,4 +20,6 @@ abstract class Env {
   static final africastalkingApiKey = _Env.africastalkingApiKey;
   @EnviedField(varName: "AFRICASTALKING_API_BASE_URL", obfuscate: true)
   static final africastalkingApiBaseUrl = _Env.africastalkingApiBaseUrl;
+  @EnviedField(varName: "GOOGLE_MAPS_API_KEY", obfuscate: true)
+  static final googleMapsApiKey = _Env.googleMapsApiKey;
 }

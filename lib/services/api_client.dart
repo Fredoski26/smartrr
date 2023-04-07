@@ -5,15 +5,16 @@ import 'package:smartrr/env/env.dart';
 
 class ApiClient {
   Future<String> getAddressFromCoordinates(
-      double latitude, double longitude, String apiKey) async {
+    double latitude,
+    double longitude,
+  ) async {
     final response = await http.post(
         Uri.parse(
-            'https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=$apiKey'),
+            'https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=${Env.googleMapsApiKey}'),
         headers: {
           "Accept": "application/json",
           "Content-Type": "application/x-www-form-urlencoded"
         });
-    debugPrint("GETTING THE LOC FROM LAT LONG " + response.body);
     var jsonResponse = json.decode(response.body);
     // var newList = jsonResponse['response'];
     // print('Address from coordinates: $jsonResponse');
@@ -22,9 +23,10 @@ class ApiClient {
   }
 
   Future<dynamic> sendSMS({
-    required String phoneNumber,
+    required dynamic phoneNumber,
     required String message,
   }) async {
+    print(Env.africastalkingApiBaseUrl);
     var response =
         await http.post(Uri.parse(Env.africastalkingApiBaseUrl), headers: {
       "Accept": "application/json",
@@ -34,9 +36,12 @@ class ApiClient {
       "username": Env.africastalkingUsername,
       "message": message,
       "from": Env.africastalkingUsername,
-      "to": [phoneNumber],
+      "to": (phoneNumber is List) ? phoneNumber : [phoneNumber],
     });
-    var jsonResponse = json.decode(response.body);
+
+    print(response);
+
+    var jsonResponse = jsonDecode(response.body);
     return jsonResponse;
   }
 }

@@ -1,23 +1,19 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:smartrr/components/screens/period_tracker/period_tracker.dart';
 import 'package:smartrr/components/screens/period_tracker/period_tracker_wrapper.dart';
+import 'package:smartrr/components/screens/sos/sos.dart';
 import 'package:smartrr/components/screens/user/all_about_srhr.dart';
-import 'package:smartrr/components/screens/user/impact_of_smartrr.dart';
-import 'package:smartrr/components/screens/user/select_service_page.dart';
-import 'package:smartrr/components/screens/chatbot/chatbot.dart';
 import 'package:smartrr/components/widgets/language_picker.dart';
+import 'package:smartrr/components/widgets/smart_dropdown.dart';
 import 'package:smartrr/components/widgets/speech_to_text.dart';
 import 'package:smartrr/provider/language_provider.dart';
-import 'package:smartrr/services/theme_provider.dart';
+import 'package:smartrr/services/country_service.dart';
+import 'package:smartrr/services/database_service.dart';
 import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/utils/utils.dart';
 import 'consent_form_page.dart';
 import 'package:smartrr/generated/l10n.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -264,17 +260,19 @@ class _HomeState extends State<Home> {
                   .copyWith(fontWeight: FontWeight.w700, fontSize: 16),
             ),
           ),
-          onPressed: null,
-          // () => Navigator.of(context).push(
-          //   MaterialPageRoute(
-          //     builder: (context) => ChatBot(),
-          //   ),
-          // ),
+          onPressed: _showSosPrompt,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(100),
           ),
         ),
       ),
+    );
+  }
+
+  _showSosPrompt() async {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => SOS(),
     );
   }
 
