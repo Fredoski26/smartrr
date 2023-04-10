@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:smartrr/components/screens/course/course_tile.dart';
 import 'package:smartrr/models/course.dart';
@@ -27,9 +25,19 @@ class _DownloadedCoursesState extends State<DownloadedCourses> {
               );
             }
             return ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, index) =>
-                    CourseTile(course: snapshot.data![index]));
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                final course = snapshot.data![index];
+                return ListTile(
+                  leading: Icon(Icons.file_copy),
+                  title: Text(course.title),
+                  subtitle: Text(course.description),
+                  onTap: () async {
+                    await FlutterDownloader.open(taskId: course.id);
+                  },
+                );
+              },
+            );
           }
           return Center(
             child: CircularProgressIndicator(),
@@ -41,21 +49,26 @@ class _DownloadedCoursesState extends State<DownloadedCourses> {
 
   Future<List<Course>> loadCourses() async {
     final query = "SELECT * FROM task WHERE status=3";
-    return FlutterDownloader.loadTasksWithRawQuery(query: query)
-        .then((tasks) => tasks!
-            .map((task) => Course(
-                  author: "",
-                  title: task.filename!,
-                  description: "",
-                  files: [
-                    CourseFile(
-                      key: task.filename!,
-                      url: task.url,
-                      name: task.filename!,
-                    )
-                  ],
-                  downloads: 0,
-                ))
-            .toList());
+    final courses = FlutterDownloader.loadTasksWithRawQuery(query: query).then(
+      (tasks) => tasks!
+          .map(
+            (task) => Course(
+              id: task.taskId,
+              author: "",
+              title: task.filename!,
+              description: "",
+              file: CourseFile(
+                key: task.filename!,
+                url: task.url,
+                name: task.filename!,
+              ),
+              downloads: 0,
+              downloadStatus: task.status,
+            ),
+          )
+          .toList(),
+    );
+
+    return courses;
   }
 }

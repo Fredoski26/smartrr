@@ -12,6 +12,7 @@ class SmartInput extends StatelessWidget {
   final bool obscureText;
   final TextInputType keyboardType;
   final List<TextInputFormatter> inputFormatters;
+  final Function(String)? onSubmitted;
 
   const SmartInput({
     super.key,
@@ -24,6 +25,7 @@ class SmartInput extends StatelessWidget {
     this.obscureText = false,
     this.keyboardType = TextInputType.text,
     this.inputFormatters = const [],
+    this.onSubmitted,
   });
 
   @override
@@ -63,6 +65,7 @@ class SmartInput extends StatelessWidget {
                   ),
                 ),
                 inputFormatters: inputFormatters,
+                onFieldSubmitted: onSubmitted,
               ),
         SizedBox(height: 13),
       ],

@@ -1,7 +1,9 @@
+import 'package:dart_date/dart_date.dart';
 import "package:flutter/material.dart";
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import 'package:smartrr/components/screens/period_tracker/cycle_settings.dart';
 import 'package:smartrr/services/theme_provider.dart';
 import 'package:smartrr/utils/colors.dart';
 import "package:table_calendar/table_calendar.dart";
@@ -40,39 +42,56 @@ class _PeriodTrackerState extends State<PeriodTracker> {
           systemNavigationBarIconBrightness:
               theme.darkTheme ? Brightness.light : Brightness.dark,
         ),
-        child: Material(
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: RadialGradient(
-                colors: [
-                  Colors.white,
-                  _selectedDayEvents.isNotEmpty
-                      ? _selectedDayEvents.first.color.withOpacity(.1)
-                      : Colors.pink.withOpacity(.1),
-                ],
-              ),
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(
+              "Period Tracker",
+              style: TextStyle().copyWith(color: materialWhite),
             ),
-            child: ListView(
-              children: [
-                Container(
-                  height: 80.0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Period Tracker",
-                        style: TextStyle().copyWith(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                ValueListenableBuilder(
-                  valueListenable: _calendarFormat,
-                  builder: (context, _, __) {
-                    return TableCalendar(
+            centerTitle: true,
+            backgroundColor: primaryColor,
+            iconTheme: IconThemeData().copyWith(color: materialWhite),
+            actions: [
+              IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CycleSettings(),
+                        ));
+                  },
+                  icon: Icon(Icons.settings))
+            ],
+          ),
+          backgroundColor: Color(0xFFEEEEEE),
+          body: ListView(
+            padding: EdgeInsets.only(left: 30, top: 30, right: 30),
+            children: [
+              // Container(
+              //   height: 80.0,
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: [
+              //       Text(
+              //         "Period Tracker",
+              //         style: TextStyle().copyWith(
+              //           fontSize: 20,
+              //           fontWeight: FontWeight.bold,
+              //         ),
+              //       )
+              //     ],
+              //   ),
+              // ),
+              ValueListenableBuilder(
+                valueListenable: _calendarFormat,
+                builder: (context, _, __) {
+                  return Container(
+                    padding: EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: materialWhite,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: TableCalendar(
                       calendarFormat: _calendarFormat.value,
                       firstDay: DateTime.utc(2010, 10, 16),
                       lastDay: _lastCalendarDay,
@@ -83,13 +102,10 @@ class _PeriodTrackerState extends State<PeriodTracker> {
                       daysOfWeekStyle:
                           DaysOfWeekStyle(dowTextFormatter: weekDayBuilder),
                       headerStyle: HeaderStyle(
-                        leftChevronVisible: false,
-                        rightChevronVisible: false,
+                        titleCentered: true,
                       ),
                       calendarStyle: CalendarStyle(outsideDaysVisible: false),
-                      onFormatChanged: (format) {
-                        _calendarFormat.value = format;
-                      },
+                      availableCalendarFormats: {CalendarFormat.month: "Month"},
                       // onPageChanged: (focusedDay) =>
                       //     onDaySelected(focusedDay, _selectedDay),
                       eventLoader: (day) {
@@ -264,71 +280,82 @@ class _PeriodTrackerState extends State<PeriodTracker> {
                         },
                       ),
                       onDaySelected: onDaySelected,
-                    );
-                  },
+                    ),
+                  );
+                },
+              ),
+              SizedBox(height: 22.0),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                decoration: BoxDecoration(
+                  color: materialWhite,
+                  borderRadius: BorderRadius.circular(20),
                 ),
-                SizedBox(height: 50.0),
-                Center(
-                  child: Container(
-                    height: MediaQuery.of(context).size.height / 3,
-                    width: MediaQuery.of(context).size.height / 3,
-                    padding: EdgeInsets.all(10.0),
-                    decoration: BoxDecoration(
-                      color: _selectedDayEvents.isNotEmpty
-                          ? _selectedDayEvents.first.color
-                          : Colors.white,
-                      borderRadius: BorderRadius.circular(
-                          MediaQuery.of(context).size.height / 3),
-                      boxShadow: [
-                        BoxShadow(
-                          color: _selectedDayEvents.isNotEmpty
-                              ? _selectedDayEvents.first.color.shade300
-                              : Colors.grey.shade300,
-                          blurRadius: 0.0,
-                          spreadRadius: 1.0,
-                        ),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        isSameDay(_selectedDay, now)
+                            ? Text(
+                                "Today",
+                                style: TextStyle().copyWith(
+                                  color: _selectedDayEvents.first.color,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              )
+                            : Text(
+                                "${DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day).toHumanString()}",
+                                style: TextStyle().copyWith(
+                                  color: _selectedDayEvents.isNotEmpty
+                                      ? _selectedDayEvents.first.color
+                                      : darkGrey,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              )
                       ],
-                      gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            _selectedDayEvents.isNotEmpty
-                                ? _selectedDayEvents.first.color.shade200
-                                : Colors.grey.shade200,
-                            _selectedDayEvents.isNotEmpty
-                                ? _selectedDayEvents.first.color.shade300
-                                : Colors.grey.shade300,
-                            _selectedDayEvents.isNotEmpty
-                                ? _selectedDayEvents.first.color.shade400
-                                : Colors.grey.shade400,
-                            _selectedDayEvents.isNotEmpty
-                                ? _selectedDayEvents.first.color.shade500
-                                : Colors.grey.shade500,
-                          ],
-                          stops: [
-                            0.1,
-                            0.3,
-                            0.8,
-                            0.9
-                          ]),
                     ),
-                    child: Center(
-                      child: _selectedDayEvents.isNotEmpty
-                          ? _selectedDayEvents.first.title
-                          : Text(
-                              "Today seems like a good day",
-                              textAlign: TextAlign.center,
-                              style: TextStyle().copyWith(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
+                    SizedBox(height: 13),
+                    Center(
+                      child: Container(
+                        height: 156,
+                        width: 156,
+                        decoration: BoxDecoration(
+                          color: _selectedDayEvents.isNotEmpty
+                              ? _selectedDayEvents.first.color.withOpacity(.5)
+                              : Color(0xFFEEEEEE).withOpacity(.5),
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                        child: Center(
+                          child: Container(
+                            height: 140,
+                            width: 140,
+                            padding: EdgeInsets.all(10.0),
+                            decoration: BoxDecoration(
+                              color: _selectedDayEvents.isNotEmpty
+                                  ? _selectedDayEvents.first.color
+                                  : Color(0xFFEEEEEE),
+                              borderRadius: BorderRadius.circular(100),
                             ),
+                            child: Center(
+                              child: _selectedDayEvents.isNotEmpty
+                                  ? _selectedDayEvents.first.title
+                                  : Text(
+                                      "Today seems like a good day",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle().copyWith(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                )
-              ],
-            ),
+                  ],
+                ),
+              )
+            ],
           ),
         ),
       ),
@@ -384,7 +411,7 @@ class _PeriodTrackerState extends State<PeriodTracker> {
               'Period day ${j + 1}',
               style: TextStyle().copyWith(
                 color: materialWhite,
-                fontSize: 25,
+                fontSize: 16,
                 fontWeight: FontWeight.w900,
               ),
             ),
@@ -413,13 +440,13 @@ class _PeriodTrackerState extends State<PeriodTracker> {
               Text("Ovulation Day",
                   style: TextStyle().copyWith(
                       color: materialWhite,
-                      fontSize: 25,
+                      fontSize: 16,
                       fontWeight: FontWeight.w900)),
               Text('High possibility of getting pregnant',
                   textAlign: TextAlign.center,
                   style: TextStyle().copyWith(
                     color: materialWhite,
-                    fontSize: 18,
+                    fontSize: 12,
                   ))
             ],
           ),
@@ -453,7 +480,7 @@ class _PeriodTrackerState extends State<PeriodTracker> {
                   "Fertile Window",
                   style: TextStyle().copyWith(
                     color: materialWhite,
-                    fontSize: 25,
+                    fontSize: 16,
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -461,7 +488,7 @@ class _PeriodTrackerState extends State<PeriodTracker> {
                     textAlign: TextAlign.center,
                     style: TextStyle().copyWith(
                       color: materialWhite,
-                      fontSize: 18,
+                      fontSize: 12,
                     ))
               ],
             ),

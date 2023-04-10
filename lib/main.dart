@@ -1,8 +1,12 @@
+import 'dart:isolate';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:smartrr/components/screens/main_wrapper.dart';
+import 'package:smartrr/components/screens/period_tracker/period_tracker_wrapper.dart';
 import 'package:smartrr/components/screens/shop/shopping_cart.dart';
 import 'package:smartrr/components/screens/user/about.dart';
 import 'package:smartrr/components/screens/user/all_about_srhr.dart';
@@ -32,6 +36,20 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:smartrr/env/env.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 
+class DownloadHandler {
+  @pragma('vm:entry-point')
+  static void downloadCallback(
+    String id,
+    DownloadTaskStatus status,
+    int progress,
+  ) {
+    final SendPort sendPort =
+        IsolateNameServer.lookupPortByName('downloader_send_port')!;
+
+    sendPort.send([id, status.value, progress]);
+  }
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -58,6 +76,7 @@ void main() async {
 
   // Initialize flutter downloader plugin for courses
   await FlutterDownloader.initialize(debug: true);
+  await FlutterDownloader.registerCallback(DownloadHandler.downloadCallback);
 
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
@@ -109,7 +128,8 @@ class MyApp extends StatelessWidget {
         "/countries": (context) => SelectCountry(),
         "/srhr": (context) => AllAboutSRHR(),
         "/shop": (context) => Shop(),
-        "/cart": (context) => ShoppingCart()
+        "/cart": (context) => ShoppingCart(),
+        "/periodTracker": (context) => PeriodTrackerWrapper()
       },
       theme: isDarkTheme ? darkTheme : appTheme,
       localizationsDelegates: [

@@ -140,11 +140,8 @@ class _HomeState extends State<Home> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: GestureDetector(
-                          onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => PeriodTrackerWrapper(),
-                              )),
+                          onTap: () =>
+                              Navigator.pushNamed(context, "/periodTracker"),
                           child: Stack(
                             fit: StackFit.expand,
                             children: [
