@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class DateInputField extends StatefulWidget {
-  final dynamic? initialValue;
   final Function? onDateSelected;
+  final TextEditingController controller;
 
-  const DateInputField({this.onDateSelected, this.initialValue});
+  const DateInputField({
+    this.onDateSelected,
+    required this.controller,
+  });
   @override
   _DateInputFieldState createState() => _DateInputFieldState();
 }
@@ -16,16 +19,19 @@ class _DateInputFieldState extends State<DateInputField> {
 
   // Function to show the date picker
   Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
+    final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: _selectedDate ?? DateTime.now(),
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
     );
-    if (picked != null && picked != _selectedDate) {
+    if (pickedDate != null && pickedDate != _selectedDate) {
       setState(() {
-        _selectedDate = picked;
-        widget.onDateSelected != null ? widget.onDateSelected!(picked) : null;
+        widget.controller.text = DateFormat('dd-MM-yyyy').format(pickedDate);
+        _selectedDate = pickedDate;
+        widget.onDateSelected != null
+            ? widget.onDateSelected!(pickedDate)
+            : null;
       });
     }
   }
@@ -36,20 +42,13 @@ class _DateInputFieldState extends State<DateInputField> {
       onTap: () => _selectDate(context),
       child: AbsorbPointer(
         child: TextFormField(
+          controller: widget.controller,
+          validator: (value) =>
+              value == null || value.isEmpty ? "Field is required" : null,
           decoration: InputDecoration(
-            labelText: widget.initialValue != null
-                ? DateFormat('dd-MM-yyyy').format(widget.initialValue)
-                : _selectedDate != null
-                    ? DateFormat('dd-MM-yyyy').format(_selectedDate!)
-                    : null,
             border: InputBorder.none,
             contentPadding: EdgeInsets.zero,
           ),
-          initialValue: widget.initialValue != null
-              ? DateFormat('yyyy-MM-dd').format(widget.initialValue)
-              : _selectedDate != null
-                  ? DateFormat('yyyy-MM-dd').format(_selectedDate!)
-                  : null,
         ),
       ),
     );

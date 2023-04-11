@@ -15,8 +15,6 @@ class _PeriodTrackerWrapperState extends State<PeriodTrackerWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    // Hive.box("period_tracker").clear();
-
     if (lastPeriod == null) {
       return PeriodTrackerOnboarding();
     }

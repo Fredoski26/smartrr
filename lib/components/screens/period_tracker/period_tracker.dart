@@ -67,25 +67,11 @@ class _PeriodTrackerState extends State<PeriodTracker> {
           body: ListView(
             padding: EdgeInsets.only(left: 30, top: 30, right: 30),
             children: [
-              // Container(
-              //   height: 80.0,
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     children: [
-              //       Text(
-              //         "Period Tracker",
-              //         style: TextStyle().copyWith(
-              //           fontSize: 20,
-              //           fontWeight: FontWeight.bold,
-              //         ),
-              //       )
-              //     ],
-              //   ),
-              // ),
               ValueListenableBuilder(
                 valueListenable: _calendarFormat,
                 builder: (context, _, __) {
                   return Container(
+                    height: 450,
                     padding: EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: materialWhite,
@@ -299,12 +285,14 @@ class _PeriodTrackerState extends State<PeriodTracker> {
                             ? Text(
                                 "Today",
                                 style: TextStyle().copyWith(
-                                  color: _selectedDayEvents.first.color,
+                                  color: _selectedDayEvents.isNotEmpty
+                                      ? _selectedDayEvents.first.color
+                                      : darkGrey,
                                   fontWeight: FontWeight.w700,
                                 ),
                               )
                             : Text(
-                                "${DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day).toHumanString()}",
+                                "${_selectedDay.toHumanString().substring(0, _selectedDay.toHumanString().length - 6)}",
                                 style: TextStyle().copyWith(
                                   color: _selectedDayEvents.isNotEmpty
                                       ? _selectedDayEvents.first.color

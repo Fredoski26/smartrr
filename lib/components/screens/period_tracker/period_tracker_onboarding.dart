@@ -141,7 +141,9 @@ class _PeriodTrackerOnboardingState extends State<PeriodTrackerOnboarding> {
       return Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => CycleSettings(),
+          builder: (context) => CycleSettings(
+            isOnboarding: true,
+          ),
         ),
       );
     }

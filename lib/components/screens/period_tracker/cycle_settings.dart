@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:smartrr/components/screens/period_tracker/period_tracker.dart';
 import 'package:smartrr/components/widgets/smart_input.dart';
 import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/components/widgets/date_input.dart';
+import 'package:intl/intl.dart';
 
 class CycleSettings extends StatefulWidget {
-  const CycleSettings({super.key});
+  final bool isOnboarding;
+  const CycleSettings({super.key, this.isOnboarding = false});
 
   @override
   State<CycleSettings> createState() => _CycleSettingsState();
 }
 
 class _CycleSettingsState extends State<CycleSettings> {
+  final _formKey = new GlobalKey<FormState>();
   final _periodTrackerBox = Hive.box("period_tracker");
 
-  late DateTime lastPeriod;
+  late DateTime? lastPeriod;
 
-  late TextEditingController cycleLengthController;
-  late TextEditingController periodLengthController;
-  late TextEditingController lutealPhaseLengthController;
+  late TextEditingController _cycleLengthController;
+  late TextEditingController _periodLengthController;
+  late TextEditingController _lutealPhaseLengthController;
+  late TextEditingController _lastPeriodController;
 
   @override
   Widget build(BuildContext context) {
@@ -32,39 +35,43 @@ class _CycleSettingsState extends State<CycleSettings> {
         backgroundColor: primaryColor,
         iconTheme: IconThemeData().copyWith(color: materialWhite),
       ),
-      body: ListView(
-        padding: EdgeInsets.only(left: 30, top: 30, right: 30),
-        children: [
-          Text(
-            "Please answer the following questions:",
-            style: TextStyle().copyWith(fontSize: 18),
-          ),
-          Divider(height: 38),
-          SmartInput(
-            controller: new TextEditingController(),
-            label: "When did your last period start?",
-            widget: DateInputField(
-              onDateSelected: _onDateSelected,
-              initialValue: lastPeriod,
+      body: Form(
+        key: _formKey,
+        child: ListView(
+          padding: EdgeInsets.only(left: 30, top: 30, right: 30),
+          children: [
+            Text(
+              "Please answer the following questions:",
+              style: TextStyle().copyWith(fontSize: 18),
             ),
-          ),
-          SmartInput(
-            controller: cycleLengthController,
-            label: "What is your cycle length?",
-            keyboardType: TextInputType.number,
-          ),
-          SmartInput(
-            controller: periodLengthController,
-            label: "What is your period length?",
-            keyboardType: TextInputType.number,
-          ),
-          SmartInput(
-            controller: lutealPhaseLengthController,
-            label: "What is your luteal phase length?",
-            keyboardType: TextInputType.number,
-          ),
-          TextButton(onPressed: _onSave, child: Text("Save"))
-        ],
+            Divider(height: 38),
+            SmartInput(
+              controller: _lastPeriodController,
+              label: "When did your last period start?",
+              widget: DateInputField(
+                controller: _lastPeriodController,
+                onDateSelected: _onDateSelected,
+              ),
+            ),
+            SmartInput(
+              controller: _cycleLengthController,
+              label: "What is your cycle length?",
+              keyboardType: TextInputType.number,
+              isRequired: true,
+            ),
+            SmartInput(
+              controller: _periodLengthController,
+              label: "What is your period length?",
+              keyboardType: TextInputType.number,
+            ),
+            SmartInput(
+              controller: _lutealPhaseLengthController,
+              label: "What is your luteal phase length?",
+              keyboardType: TextInputType.number,
+            ),
+            TextButton(onPressed: _onSave, child: Text("Save"))
+          ],
+        ),
       ),
     );
   }
@@ -74,27 +81,29 @@ class _CycleSettingsState extends State<CycleSettings> {
   }
 
   void _onSave() {
-    _periodTrackerBox.putAll({
-      "lastPeriod": lastPeriod.toLocal(),
-      "cycleLength": cycleLengthController.text,
-      "periodLength": periodLengthController.text,
-      "lutealPhaseLength": lutealPhaseLengthController.text
-    });
+    if (_formKey.currentState!.validate()) {
+      _periodTrackerBox.putAll({
+        "lastPeriod": lastPeriod!.toLocal(),
+        "cycleLength": _cycleLengthController.text,
+        "periodLength": _periodLengthController.text,
+        "lutealPhaseLength": _lutealPhaseLengthController.text
+      });
 
-    Navigator.popUntil(context, ModalRoute.withName("/periodTracker"));
-
-    // Navigator.pushReplacement(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => PeriodTracker()),
-    // );
+      Navigator.pop(context);
+      Navigator.pushReplacementNamed(context, "/periodTracker");
+    }
   }
 
   @override
   void initState() {
     lastPeriod = _periodTrackerBox.get("lastPeriod");
-    periodLengthController = new TextEditingController(text: "5");
-    cycleLengthController = new TextEditingController(text: "28");
-    lutealPhaseLengthController = new TextEditingController(text: "14");
+    _periodLengthController = new TextEditingController(text: "5");
+    _cycleLengthController = new TextEditingController(text: "28");
+    _lutealPhaseLengthController = new TextEditingController(text: "14");
+    _lastPeriodController = new TextEditingController(
+        text: lastPeriod != null
+            ? DateFormat('yyyy-MM-dd').format(lastPeriod!)
+            : null);
     super.initState();
   }
 }

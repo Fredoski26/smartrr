@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:smartrr/components/screens/period_tracker/period_tracker_wrapper.dart';
 import 'package:smartrr/components/screens/sos/sos.dart';
 import 'package:smartrr/components/screens/user/all_about_srhr.dart';
 import 'package:smartrr/components/widgets/language_picker.dart';
-import 'package:smartrr/components/widgets/smart_dropdown.dart';
 import 'package:smartrr/components/widgets/speech_to_text.dart';
 import 'package:smartrr/provider/language_provider.dart';
-import 'package:smartrr/services/country_service.dart';
-import 'package:smartrr/services/database_service.dart';
 import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/utils/utils.dart';
 import 'consent_form_page.dart';
