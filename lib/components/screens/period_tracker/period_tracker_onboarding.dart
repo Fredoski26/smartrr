@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:hive/hive.dart';
 import 'package:smartrr/components/screens/period_tracker/cycle_settings.dart';
+import 'package:smartrr/services/period_tracker_service.dart';
 import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/utils/utils.dart';
 
@@ -137,7 +137,7 @@ class _PeriodTrackerOnboardingState extends State<PeriodTrackerOnboarding> {
 
   _onContinue() {
     if (birthYear != null) {
-      Hive.box("period_tracker").put("birthYear", birthYear);
+      PeriodTrackerService.setYearOfBirth(birthYear!);
       return Navigator.push(
         context,
         MaterialPageRoute(

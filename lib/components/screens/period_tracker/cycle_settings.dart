@@ -1,6 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:smartrr/components/widgets/smart_input.dart';
+import 'package:smartrr/services/period_tracker_service.dart';
 import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/components/widgets/date_input.dart';
 import 'package:intl/intl.dart';
@@ -15,7 +16,7 @@ class CycleSettings extends StatefulWidget {
 
 class _CycleSettingsState extends State<CycleSettings> {
   final _formKey = new GlobalKey<FormState>();
-  final _periodTrackerBox = Hive.box("period_tracker");
+  final User _currenctUser = FirebaseAuth.instance.currentUser!;
 
   late DateTime? lastPeriod;
 
@@ -82,12 +83,15 @@ class _CycleSettingsState extends State<CycleSettings> {
 
   void _onSave() {
     if (_formKey.currentState!.validate()) {
-      _periodTrackerBox.putAll({
-        "lastPeriod": lastPeriod!.toLocal(),
-        "cycleLength": _cycleLengthController.text,
-        "periodLength": _periodLengthController.text,
-        "lutealPhaseLength": _lutealPhaseLengthController.text
-      });
+      PeriodTrackerService.setLastPeriod(lastPeriod!.toLocal());
+      PeriodTrackerService.setCycleLength(
+          int.parse(_cycleLengthController.text));
+      PeriodTrackerService.setPeriodLength(
+          int.parse(_periodLengthController.text));
+      PeriodTrackerService.setLutealPhaseLength(
+          int.parse(_lutealPhaseLengthController.text));
+
+      PeriodTrackerService(uid: _currenctUser.uid).updateDocument();
 
       Navigator.pop(context);
       Navigator.pushReplacementNamed(context, "/periodTracker");
@@ -96,7 +100,7 @@ class _CycleSettingsState extends State<CycleSettings> {
 
   @override
   void initState() {
-    lastPeriod = _periodTrackerBox.get("lastPeriod");
+    lastPeriod = PeriodTrackerService.getLastPeriod;
     _periodLengthController = new TextEditingController(text: "5");
     _cycleLengthController = new TextEditingController(text: "28");
     _lutealPhaseLengthController = new TextEditingController(text: "14");
