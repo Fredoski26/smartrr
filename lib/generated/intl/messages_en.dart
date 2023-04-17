@@ -29,8 +29,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "acceptTerms": MessageLookupByLibrary.simpleMessage(
             "I accept all terms & conditions"),
         "age": MessageLookupByLibrary.simpleMessage("Age"),
-        "allAboutSRHR":
-            MessageLookupByLibrary.simpleMessage("All About SRH/FGM"),
+        "allAboutSRHR": MessageLookupByLibrary.simpleMessage("SRH/FGM"),
         "alreadyHaveAnAccount":
             MessageLookupByLibrary.simpleMessage("Already have an account?"),
         "badInternet": MessageLookupByLibrary.simpleMessage(

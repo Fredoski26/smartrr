@@ -246,7 +246,9 @@ class _SelectOrgPageState extends State<SelectOrgPage> {
       Organization organization = new Organization(
         id: organizations[i].id,
         name: organizations[i].get('name'),
-        locationId: organizations[i].get('locationId'),
+        locationId: organizations[i].get('locationId') != null
+            ? organizations[i].get("locationId")
+            : "",
         location: organizations[i].data().containsKey("location")
             ? organizations[i].get("location")
             : "",

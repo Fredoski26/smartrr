@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:smartrr/components/widgets/smart_dropdown.dart';
 import 'package:smartrr/services/api_client.dart';
-import 'package:smartrr/services/country_service.dart';
-import 'package:smartrr/services/database_service.dart';
+import 'package:smartrr/utils/utils.dart';
 
 class SOS extends StatefulWidget {
   const SOS({super.key});
@@ -37,7 +36,7 @@ class _SOSState extends State<SOS> {
                         value: selectedState,
                         items: statesList
                             .map((state) => DropdownMenuItem(
-                                  child: Text(state["name"]),
+                                  child: Text(state["state"]),
                                   value: state,
                                 ))
                             .toList(),
@@ -53,9 +52,7 @@ class _SOSState extends State<SOS> {
                   children: [
                     Expanded(
                       child: TextButton(
-                        onPressed: () {
-                          _submitSos();
-                        },
+                        onPressed: selectedState != null ? _submitSos : null,
                         child: Text("Alert"),
                       ),
                     )
@@ -67,41 +64,45 @@ class _SOSState extends State<SOS> {
   }
 
   Future _getStates() async {
-    return DatabaseService().getUser().then((user) async {
-      await CountryService.getStates(user["country"]).then((states) {
-        statesList = states;
-        isLoading = false;
-        setState(() => {});
-      });
-    });
-  }
-
-  _submitSos() async {
     final file =
         await rootBundle.loadString("assets/state-emergency-lines.json");
 
-    final List jsonFile = jsonDecode(file);
+    final List states = jsonDecode(file);
+    statesList = states;
+    isLoading = false;
+    setState(() {});
+  }
 
-    final match =
-        jsonFile.where((state) => state["state"] == selectedState?["name"]);
+  _submitSos() async {
+    try {
+      if (selectedState != null) {
+        setState(() => isLoading = true);
 
-    if (match.isNotEmpty) {
-      setState(() => isLoading = true);
+        final location = new Location();
+        final currentLocation = await location.getLocation();
+        final currentLocationName = await ApiClient().getAddressFromCoordinates(
+          currentLocation.latitude!,
+          currentLocation.longitude!,
+        );
+        final message =
+            "SOS from SmartRR App!\nI need help!\nLocation: ${currentLocationName}";
+        final emergencyLines = selectedState!["emergency_lines"] as List;
 
-      final location = new Location();
-      final currentLocation = await location.getLocation();
-      final currentLocationName = await ApiClient().getAddressFromCoordinates(
-        currentLocation.latitude!,
-        currentLocation.longitude!,
-      );
-      final message =
-          "SOS from SmartRR App!\nI need help!\nLocation: ${currentLocationName}";
-      print(message);
-      await ApiClient().sendSMS(
-        phoneNumber: match.first["emergency_lines"],
-        message: message,
-      );
+        final String phoneNumber =
+            emergencyLines.first.replaceFirst(r'0', '234');
+
+        await ApiClient().sendSMS(
+          phoneNumber: phoneNumber,
+          message: message,
+        );
+
+        showToast(msg: "SOS Successful", type: "success");
+      }
+    } catch (e) {
+      showToast(msg: e.toString(), type: "error");
+    } finally {
       setState(() => isLoading = false);
+      Navigator.pop(context);
     }
   }
 

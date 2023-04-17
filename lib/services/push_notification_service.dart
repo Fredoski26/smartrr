@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:smartrr/models/smart_notification.dart';
 import 'package:smartrr/services/local_notification_service.dart';
 
 abstract class PushNotificationService {
@@ -28,8 +29,10 @@ abstract class PushNotificationService {
       AndroidNotification? android = message.notification?.android;
       if (notification != null && android != null && !kIsWeb) {
         LocalNotificationService.showNotification(
-          title: notification.title!,
-          body: notification.body!,
+          notification: SmartNotification(
+            title: notification.title!,
+            body: notification.body!,
+          ),
         );
       }
     });

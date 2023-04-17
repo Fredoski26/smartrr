@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:smartrr/components/screens/period_tracker/period_tracker.dart';
 import 'package:smartrr/components/screens/period_tracker/period_tracker_wrapper.dart';
 import 'package:smartrr/components/widgets/ask_action.dart';
+import 'package:smartrr/services/auth_service.dart';
+import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:smartrr/generated/l10n.dart';
@@ -38,6 +40,7 @@ class CustomDrawer extends StatelessWidget {
       elevation: 1,
       child: ListView(children: [
         UserAccountsDrawerHeader(
+            decoration: BoxDecoration(color: secondaryColor),
             currentAccountPicture: _currentUser.photoURL != null
                 ? Image.network(_currentUser.photoURL!)
                 : Container(
@@ -63,42 +66,9 @@ class CustomDrawer extends StatelessWidget {
           onTap: () => Navigator.pushNamed(context, '/casesHistory'),
         ),
         ListTile(
-          leading: Icon(Icons.history),
-          title: Text("Period Tracker"),
-          onTap: () => Navigator.push(context,
-              MaterialPageRoute(builder: (context) => PeriodTrackerWrapper())),
-        ),
-        ListTile(
-          leading: Icon(Icons.shopping_bag_outlined),
-          title: Row(
-            children: [
-              Text(_language.shop),
-              // Container(
-              //   margin: EdgeInsets.all(2),
-              //   padding: EdgeInsets.all(10),
-              //   decoration: BoxDecoration(
-              //     color: Colors.purple.withOpacity(.1),
-              //     borderRadius: BorderRadius.circular(20.0),
-              //   ),
-              //   child: Text(
-              //     _language.new_,
-              //     style:
-              //         TextStyle().copyWith(color: Colors.purple, fontSize: 15),
-              //   ),
-              // ),
-            ],
-          ),
-          onTap: () => Navigator.of(context).pushNamed("/shop"),
-        ),
-        ListTile(
           leading: Icon(Icons.info_outline_rounded),
           title: Text(_language.aboutSmartRR),
           onTap: () => Navigator.of(context).pushNamed("/about"),
-        ),
-        ListTile(
-          leading: Icon(Icons.settings),
-          title: Text(_language.settings),
-          onTap: () => Navigator.pushNamed(context, '/settings'),
         ),
         ListTile(
           leading: Icon(Icons.question_mark_rounded),
@@ -108,9 +78,10 @@ class CustomDrawer extends StatelessWidget {
         ListTile(
           leading: Icon(Icons.logout),
           title: Text(_language.logOut),
-          onTap: _confirmLogout,
+          onTap: () => AuthService.logOutUser(context),
         )
       ]),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
     );
   }
 }

@@ -11,14 +11,14 @@ class PeriodTrackerService {
   static final CollectionReference _periodTrackerCollection =
       FirebaseFirestore.instance.collection("periodTracker");
 
-  static DateTime get getLastPeriod => _periodTrackerBox.get("lastPeriod");
+  static DateTime? get getLastPeriod => _periodTrackerBox.get("lastPeriod");
 
-  static int get getLutealPhaseLength =>
+  static int? get getLutealPhaseLength =>
       _periodTrackerBox.get("lutealPhaseLength");
 
-  static get getCycleLength => _periodTrackerBox.get("cycleLength");
-  static get getPeriodLength => _periodTrackerBox.get("periodLength");
-  static get getYearOfBirth => _periodTrackerBox.get("yearOfBirth");
+  static int? get getCycleLength => _periodTrackerBox.get("cycleLength");
+  static int? get getPeriodLength => _periodTrackerBox.get("periodLength");
+  static int? get getYearOfBirth => _periodTrackerBox.get("yearOfBirth");
 
   static Future setYearOfBirth(int year) async {
     _periodTrackerBox.put("yearOfBirth", year);

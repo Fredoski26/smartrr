@@ -1,9 +1,9 @@
 import 'package:dart_date/dart_date.dart';
 import "package:flutter/material.dart";
 import 'package:flutter/services.dart';
-import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:smartrr/components/screens/period_tracker/cycle_settings.dart';
+import 'package:smartrr/services/period_tracker_service.dart';
 import 'package:smartrr/services/theme_provider.dart';
 import 'package:smartrr/utils/colors.dart';
 import "package:table_calendar/table_calendar.dart";
@@ -19,16 +19,16 @@ class PeriodTracker extends StatefulWidget {
 
 class _PeriodTrackerState extends State<PeriodTracker> {
   late DateTime now;
-  late DateTime lastPeriod;
   late List<Event> _selectedDayEvents;
   late DateTime _selectedDay;
 
-  DateTime _lastCalendarDay = DateTime.utc(2030, 1, 1);
+  late List<DateTime> _ovulationDays;
+  late List<List<DateTime>> _period;
+  late List<List<DateTime>> _fertileWindow;
 
-  ValueNotifier<CalendarFormat> _calendarFormat =
-      ValueNotifier(CalendarFormat.month);
+  final DateTime _lastCalendarDay = DateTime(DateTime.now().year + 1);
 
-  Map<DateTime, List<Event>> allEvents = {};
+  final Map<DateTime, List<Event>> allEvents = {};
 
   @override
   Widget build(BuildContext context) {
@@ -67,208 +67,184 @@ class _PeriodTrackerState extends State<PeriodTracker> {
           body: ListView(
             padding: EdgeInsets.only(left: 30, top: 30, right: 30),
             children: [
-              ValueListenableBuilder(
-                valueListenable: _calendarFormat,
-                builder: (context, _, __) {
-                  return Container(
-                    height: 450,
-                    padding: EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: materialWhite,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: TableCalendar(
-                      calendarFormat: _calendarFormat.value,
-                      firstDay: DateTime.utc(2010, 10, 16),
-                      lastDay: _lastCalendarDay,
-                      focusedDay: _selectedDay,
-                      selectedDayPredicate: (day) =>
-                          isSameDay(_selectedDay, day),
-                      daysOfWeekHeight: 20,
-                      daysOfWeekStyle:
-                          DaysOfWeekStyle(dowTextFormatter: weekDayBuilder),
-                      headerStyle: HeaderStyle(
-                        titleCentered: true,
-                      ),
-                      calendarStyle: CalendarStyle(outsideDaysVisible: false),
-                      availableCalendarFormats: {CalendarFormat.month: "Month"},
-                      // onPageChanged: (focusedDay) =>
-                      //     onDaySelected(focusedDay, _selectedDay),
-                      eventLoader: (day) {
-                        final ovulationDays = FertilityCalculator(
-                          lastCalendarDay: _lastCalendarDay,
-                          cycleLength: 28,
-                          lastPeriod: lastPeriod,
-                        ).ovulation;
-                        for (int i = 0; i < ovulationDays.length; i++) {
-                          if (isSameDay(ovulationDays[i], day)) {
-                            List<Event> events = [
-                              Event(
-                                title: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text("Ovulation Day",
-                                        style: TextStyle().copyWith(
-                                            color: materialWhite,
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.w900)),
-                                    Text('High possibility of getting pregnant',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle().copyWith(
-                                          color: materialWhite,
-                                          fontSize: 18,
-                                        ))
-                                  ],
-                                ),
-                                type: EventType.OVULATION,
-                                color: Colors.blue,
-                              )
-                            ];
-                            return events;
-                          }
-                        }
+              Container(
+                height: 450,
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: materialWhite,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: TableCalendar(
+                  calendarFormat: CalendarFormat.month,
+                  firstDay: DateTime.utc(2010, 10, 16),
+                  lastDay: _lastCalendarDay,
+                  focusedDay: _selectedDay,
+                  selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+                  daysOfWeekHeight: 20,
+                  daysOfWeekStyle:
+                      DaysOfWeekStyle(dowTextFormatter: weekDayBuilder),
+                  headerStyle: HeaderStyle(
+                    titleCentered: true,
+                  ),
+                  calendarStyle: CalendarStyle(outsideDaysVisible: false),
+                  availableCalendarFormats: {CalendarFormat.month: "Month"},
+                  // onPageChanged: (focusedDay) =>
+                  //     onDaySelected(focusedDay, _selectedDay),
+                  eventLoader: (day) {
+                    for (int i = 0; i < _ovulationDays.length; i++) {
+                      if (isSameDay(_ovulationDays[i], day)) {
+                        List<Event> events = [
+                          Event(
+                            title: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("Ovulation Day",
+                                    style: TextStyle().copyWith(
+                                        color: materialWhite,
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.w900)),
+                                Text('High possibility of getting pregnant',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle().copyWith(
+                                      color: materialWhite,
+                                      fontSize: 18,
+                                    ))
+                              ],
+                            ),
+                            type: EventType.OVULATION,
+                            color: Colors.blue,
+                          )
+                        ];
+                        return events;
+                      }
+                    }
 
-                        final fertileWindow = FertilityCalculator(
-                          lastCalendarDay: _lastCalendarDay,
-                          cycleLength: 28,
-                          lastPeriod: lastPeriod,
-                        ).fertileWindow;
-
-                        for (int i = 0; i < fertileWindow.length; i++) {
-                          for (int j = 0; j < fertileWindow[i].length; j++) {
-                            if (isSameDay(fertileWindow[i][j], day)) {
-                              List<Event> events = [
-                                Event(
-                                  title: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "Fertile Window",
-                                        style: TextStyle().copyWith(
-                                          color: materialWhite,
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.w900,
-                                        ),
-                                      ),
-                                      Text('Possibility of getting pregnant',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle().copyWith(
-                                            color: materialWhite,
-                                            fontSize: 18,
-                                          ))
-                                    ],
-                                  ),
-                                  type: EventType.FERTILE_WINDOW,
-                                  color: Colors.teal,
-                                )
-                              ];
-                              return events;
-                            }
-                          }
-                        }
-
-                        final period = FertilityCalculator(
-                                lastCalendarDay: _lastCalendarDay,
-                                cycleLength: 28,
-                                lastPeriod: lastPeriod)
-                            .menstrualCycle;
-
-                        for (int i = 0; i < period.length; i++) {
-                          for (int j = 0; j < period[i].length; j++) {
-                            if (isSameDay(period[i][j], day)) {
-                              List<Event> events = [
-                                Event(
-                                  title: Text(
-                                    'Period day ${j + 1}',
+                    for (int i = 0; i < _fertileWindow.length; i++) {
+                      for (int j = 0; j < _fertileWindow[i].length; j++) {
+                        if (isSameDay(_fertileWindow[i][j], day)) {
+                          List<Event> events = [
+                            Event(
+                              title: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Fertile Window",
                                     style: TextStyle().copyWith(
                                       color: materialWhite,
                                       fontSize: 25,
                                       fontWeight: FontWeight.w900,
                                     ),
                                   ),
-                                  type: EventType.MESTRUAL_FLOW,
-                                  color: Colors.pink,
-                                )
-                              ];
-                              return events;
-                            }
-                          }
-                        }
-                        return [];
-                      },
-                      calendarBuilders: CalendarBuilders(
-                        todayBuilder: (context, day, _focusedDay) => Center(
-                          child: Text(day.day.toString()),
-                        ),
-                        selectedBuilder: (context, day, _focusedDay) => Center(
-                          child: Container(
-                            height: 40,
-                            width: 40,
-                            padding: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(100)),
-                            child: Center(
-                              child: Text(
-                                day.day.toString(),
-                                style: TextStyle().copyWith(color: darkGrey),
+                                  Text('Possibility of getting pregnant',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle().copyWith(
+                                        color: materialWhite,
+                                        fontSize: 18,
+                                      ))
+                                ],
                               ),
-                            ),
+                              type: EventType.FERTILE_WINDOW,
+                              color: Colors.teal,
+                            )
+                          ];
+                          return events;
+                        }
+                      }
+                    }
+
+                    for (int i = 0; i < _period.length; i++) {
+                      for (int j = 0; j < _period[i].length; j++) {
+                        if (isSameDay(_period[i][j], day)) {
+                          List<Event> events = [
+                            Event(
+                              title: Text(
+                                'Period day ${j + 1}',
+                                style: TextStyle().copyWith(
+                                  color: materialWhite,
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                              type: EventType.MESTRUAL_FLOW,
+                              color: Colors.pink,
+                            )
+                          ];
+                          return events;
+                        }
+                      }
+                    }
+                    return [];
+                  },
+                  calendarBuilders: CalendarBuilders(
+                    todayBuilder: (context, day, _focusedDay) => Center(
+                      child: Text(day.day.toString()),
+                    ),
+                    selectedBuilder: (context, day, _focusedDay) => Center(
+                      child: Container(
+                        height: 40,
+                        width: 40,
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(100)),
+                        child: Center(
+                          child: Text(
+                            day.day.toString(),
+                            style: TextStyle().copyWith(color: darkGrey),
                           ),
                         ),
-                        markerBuilder: (context, day, events) {
-                          if (events.isNotEmpty) {
-                            events = events as List<Event>;
-
-                            if (events[0].type == EventType.FERTILE_WINDOW) {
-                              return Center(
-                                child: Container(
-                                  height: 40,
-                                  width: 40,
-                                  padding: EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          width: 2, color: events[0].color),
-                                      borderRadius: BorderRadius.circular(100)),
-                                  child: Center(
-                                    child: Text(
-                                      day.day.toString(),
-                                      style: TextStyle()
-                                          .copyWith(color: events[0].color),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            } else {
-                              return Center(
-                                child: Container(
-                                  height: 40,
-                                  width: 40,
-                                  padding: EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                      color: events[0].color,
-                                      borderRadius: BorderRadius.circular(100)),
-                                  child: Center(
-                                    child: Text(
-                                      day.day.toString(),
-                                      style: TextStyle()
-                                          .copyWith(color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }
-                          }
-                          return null;
-                        },
                       ),
-                      onDaySelected: onDaySelected,
                     ),
-                  );
-                },
+                    markerBuilder: (context, day, events) {
+                      if (events.isNotEmpty) {
+                        events = events as List<Event>;
+
+                        if (events[0].type == EventType.FERTILE_WINDOW) {
+                          return Center(
+                            child: Container(
+                              height: 40,
+                              width: 40,
+                              padding: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: 2, color: events[0].color),
+                                  borderRadius: BorderRadius.circular(100)),
+                              child: Center(
+                                child: Text(
+                                  day.day.toString(),
+                                  style: TextStyle()
+                                      .copyWith(color: events[0].color),
+                                ),
+                              ),
+                            ),
+                          );
+                        } else {
+                          return Center(
+                            child: Container(
+                              height: 40,
+                              width: 40,
+                              padding: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                  color: events[0].color,
+                                  borderRadius: BorderRadius.circular(100)),
+                              child: Center(
+                                child: Text(
+                                  day.day.toString(),
+                                  style:
+                                      TextStyle().copyWith(color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+                      }
+                      return null;
+                    },
+                  ),
+                  onDaySelected: onDaySelected,
+                ),
               ),
               SizedBox(height: 22.0),
               Container(
@@ -386,10 +362,13 @@ class _PeriodTrackerState extends State<PeriodTracker> {
 
   void _getAllMenstrualFlowDays() {
     final period = FertilityCalculator(
-            lastCalendarDay: _lastCalendarDay,
-            cycleLength: 28,
-            lastPeriod: lastPeriod)
-        .menstrualCycle;
+      lastCalendarDay: _lastCalendarDay,
+      cycleLength: PeriodTrackerService.getCycleLength!,
+      lastPeriod: PeriodTrackerService.getLastPeriod!,
+      lutealPhaseLength: PeriodTrackerService.getLutealPhaseLength!,
+    ).menstrualCycle;
+
+    _period = period;
 
     for (int i = 0; i < period.length; i++) {
       for (int j = 0; j < period[i].length; j++) {
@@ -415,9 +394,12 @@ class _PeriodTrackerState extends State<PeriodTracker> {
   void _getAllOvulationDays() {
     final ovulationDays = FertilityCalculator(
       lastCalendarDay: _lastCalendarDay,
-      cycleLength: 28,
-      lastPeriod: lastPeriod,
+      cycleLength: PeriodTrackerService.getCycleLength!,
+      lastPeriod: PeriodTrackerService.getLastPeriod!,
+      lutealPhaseLength: PeriodTrackerService.getLutealPhaseLength!,
     ).ovulation;
+    _ovulationDays = ovulationDays;
+
     for (int i = 0; i < ovulationDays.length; i++) {
       List<Event> events = [
         Event(
@@ -452,9 +434,12 @@ class _PeriodTrackerState extends State<PeriodTracker> {
   void _getAllFertileWindows() {
     final fertileWindow = FertilityCalculator(
       lastCalendarDay: _lastCalendarDay,
-      cycleLength: 28,
-      lastPeriod: lastPeriod,
+      cycleLength: PeriodTrackerService.getCycleLength!,
+      lastPeriod: PeriodTrackerService.getLastPeriod!,
+      lutealPhaseLength: PeriodTrackerService.getLutealPhaseLength!,
     ).fertileWindow;
+
+    _fertileWindow = fertileWindow;
 
     for (int i = 0; i < fertileWindow.length; i++) {
       for (int j = 0; j < fertileWindow[i].length; j++) {
@@ -494,8 +479,6 @@ class _PeriodTrackerState extends State<PeriodTracker> {
 
   @override
   void initState() {
-    lastPeriod = Hive.box("period_tracker").get("lastPeriod");
-
     now = DateTime.now();
     _selectedDay = DateTime(now.year, now.month, now.day);
 

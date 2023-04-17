@@ -51,10 +51,6 @@ abstract class CourseService {
       final bool downloadTaskExists =
           downloadTask != null && downloadTask.isNotEmpty;
 
-      if (downloadTaskExists) {
-        await FlutterDownloader.remove(taskId: downloadTask.first.taskId);
-      }
-
       courses.add(
         Course(
           id: jsonData[i]["_id"],

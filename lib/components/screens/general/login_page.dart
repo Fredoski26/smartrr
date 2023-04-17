@@ -535,13 +535,12 @@ class _LoginPageState extends State<LoginPage> {
             await setUserIdPref(userId: userId, userDocId: userDocId);
             await onLoginSuccessful(credential: result.user!);
             setState(() => isLoading = false);
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (context) => AuthWrapper(),
-              ),
-              ModalRoute.withName("/"),
-            );
+            Navigator.pop(context);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AuthWrapper(),
+                ));
           }
         },
       );
@@ -577,7 +576,7 @@ class _LoginPageState extends State<LoginPage> {
             Navigator.pushNamedAndRemoveUntil(
               context,
               '/orgMain',
-              ModalRoute.withName('Dashboard'),
+              ModalRoute.withName('/'),
             );
           }
         },

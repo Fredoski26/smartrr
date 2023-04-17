@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:smartrr/env/env.dart';
 
@@ -26,22 +25,25 @@ class ApiClient {
     required dynamic phoneNumber,
     required String message,
   }) async {
-    print(Env.africastalkingApiBaseUrl);
-    var response =
-        await http.post(Uri.parse(Env.africastalkingApiBaseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/x-www-form-urlencoded",
-      "apiKey": Env.africastalkingApiKey,
-    }, body: {
-      "username": Env.africastalkingUsername,
-      "message": message,
-      "from": Env.africastalkingUsername,
-      "to": (phoneNumber is List) ? phoneNumber : [phoneNumber],
-    });
+    Map<String, dynamic> data = {
+      "sms": message,
+      "from": Env.termiiSenderId,
+      "to": phoneNumber,
+      "type": "plain",
+      "channel": "generic",
+      "api_key": Env.termiiApiKey,
+    };
 
-    print(response);
+    var response = await http.post(
+      Uri.parse(Env.termiiApiBaseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode(data),
+    );
 
-    var jsonResponse = jsonDecode(response.body);
-    return jsonResponse;
+    if (response.statusCode == 200) return true;
+    throw "Something went wrong";
   }
 }

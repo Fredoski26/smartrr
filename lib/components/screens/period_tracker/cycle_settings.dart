@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:smartrr/components/widgets/smart_input.dart';
+import 'package:smartrr/services/local_notification_service.dart';
 import 'package:smartrr/services/period_tracker_service.dart';
 import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/components/widgets/date_input.dart';
@@ -24,6 +25,11 @@ class _CycleSettingsState extends State<CycleSettings> {
   late TextEditingController _periodLengthController;
   late TextEditingController _lutealPhaseLengthController;
   late TextEditingController _lastPeriodController;
+
+  DateTime? _lastPeriod = PeriodTrackerService.getLastPeriod;
+  int? _periodLength = PeriodTrackerService.getPeriodLength;
+  int? _cycleLength = PeriodTrackerService.getCycleLength;
+  int? _lutealPhaseLength = PeriodTrackerService.getLutealPhaseLength;
 
   @override
   Widget build(BuildContext context) {
@@ -83,15 +89,26 @@ class _CycleSettingsState extends State<CycleSettings> {
 
   void _onSave() {
     if (_formKey.currentState!.validate()) {
-      PeriodTrackerService.setLastPeriod(lastPeriod!.toLocal());
-      PeriodTrackerService.setCycleLength(
-          int.parse(_cycleLengthController.text));
-      PeriodTrackerService.setPeriodLength(
-          int.parse(_periodLengthController.text));
-      PeriodTrackerService.setLutealPhaseLength(
-          int.parse(_lutealPhaseLengthController.text));
+      final int periodLength = int.parse(_periodLengthController.text);
+      final int cycleLength = int.parse(_cycleLengthController.text);
+      final int lutealPhaseLength =
+          int.parse(_lutealPhaseLengthController.text);
 
-      PeriodTrackerService(uid: _currenctUser.uid).updateDocument();
+      // check if there is a change
+      if (lastPeriod != _lastPeriod ||
+          _periodLength != periodLength ||
+          cycleLength != _cycleLength ||
+          lutealPhaseLength != _lutealPhaseLength) {
+        PeriodTrackerService.setLastPeriod(lastPeriod!.toLocal());
+        PeriodTrackerService.setCycleLength(cycleLength);
+        PeriodTrackerService.setPeriodLength(periodLength);
+        PeriodTrackerService.setLutealPhaseLength(lutealPhaseLength);
+
+        PeriodTrackerService(uid: _currenctUser.uid).updateDocument();
+
+        // cancel all scheduled notifications
+        LocalNotificationService.cancelAll();
+      }
 
       Navigator.pop(context);
       Navigator.pushReplacementNamed(context, "/periodTracker");
@@ -109,5 +126,14 @@ class _CycleSettingsState extends State<CycleSettings> {
             ? DateFormat('yyyy-MM-dd').format(lastPeriod!)
             : null);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _periodLengthController.dispose();
+    _cycleLengthController.dispose();
+    _lutealPhaseLengthController.dispose();
+    _lastPeriodController.dispose();
+    super.dispose();
   }
 }

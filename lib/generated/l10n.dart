@@ -270,10 +270,10 @@ class S {
     );
   }
 
-  /// `All About SRH/FGM`
+  /// `SRH/FGM`
   String get allAboutSRHR {
     return Intl.message(
-      'All About SRH/FGM',
+      'SRH/FGM',
       name: 'allAboutSRHR',
       desc: '',
       args: [],
