@@ -12,7 +12,6 @@ class FertilityCalculator {
   });
 
   List<List<DateTime>> get menstrualCycle {
-    print("CALLED MENTRUAL CYCLE");
     List<List<DateTime>> menstrualCycle = [];
     DateTime lastPeriodDay = lastPeriod;
 

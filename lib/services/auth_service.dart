@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:smartrr/components/widgets/ask_action.dart';
+import 'package:smartrr/models/product.dart';
 import 'package:smartrr/services/database_service.dart';
 import 'package:smartrr/utils/constants.dart';
 import 'package:smartrr/utils/utils.dart';
@@ -23,7 +24,7 @@ abstract class AuthService {
         await FirebaseAuth.instance.signOut().then((_) {
           Hive.box(kconfigBox).clear();
           Hive.box(kmessageBox).clear();
-          Hive.box(kcartBox).clear();
+          Hive.box<Product>(kcartBox).clear();
           Hive.box(knotificationBox).clear();
           clearPrefs().then(
             (_) => Navigator.pushNamedAndRemoveUntil(

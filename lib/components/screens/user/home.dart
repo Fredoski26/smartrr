@@ -11,6 +11,7 @@ import 'package:smartrr/utils/utils.dart';
 import 'consent_form_page.dart';
 import 'package:smartrr/generated/l10n.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -225,26 +226,14 @@ class _HomeState extends State<Home> {
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: materialWhite,
-          foregroundColor: materialWhite,
-          child: Container(
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: secondaryColor,
-            ),
-            child: Text(
-              "SOS",
-              style: TextStyle()
-                  .copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-            ),
+        floatingActionButton: IconButton(
+          icon: SvgPicture.asset(
+            "assets/icons/sos.svg",
+            fit: BoxFit.fitHeight,
           ),
           onPressed: _showSosPrompt,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(100),
-          ),
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endContained,
       ),
     );
   }

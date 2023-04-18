@@ -12,16 +12,14 @@ abstract class CourseService {
   static Future<bool> captureDownload(String uid, String courseId) async {
     final token = AuthService.generateApiToken();
 
-    print("UID: $uid TOKEN: $token");
-
-    final res = await http.put(Uri.parse("$_apiBaseUrl/courses/$courseId"),
-        headers: {
-          "Content-Type": "multipart/form-data",
-          "Authorization": "Bearer $token"
-        },
-        body: {
-          "userId": uid
-        });
+    final res = await http.put(
+      Uri.parse("$_apiBaseUrl/courses/$courseId"),
+      headers: {
+        "Content-Type": "multipart/form-data",
+        "Authorization": "Bearer $token"
+      },
+      body: jsonEncode({"userId": uid}),
+    );
 
     print("RESPONSE: $res");
     if (res.statusCode == 200) return true;

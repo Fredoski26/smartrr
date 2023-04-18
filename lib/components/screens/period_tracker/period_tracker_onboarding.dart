@@ -50,14 +50,19 @@ class _PeriodTrackerOnboardingState extends State<PeriodTrackerOnboarding> {
                 ),
                 Text(
                   "Hello!",
+                  textAlign: TextAlign.center,
                   style: TextStyle()
                       .copyWith(fontSize: 40, fontWeight: FontWeight.w900),
                 ),
                 Text(
                   "Welcome to SmartRR Period Tracker",
+                  textAlign: TextAlign.center,
                   style: TextStyle().copyWith(fontSize: 20),
                 ),
-                Text("Easily keep track of your period with no surprises")
+                Text(
+                  "Easily keep track of your period with no surprises",
+                  textAlign: TextAlign.center,
+                )
               ],
             ),
           ),
@@ -115,18 +120,19 @@ class _PeriodTrackerOnboardingState extends State<PeriodTrackerOnboarding> {
               style: TextStyle().copyWith(fontSize: 12),
             ),
           ),
-          Container(
-            height: 500,
-            margin: EdgeInsets.only(top: 50, bottom: 50),
-            child: CupertinoPicker(
-              squeeze: .8,
-              diameterRatio: 3,
-              children: years
-                  .map((year) => Center(child: Text(year.toString())))
-                  .toList(),
-              itemExtent: 50,
-              onSelectedItemChanged: ((index) => {birthYear = years[index]}),
-              looping: true,
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.only(top: 50, bottom: 50),
+              child: CupertinoPicker(
+                squeeze: .8,
+                diameterRatio: 3,
+                children: years
+                    .map((year) => Center(child: Text(year.toString())))
+                    .toList(),
+                itemExtent: 50,
+                onSelectedItemChanged: ((index) => {birthYear = years[index]}),
+                looping: true,
+              ),
             ),
           ),
           TextButton(onPressed: _onContinue, child: Text("Continue"))
