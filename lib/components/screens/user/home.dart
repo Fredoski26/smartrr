@@ -49,7 +49,7 @@ class _HomeState extends State<Home> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "Welcome ${_currentUser.displayName?.split(' ')[0]}.",
+                  "${S.of(context).welcome} ${_currentUser.displayName?.split(' ')[0]}.",
                   style: TextStyle().copyWith(
                     color: darkGrey,
                     fontWeight: FontWeight.w700,
@@ -62,7 +62,7 @@ class _HomeState extends State<Home> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "How may we help you today?",
+                  "${S.current.howMayWeHelpYouToday}?",
                   style: TextStyle().copyWith(
                     color: darkGrey,
                     fontSize: 14,

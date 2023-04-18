@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:smartrr/components/widgets/smart_dropdown.dart';
 import 'package:smartrr/services/api_client.dart';
+import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/utils/utils.dart';
 
 class SOS extends StatefulWidget {
@@ -52,7 +54,7 @@ class _SOSState extends State<SOS> {
                   children: [
                     Expanded(
                       child: TextButton(
-                        onPressed: selectedState != null ? _submitSos : null,
+                        onPressed: selectedState != null ? _showWarning : null,
                         child: Text("Alert"),
                       ),
                     )
@@ -73,9 +75,53 @@ class _SOSState extends State<SOS> {
     setState(() {});
   }
 
+  _showWarning() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        icon: Icon(
+          Icons.warning_amber,
+          color: red,
+        ),
+        title: Text(
+          "Warning!!!",
+          style: TextStyle().copyWith(color: red, fontWeight: FontWeight.w700),
+        ),
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+                "You are about to send an emergency text message to security operatives nearest to you. Do not play pranks."),
+            Text("Do you want to proceed?")
+          ],
+        ),
+        actions: [
+          InkWell(
+            child: Text(
+              "No, Cancel",
+              style: TextStyle()
+                  .copyWith(color: Colors.blue, fontWeight: FontWeight.w700),
+            ),
+            onTap: () => Navigator.pop(context),
+          ),
+          InkWell(
+            child: Text(
+              "Yes, Proceed",
+              style:
+                  TextStyle().copyWith(color: red, fontWeight: FontWeight.w700),
+            ),
+            onTap: _submitSos,
+          )
+        ],
+      ),
+    );
+  }
+
   _submitSos() async {
     try {
       if (selectedState != null) {
+        Navigator.pop(context);
         setState(() => isLoading = true);
 
         final location = new Location();
@@ -106,8 +152,16 @@ class _SOSState extends State<SOS> {
     }
   }
 
+  _requestPermission() async {
+    final locationPermission = await Permission.location.status;
+    if (!locationPermission.isGranted) {
+      await Permission.location.request();
+    }
+  }
+
   @override
   void initState() {
+    _requestPermission();
     _getStates();
     super.initState();
   }

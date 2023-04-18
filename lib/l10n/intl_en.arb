@@ -94,5 +94,8 @@
   "watch": "Watch",
   "read": "Read",
   "new_": "new",
-  "buyPoducts": "Buy Products"
+  "buyPoducts": "Buy Products",
+  "orders": "Orders",
+  "welcome": "Welcome",
+  "howMayWeHelpYouToday": "How may we help you today"
 }

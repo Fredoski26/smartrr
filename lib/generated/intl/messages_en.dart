@@ -65,6 +65,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Enter the email address associated with your Smart RR account and we will send a reset password link"),
         "gender": MessageLookupByLibrary.simpleMessage("Gender"),
         "history": MessageLookupByLibrary.simpleMessage("History"),
+        "howMayWeHelpYouToday":
+            MessageLookupByLibrary.simpleMessage("How may we help you today"),
         "impactOfSmartRR":
             MessageLookupByLibrary.simpleMessage("Impact of Smart RR"),
         "interviewWith": MessageLookupByLibrary.simpleMessage("Interview with"),
@@ -76,6 +78,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "more": MessageLookupByLibrary.simpleMessage("More"),
         "name": MessageLookupByLibrary.simpleMessage("Name"),
         "new_": MessageLookupByLibrary.simpleMessage("new"),
+        "orders": MessageLookupByLibrary.simpleMessage("Orders"),
         "organization": MessageLookupByLibrary.simpleMessage("Organization"),
         "password": MessageLookupByLibrary.simpleMessage("Password"),
         "periodTracker":
@@ -162,6 +165,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "update": MessageLookupByLibrary.simpleMessage("Update"),
         "user": MessageLookupByLibrary.simpleMessage("User"),
         "watch": MessageLookupByLibrary.simpleMessage("Watch"),
+        "welcome": MessageLookupByLibrary.simpleMessage("Welcome"),
         "yourself": MessageLookupByLibrary.simpleMessage("For Yourself")
       };
 }

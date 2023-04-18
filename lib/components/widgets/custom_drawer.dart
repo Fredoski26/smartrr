@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smartrr/components/screens/period_tracker/period_tracker.dart';
 import 'package:smartrr/components/screens/period_tracker/period_tracker_wrapper.dart';
+import 'package:smartrr/components/screens/shop/orders.dart';
 import 'package:smartrr/components/widgets/ask_action.dart';
 import 'package:smartrr/services/auth_service.dart';
 import 'package:smartrr/utils/colors.dart';
@@ -13,28 +14,6 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _language = S.of(context);
-
-    _stayHere() {
-      Navigator.pop(context);
-    }
-
-    _logout() async {
-      await FirebaseAuth.instance.signOut().then((_) {
-        clearPrefs().then((_) => Navigator.pushNamedAndRemoveUntil(
-            context, '/login', ModalRoute.withName('Login')));
-      });
-    }
-
-    _confirmLogout() {
-      askAction(
-        actionText: 'Yes',
-        cancelText: 'No',
-        text: 'Do you want to logout?',
-        context: context,
-        func: _logout,
-        cancelFunc: _stayHere,
-      );
-    }
 
     return Drawer(
       elevation: 1,
@@ -64,6 +43,16 @@ class CustomDrawer extends StatelessWidget {
           leading: Icon(Icons.history),
           title: Text(_language.history),
           onTap: () => Navigator.pushNamed(context, '/casesHistory'),
+        ),
+        ListTile(
+          leading: Icon(Icons.shopping_cart_outlined),
+          title: Text(_language.orders),
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Orders(),
+            ),
+          ),
         ),
         ListTile(
           leading: Icon(Icons.info_outline_rounded),
