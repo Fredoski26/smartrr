@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartrr/components/widgets/order_card.dart';
+import 'package:smartrr/generated/l10n.dart';
 import 'package:smartrr/models/order.dart';
 import 'package:smartrr/services/shop_service.dart';
 import 'package:smartrr/services/theme_provider.dart';
@@ -15,7 +16,7 @@ class Orders extends StatelessWidget {
 
     return Consumer<ThemeNotifier>(
       builder: (context, theme, _) => Scaffold(
-        appBar: AppBar(title: Text("Orders")),
+        appBar: AppBar(title: Text(S.current.orders)),
         body: StreamBuilder<List<Order>>(
           stream:
               ShopService.getAllOrders(userId: _currentUser!.uid).asStream(),

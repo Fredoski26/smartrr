@@ -64,6 +64,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Shigar da Adireshin Email da ke da alaka da manahajar (APP) SmartRR"),
         "gender": MessageLookupByLibrary.simpleMessage("Jinsi"),
         "history": MessageLookupByLibrary.simpleMessage("Tarihi"),
+        "howMayWeHelpYouToday": MessageLookupByLibrary.simpleMessage(
+            "Ta yaya za mu taimake ka a yau"),
         "impactOfSmartRR":
             MessageLookupByLibrary.simpleMessage("Tasiri Smart RR"),
         "interviewWith": MessageLookupByLibrary.simpleMessage("Hira da"),
@@ -75,10 +77,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "more": MessageLookupByLibrary.simpleMessage("Kara"),
         "name": MessageLookupByLibrary.simpleMessage("Suna"),
         "new_": MessageLookupByLibrary.simpleMessage("sabo"),
+        "orders": MessageLookupByLibrary.simpleMessage("Tarihin siya"),
         "organization": MessageLookupByLibrary.simpleMessage("Kungiya"),
         "password": MessageLookupByLibrary.simpleMessage("Mabudi"),
         "periodTracker":
-            MessageLookupByLibrary.simpleMessage("period Tracker & Kalanda"),
+            MessageLookupByLibrary.simpleMessage("Period Tracker & Kalanda"),
         "phoneNumber": MessageLookupByLibrary.simpleMessage("Lamba Waya"),
         "physicalAbuse":
             MessageLookupByLibrary.simpleMessage("Cin zarafi na jiki"),
@@ -161,6 +164,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "update": MessageLookupByLibrary.simpleMessage("Sabunta"),
         "user": MessageLookupByLibrary.simpleMessage("Mai Aiki"),
         "watch": MessageLookupByLibrary.simpleMessage("Kallo"),
+        "welcome": MessageLookupByLibrary.simpleMessage("Barka da zuwa"),
         "yourself": MessageLookupByLibrary.simpleMessage("Ma kai na")
       };
 }

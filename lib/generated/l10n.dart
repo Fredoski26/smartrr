@@ -270,10 +270,10 @@ class S {
     );
   }
 
-  /// `All About SRH/FGM`
+  /// `SRH/FGM`
   String get allAboutSRHR {
     return Intl.message(
-      'All About SRH/FGM',
+      'SRH/FGM',
       name: 'allAboutSRHR',
       desc: '',
       args: [],
@@ -1005,6 +1005,36 @@ class S {
     return Intl.message(
       'Buy Products',
       name: 'buyPoducts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Orders`
+  String get orders {
+    return Intl.message(
+      'Orders',
+      name: 'orders',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Welcome`
+  String get welcome {
+    return Intl.message(
+      'Welcome',
+      name: 'welcome',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `How may we help you today`
+  String get howMayWeHelpYouToday {
+    return Intl.message(
+      'How may we help you today',
+      name: 'howMayWeHelpYouToday',
       desc: '',
       args: [],
     );

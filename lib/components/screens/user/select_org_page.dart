@@ -212,13 +212,16 @@ class _SelectOrgPageState extends State<SelectOrgPage> {
           .get()
           .then((snapshot) async {
         List<QueryDocumentSnapshot<Map<String, dynamic>>> organizations = [];
-        await FirebaseFirestore.instance
-            .collection("organizations")
-            .where("locationId", isEqualTo: snapshot.docs[0].id)
-            .get()
-            .then((orgs) async {
-          organizations = [...organizations, ...orgs.docs];
-        });
+
+        if (snapshot.docs.isNotEmpty) {
+          await FirebaseFirestore.instance
+              .collection("organizations")
+              .where("locationId", isEqualTo: snapshot.docs[0].id)
+              .get()
+              .then((orgs) async {
+            organizations = [...organizations, ...orgs.docs];
+          });
+        }
 
         await FirebaseFirestore.instance
             .collection("organizations")
@@ -243,7 +246,9 @@ class _SelectOrgPageState extends State<SelectOrgPage> {
       Organization organization = new Organization(
         id: organizations[i].id,
         name: organizations[i].get('name'),
-        locationId: organizations[i].get('locationId'),
+        locationId: organizations[i].get('locationId') != null
+            ? organizations[i].get("locationId")
+            : "",
         location: organizations[i].data().containsKey("location")
             ? organizations[i].get("location")
             : "",

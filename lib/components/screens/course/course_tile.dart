@@ -1,36 +1,30 @@
-import 'dart:io';
-import 'dart:isolate';
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:smartrr/models/course.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:path_provider/path_provider.dart';
 
 class CourseTile extends StatefulWidget {
   final Course course;
-  const CourseTile({super.key, required this.course});
+  final Function(Course) startDownload;
+  final Function(String) pauseDownload;
+  final Function(String) resumeDownload;
+  final Function(String) cancelDownload;
+  final DownloadTaskStatus downloadStatus;
+
+  const CourseTile({
+    super.key,
+    required this.course,
+    required this.startDownload,
+    required this.pauseDownload,
+    required this.resumeDownload,
+    required this.cancelDownload,
+    this.downloadStatus = DownloadTaskStatus.undefined,
+  });
 
   @override
   State<CourseTile> createState() => _CourseTileState();
-
-  @pragma('vm:entry-point')
-  static void downloadCallback(
-    String id,
-    DownloadTaskStatus status,
-    int progress,
-  ) {
-    final SendPort sendPort =
-        IsolateNameServer.lookupPortByName('downloader_send_port')!;
-
-    sendPort.send([id, status.value, progress]);
-  }
 }
 
 class _CourseTileState extends State<CourseTile> {
-  late String _taskId;
-
-  late DownloadTaskStatus _status = DownloadTaskStatus.undefined;
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -45,127 +39,42 @@ class _CourseTileState extends State<CourseTile> {
         overflow: TextOverflow.ellipsis,
       ),
       leading: Icon(Icons.file_copy),
-      onTap: _status == DownloadTaskStatus.complete
+      onTap: widget.downloadStatus == DownloadTaskStatus.complete
           ? () async {
-              await FlutterDownloader.open(taskId: _taskId);
+              await openFile(widget.course.file.url);
             }
           : null,
-      trailing: _status == DownloadTaskStatus.complete ||
-              _status == DownloadTaskStatus.failed
-          ? IconButton(
-              icon: Icon(Icons.file_download_done),
-              tooltip: "Open",
-              onPressed: () async {
-                await FlutterDownloader.open(taskId: _taskId);
-              })
-          : _status == DownloadTaskStatus.undefined
+      trailing: widget.downloadStatus == DownloadTaskStatus.complete
+          ? Icon(Icons.file_download_done)
+          : widget.downloadStatus == DownloadTaskStatus.undefined ||
+                  widget.downloadStatus == DownloadTaskStatus.failed
               ? IconButton(
                   icon: Icon(Icons.file_download),
                   tooltip: "Download",
                   onPressed: () async {
-                    await startDownload(
-                      widget.course.files[0].url,
-                      widget.course.files[0].key.split("/")[1],
-                    );
+                    await widget.startDownload(widget.course);
                   },
                 )
-              : _status == DownloadTaskStatus.paused
+              : widget.downloadStatus == DownloadTaskStatus.paused
                   ? IconButton(
                       icon: Icon(Icons.play_circle_outline),
                       tooltip: "Play",
-                      onPressed: () => resumeDownload(_taskId),
+                      onPressed: () => widget.resumeDownload(widget.course.id),
                     )
                   : IconButton(
                       icon: Icon(Icons.pause_circle_outline),
                       tooltip: "Pause",
-                      onPressed: () => pauseDownload(_taskId),
+                      onPressed: () => widget.pauseDownload(widget.course.id),
                     ),
     );
   }
 
-  Future<String> startDownload(String url, String fileName) async {
-    Directory _path = await getApplicationDocumentsDirectory();
-    String _localPath = _path.path + Platform.pathSeparator + fileName;
+  Future openFile(String url) async {
+    final downloadTask = await FlutterDownloader.loadTasksWithRawQuery(
+        query: "SELECT * FROM task WHERE status=3 AND url='$url'");
 
-    final savedDir = Directory(_localPath);
-
-    await savedDir.create(recursive: true);
-
-    final taskId = await FlutterDownloader.enqueue(
-      url: url,
-      fileName: fileName,
-      headers: {},
-      savedDir: _localPath,
-      saveInPublicStorage: true,
-      showNotification: true,
-      openFileFromNotification: true,
-    );
-
-    _taskId = taskId!;
-
-    return taskId;
-  }
-
-  void pauseDownload(String taskId) {
-    FlutterDownloader.pause(taskId: taskId);
-  }
-
-  void cancelDownload(String taskId) {
-    FlutterDownloader.cancel(taskId: taskId);
-  }
-
-  void resumeDownload(String taskId) async {
-    final String? newTaskId = await FlutterDownloader.resume(taskId: taskId);
-    _taskId = newTaskId!;
-  }
-
-  void loadTasks() {
-    FlutterDownloader.loadTasks().then((tasks) {
-      final task = tasks
-          ?.where((element) => element.url == widget.course.files[0].url)
-          .first;
-      if (task != null) {
-        _status = task.status;
-        _taskId = task.taskId;
-      }
-      setState(() {});
-    });
-  }
-
-  ReceivePort _port = ReceivePort();
-
-  @override
-  void initState() {
-    super.initState();
-    loadTasks();
-
-    final isSuccess = IsolateNameServer.registerPortWithName(
-      _port.sendPort,
-      'downloader_send_port',
-    );
-    if (isSuccess) {
-      _port.listen((dynamic data) {
-        String id = data[0];
-        int status = data[1];
-        int progress = data[2];
-
-        _status = DownloadTaskStatus(status);
-
-        if (_status == DownloadTaskStatus.failed) {
-          FlutterDownloader.remove(taskId: id);
-        }
-        setState(() {});
-      });
-
-      FlutterDownloader.registerCallback(CourseTile.downloadCallback);
-    } else {
-      print("ISOLATE CREATION FAILED");
+    if (downloadTask != null && downloadTask.isNotEmpty) {
+      await FlutterDownloader.open(taskId: downloadTask.first.taskId);
     }
-  }
-
-  @override
-  void dispose() {
-    IsolateNameServer.removePortNameMapping('downloader_send_port');
-    super.dispose();
   }
 }

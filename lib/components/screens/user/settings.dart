@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:smartrr/components/screens/user/select_country.dart';
 import 'package:smartrr/components/widgets/language_picker.dart';
 import 'package:smartrr/components/widgets/smart_input.dart';
-import 'package:smartrr/components/widgets/smart_text_field.dart';
 import 'package:smartrr/provider/language_provider.dart';
 import 'package:smartrr/services/auth_service.dart';
 import 'package:smartrr/services/database_service.dart';

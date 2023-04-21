@@ -1,15 +1,20 @@
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:hive/hive.dart';
 import 'package:smartrr/components/screens/period_tracker/period_tracker.dart';
 import 'package:smartrr/components/screens/period_tracker/period_tracker_onboarding.dart';
+import 'package:smartrr/services/period_tracker_service.dart';
 
-class PeriodTrackerWrapper extends StatelessWidget {
+class PeriodTrackerWrapper extends StatefulWidget {
   const PeriodTrackerWrapper({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    dynamic lastPeriod = Hive.box("period_tracker").get("lastPeriod");
+  State<PeriodTrackerWrapper> createState() => _PeriodTrackerWrapperState();
+}
 
+class _PeriodTrackerWrapperState extends State<PeriodTrackerWrapper> {
+  dynamic lastPeriod = PeriodTrackerService.getLastPeriod;
+
+  @override
+  Widget build(BuildContext context) {
     if (lastPeriod == null) {
       return PeriodTrackerOnboarding();
     }

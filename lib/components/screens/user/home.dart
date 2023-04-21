@@ -1,17 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:smartrr/components/screens/period_tracker/period_tracker.dart';
-import 'package:smartrr/components/screens/period_tracker/period_tracker_wrapper.dart';
+import 'package:smartrr/components/screens/sos/sos.dart';
 import 'package:smartrr/components/screens/user/all_about_srhr.dart';
-import 'package:smartrr/components/screens/user/impact_of_smartrr.dart';
-import 'package:smartrr/components/screens/user/select_service_page.dart';
-import 'package:smartrr/components/screens/chatbot/chatbot.dart';
+import 'package:smartrr/components/widgets/custom_drawer.dart';
 import 'package:smartrr/components/widgets/language_picker.dart';
 import 'package:smartrr/components/widgets/speech_to_text.dart';
 import 'package:smartrr/provider/language_provider.dart';
-import 'package:smartrr/services/theme_provider.dart';
 import 'package:smartrr/utils/colors.dart';
 import 'package:smartrr/utils/utils.dart';
 import 'consent_form_page.dart';
@@ -44,237 +38,210 @@ class _HomeState extends State<Home> {
               fontSize: 20,
             ),
           ),
-          centerTitle: false,
+          centerTitle: true,
           actions: [SmartSpeechToText(), LanguagePicker()],
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20.0,
-            vertical: 20,
-          ),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Welcome ${_currentUser.displayName?.split(' ')[0]}.",
-                    style: TextStyle().copyWith(
-                      color: darkGrey,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 20,
-                    ),
+        drawer: CustomDrawer(),
+        body: ListView(
+          padding: EdgeInsets.only(left: 20, top: 20, right: 20),
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  "${S.of(context).welcome} ${_currentUser.displayName?.split(' ')[0]}.",
+                  style: TextStyle().copyWith(
+                    color: darkGrey,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 20,
                   ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "How may we help you today?",
-                    style: TextStyle().copyWith(
-                      color: darkGrey,
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 30),
-              Container(
-                height: 220,
-                margin: EdgeInsets.only(bottom: 12),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
                 ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: GestureDetector(
-                    onTap: () => _showDialog(context: context),
-                    child: Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        Image.asset(
-                          "assets/images/report_case.png",
-                          fit: BoxFit.cover,
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  "${S.current.howMayWeHelpYouToday}?",
+                  style: TextStyle().copyWith(
+                    color: darkGrey,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 30),
+            Container(
+              height: 220,
+              margin: EdgeInsets.only(bottom: 12),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: GestureDetector(
+                  onTap: () => _showDialog(context: context),
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Image.asset(
+                        "assets/images/report_case.png",
+                        fit: BoxFit.cover,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                            colors: [
+                              Colors.black,
+                              Color(0xFF1E1E1E).withOpacity(.36)
+                            ],
+                          ),
                         ),
-                        Container(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.bottomCenter,
-                              end: Alignment.topCenter,
-                              colors: [
-                                Colors.black,
-                                Color(0xFF1E1E1E).withOpacity(.36)
-                              ],
+                      ),
+                      Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.all(18.0),
+                          child: Text(
+                            _language.reportACase,
+                            style: TextStyle().copyWith(
+                              color: Colors.white,
+                              fontSize: 18,
                             ),
                           ),
                         ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    height: 220,
+                    margin: EdgeInsets.only(right: 6),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: GestureDetector(
+                        onTap: () =>
+                            Navigator.pushNamed(context, "/periodTracker"),
+                        child: Stack(
+                          fit: StackFit.expand,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.all(18.0),
-                              child: Text(
-                                _language.reportACase,
-                                style: TextStyle().copyWith(
-                                  color: Colors.white,
-                                  fontSize: 18,
+                            Image.asset(
+                              "assets/images/period_tracker_image.png",
+                              fit: BoxFit.cover,
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6.0),
+                                gradient: LinearGradient(
+                                  begin: Alignment.bottomCenter,
+                                  end: Alignment.topCenter,
+                                  colors: [
+                                    Colors.black,
+                                    Color(0xFF1E1E1E).withOpacity(.36)
+                                  ],
                                 ),
                               ),
                             ),
+                            Align(
+                              alignment: Alignment.bottomLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.all(18.0),
+                                child: Text(
+                                  _language.periodTracker,
+                                  style: TextStyle().copyWith(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ),
+                            )
                           ],
-                        )
-                      ],
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Container(
-                height: 220,
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: Container(
-                      height: 220,
-                      margin: EdgeInsets.only(right: 6),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: GestureDetector(
-                          onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => PeriodTrackerWrapper(),
-                              )),
-                          child: Stack(
-                            fit: StackFit.expand,
-                            children: [
-                              Image.asset(
-                                "assets/images/period_tracker_image.png",
-                                fit: BoxFit.cover,
+                Expanded(
+                  child: Container(
+                    height: 220,
+                    margin: EdgeInsets.only(left: 6),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: GestureDetector(
+                        onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => AllAboutSRHR())),
+                        child: Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            Image.asset(
+                              "assets/images/about_srh.png",
+                              fit: BoxFit.cover,
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.bottomCenter,
+                                  end: Alignment.topCenter,
+                                  colors: [
+                                    Colors.black,
+                                    Color(0xFF1E1E1E).withOpacity(.36)
+                                  ],
+                                ),
                               ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(6.0),
-                                  gradient: LinearGradient(
-                                    begin: Alignment.bottomCenter,
-                                    end: Alignment.topCenter,
-                                    colors: [
-                                      Colors.black,
-                                      Color(0xFF1E1E1E).withOpacity(.36)
-                                    ],
+                            ),
+                            Align(
+                              alignment: Alignment.bottomLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.all(18.0),
+                                child: Text(
+                                  _language.allAboutSRHR,
+                                  style: TextStyle().copyWith(
+                                    color: Colors.white,
+                                    fontSize: 18,
                                   ),
                                 ),
                               ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(18.0),
-                                    child: Text(
-                                      _language.periodTracker,
-                                      style: TextStyle().copyWith(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
+                            )
+                          ],
                         ),
                       ),
-                    )),
-                    Expanded(
-                        child: Container(
-                      height: 220,
-                      margin: EdgeInsets.only(left: 6),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: GestureDetector(
-                          onTap: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (context) => AllAboutSRHR())),
-                          child: Stack(
-                            fit: StackFit.expand,
-                            children: [
-                              Image.asset(
-                                "assets/images/about_srh.png",
-                                fit: BoxFit.cover,
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.bottomCenter,
-                                    end: Alignment.topCenter,
-                                    colors: [
-                                      Colors.black,
-                                      Color(0xFF1E1E1E).withOpacity(.36)
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(18.0),
-                                    child: Text(
-                                      _language.allAboutSRHR,
-                                      style: TextStyle().copyWith(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    )),
-                  ],
+                    ),
+                  ),
                 ),
-              )
-            ],
-          ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: materialWhite,
-          foregroundColor: materialWhite,
-          child: Container(
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: secondaryColor,
+              ],
             ),
-            child: Text(
-              "SOS",
-              style: TextStyle()
-                  .copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-            ),
-          ),
-          onPressed: null,
-          // () => Navigator.of(context).push(
-          //   MaterialPageRoute(
-          //     builder: (context) => ChatBot(),
-          //   ),
-          // ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(100),
-          ),
+          ],
         ),
+        floatingActionButton: IconButton(
+          icon: SvgPicture.asset(
+            "assets/icons/sos.svg",
+            fit: BoxFit.fitHeight,
+          ),
+          onPressed: _showSosPrompt,
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endContained,
       ),
+    );
+  }
+
+  _showSosPrompt() async {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => SOS(),
     );
   }
 

@@ -18,9 +18,6 @@ class _SelectLocationMapState extends State<SelectLocationMap> {
   var location = new Location();
   late LocationData currentLocation;
 
-//  final kGoogleApiKey = "AIzaSyCdyE02XLdx7ExfUmx0HEhCkLqhBalMEr4";
-  final kGoogleApiKey = "AIzaSyDwOvvKZ2QQnQNkTtJOa9swaPk9Ir8B6jI";
-
   @override
   void initState() {
     _getLocation();
@@ -62,10 +59,11 @@ class _SelectLocationMapState extends State<SelectLocationMap> {
   }
 
   _onChooseLocation() {
-    print('Current map position: $_lastMapPosition');
     ApiClient()
-        .getAddressFromCoordinates(_lastMapPosition.latitude,
-            _lastMapPosition.longitude, kGoogleApiKey)
+        .getAddressFromCoordinates(
+      _lastMapPosition.latitude,
+      _lastMapPosition.longitude,
+    )
         .then((String addressReturned) {
       Navigator.pop(context, addressReturned);
     });

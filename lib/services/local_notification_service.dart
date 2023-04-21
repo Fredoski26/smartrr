@@ -2,11 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import "package:flutter_local_notifications/flutter_local_notifications.dart";
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:smartrr/utils/colors.dart';
+import 'package:smartrr/models/smart_notification.dart';
 import 'package:timezone/data/latest.dart' as tz;
-import "package:timezone/timezone.dart";
 
-abstract class LocalNotificationService {
+class LocalNotificationService {
   static FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
   static final _notificationsBox = Hive.box("notifications");
@@ -45,64 +44,39 @@ abstract class LocalNotificationService {
     }
   }
 
-  static Future<bool> scheduleNotification({
-    required String title,
-    required String body,
-    required TZDateTime scheduledDate,
-    NotificationDetails? notificationDetails,
+  static Future scheduleNotification({
+    required SmartNotificationSchedule notificationSchedule,
   }) async {
-    try {
-      final double dt = DateTime.now().millisecondsSinceEpoch / 1000;
-      final int id = dt.toInt();
-      await _flutterLocalNotificationsPlugin.zonedSchedule(
-        id,
-        title,
-        body,
-        scheduledDate,
-        notificationDetails ?? _defaultNotificationDetails,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
-        androidAllowWhileIdle: true,
-      );
-
-      _notificationsBox.put(scheduledDate.toIso8601String(), {id: id});
-
-      return true;
-    } catch (e) {
-      debugPrint(e.toString());
-      return false;
-    }
+    print("SCHEDULE DATE: ${notificationSchedule.scheduledDate}");
+    await _notificationsBox.put(
+      notificationSchedule.scheduledDate.millisecondsSinceEpoch,
+      notificationSchedule,
+    );
   }
 
   static Future<void> showNotification({
-    required String title,
-    required String body,
-    NotificationDetails? notificationDetails,
+    required SmartNotification notification,
   }) async {
     final double dt = DateTime.now().millisecondsSinceEpoch / 1000;
     final int id = dt.toInt();
     _flutterLocalNotificationsPlugin.show(
       id,
-      title,
-      body,
-      notificationDetails ?? _defaultNotificationDetails,
+      notification.title,
+      notification.body,
+      notification.notificationDetails,
     );
   }
 
-  static bool hasBeenScheduled(DateTime datetime) {
-    return _notificationsBox.containsKey(datetime.toIso8601String());
+  static bool hasBeenScheduled(int datetime) {
+    return _notificationsBox.containsKey(datetime);
   }
 
-  static final NotificationDetails _defaultNotificationDetails =
-      NotificationDetails(
-    android: AndroidNotificationDetails(
-      "GENERAL",
-      "General",
-      icon: "@mipmap/ic_launcher",
-      priority: Priority.max,
-      color: primaryColor,
-      ticker: "ticker",
-      importance: Importance.max,
-    ),
-  );
+  static Future cancelAll() async {
+    await _flutterLocalNotificationsPlugin.cancelAll();
+    await _notificationsBox.clear();
+  }
+
+  static getNotification(int date) => _notificationsBox.get(date);
+
+  static List get getAllNotificationDates => _notificationsBox.keys.toList();
 }

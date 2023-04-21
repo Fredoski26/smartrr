@@ -1,18 +1,19 @@
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:smartrr/env/env.dart';
 
 class ApiClient {
   Future<String> getAddressFromCoordinates(
-      double latitude, double longitude, String apiKey) async {
+    double latitude,
+    double longitude,
+  ) async {
     final response = await http.post(
         Uri.parse(
-            'https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=$apiKey'),
+            'https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=${Env.googleMapsApiKey}'),
         headers: {
           "Accept": "application/json",
           "Content-Type": "application/x-www-form-urlencoded"
         });
-    debugPrint("GETTING THE LOC FROM LAT LONG " + response.body);
     var jsonResponse = json.decode(response.body);
     // var newList = jsonResponse['response'];
     // print('Address from coordinates: $jsonResponse');
@@ -20,18 +21,29 @@ class ApiClient {
     return jsonResponse['results'][0]['formatted_address'];
   }
 
-  Future<dynamic> sendSMS(
-      {required String phoneNumber, required String message}) async {
-//    ac89f1f3
-//    EWXULOE0HO87RjBn
+  Future<dynamic> sendSMS({
+    required dynamic phoneNumber,
+    required String message,
+  }) async {
+    Map<String, dynamic> data = {
+      "sms": message,
+      "from": Env.termiiSenderId,
+      "to": phoneNumber,
+      "type": "plain",
+      "channel": "generic",
+      "api_key": Env.termiiApiKey,
+    };
+
     var response = await http.post(
-        Uri.parse(
-            'https://rest.nexmo.com/sms/json?api_key=d11a9692&api_secret=SmartRR1TYIaXsFlM&to=$phoneNumber&from=SmartRR&text=$message'),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/x-www-form-urlencoded"
-        });
-    var jsonResponse = json.decode(response.body);
-    return jsonResponse;
+      Uri.parse(Env.termiiApiBaseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode(data),
+    );
+
+    if (response.statusCode == 200) return true;
+    throw "Something went wrong";
   }
 }

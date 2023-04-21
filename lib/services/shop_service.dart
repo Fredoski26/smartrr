@@ -4,10 +4,11 @@ import 'package:smartrr/models/product.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:smartrr/utils/constants.dart';
 
 abstract class ShopService {
   static String apiBaseUrl = Env.apiBaseUrl;
-  static Box<Product> _cartBox = Hive.box<Product>("cart");
+  static Box<Product> _cartBox = Hive.box<Product>(kcartBox);
 
   static Future<List<Product>> getAllProducts() async {
     final res = await http.get(Uri.parse("$apiBaseUrl/products"));
@@ -64,8 +65,6 @@ abstract class ShopService {
       },
       body: jsonEncode(data),
     );
-
-    print(response);
   }
 
   static Future<List<Order>> getAllOrders({required String userId}) async {

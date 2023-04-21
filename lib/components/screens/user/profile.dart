@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartrr/components/widgets/ask_action.dart';
 import 'package:smartrr/generated/l10n.dart';
+import 'package:smartrr/services/auth_service.dart';
 import 'package:smartrr/services/theme_provider.dart';
 import 'package:smartrr/utils/colors.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:smartrr/utils/utils.dart';
 
 class Profile extends StatefulWidget {
@@ -106,7 +108,7 @@ class _ProfileState extends State<Profile> {
                     style: _textButtonStyle,
                   ),
                   TextButton.icon(
-                    onPressed: _logout,
+                    onPressed: () => AuthService.logOutUser(context),
                     icon: Icon(Icons.logout),
                     label: Text(S.current.logOut),
                     style: _textButtonStyle,
@@ -117,22 +119,6 @@ class _ProfileState extends State<Profile> {
           ],
         ),
       ),
-    );
-  }
-
-  _logout() {
-    askAction(
-      actionText: 'Yes',
-      cancelText: 'No',
-      text: 'Do you want to logout?',
-      context: context,
-      func: () async {
-        await FirebaseAuth.instance.signOut().then((_) {
-          clearPrefs().then((_) => Navigator.pushNamedAndRemoveUntil(
-              context, '/login', ModalRoute.withName('Login')));
-        });
-      },
-      cancelFunc: () => Navigator.pop(context),
     );
   }
 

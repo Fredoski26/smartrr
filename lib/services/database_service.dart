@@ -13,6 +13,9 @@ class DatabaseService {
   CollectionReference userCollection =
       FirebaseFirestore.instance.collection('users');
 
+  CollectionReference orgCollection =
+      FirebaseFirestore.instance.collection('organizations');
+
   CollectionReference stateCollection =
       FirebaseFirestore.instance.collection("state");
 
@@ -47,6 +50,21 @@ class DatabaseService {
     }
   }
 
+  Future updateOrg(Map update) async {
+    try {
+      String orgId = await getOrgIdPref();
+      HashMap<String, Object> orgData = HashMap.from(update);
+      final id = await orgCollection
+          .where("uId", isEqualTo: orgId)
+          .get()
+          .then((value) => value.docs[0].id);
+
+      await orgCollection.doc(id).set(orgData, SetOptions(merge: true));
+    } catch (e) {
+      return null;
+    }
+  }
+
   Future getUser() async {
     try {
       String userId = await getUserIdPref();
@@ -61,12 +79,29 @@ class DatabaseService {
     }
   }
 
-  Future setDeviceToken(User user) async {
+  Future getOrg() async {
+    try {
+      String orgId = await getOrgIdPref();
+      final data = await orgCollection
+          .where("uId", isEqualTo: orgId)
+          .get()
+          .then((snapshot) => snapshot.docs[0].data());
+
+      return data;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future setDeviceToken({required User user, isUser = true}) async {
     final deviceToken = await FirebaseMessaging.instance.getToken();
-    print("DEVICE: $deviceToken");
 
     configBox.put("deviceToken", deviceToken);
-    await DatabaseService().updateUser({"deviceToken": deviceToken});
+    if (isUser) {
+      await updateUser({"deviceToken": deviceToken});
+    } else {
+      await updateOrg({"deviceToken": deviceToken});
+    }
   }
 
   Future getLocations(String state) async {
